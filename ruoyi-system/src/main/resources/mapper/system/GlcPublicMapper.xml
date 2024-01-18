@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GlcPublicMapper">
+    
+    <resultMap type="GlcPublic" id="GlcPublicResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="arr"    column="arr"    />
+        <result property="Token"    column="Token"    />
+        <result property="DrillID"    column="DrillID"    />
+        <result property="PatternID"    column="PatternID"    />
+        <result property="PatternCode"    column="PatternCode"    />
+        <result property="PortIsIM"    column="PortIsIM"    />
+    </resultMap>
+
+    <sql id="selectGlcPublicVo">
+        select id, name, arr, Token, DrillID, PatternID, PatternCode, PortIsIM from glc_public
+    </sql>
+
+    <select id="selectGlcPublicList" parameterType="GlcPublic" resultMap="GlcPublicResult">
+        <include refid="selectGlcPublicVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="arr != null  and arr != ''"> and arr = #{arr}</if>
+            <if test="Token != null  and Token != ''"> and Token = #{Token}</if>
+            <if test="DrillID != null  and DrillID != ''"> and DrillID = #{DrillID}</if>
+            <if test="PatternID != null  and PatternID != ''"> and PatternID = #{PatternID}</if>
+            <if test="PatternCode != null  and PatternCode != ''"> and PatternCode = #{PatternCode}</if>
+            <if test="PortIsIM != null  and PortIsIM != ''"> and PortIsIM = #{PortIsIM}</if>
+        </where>
+    </select>
+    
+    <select id="selectGlcPublicById" parameterType="Long" resultMap="GlcPublicResult">
+        <include refid="selectGlcPublicVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGlcPublic" parameterType="GlcPublic" useGeneratedKeys="true" keyProperty="id">
+        insert into glc_public
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="arr != null and arr != ''">arr,</if>
+            <if test="Token != null and Token != ''">Token,</if>
+            <if test="DrillID != null and DrillID != ''">DrillID,</if>
+            <if test="PatternID != null and PatternID != ''">PatternID,</if>
+            <if test="PatternCode != null and PatternCode != ''">PatternCode,</if>
+            <if test="PortIsIM != null and PortIsIM != ''">PortIsIM,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="arr != null and arr != ''">#{arr},</if>
+            <if test="Token != null and Token != ''">#{Token},</if>
+            <if test="DrillID != null and DrillID != ''">#{DrillID},</if>
+            <if test="PatternID != null and PatternID != ''">#{PatternID},</if>
+            <if test="PatternCode != null and PatternCode != ''">#{PatternCode},</if>
+            <if test="PortIsIM != null and PortIsIM != ''">#{PortIsIM},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGlcPublic" parameterType="GlcPublic">
+        update glc_public
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="arr != null and arr != ''">arr = #{arr},</if>
+            <if test="Token != null and Token != ''">Token = #{Token},</if>
+            <if test="DrillID != null and DrillID != ''">DrillID = #{DrillID},</if>
+            <if test="PatternID != null and PatternID != ''">PatternID = #{PatternID},</if>
+            <if test="PatternCode != null and PatternCode != ''">PatternCode = #{PatternCode},</if>
+            <if test="PortIsIM != null and PortIsIM != ''">PortIsIM = #{PortIsIM},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGlcPublicById" parameterType="Long">
+        delete from glc_public where id = #{id}
+    </delete>
+
+    <delete id="deleteGlcPublicByIds" parameterType="String">
+        delete from glc_public where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

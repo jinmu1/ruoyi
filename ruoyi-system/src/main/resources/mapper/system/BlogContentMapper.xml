@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BlogContentMapper">
+    
+    <resultMap type="BlogContent" id="BlogContentResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="author"    column="author"    />
+        <result property="title"    column="title"    />
+        <result property="sort"    column="sort"    />
+        <result property="content"    column="content"    />
+        <result property="del"    column="del"    />
+        <result property="createDate"    column="createDate"    />
+    </resultMap>
+
+    <sql id="selectBlogContentVo">
+        select id, type, author, title, sort, content, del, createDate from blog_content
+    </sql>
+
+    <select id="selectBlogContentList" parameterType="BlogContent" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="author != null  and author != ''"> and author = #{author}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="del != null "> and del = #{del}</if>
+            <if test="createDate != null "> and createDate = #{createDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectBlogContentById" parameterType="Long" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBlogContent" parameterType="BlogContent" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="author != null and author != ''">author,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="sort != null">sort,</if>
+            <if test="content != null">content,</if>
+            <if test="del != null">del,</if>
+            <if test="createDate != null">createDate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="author != null and author != ''">#{author},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="content != null">#{content},</if>
+            <if test="del != null">#{del},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogContent" parameterType="BlogContent">
+        update blog_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="author != null and author != ''">author = #{author},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="del != null">del = #{del},</if>
+            <if test="createDate != null">createDate = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogContentById" parameterType="Long">
+        delete from blog_content where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogContentByIds" parameterType="String">
+        delete from blog_content where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ContentMapper">
+    
+    <resultMap type="Content" id="ContentResult">
+        <result property="id"    column="id"    />
+        <result property="createBy"    column="createBy"    />
+        <result property="gwType"    column="gw_type"    />
+        <result property="sort"    column="sort"    />
+        <result property="title"    column="title"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="url1"    column="url1"    />
+        <result property="url2"    column="url2"    />
+        <result property="createDate"    column="createDate"    />
+    </resultMap>
+
+    <sql id="selectContentVo">
+        select id, createBy, gw_type, sort, title, img_url, url1, url2, createDate from content
+    </sql>
+
+    <select id="selectContentList" parameterType="Content" resultMap="ContentResult">
+        <include refid="selectContentVo"/>
+        <where>  
+            <if test="createBy != null  and createBy != ''"> and createBy = #{createBy}</if>
+            <if test="gwType != null "> and gw_type = #{gwType}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="url1 != null  and url1 != ''"> and url1 = #{url1}</if>
+            <if test="url2 != null  and url2 != ''"> and url2 = #{url2}</if>
+            <if test="createDate != null "> and createDate = #{createDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectContentById" parameterType="Long" resultMap="ContentResult">
+        <include refid="selectContentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertContent" parameterType="Content" useGeneratedKeys="true" keyProperty="id">
+        insert into content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null and createBy != ''">createBy,</if>
+            <if test="gwType != null">gw_type,</if>
+            <if test="sort != null">sort,</if>
+            <if test="title != null">title,</if>
+            <if test="imgUrl != null">img_url,</if>
+            <if test="url1 != null">url1,</if>
+            <if test="url2 != null">url2,</if>
+            <if test="createDate != null">createDate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="gwType != null">#{gwType},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="title != null">#{title},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="url1 != null">#{url1},</if>
+            <if test="url2 != null">#{url2},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateContent" parameterType="Content">
+        update content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createBy != null and createBy != ''">createBy = #{createBy},</if>
+            <if test="gwType != null">gw_type = #{gwType},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="imgUrl != null">img_url = #{imgUrl},</if>
+            <if test="url1 != null">url1 = #{url1},</if>
+            <if test="url2 != null">url2 = #{url2},</if>
+            <if test="createDate != null">createDate = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteContentById" parameterType="Long">
+        delete from content where id = #{id}
+    </delete>
+
+    <delete id="deleteContentByIds" parameterType="String">
+        delete from content where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="getContentList" resultType="Content">
+SELECT id AS 'id',title AS 'title',img_url AS 'imgUrl',url1 AS 'url1',url2 AS 'url2',createBy AS 'createBy',createDate AS 'createDate'
+from content
+WHERE gw_type =#{type}
+order by sort asc
+limit #{start},8
+    </select>
+    <select id="getContentNum" resultType="java.lang.Integer">
+SELECT count(1)
+from content
+WHERE gw_type =#{type}
+    </select>
+
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BaidieScoreMapper">
+    
+    <resultMap type="BaidieScore" id="BaidieScoreResult">
+        <result property="id"    column="id"    />
+        <result property="headId"    column="headId"    />
+        <result property="userId"    column="userId"    />
+        <result property="userCode"    column="userCode"    />
+        <result property="name"    column="name"    />
+        <result property="score"    column="score"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectBaidieScoreVo">
+        select id, headId, userId, userCode, name, score, remarks from baidie_score
+    </sql>
+
+    <select id="selectBaidieScoreList" parameterType="BaidieScore" resultMap="BaidieScoreResult">
+        <include refid="selectBaidieScoreVo"/>
+        <where>  
+            <if test="headId != null  and headId != ''"> and headId = #{headId}</if>
+            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
+            <if test="userCode != null  and userCode != ''"> and userCode = #{userCode}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaidieScoreById" parameterType="Long" resultMap="BaidieScoreResult">
+        <include refid="selectBaidieScoreVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBaidieScore" parameterType="BaidieScore" useGeneratedKeys="true" keyProperty="id">
+        insert into baidie_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="headId != null and headId != ''">headId,</if>
+            <if test="userId != null and userId != ''">userId,</if>
+            <if test="userCode != null and userCode != ''">userCode,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="score != null and score != ''">score,</if>
+            <if test="remarks != null and remarks != ''">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="headId != null and headId != ''">#{headId},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="userCode != null and userCode != ''">#{userCode},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="score != null and score != ''">#{score},</if>
+            <if test="remarks != null and remarks != ''">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaidieScore" parameterType="BaidieScore">
+        update baidie_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="headId != null and headId != ''">headId = #{headId},</if>
+            <if test="userId != null and userId != ''">userId = #{userId},</if>
+            <if test="userCode != null and userCode != ''">userCode = #{userCode},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="score != null and score != ''">score = #{score},</if>
+            <if test="remarks != null and remarks != ''">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaidieScoreById" parameterType="Long">
+        delete from baidie_score where id = #{id}
+    </delete>
+
+    <delete id="deleteBaidieScoreByIds" parameterType="String">
+        delete from baidie_score where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GlcPointMapper">
+
+    <resultMap type="com.ruoyi.system.form.GlcPoint" id="GlcPointResult">
+        <result property="provinces"    column="provinces"    />
+        <result property="city"    column="city"    />
+        <result property="lat"    column="lat"    />
+        <result property="lng"    column="lng"    />
+        <result property="gdp"    column="gdp"    />
+    </resultMap>
+
+    <sql id="selectGlcPointVo">
+        select provinces, city, lat, lng, gdp from glc_point
+    </sql>
+
+    <select id="selectGlcPointList" parameterType="com.ruoyi.system.form.GlcPoint" resultMap="GlcPointResult">
+        <include refid="selectGlcPointVo"/>
+        <where>
+            <if test="provinces != null  and provinces != ''"> and provinces = #{provinces}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+            <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
+            <if test="gdp != null  and gdp != ''"> and gdp = #{gdp}</if>
+        </where>
+    </select>
+
+    <select id="selectGlcPointById" parameterType="String" resultMap="GlcPointResult">
+        <include refid="selectGlcPointVo"/>
+        where provinces = #{provinces}
+    </select>
+
+    <insert id="insertGlcPoint" parameterType="com.ruoyi.system.form.GlcPoint">
+        insert into glc_point
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="provinces != null">provinces,</if>
+            <if test="city != null">city,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lng != null">lng,</if>
+            <if test="gdp != null">gdp,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="provinces != null">#{provinces},</if>
+            <if test="city != null">#{city},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="gdp != null">#{gdp},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGlcPoint" parameterType="com.ruoyi.system.form.GlcPoint">
+        update glc_point
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="city != null">city = #{city},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="gdp != null">gdp = #{gdp},</if>
+        </trim>
+        where provinces = #{provinces}
+    </update>
+
+    <delete id="deleteGlcPointById" parameterType="String">
+        delete from glc_point where provinces = #{provinces}
+    </delete>
+
+    <delete id="deleteGlcPointByIds" parameterType="String">
+        delete from glc_point where provinces in
+        <foreach item="provinces" collection="array" open="(" separator="," close=")">
+            #{provinces}
+        </foreach>
+    </delete>
+
+</mapper>

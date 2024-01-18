@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.NetsendMapper">
+    
+    <resultMap type="Netsend" id="NetsendResult">
+        <result property="订单编号"    column="订单编号"    />
+        <result property="客户代码"    column="客户代码"    />
+        <result property="渠道"    column="渠道"    />
+        <result property="线上线下"    column="线上线下"    />
+        <result property="区域"    column="区域"    />
+        <result property="RDC城市"    column="RDC城市"    />
+        <result property="客户城市"    column="客户城市"    />
+        <result property="实际运输时间"    column="实际运输时间"    />
+        <result property="体积"    column="体积"    />
+        <result property="要求到货时间"    column="要求到货时间"    />
+        <result property="签收时间"    column="签收时间"    />
+        <result property="订单创建时间"    column="订单创建时间"    />
+        <result property="物料编码"    column="物料编码"    />
+        <result property="运输方"    column="运输方"    />
+        <result property="订货量"    column="订货量"    />
+        <result property="单位1"    column="单位1"    />
+        <result property="发货单号"    column="发货单号"    />
+        <result property="出库单创建时间"    column="出库单创建时间"    />
+        <result property="发货数量"    column="发货数量"    />
+        <result property="单位2"    column="单位2"    />
+    </resultMap>
+
+    <sql id="selectNetsendVo">
+        select 订单编号, 客户代码, 渠道, 线上线下, 区域, RDC城市, 客户城市, 实际运输时间, 体积, 要求到货时间, 签收时间, 订单创建时间, 物料编码, 运输方, 订货量, 单位1, 发货单号, 出库单创建时间, 发货数量, 单位2 from netsend
+    </sql>
+
+    <select id="selectNetsendList" parameterType="Netsend" resultMap="NetsendResult">
+        <include refid="selectNetsendVo"/>
+        <where>  
+            <if test="订单编号 != null  and 订单编号 != ''"> and 订单编号 = #{订单编号}</if>
+            <if test="客户代码 != null  and 客户代码 != ''"> and 客户代码 = #{客户代码}</if>
+            <if test="渠道 != null  and 渠道 != ''"> and 渠道 = #{渠道}</if>
+            <if test="线上线下 != null  and 线上线下 != ''"> and 线上线下 = #{线上线下}</if>
+            <if test="区域 != null  and 区域 != ''"> and 区域 = #{区域}</if>
+            <if test="RDC城市 != null  and RDC城市 != ''"> and RDC城市 = #{RDC城市}</if>
+            <if test="客户城市 != null  and 客户城市 != ''"> and 客户城市 = #{客户城市}</if>
+            <if test="实际运输时间 != null  and 实际运输时间 != ''"> and 实际运输时间 = #{实际运输时间}</if>
+            <if test="体积 != null  and 体积 != ''"> and 体积 = #{体积}</if>
+            <if test="要求到货时间 != null  and 要求到货时间 != ''"> and 要求到货时间 = #{要求到货时间}</if>
+            <if test="签收时间 != null  and 签收时间 != ''"> and 签收时间 = #{签收时间}</if>
+            <if test="订单创建时间 != null  and 订单创建时间 != ''"> and 订单创建时间 = #{订单创建时间}</if>
+            <if test="物料编码 != null  and 物料编码 != ''"> and 物料编码 = #{物料编码}</if>
+            <if test="运输方 != null  and 运输方 != ''"> and 运输方 = #{运输方}</if>
+            <if test="订货量 != null  and 订货量 != ''"> and 订货量 = #{订货量}</if>
+            <if test="单位1 != null  and 单位1 != ''"> and 单位1 = #{单位1}</if>
+            <if test="发货单号 != null  and 发货单号 != ''"> and 发货单号 = #{发货单号}</if>
+            <if test="出库单创建时间 != null  and 出库单创建时间 != ''"> and 出库单创建时间 = #{出库单创建时间}</if>
+            <if test="发货数量 != null  and 发货数量 != ''"> and 发货数量 = #{发货数量}</if>
+            <if test="单位2 != null  and 单位2 != ''"> and 单位2 = #{单位2}</if>
+        </where>
+    </select>
+    
+    <select id="selectNetsendBy订单编号" parameterType="String" resultMap="NetsendResult">
+        <include refid="selectNetsendVo"/>
+        where 订单编号 = #{订单编号}
+    </select>
+        
+    <insert id="insertNetsend" parameterType="Netsend">
+        insert into netsend
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="订单编号 != null">订单编号,</if>
+            <if test="客户代码 != null">客户代码,</if>
+            <if test="渠道 != null">渠道,</if>
+            <if test="线上线下 != null">线上线下,</if>
+            <if test="区域 != null">区域,</if>
+            <if test="RDC城市 != null">RDC城市,</if>
+            <if test="客户城市 != null">客户城市,</if>
+            <if test="实际运输时间 != null">实际运输时间,</if>
+            <if test="体积 != null">体积,</if>
+            <if test="要求到货时间 != null">要求到货时间,</if>
+            <if test="签收时间 != null">签收时间,</if>
+            <if test="订单创建时间 != null">订单创建时间,</if>
+            <if test="物料编码 != null">物料编码,</if>
+            <if test="运输方 != null">运输方,</if>
+            <if test="订货量 != null">订货量,</if>
+            <if test="单位1 != null">单位1,</if>
+            <if test="发货单号 != null">发货单号,</if>
+            <if test="出库单创建时间 != null">出库单创建时间,</if>
+            <if test="发货数量 != null">发货数量,</if>
+            <if test="单位2 != null">单位2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="订单编号 != null">#{订单编号},</if>
+            <if test="客户代码 != null">#{客户代码},</if>
+            <if test="渠道 != null">#{渠道},</if>
+            <if test="线上线下 != null">#{线上线下},</if>
+            <if test="区域 != null">#{区域},</if>
+            <if test="RDC城市 != null">#{RDC城市},</if>
+            <if test="客户城市 != null">#{客户城市},</if>
+            <if test="实际运输时间 != null">#{实际运输时间},</if>
+            <if test="体积 != null">#{体积},</if>
+            <if test="要求到货时间 != null">#{要求到货时间},</if>
+            <if test="签收时间 != null">#{签收时间},</if>
+            <if test="订单创建时间 != null">#{订单创建时间},</if>
+            <if test="物料编码 != null">#{物料编码},</if>
+            <if test="运输方 != null">#{运输方},</if>
+            <if test="订货量 != null">#{订货量},</if>
+            <if test="单位1 != null">#{单位1},</if>
+            <if test="发货单号 != null">#{发货单号},</if>
+            <if test="出库单创建时间 != null">#{出库单创建时间},</if>
+            <if test="发货数量 != null">#{发货数量},</if>
+            <if test="单位2 != null">#{单位2},</if>
+         </trim>
+    </insert>
+    <insert id="insertNetsendList" parameterType="Netsend" >
+        insert into netsend(订单编号, 客户代码, 渠道, 线上线下, 区域, RDC城市, 客户城市, 实际运输时间, 体积, 要求到货时间, 签收时间, 订单创建时间, 物料编码, 运输方, 订货量, 单位1, 发货单号, 出库单创建时间, 发货数量, 单位2)
+        values
+        <foreach item="netsend" collection="list" separator=",">
+            (#{netsend.订单编号},#{netsend.客户代码},#{netsend.渠道},#{netsend.线上线下},#{netsend.区域},#{netsend.RDC城市},#{netsend.客户城市},#{netsend.实际运输时间},#{netsend.体积},#{netsend.要求到货时间},#{netsend.签收时间},#{netsend.订单创建时间},
+             #{netsend.订单创建时间},#{netsend.物料编码},#{netsend.运输方},#{netsend.订货量},#{netsend.单位1},#{netsend.发货单号},#{netsend.出库单创建时间},#{netsend.发货数量},#{netsend.单位2})
+        </foreach>
+    </insert>
+    <update id="updateNetsend" parameterType="Netsend">
+        update netsend
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="客户代码 != null">客户代码 = #{客户代码},</if>
+            <if test="渠道 != null">渠道 = #{渠道},</if>
+            <if test="线上线下 != null">线上线下 = #{线上线下},</if>
+            <if test="区域 != null">区域 = #{区域},</if>
+            <if test="RDC城市 != null">RDC城市 = #{RDC城市},</if>
+            <if test="客户城市 != null">客户城市 = #{客户城市},</if>
+            <if test="实际运输时间 != null">实际运输时间 = #{实际运输时间},</if>
+            <if test="体积 != null">体积 = #{体积},</if>
+            <if test="要求到货时间 != null">要求到货时间 = #{要求到货时间},</if>
+            <if test="签收时间 != null">签收时间 = #{签收时间},</if>
+            <if test="订单创建时间 != null">订单创建时间 = #{订单创建时间},</if>
+            <if test="物料编码 != null">物料编码 = #{物料编码},</if>
+            <if test="运输方 != null">运输方 = #{运输方},</if>
+            <if test="订货量 != null">订货量 = #{订货量},</if>
+            <if test="单位1 != null">单位1 = #{单位1},</if>
+            <if test="发货单号 != null">发货单号 = #{发货单号},</if>
+            <if test="出库单创建时间 != null">出库单创建时间 = #{出库单创建时间},</if>
+            <if test="发货数量 != null">发货数量 = #{发货数量},</if>
+            <if test="单位2 != null">单位2 = #{单位2},</if>
+        </trim>
+        where 订单编号 = #{订单编号}
+    </update>
+
+    <delete id="deleteNetsendBy订单编号" parameterType="String">
+        delete from netsend where 订单编号 = #{订单编号}
+    </delete>
+
+    <delete id="deleteNetsendBy订单编号s" parameterType="String">
+        delete from netsend where 订单编号 in 
+        <foreach item="订单编号" collection="array" open="(" separator="," close=")">
+            #{订单编号}
+        </foreach>
+    </delete>
+
+</mapper>

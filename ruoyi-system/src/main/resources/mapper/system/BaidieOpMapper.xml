@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BaidieOpMapper">
+    
+    <resultMap type="BaidieOp" id="BaidieOpResult">
+        <result property="id"    column="id"    />
+        <result property="opId"    column="op_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="drillID"    column="drillID"    />
+        <result property="opValue"    column="op_value"    />
+    </resultMap>
+
+    <sql id="selectBaidieOpVo">
+        select id, op_id, user_id, drillID, op_value from baidie_op
+    </sql>
+
+    <select id="selectBaidieOpList" parameterType="BaidieOp" resultMap="BaidieOpResult">
+        <include refid="selectBaidieOpVo"/>
+        <where>  
+            <if test="opId != null  and opId != ''"> and op_id = #{opId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="drillID != null  and drillID != ''"> and drillID = #{drillID}</if>
+            <if test="opValue != null  and opValue != ''"> and op_value = #{opValue}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaidieOpById" parameterType="Long" resultMap="BaidieOpResult">
+        <include refid="selectBaidieOpVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBaidieOp" parameterType="BaidieOp" useGeneratedKeys="true" keyProperty="id">
+        insert into baidie_op
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="opId != null and opId != ''">op_id,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="drillID != null and drillID != ''">drillID,</if>
+            <if test="opValue != null and opValue != ''">op_value,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="opId != null and opId != ''">#{opId},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="drillID != null and drillID != ''">#{drillID},</if>
+            <if test="opValue != null and opValue != ''">#{opValue},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaidieOp" parameterType="BaidieOp">
+        update baidie_op
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opId != null and opId != ''">op_id = #{opId},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="drillID != null and drillID != ''">drillID = #{drillID},</if>
+            <if test="opValue != null and opValue != ''">op_value = #{opValue},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaidieOpById" parameterType="Long">
+        delete from baidie_op where id = #{id}
+    </delete>
+
+    <delete id="deleteBaidieOpByIds" parameterType="String">
+        delete from baidie_op where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
