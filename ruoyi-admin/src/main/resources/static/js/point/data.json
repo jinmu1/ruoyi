@@ -1,0 +1,100 @@
+﻿[
+  {
+    "indicators": "仓储能力",
+    "planA": "844405.0",
+    "planB": "771643.0",
+    "planC": "819518.0",
+    "planD": "800117.0"
+  },
+  {
+    "indicators": "吞吐能力",
+    "planA": "1800000.0",
+    "planB": "1800000.0",
+    "planC": "1800000.0",
+    "planD": "1800000.0"
+  },
+  {
+    "indicators": "平均库存天数",
+    "planA": "39.0",
+    "planB": "57.0",
+    "planC": "42.0",
+    "planD": "37.0"
+  },
+  {
+    "indicators": "单位面积存量",
+    "planA": "1.0",
+    "planB": "2.0",
+    "planC": "2.0",
+    "planD": "1.0"
+  },
+  {
+    "indicators": "订单满足率",
+    "planA": "64.0",
+    "planB": "70.0",
+    "planC": "73.0",
+    "planD": "60.0"
+  },
+  {
+    "indicators": "订单完成周期",
+    "planA": "3.0",
+    "planB": "3.0",
+    "planC": "3.0",
+    "planD": "3.0"
+  },
+  {
+    "indicators": "订单12h送达率",
+    "planA": "1.0",
+    "planB": "1.0",
+    "planC": "1.0",
+    "planD": "1.0"
+  },
+  {
+    "indicators": "面积",
+    "planA": "43895.0",
+    "planB": "39243.0",
+    "planC": "47077.0",
+    "planD": "38437.0"
+  },
+  {
+    "indicators": "人数",
+    "planA": "88.0",
+    "planB": "71.0",
+    "planC": "82.0",
+    "planD": "86.0"
+  },
+  {
+    "indicators": "车辆数",
+    "planA": "38.0",
+    "planB": "33.0",
+    "planC": "47.0",
+    "planD": "38.0"
+  },
+  {
+    "indicators": "总成本",
+    "planA": "8106.0",
+    "planB": "7847.0",
+    "planC": "8212.0",
+    "planD": "8415.0"
+  },
+  {
+    "indicators": "物流费率",
+    "planA": "0.04053",
+    "planB": "0.039235",
+    "planC": "0.04106",
+    "planD": "0.042075"
+  },
+  {
+    "indicators": "单托成本",
+    "planA": "22.0",
+    "planB": "23.0",
+    "planC": "20.0",
+    "planD": "21.0"
+  },
+  {
+    "indicators": "单订单成本",
+    "planA": "27.0",
+    "planB": "31.0",
+    "planC": "29.0",
+    "planD": "26.0"
+  }
+]
