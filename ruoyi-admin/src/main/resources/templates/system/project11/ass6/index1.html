@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+    </style>
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">案例企业作业决策优化模拟</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>作业设施资源决策优化</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table1"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>作业设备资源决策优化</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table2"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>作业人员资源决策优化</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table3"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>作业批量批次决策优化</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table4"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12"  >
+            <div class="text-center" >
+                <button type="button" class="btn btn-primary" onclick="submit()">提交运算</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 25px">
+
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="pre()">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="next()">下一步</button>
+        </div>
+    </div>
+</div>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>正在加载...</h5>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<th:block th:include="include :: layer-js"/>
+<script th:src="@{/js/plugins/layer/layer.ext.js}"></script>
+<script  th:inline="javascript">
+
+    function next(){
+        window.location.href=ctx+"system/project1/ass6/index2";
+    }
+    function pre(){
+        window.location.href=ctx+"system/project1/ass6/index";
+    }
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9;
+    $.getJSON("../../../file/zuoye.json", function (data) {
+        data1=data.data5;
+        data2=data.data6;
+        data3=data.data7;
+        data4=data.data8;
+        loadTable1();
+    });
+
+    function submit(){
+        layer.load('正在计算中....', 5);
+    }
+    function loadTable1() {
+        var options = {
+            id:"table1",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            onEditableSave: onEditableSave,
+            columns: [  {
+                field: '作业设施',
+                title: '作业设施'
+            },
+                {
+                    field: '初始状态数量',
+                    title: '状态数量',
+                    editable : {
+                        type : 'text',
+                        title : '状态数量',
+                        emptytext : "【状态数量】为空",
+                        validate : function(value) {
+
+                        }
+                    }
+                }]
+
+        };
+        var options1 = {
+            id:"table2",
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            onEditableSave: onEditableSave,
+            columns: [    {
+                field: '设备名称',
+                title: '设备名称'
+            },
+                {
+                    field: '设备功能',
+                    title: '设备功能'
+                },
+                {
+                    field: '初始设备数量（个）',
+                    title: '初始设备数量（个）',
+                    editable : {
+                        type : 'text',
+                        title : '设备数量',
+                        emptytext : "【设备数量】为空",
+                        validate : function(value) {
+
+                        }
+                    }
+                },
+                {
+                    field: '设备固定处理能力（托/秒）',
+                    title: '设备固定处理能力（托/秒）'
+                }
+            ]
+
+        };
+        var options2 = {
+            id:"table3",
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            onEditableSave: onEditableSave,
+            columns: [     {
+                field: '工作组',
+                title: '工作组'
+            },
+                {
+                    field: '工作类型',
+                    title: '工作类型'
+                },
+                {
+                    field: '初始人员数量',
+                    title: '初始人员数量',
+                    editable : {
+                        type : 'text',
+                        title : '人员数量',
+                        emptytext : "【初始人员数量】为空",
+                        validate : function(value) {
+
+                        }
+                    }
+                },
+                {
+                    field: '每人处理能力（托/秒）',
+                    title: '每人处理能力（托/秒）'
+                }
+            ]
+
+        };
+        var options3 = {
+            id:"table4",
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            onEditableSave: onEditableSave,
+            columns: [      {
+                field: '作业流程',
+                title: '作业流程'
+            },
+                {
+                    field: '需处理总作业量（托）',
+                    title: '需处理总作业量（托）'
+                },
+                {
+                    field: '初始作业批量（托/次）',
+                    title: '初始作业批量（托/次）',
+                    editable : {
+                        type : 'text',
+                        title : '作业批量',
+                        emptytext : "【作业批量】为空",
+                        validate : function(value) {
+
+                        }
+                    }
+                },
+                {
+                    field: '初始作业批次（次）',
+                    title: '初始作业批次（次）'
+                }
+            ]
+
+        };
+        $.table.init(options);
+        $.table.init(options1);
+        $.table.init(options2);
+        $.table.init(options3);
+    }
+    function onEditableSave (field, row, rowIndex, oldValue, $el) {
+        alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>仓储物流中心资源仿真模拟数字看板</title>
+    <th:block th:include="include :: header('')" />
+    <link  href="../../../static/template4/styles/common.css"  th:href="@{/template4/styles/common.css}" rel="stylesheet"/>
+    <script th:src="@{/ajax/libs/report/echarts/echarts-all.min.js?v=4.2.1}"></script>
+    <script th:src="@{/template4/scripts/Plugin/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/bmap.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/echarts-gl.js}"></script>
+    <script th:src="@{/template4/scripts/common.js}"></script>
+    <!--    <script th:src="@{/template4/scripts/index.js}"></script>-->
+    <script th:src="@{/template4/scripts/Plugin/laydate/laydate.js}"></script>
+</head>
+<body>
+<!--顶部-->
+<header class="header left">
+    <div class="left nav">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+    <div class="header_center left" style="position:relative">
+        <h1><strong>设备利用率优化前后对比</strong></h1>
+    </div>
+    <div style="">
+        <p><span id="n" style="display: none" th:text="${n}"></span></p>
+        <p><span id="drillID" style="display: none" th:text="${drillID}"></span></p>
+        <p> <span id="userID" style="display: none" th:text="${userID}"></span></p>
+        <p> <span id="issueID" style="display: none" th:text="${issueID}"></span></p>
+        <h4 style="float: left"><a onclick="end()" class="button" style="background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid green;margin-left: 80px;margin-top: 20px;font-size: 16px;text-decoration: none;display: inline-block;">提交</a></h4>
+    </div>
+    <div class="right nav text_right">
+        <ul>
+
+        </ul>
+    </div>
+
+</header>
+<!--内容部分-->
+<div class="con left">
+
+</div>
+<div class="div_any">
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始入库卸货电动叉车资源占用情况</div>
+            <p id="demo16" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始入库卸货电动叉车利用率</div>
+            <p id="demo161" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后入库卸货电动叉车资源占用情况</div>
+            <p id="demo162" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后入库卸货电动叉车利用率</div>
+            <p id="demo163" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始入库上架电动叉车资源占用情况</div>
+            <p id="demo17" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始入库上架电动叉车利用率</div>
+            <p id="demo171" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">优化后入库上架电动叉车资源占用情况</div>
+            <p id="demo172" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后入库上架电动叉车利用率</div>
+            <p id="demo173" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">初始下架分拣电动叉车资源占用情况</div>
+            <p id="demo18" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">初始下架分拣电动叉车利用率</div>
+            <p id="demo181" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">优化后下架分拣电动叉车资源占用情况</div>
+            <p id="demo182" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后下架分拣电动叉车利用率</div>
+            <p id="demo183" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始出库装车电动叉车资源占用情况</div>
+            <p id="demo19" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始出库装车电动叉车利用率</div>
+            <p id="demo191" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后出库装车电动叉车资源占用情况</div>
+            <p id="demo192" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后出库装车电动叉车利用率</div>
+            <p id="demo193" class="p_chart"></p>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<th:block th:include="include :: footer" />
+<script>
+    function end(){
+        window.location.href=ctx+"end?score="+$('#n').text()+"&drillID="+$('#drillID').text()+"&userID="+$('#userID').text()+"&issueID="+$('#issueID').text();
+    }
+    for(var i=16;i<20;i++) {
+        init("", "demo" + i);
+    }
+    for(var i=161;i<200;i+=10) {
+        init1("", "demo" + i);
+    }
+    for(var i=162;i<200;i+=10) {
+        init("", "demo" + i);
+    }
+    for(var i=163;i<200;i+=10) {
+        init1("", "demo" + i);
+    }
+
+    function init(title,id) {
+        var dom = document.getElementById(id);
+        var myChart = echarts.init(dom);
+        var dataCount = 80000;
+        var data = generateData(dataCount);
+        var color1=['#ffd42b', '#ff733f', '#b3ec6a','#ffd42b', '#ff733f', '#b3ec6a'];
+        var option = {
+            color: ['#ffd42b', '#ff733f', '#b3ec6a'],
+            title: [{
+                text: title+"资源占用情况",
+                left: '1%',
+                top: '6%',
+                textStyle: {
+                    color: '#fff',
+                    fontSize:16
+                }
+            }],
+            legend: {
+                x: 300,
+                top: '7%',
+                textStyle: {
+                    color: '#ffd285',
+                },
+                data: [title+"资源占用情况"]
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: false
+                    },
+                    saveAsImage: {
+                        pixelRatio: 2
+                    }
+                }
+            },
+            grid: {
+                left: '1%',
+                right: '1%',
+                top: '16%',
+                bottom: '6%',
+                containLabel: true
+            },
+            toolbox: {
+                "show": false,
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+
+            dataZoom: [{
+                type: 'inside'
+            }, {
+                type: 'slider'
+            }],
+            textStyle: {//图例文字的样式
+                color: '#fff',
+                fontSize: 12
+            },
+            xAxis: {
+                data: data.categoryData,
+                silent: false,
+                splitLine: {
+                    show: false
+                },
+                splitArea: {
+                    show: false
+                }
+            },
+            yAxis: {
+                splitArea: {
+                    show: false
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.valueData,
+                itemStyle: {
+                    color: color1[randomNum(1,6)]
+                },
+                // Set `large` for large data amount
+                large: true
+            }]
+        };
+
+        function generateData(count) {
+            var baseValue = Math.random() * 1000;
+            var time = +new Date(2018, 2, 2)+60*60*8*1000;
+            var smallBaseValue;
+
+            function next(idx) {
+                smallBaseValue = idx % 30 === 0
+                    ? Math.random() * 700
+                    : (smallBaseValue + Math.random() * 500 - 250);
+                baseValue += Math.random() * 20 - 10;
+                return Math.max(
+                    0,
+                    Math.round(baseValue + smallBaseValue) + 1000
+                );
+            }
+
+            var categoryData = [];
+            var valueData = [];
+
+            for (var i = 0; i < count; i++) {
+                categoryData.push(echarts.format.formatTime('MM-dd\nhh:mm:ss', time));
+                valueData.push(next(i).toFixed(2) / 110);
+                time += 1000;
+            }
+
+            return {
+                categoryData: categoryData,
+                valueData: valueData
+            };
+        }
+
+        myChart.setOption(option);
+    };
+    function init1(title,id) {
+        var dom = document.getElementById(id);
+        var myChart = echarts.init(dom);
+        var num =  randomNum(50,99);
+        var option = {
+            color: ['#213B7A', '#54FEFE', '#0097EE', '#3D4969', '#35CEBA'],
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            series: [{
+                name: '利用率',
+                type: 'pie',
+                radius: ['24%', '70%'],
+                roseType: 'area',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{b|{b}}\n{hr|}\n{d|占比{d}%}',
+                        rich: {
+                            b: {
+                                fontSize: 14,
+                                color: 'rgba(255,255,255,0.8)',
+                                align: 'center',
+                                padding: 6
+                            },
+                            hr: {
+                                borderColor: '#0097EE',
+                                width: '100%',
+                                borderWidth: 1,
+                                height: 0
+                            },
+                            d: {
+                                fontSize: 14,
+                                color: '#fff',
+                                align: 'center',
+                                padding: 6,
+                            },
+                        },
+                        position: 'outside'
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                        length: 1,
+                        lineStyle: {
+                            color: '#0097EE',
+                            width: 1
+                        },
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: [{
+                    value: num,
+                    name: '忙'
+                },
+                    {
+                        value: 100-num,
+                        name: '闲'
+                    }
+                ]
+            },
+                // 边框的设置
+                {
+                    radius: ['16%', '20%'],
+                    center: ['50%', '50%'],
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    animation: false,
+                    tooltip: {
+                        show: false
+                    },
+                    data: [{
+                        value: 1,
+                        itemStyle: {
+                            color: "#3D4969",
+                        },
+                    }],
+                },
+            ]
+        };
+        myChart.setOption(option);
+    };
+    function  randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+
+
+</html>

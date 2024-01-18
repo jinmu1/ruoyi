@@ -1,0 +1,4542 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">配送网络特征分析</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络可视化分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>起点</p>
+                            <select  name="z" id="s1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	地图上按照经纬度展示客户所在地点	</option>
+                                <option value="2">	地图上按照经纬度展示二级物流中心所在城市仓库点	</option>
+                                <option value="3">	按照经纬度在地图上展示起点仓所在城市的地点	</option>
+                                <option value="4">	地图上按照经纬度展示工厂所在地点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>终点</p>
+                            <select  name="x" id="s2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	地图上按照经纬度展示工厂所在地点	</option>
+                                <option value="2">	地图上按照经纬度展示一级物流中心所在城市仓库点	</option>
+                                <option value="3">	地图上按照经纬度展示二级物流中心所在城市仓库点	</option>
+                                <option value="4">	按照经纬度在地图上展示终点仓所在城市的地点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>分析方法</p>
+                            <select name="y" id="s3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计每一个起点仓库和终点仓库的订单数量分布	</option>
+                                <option value="2">	统计每一个起点仓库和终点仓库的物料数量分布	</option>
+                                <option value="3">	以运输路线连接每一个起点仓和终点仓	</option>
+                                <option value="4">	统计每一个起点仓库和终点仓库的运输距离分布	</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>全国三级物流中心配送辐射范围分布</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="echarts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送线路分析用表制作</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>分析对象一</p>
+                            <select  name="z" id="s11" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有备选城市点	</option>
+                                <option value="3">	所有工厂所在城市点	</option>
+                                <option value="4">	所有三级物流中心仓库点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>分析对象二</p>
+                            <select  name="x" id="s12" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	订单数量	</option>
+                                <option value="2">	所有客户分布点	</option>
+                                <option value="3">	所有二级物流中心仓库点	</option>
+                                <option value="4">	物料数量	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="x" id="s13" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计周期内不同三级物流中心到客户分布点的配送订单总数量	</option>
+                                <option value="2">	统计周期内不同三级物流中心到客户指定仓的配送线路数量	</option>
+                                <option value="3">	统计周期内不同三级物流中心到客户分布点的配送路线总数量	</option>
+                                <option value="4">	统计周期内不同三级物流中心到客户分布点的配送运输总数量	</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送线路分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-tables"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送辐射范围分布图</h5>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="map" style="height:460px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送线路分析</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z" id="x" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	客户点	</option>
+                                <option value="2">	仓库节点	</option>
+                                <option value="3">	备选点	</option>
+                                <option value="4">	工厂点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="x" id="y" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内覆盖订单数量（个）	</option>
+                                <option value="2">	周期内运输物料总体积（立方米）	</option>
+                                <option value="3">	周期内覆盖客户数量（个）	</option>
+                                <option value="4">	周期内覆盖线路数量（条）	</option>
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送线路分析</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送线路ABC分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x12" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	工厂点累计数量占比	</option>
+                                <option value="2">	客户分布点累计数量占比	</option>
+                                <option value="3">	仓库节点累计品目数百分比	</option>
+                                <option value="4">	备选点累计数量占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>数据系列字段二</p>
+                            <select  name="y1" id="y12" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内覆盖客户分布点累计数量占比	</option>
+                                <option value="2">	周期内配送总距离（公里）累计数量占比	</option>
+                                <option value="3">	周期内覆盖订单数量（个）累计数量占比	</option>
+                                <option value="4">	周期内覆盖线路数量（条）累计数量占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内覆盖线路（条）累计数量占比
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="map2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送总距离分析</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>分析对象一</p>
+                            <select  name="z1" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有三级物流中心仓库点	</option>
+                                <option value="3">	所有工厂所在城市点	</option>
+                                <option value="4">	所有备选城市点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>分析对象二</p>
+                            <select  name="y1" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	订单数量	</option>
+                                <option value="2">	物料数量	</option>
+                                <option value="3">	所有客户分布点	</option>
+                                <option value="4">	所有二级物流中心仓库点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="y1" id="z1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计周期内不同三级物流中心到客户分布点的配送订单总数量	</option>
+                                <option value="2">	统计周期内不同三级物流中心到客户分布点的配送总距离	</option>
+                                <option value="3">	统计周期内不同三级物流中心到客户分布点的配送路线总数量	</option>
+                                <option value="4">	统计周期内不同三级物流中心到客户分布点的配送运输总数量	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit4()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点运输总距离分析用表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+
+                    <table id="bootstrap-table2"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送总距离分析</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	客户点	</option>
+                                <option value="2">	仓库节点	</option>
+                                <option value="3">	备选点	</option>
+                                <option value="4">	工厂点	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内覆盖订单数量（个）	</option>
+                                <option value="2">	周期内覆盖线路数量（条）	</option>
+                                <option value="3">	周期内运输物料总体积（立方米）	</option>
+                                <option value="4">	周期内配送总距离（公里）	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit6()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送总距离</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="map5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送距离ABC分析</h5>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	工厂点累计数量占比	</option>
+                                <option value="2">	客户分布点累计数量占比	</option>
+                                <option value="3">	备选点累计数量占比	</option>
+                                <option value="4">	仓库节点累计品目数百分比	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内辐射客户分布点累计数量占比	</option>
+                                <option value="2">	周期内覆盖线路数量（条）累计数量占比	</option>
+                                <option value="3">	周期内配送总距离（公里）累计数量占比	</option>
+                                <option value="4">	周期内覆盖订单数量（个）累计数量占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit7()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送距离ABC分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="map6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域周期内涵盖仓库节点数量统计分析</h5>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-5">
+                                    <label class="control-label">分析对象一</label>
+                                </div>
+
+                                <div class="col-sm-5">
+                                    <label class="control-label">统计方法</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确步骤</label>
+                            <div class="col-sm-10">
+                                <div  class="row">
+                                    <div class="col-sm-5">
+                                        <select class="type form-control m-b" id="s41" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	订单数量	</option>
+                                            <option value="2">	客户数量	</option>
+                                            <option value="3">	物料数量	</option>
+                                            <option value="4">	客户分布区域	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <select class="router form-control m-b" id="s43" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	统计周期内不同区域内分布的仓库节点数量（个）及其占比	</option>
+                                            <option value="2">	统计周期内不同区域内覆盖的客户数量（个）及其占比	</option>
+                                            <option value="3">	统计周期内不同区域内分布的订单数量（个）及其占比	</option>
+                                            <option value="4">	统计周期内不同区域内分布的仓库节点数量（个）及其占比	</option>
+
+
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域周期内涵盖仓库节点数量表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+
+                    <table id="bootstrap-table3"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域周期内涵盖仓库节点数量统计分析</h5>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>分析对象一</p>
+                            <select  name="z1" id="x4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	订单数量	</option>
+                                <option value="2">	客户数量	</option>
+                                <option value="3">	客户分布区域	</option>
+                                <option value="4">	物料数量	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>分析对象二</p>
+                            <select  name="y1" id="y4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有三级物流中心仓库点覆盖客户数量（个）	</option>
+                                <option value="3">	所有备选城市点	</option>
+                                <option value="4">	所有工厂所在城市点	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="y1" id="z4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计周期内不同区域内分布的仓库节点数量（个）及其占比	</option>
+                                <option value="2">	统计周期内不同区域内分布的对应仓库节点覆盖订单数量（个）及其占比	</option>
+                                <option value="3">	统计周期内不同区域内分布的对应仓库节点覆盖客户数量（个）及其占比	</option>
+                                <option value="4">	统计周期内不同区域内分布的对应仓库节点覆盖物料数量（个）及其占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit9()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域周期内涵盖仓库节点数量统计分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+
+                    <table id="bootstrap-table4"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6" >
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域涵盖仓库节点数量占比图表制作</h5>
+                </div>
+                <div class="ibox-content"  style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>数据系列字段一</p>
+                            <select  name="z1" id="x5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	客户点	</option>
+                                <option value="2">	仓库节点	</option>
+                                <option value="3">	客户分布区域	</option>
+                                <option value="4">	工厂点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>数据系列字段二</p>
+                            <select  name="y1" id="y5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	各区域客户分布数量（个）占比	</option>
+                                <option value="2">	各区域订单分布数量（个）占比	</option>
+                                <option value="3">	各区域物料分布数量（个）占比	</option>
+                                <option value="4">	各区域仓库节点分布数量（个）占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit10()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中不同区域涵盖仓库节点数量占比图表制作</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="map9"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <div class="row">-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>配送网络中不同区域周期内覆盖客户数量占比图表制作</h5>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content"  style="height:300px">-->
+    <!--                    <div class="panel panel-bordered">-->
+    <!--                        <div>-->
+    <!--                            <p>数据系列字段一</p>-->
+    <!--                            <select  name="z1" id="x6" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	各客户点	</option>-->
+    <!--                                <option value="2">	各区域	</option>-->
+    <!--                                <option value="3">	各仓库节点	</option>-->
+    <!--                                <option value="4">	各工厂点	</option>-->
+
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div>-->
+    <!--                            <p>数据系列字段二</p>-->
+    <!--                            <select  name="y1" id="y6" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	周期内覆盖订单数量（个）占比	</option>-->
+    <!--                                <option value="2">	各区域周期内覆盖客户数量（个）占比	</option>-->
+    <!--                                <option value="3">	周期内覆盖仓库节点数量（个）占比	</option>-->
+    <!--                                <option value="4">	周期内覆盖线路数量（条）占比	</option>-->
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group">-->
+    <!--                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">-->
+    <!--                                <button class="btn btn-primary" onclick="submit11()" type="button">提交</button>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                    </div>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>配送网络中不同区域周期内覆盖客户数量占比图表制作</h5>-->
+    <!--                    <div class="ibox-tools">-->
+    <!--                        <a class="collapse-link">-->
+    <!--                            <i class="fa fa-chevron-up"></i>-->
+    <!--                        </a>-->
+    <!--                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+    <!--                            <i class="fa fa-wrench"></i>-->
+    <!--                        </a>-->
+    <!--                        <ul class="dropdown-menu dropdown-user">-->
+    <!--                            <li><a href="#">选项1</a>-->
+    <!--                            </li>-->
+    <!--                            <li><a href="#">选项2</a>-->
+    <!--                            </li>-->
+    <!--                        </ul>-->
+    <!--                        <a class="close-link">-->
+    <!--                            <i class="fa fa-times"></i>-->
+    <!--                        </a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content" style="height:300px">-->
+
+    <!--                    <div class="echarts" id="map12"></div>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络时效区间的仓库节点分布分析用表制作</h5>
+                </div>
+                <div class="ibox-content"  style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x7" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有一级物流中心仓库点	</option>
+                                <option value="3">	所有工厂所在城市点	</option>
+                                <option value="4">	所有备选城市点	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y7" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有三级物流中心的订单数量	</option>
+                                <option value="2">	所有三级物流中心的客户数量	</option>
+                                <option value="3">	覆盖订单各订单的起始时间	</option>
+                                <option value="4">	所有三级物流中心的物料数量	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>辅助数据系列</p>
+                            <select  name="y1" id="z7" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有三级物流中心的订单数量	</option>
+                                <option value="2">	统计周期内各三级物流中心所覆盖订单配送周期的平均天数	</option>
+                                <option value="3">	平均时效(天数)分布区间对应仓库节点数量	</option>
+                                <option value="4">	所有三级物流中心的物料数量	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit13()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络时效区间的仓库节点分布分析用表制作</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table5"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络各区域下平均时效（天数）的仓库节点分布分析用表制作</h5>
+                </div>
+                <div class="ibox-content"  style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x17" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有三级物流中心	</option>
+                                <option value="3">	所有备选城市点	</option>
+                                <option value="4">	所有三级物流中心的区域	</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y17" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有三级物流中心周期内的订单数量	</option>
+                                <option value="2">	所有三级物流中心周期内的客户数量	</option>
+                                <option value="3">	周期内三级物流中心覆盖订单配送时效的平均时效（天数）	</option>
+                                <option value="4">	所有三级物流中心周期内的物料数量	</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>辅助数据系列</p>
+                            <select  name="y1" id="z17" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	平均时效分布区间对应仓库节点数量ABC分类分析	</option>
+                                <option value="2">	统计周期内各三级物流物流中心送达对应客户的时效	</option>
+                                <option value="3">	统计周期内不同一级物流中心到二级物流中心、二级物流中心到三级物流中心的运输物料总体积	</option>
+                                <option value="4">	按照周期内三级物流中心覆盖订单配送时效的平均时效（天数）进行直方图分析	</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit131()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络各区域下平均时效（天数）的仓库节点分布分析用表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table51"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络各仓库节点周期内覆盖订单配送平均时效（天数）统计直方图制作</h5>
+                </div>
+                <div class="ibox-content"  style="height:400px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x27" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有三级物流中心	</option>
+                                <option value="3">	所有备选城市点	</option>
+                                <option value="4">	所有三级物流中心的区域	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y27" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有三级物流中心周期内的订单数量	</option>
+                                <option value="2">	所有三级物流中心周期内的客户数量	</option>
+                                <option value="3">	周期内三级物流中心覆盖订单配送时效的平均时效（天数）	</option>
+                                <option value="4">	所有三级物流中心周期内的物料数量	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit132()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络各区域下平均时效（天数）的仓库节点分布分析用表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:400px">
+
+                    <div class="echarts" id="map13"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <div class="row">-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>各区域不同时效区间分布的仓库节点数量占比分析</h5>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content">-->
+    <!--                    <div class="panel panel-bordered">-->
+    <!--                        <div>-->
+    <!--                            <p>X轴</p>-->
+    <!--                            <select  name="z1" id="x8" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	所有工厂所在城市点	</option>-->
+    <!--                                <option value="2">	平均时效分布区间(天数)	</option>-->
+
+    <!--                                <option value="3">	所有备选城市点	</option>-->
+    <!--                                <option value="4">	所有三级物流中心的物料数量	</option>-->
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div>-->
+    <!--                            <p>Y轴</p>-->
+    <!--                            <select  name="y1" id="y8" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	所有三级物流中心的订单数量	</option>-->
+    <!--                                <option value="2">	所有三级物流中心的客户数量	</option>-->
+    <!--                                <option value="3">	平均时效(天数)分布区间对应仓库节点数量	</option>-->
+    <!--                                <option value="4">	所有三级物流中心的物料数量	</option>-->
+
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group">-->
+    <!--                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">-->
+    <!--                                <button class="btn btn-primary" onclick="submit14()" type="button">提交</button>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                    </div>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>配送网络时效区间的仓库节点分布分析用表制作</h5>-->
+    <!--                    <div class="ibox-tools">-->
+    <!--                        <a class="collapse-link">-->
+    <!--                            <i class="fa fa-chevron-up"></i>-->
+    <!--                        </a>-->
+    <!--                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+    <!--                            <i class="fa fa-wrench"></i>-->
+    <!--                        </a>-->
+    <!--                        <ul class="dropdown-menu dropdown-user">-->
+    <!--                            <li><a href="#">选项1</a>-->
+    <!--                            </li>-->
+    <!--                            <li><a href="#">选项2</a>-->
+    <!--                            </li>-->
+    <!--                        </ul>-->
+    <!--                        <a class="close-link">-->
+    <!--                            <i class="fa fa-times"></i>-->
+    <!--                        </a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content" style="height:300px">-->
+    <!--                    <div class="echarts" id="map13"></div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>各区域不同时效区间分布的仓库节点数量占比分析</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>数据系列字段一</p>
+                            <select  name="z1" id="x9" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	各客户点	</option>
+                                <option value="2">	各仓库节点	</option>
+                                <option value="3">	各工厂点	</option>
+                                <option value="4">	各区域	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>数据系列字段二</p>
+                            <select  name="y1" id="y9" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内各仓库节点覆盖订单数量（个）占比	</option>
+                                <option value="2">	各区域不同时效区间分布的仓库节点数量占比	</option>
+                                <option value="3">	周期内各仓库节点覆盖客户数量（个）占比	</option>
+                                <option value="4">	周期内各仓库节点覆盖线路数量（条）占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit15()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>各区域不同时效区间分布的仓库节点数量占比分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="echarts" id="map141">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="echarts" id="map142">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="echarts" id="map143">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="echarts" id="map144">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--    <div class="row">-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>配送网络各物流节点周期内配送总量分析用表制作</h5>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content" style="height:700px">-->
+    <!--                    <div class="panel panel-bordered">-->
+    <!--                        <div>-->
+    <!--                            <p>分析对象一</p>-->
+    <!--                            <select  name="z1" id="x10" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	所有客户所在城市点	</option>-->
+    <!--                                <option value="2">	所有一级物流中心仓库点	</option>-->
+    <!--                                <option value="3">	所有二级物流中心仓库点	</option>-->
+    <!--                                <option value="4">	所有三级物流中心仓库点	</option>-->
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div>-->
+    <!--                            <p>分析对象二</p>-->
+    <!--                            <select  name="y1" id="y10" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	周期内物料种类总数量	</option>-->
+    <!--                                <option value="2">	周期内订单个数	</option>-->
+    <!--                                <option value="3">	周期内配送量	</option>-->
+    <!--                                <option value="4">	周期内物料运输总体积	</option>-->
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div>-->
+    <!--                            <p>统计方法</p>-->
+    <!--                            <select  name="y1" id="z10" type="text"  class="form-control"    >-->
+    <!--                                <option  value='请选择'  >请选择</option>-->
+    <!--                                <option value="1">	统计周期内不同一级物流中心到二级物流中心、二级物流中心到三级物流中心的运输总距离	</option>-->
+    <!--                                <option value="2">	统计周期内不同三级物流中心到客户的配送总量	</option>-->
+    <!--                                <option value="3">	统计周期内不同一级物流中心到二级物流中心、二级物流中心到三级物流中心的订单数量	</option>-->
+    <!--                                <option value="4">	统计周期内不同二级物流中心到三级物流中心的运输总距离	</option>-->
+
+
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group">-->
+    <!--                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">-->
+    <!--                                <button class="btn btn-primary" onclick="submit17()" type="button">提交</button>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                    </div>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="col-sm-6">-->
+    <!--            <div class="ibox float-e-margins">-->
+    <!--                <div class="ibox-title">-->
+    <!--                    <h5>配送网络各物流节点周期内配送总量分析表-->
+    <!--                    </h5>-->
+    <!--                    <div class="ibox-tools">-->
+    <!--                        <a class="collapse-link">-->
+    <!--                            <i class="fa fa-chevron-up"></i>-->
+    <!--                        </a>-->
+    <!--                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+    <!--                            <i class="fa fa-wrench"></i>-->
+    <!--                        </a>-->
+    <!--                        <ul class="dropdown-menu dropdown-user">-->
+    <!--                            <li><a href="#">选项1</a>-->
+    <!--                            </li>-->
+    <!--                            <li><a href="#">选项2</a>-->
+    <!--                            </li>-->
+    <!--                        </ul>-->
+    <!--                        <a class="close-link">-->
+    <!--                            <i class="fa fa-times"></i>-->
+    <!--                        </a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="ibox-content" style="height:700px">-->
+
+    <!--                        <table id="bootstrap-table7"></table>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送体积ABC分类分析</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="x11" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	仓库节点	</option>
+                                <option value="2">	工厂点	</option>
+                                <option value="3">	仓库节点累计品目数百分比	</option>
+                                <option value="4">	备选点	</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y11" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内配送总数量（箱）	</option>
+                                <option value="2">	周期内配送体积（立方米）累计占比	</option>
+                                <option value="3">	周期内覆盖线路数量（条）	</option>
+                                <option value="4">	周期内运输总距离（公里）	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit18()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各物流节点配送体积ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table8"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络中各区域配送体积占比分析</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>分析对象一</p>
+                            <select  name="z1" id="x14" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	所有客户所在城市点	</option>
+                                <option value="2">	所有三级物流中心仓库点对应区域	</option>
+                                <option value="3">	所有三级物流中心仓库点对应客户点	</option>
+                                <option value="4">	所有三级物流中心仓库点	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>分析对象二</p>
+                            <select  name="y1" id="y14" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内各区域订单数量（个）	</option>
+                                <option value="2">	周期内各区域运输总距离（公里）	</option>
+                                <option value="3">	周期内各区域配送体积(立方米)	</option>
+                                <option value="4">	周期内各区域覆盖线路数量（条）	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="y1" id="z14" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计周期内不同区域的覆盖运输线路数量（条）占比情况	</option>
+                                <option value="2">	统计周期内不同区域的配送体积(立方米)占比情况	</option>
+                                <option value="3">	统计周期内不同区域的订单数量（个）占比情况	</option>
+                                <option value="4">	统计周期内不同区域的运输总距离（公里）占比情况	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit19()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配送网络各物流节点周期内配送总量分析表
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="map18"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+
+    var prefix = ctx + "system/netsend";
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11,data12;
+    $.getJSON("../../../file/transport1.json", function (data) {
+        data12=data.data12;
+        loadTable1();
+    })
+    $.getJSON("../../../file/send.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+        data5=data.data5;
+        data6=data.data6;
+        data7=data.data7;
+        data8=data.data8;
+        data9=data.data9;
+        data10=data.data10;
+        data11=data.data11;
+
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            submit();
+            submit1();
+            submit2();
+            submit3();
+            submit4();
+            submit6();
+            submit7();
+            submit8();
+            submit9();
+            submit10();
+            submit13();
+            submit131();
+            submit132();
+            submit14();
+            submit15();
+            submit18();
+            submit19();
+        });
+
+        // load();
+        // load1();
+        // load2();
+        // load3();
+        // load4();
+        // load6();
+        // load7();
+        // load8();
+        // load9();
+        // load10();
+        // // load11();
+        // load131()
+        // load13();
+        // load15();
+        // //
+        // // load17();
+        // load18();
+        // load19();
+
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+
+    function loadTable1() {
+        var options = {
+            id:"bootstrap-table",
+            toolbar:null,
+            data:data12,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [{"field":"订单编号","title":"订单编号"},{"field":"客户编码","title":"客户编码"},{"field":"客户订单创建时间","title":"客户订单创建时间"},{"field":"渠道类别","title":"渠道类别"},{"field":"渠道细分","title":"渠道细分"},{"field":"客户分布区域","title":"客户分布区域"},{"field":"起点仓","title":"起点仓"},{"field":"终点仓","title":"终点仓"},{"field":"客户省份","title":"客户省份"},{"field":"客户指定仓代码","title":"客户指定仓代码"},{"field":"实际运输时间","title":"实际运输时间"},{"field":"物料编码","title":"物料编码"},{"field":"运输体积数量（立方米）","title":"运输体积数量（立方米）"},{"field":"发货数量（运输单位）","title":"发货数量（运输单位）"},{"field":"发货单位","title":"发货单位"},{"field":"要求到货时间","title":"要求到货时间"},{"field":"订单签收时间","title":"订单签收时间"},{"field":"运输方编码","title":"运输方编码"},{"field":"订货数量","title":"订货数量"},{"field":"单位","title":"单位"},{"field":"发货单号","title":"发货单号"},{"field":"产品单价","title":"产品单价"},{"field":"单位(元)","title":"单位(元)"}]
+        };
+        $.table.init(options);
+    }
+
+    function submit1(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load1();
+            n++;
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+        }
+
+    }
+    function load1(){
+        var myChart = echarts.init(document.getElementById('map'), 'macarons');
+        var geoCoordMap = {
+            '北京': [116.4133837,39.91092455],
+            '郑州': [113.6314192,34.75343885],
+            '杭州': [120.2155118,30.25308298],
+            '兰州': [103.8405212,36.06723469],
+            '银川': [106.2384936,38.49246006],
+            '临沂': [118.363533,35.11067124],
+            '天津': [117.2080928,39.0911026],
+            '南昌': [115.9504602,28.55160419],
+            '攀枝花': [101.7255412,26.58803317],
+            '青岛': [120.3894552,36.0722275],
+            '太原': [112.5563915,37.87698903],
+            '徐州': [117.2905754,34.21266655],
+            '重庆': [106.5584342,29.56899625],
+            '合肥': [117.2334427,31.82657783],
+            '济南': [117.1263994,36.6565542],
+            '南京': [118.8024217,32.06465289],
+            '宁波': [121.6308428,29.86606812],
+            '温州': [120.7064769,28.0010854],
+            '乌鲁木齐': [87.41602875,43.47708607],
+            '无锡': [120.3185833,31.49880973],
+            '许昌': [113.8584755,34.04143161],
+            '福州': [119.3034698,26.08042942],
+            '济宁': [116.5936123,35.42017739],
+            '九江': [115.9606612,29.66666085],
+            '洛阳': [112.4594213,34.62426278],
+            '石家庄': [114.5214032,38.04829154],
+            '苏州': [120.5924122,31.30356407],
+            '襄阳': [112.1285372,32.0147968],
+            '安庆': [117.1212828,30.53922248],
+            '包头': [109.9597986,40.62714122],
+            '保定': [115.4714638,38.87998777],
+            '沧州': [116.8455808,38.31021514],
+            '常州': [119.9814847,31.81579565],
+            '达州': [107.4745939,31.21430772],
+            '鄂州': [114.9016074,30.39657217],
+            '阜阳': [115.8204361,32.89606099],
+            '菏泽': [115.487545,35.23940742],
+            '淮安': [119.1474632,33.50899984],
+            '昆明': [102.8394451,24.88627211],
+            '昆山': [120.9874525,31.39086343],
+            '乐山': [103.7725376,29.55794072],
+            '眉山': [103.8565633,30.08252612],
+            '南充': [106.1175026,30.84378251],
+            '南通': [120.9015917,31.98654943],
+            '南阳': [112.5345013,32.9965622],
+            '宁海': [121.4364318,29.29431744],
+            '上饶': [117.9494596,28.46062592],
+            '深圳': [114.0645518,22.54845664],
+            '十堰': [110.8045296,32.63506186],
+            '宿迁': [118.281574,33.96774972],
+            '宿州': [116.9705439,33.65209533],
+            '唐山': [118.1864595,39.63658372],
+            '威海': [122.127541,37.51643055],
+            '芜湖': [118.4394314,31.35853666],
+            '西宁': [101.7844502,36.6233847],
+            '仙桃': [113.4496094,30.33358775],
+            '盐城': [120.1675443,33.35510092],
+            '张家口': [114.8925722,40.7732372],
+            '长沙': [113.0875592,28.25181849],
+            '中山': [121.6515474,38.92451112],
+            '淄博': [118.0614525,36.81908568],
+            '安康': [109.0356011,32.69051277],
+            '安阳': [114.4767338,36.08862382],
+            '白银': [104.1554128,36.54146357],
+            '蚌埠': [117.3955133,32.9215237],
+            '保山': [99.16801176,25.11785803],
+            '滨州': [117.977404,37.3881962],
+            '苍南': [120.4335951,27.52306679],
+            '常熟': [120.7594959,31.65953828],
+            '郴州': [113.0214605,25.77668327],
+            '承德': [118.1804557,40.77436719],
+            '池州': [117.502082,30.68054196],
+            '滁州': [118.3394061,32.26127087],
+            '楚雄': [101.5524723,25.03886039],
+            '慈溪': [121.2725961,30.17525661],
+            '大理': [100.3080724,25.68461355],
+            '大同': [124.8193768,46.04558395],
+            '德阳': [104.4044194,31.133115],
+            '德州': [116.3655567,37.44130845],
+            '东莞': [113.7584205,23.02730841],
+            '抚州': [116.3645388,27.95489225],
+            '广元': [105.8504232,32.44161631],
+            '哈密': [93.52121554,42.82582437],
+            '海口': [110.2067199,20.05211309],
+            '汉中': [107.0294302,33.07379991],
+            '河源': [114.7074463,23.74968437],
+            '衡水': [115.6754061,37.74519141],
+            '衡阳': [112.3775527,26.97529495],
+            '呼和浩特': [111.7555086,40.848423],
+            '湖州': [120.0945166,30.89896394],
+            '黄冈': [114.8784905,30.45935886],
+            '黄骅': [117.3364811,38.3774939],
+            '黄山': [118.1476098,30.27865098],
+            '黄石': [115.0455329,30.20520785],
+            '嘉善': [120.9325106,30.83712219],
+            '简阳': [104.5534941,30.41745149],
+            '焦作': [113.2485478,35.22096325],
+            '介休': [111.9235632,37.0326864],
+            '金华': [119.6534362,29.08463939],
+            '晋城': [112.8585782,35.49628459],
+            '荆州': [112.196414,30.35898949],
+            '景德镇': [117.1845764,29.27424771],
+            '景洪': [100.8064431,22.01700442],
+            '喀什': [76.00031274,39.47364953],
+            '开封': [114.3207651,34.80401391],
+            '库尔勒': [86.18149431,41.73237322],
+            '奎屯': [84.90944924,44.43205721],
+            '拉萨': [91.17845426,29.65948788],
+            '乐清': [120.9925019,28.11818],
+            '丽江': [100.2324645,26.86065744],
+            '丽水': [119.9295731,28.47327818],
+            '连云港': [119.2286213,34.60224953],
+            '聊城': [115.9915878,36.46275819],
+            '临沧': [100.0954404,23.89046856],
+            '临汾': [111.5255302,36.0937419],
+            '临夏': [103.2495492,35.60989877],
+            '六安': [116.5264097,31.74145082],
+            '泸州': [105.4485241,28.8776683],
+            '漯河': [114.0234208,33.58771071],
+            '马鞍山': [118.5135796,31.6762656],
+            '茂名': [110.9315426,21.66906403],
+            '绵阳': [104.6855619,31.47366305],
+            '内江': [105.064588,29.58588654],
+            '邳州': [118.0191233,34.34464552],
+            '秦皇岛': [119.5259672,39.8947272],
+            '曲靖': [103.8024348,25.49640693],
+            '衢州': [118.8665967,28.9755458],
+            '如皋': [120.5794656,32.37785149],
+            '瑞安': [120.6615822,27.78395074],
+            '商洛': [109.9244179,33.87863385],
+            '商丘': [115.6624493,34.42020167],
+            '遂宁': [105.5994215,30.53909767],
+            '塔城': [82.99355716,46.75738337],
+            '台州': [121.4274347,28.66219406],
+            '泰州': [119.9295663,32.46067505],
+            '腾冲': [98.49759504,25.02661686],
+            '天水': [105.7314167,34.58741188],
+            '天长': [119.0113853,32.67341003],
+            '潍坊': [119.1683779,36.71265155],
+            '文山': [104.2385438,23.39194413],
+            '梧州': [111.2855168,23.48274528],
+            '武威': [102.6445543,37.93437781],
+            '武穴': [115.5673922,29.85044143],
+            '咸阳': [108.7154225,34.33547629],
+            '孝感': [113.9634627,30.92452626],
+            '新乡': [113.8115938,35.19656441],
+            '信阳': [114.0974828,32.15301455],
+            '邢台': [114.5114623,37.07668595],
+            '宣城': [118.7655342,30.94660155],
+            '雅安': [103.0495426,30.01679255],
+            '烟台': [121.4544154,37.47003838],
+            '阳泉': [113.5876167,37.86236085],
+            '宜宾': [104.6494037,28.75800703],
+            '宜昌': [111.2925492,30.69744648],
+            '义乌': [120.081581,29.31114988],
+            '鹰潭': [117.0755754,28.26578706],
+            '余姚': [121.1605851,30.04273464],
+            '榆林': [109.741616,38.29088384],
+            '玉溪': [102.5535603,24.35771094],
+            '张掖': [100.4564115,38.93206601],
+            '长治': [113.1225589,36.20126837],
+            '镇江': [119.4304894,32.19471592],
+            '舟山': [122.2135563,29.99091168],
+            '周口': [114.7079827,33.64308358],
+            '诸暨': [120.2534083,29.71493465],
+            '驻马店': [114.0284708,33.01784242],
+            '自贡': [104.7844488,29.34558492]
+        }
+        var num = [28,12,10,8,8,6,6,5,5,5,5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,];
+        var mapData=[];
+        var i=0;
+        for(key in geoCoordMap)
+        {
+            var geoCoord = geoCoordMap[key];
+            mapData.push({name:key,value:geoCoord.concat((num[i]).toFixed(0))});
+            i++;
+        }
+
+        map_option = {
+            title : {show:false},
+            tooltip : {
+                trigger: 'item',
+                formatter: function(params) {
+                    if (typeof(params.value)[2] == "undefined") {
+                        return params.name + ' : ' + params.value;
+                    } else {
+                        return params.name + ' : ' + params.value[2];
+                    }
+                },
+                textStyle: {
+                    color: '#FFF',
+                    fontSize:24
+                }
+            },
+            legend: {
+                show:false
+            },
+            geo: {
+                map: 'china',
+                label: {
+                    normal: {show: false},
+                    emphasis: {show: false}
+                },
+                roam: false,
+                itemStyle: {
+                    normal: {
+                        areaColor: 'rgba(0,153,255,0.6)',
+                        borderColor: '#09F'
+                    },
+                    emphasis: {
+                        areaColor: 'rgba(0,153,255,0.6)',
+                        borderColor: '#09F'
+                    }
+                }
+            },
+            series: [{
+                name: '战略布局点',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                zlevel: 1,
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                symbolSize: function (val) {
+                    return val[2]*2 ;
+                },
+                label: {
+                    normal: {show: false},
+                    emphasis: {show: false}
+                },
+                itemStyle: {
+                    normal: {color: 'rgba(255,255,0,0.8)'},
+                    emphasis: {color: 'rgba(246,33,87,1)'}
+                },
+                data: mapData
+            },
+                {
+                    name: '战略布局TOP5',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    hoverAnimation: true,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            fontFamily:'微软雅黑',
+                            fontSize: 24,
+                            color:'#FFF',
+                            formatter: '{b}',
+                            position: 'right',
+                            shadowBlur: 5,
+                            shadowColor: '#000'
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    symbolSize: function (val) {
+                        return val[2] / 30;
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(255,255,255,1)'
+                        }
+                    },
+                    data: mapData.sort(function(a, b) {
+                        return b.value[2] - a.value[2];
+                    }).slice(0, 0)
+                },
+                {
+                    name: '点',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    symbol: 'pin',
+                    symbolSize: function(val) {
+                        return val[2]/10;
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            fontFamily:'Arial, Helvetica, sans-serif',
+                            formatter:'{@[2]}',
+                            textStyle: {
+                                color: '#FFF',
+                                fontSize: 18,
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(246,33,87,1)', //标志颜色
+                        }
+                    },
+                    zlevel: 3,
+                    data: mapData.sort(function(a, b) {
+                        return b.value[2] - a.value[2];
+                    }).slice(0, 5)
+                }]
+        };
+
+        myChart.setOption(map_option, true);
+    }
+
+    function submit2(){
+        var s1 = $('#s11 option:selected').val();
+        var s2 = $('#s12 option:selected').val();
+        var s3 = $('#s13 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=4){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s13').css("background-color","red");
+            setTimeout(function() {
+                $('#s13').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load2();
+            n++;
+            addResutl("s11",s1);
+            addResutl("s12",s2);
+            addResutl("s13",s3);
+        }
+
+    }
+    function load2(){
+        var options = {
+            id:"bootstrap-tables",
+            toolbar:null,
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [  {
+                field: '仓库节点',
+                title: '仓库节点'
+            },
+                {
+                    field: '周期内覆盖线路数量（条）',
+                    title: '周期内覆盖线路数量（条）'
+                }]
+        };
+        $.table.init(options);
+        var myChart = echarts.init(document.getElementById('echarts'), 'macarons');
+        var geoCoordMap = {
+            '北京': [116.4133837,39.91092455],
+            '郑州': [113.6314192,34.75343885],
+            '杭州': [120.2155118,30.25308298],
+            '兰州': [103.8405212,36.06723469],
+            '银川': [106.2384936,38.49246006],
+            '临沂': [118.363533,35.11067124],
+            '天津': [117.2080928,39.0911026],
+            '南昌': [115.9504602,28.55160419],
+            '攀枝花': [101.7255412,26.58803317],
+            '青岛': [120.3894552,36.0722275],
+            '太原': [112.5563915,37.87698903],
+            '徐州': [117.2905754,34.21266655],
+            '重庆': [106.5584342,29.56899625],
+            '合肥': [117.2334427,31.82657783],
+            '济南': [117.1263994,36.6565542],
+            '南京': [118.8024217,32.06465289],
+            '宁波': [121.6308428,29.86606812],
+            '温州': [120.7064769,28.0010854],
+            '乌鲁木齐': [87.41602875,43.47708607],
+            '无锡': [120.3185833,31.49880973],
+            '许昌': [113.8584755,34.04143161],
+            '福州': [119.3034698,26.08042942],
+            '济宁': [116.5936123,35.42017739],
+            '九江': [115.9606612,29.66666085],
+            '洛阳': [112.4594213,34.62426278],
+            '石家庄': [114.5214032,38.04829154],
+            '苏州': [120.5924122,31.30356407],
+            '襄阳': [112.1285372,32.0147968],
+            '安庆': [117.1212828,30.53922248],
+            '包头': [109.9597986,40.62714122],
+            '保定': [115.4714638,38.87998777],
+            '沧州': [116.8455808,38.31021514],
+            '常州': [119.9814847,31.81579565],
+            '达州': [107.4745939,31.21430772],
+            '鄂州': [114.9016074,30.39657217],
+            '阜阳': [115.8204361,32.89606099],
+            '菏泽': [115.487545,35.23940742],
+            '淮安': [119.1474632,33.50899984],
+            '昆明': [102.8394451,24.88627211],
+            '昆山': [120.9874525,31.39086343],
+            '乐山': [103.7725376,29.55794072],
+            '眉山': [103.8565633,30.08252612],
+            '南充': [106.1175026,30.84378251],
+            '南通': [120.9015917,31.98654943],
+            '南阳': [112.5345013,32.9965622],
+            '宁海': [121.4364318,29.29431744],
+            '上饶': [117.9494596,28.46062592],
+            '深圳': [114.0645518,22.54845664],
+            '十堰': [110.8045296,32.63506186],
+            '宿迁': [118.281574,33.96774972],
+            '宿州': [116.9705439,33.65209533],
+            '唐山': [118.1864595,39.63658372],
+            '威海': [122.127541,37.51643055],
+            '芜湖': [118.4394314,31.35853666],
+            '西宁': [101.7844502,36.6233847],
+            '仙桃': [113.4496094,30.33358775],
+            '盐城': [120.1675443,33.35510092],
+            '张家口': [114.8925722,40.7732372],
+            '长沙': [113.0875592,28.25181849],
+            '中山': [121.6515474,38.92451112],
+            '淄博': [118.0614525,36.81908568],
+            '安康': [109.0356011,32.69051277],
+            '安阳': [114.4767338,36.08862382],
+            '白银': [104.1554128,36.54146357],
+            '蚌埠': [117.3955133,32.9215237],
+            '保山': [99.16801176,25.11785803],
+            '滨州': [117.977404,37.3881962],
+            '苍南': [120.4335951,27.52306679],
+            '常熟': [120.7594959,31.65953828],
+            '郴州': [113.0214605,25.77668327],
+            '承德': [118.1804557,40.77436719],
+            '池州': [117.502082,30.68054196],
+            '滁州': [118.3394061,32.26127087],
+            '楚雄': [101.5524723,25.03886039],
+            '慈溪': [121.2725961,30.17525661],
+            '大理': [100.3080724,25.68461355],
+            '大同': [124.8193768,46.04558395],
+            '德阳': [104.4044194,31.133115],
+            '德州': [116.3655567,37.44130845],
+            '东莞': [113.7584205,23.02730841],
+            '抚州': [116.3645388,27.95489225],
+            '广元': [105.8504232,32.44161631],
+            '哈密': [93.52121554,42.82582437],
+            '海口': [110.2067199,20.05211309],
+            '汉中': [107.0294302,33.07379991],
+            '河源': [114.7074463,23.74968437],
+            '衡水': [115.6754061,37.74519141],
+            '衡阳': [112.3775527,26.97529495],
+            '呼和浩特': [111.7555086,40.848423],
+            '湖州': [120.0945166,30.89896394],
+            '黄冈': [114.8784905,30.45935886],
+            '黄骅': [117.3364811,38.3774939],
+            '黄山': [118.1476098,30.27865098],
+            '黄石': [115.0455329,30.20520785],
+            '嘉善': [120.9325106,30.83712219],
+            '简阳': [104.5534941,30.41745149],
+            '焦作': [113.2485478,35.22096325],
+            '介休': [111.9235632,37.0326864],
+            '金华': [119.6534362,29.08463939],
+            '晋城': [112.8585782,35.49628459],
+            '荆州': [112.196414,30.35898949],
+            '景德镇': [117.1845764,29.27424771],
+            '景洪': [100.8064431,22.01700442],
+            '喀什': [76.00031274,39.47364953],
+            '开封': [114.3207651,34.80401391],
+            '库尔勒': [86.18149431,41.73237322],
+            '奎屯': [84.90944924,44.43205721],
+            '拉萨': [91.17845426,29.65948788],
+            '乐清': [120.9925019,28.11818],
+            '丽江': [100.2324645,26.86065744],
+            '丽水': [119.9295731,28.47327818],
+            '连云港': [119.2286213,34.60224953],
+            '聊城': [115.9915878,36.46275819],
+            '临沧': [100.0954404,23.89046856],
+            '临汾': [111.5255302,36.0937419],
+            '临夏': [103.2495492,35.60989877],
+            '六安': [116.5264097,31.74145082],
+            '泸州': [105.4485241,28.8776683],
+            '漯河': [114.0234208,33.58771071],
+            '马鞍山': [118.5135796,31.6762656],
+            '茂名': [110.9315426,21.66906403],
+            '绵阳': [104.6855619,31.47366305],
+            '内江': [105.064588,29.58588654],
+            '邳州': [118.0191233,34.34464552],
+            '秦皇岛': [119.5259672,39.8947272],
+            '曲靖': [103.8024348,25.49640693],
+            '衢州': [118.8665967,28.9755458],
+            '如皋': [120.5794656,32.37785149],
+            '瑞安': [120.6615822,27.78395074],
+            '商洛': [109.9244179,33.87863385],
+            '商丘': [115.6624493,34.42020167],
+            '遂宁': [105.5994215,30.53909767],
+            '塔城': [82.99355716,46.75738337],
+            '台州': [121.4274347,28.66219406],
+            '泰州': [119.9295663,32.46067505],
+            '腾冲': [98.49759504,25.02661686],
+            '天水': [105.7314167,34.58741188],
+            '天长': [119.0113853,32.67341003],
+            '潍坊': [119.1683779,36.71265155],
+            '文山': [104.2385438,23.39194413],
+            '梧州': [111.2855168,23.48274528],
+            '武威': [102.6445543,37.93437781],
+            '武穴': [115.5673922,29.85044143],
+            '咸阳': [108.7154225,34.33547629],
+            '孝感': [113.9634627,30.92452626],
+            '新乡': [113.8115938,35.19656441],
+            '信阳': [114.0974828,32.15301455],
+            '邢台': [114.5114623,37.07668595],
+            '宣城': [118.7655342,30.94660155],
+            '雅安': [103.0495426,30.01679255],
+            '烟台': [121.4544154,37.47003838],
+            '阳泉': [113.5876167,37.86236085],
+            '宜宾': [104.6494037,28.75800703],
+            '宜昌': [111.2925492,30.69744648],
+            '义乌': [120.081581,29.31114988],
+            '鹰潭': [117.0755754,28.26578706],
+            '余姚': [121.1605851,30.04273464],
+            '榆林': [109.741616,38.29088384],
+            '玉溪': [102.5535603,24.35771094],
+            '张掖': [100.4564115,38.93206601],
+            '长治': [113.1225589,36.20126837],
+            '镇江': [119.4304894,32.19471592],
+            '舟山': [122.2135563,29.99091168],
+            '周口': [114.7079827,33.64308358],
+            '诸暨': [120.2534083,29.71493465],
+            '驻马店': [114.0284708,33.01784242],
+            '自贡': [104.7844488,29.34558492]
+        }
+        var num = [28,12,10,8,8,6,6,5,5,5,5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,];
+        var mapData=[];
+        var i=0;
+        for(key in geoCoordMap)
+        {
+            var geoCoord = geoCoordMap[key];
+            mapData.push({name:key,value:geoCoord.concat((num[i]).toFixed(0))});
+            i++;
+        }
+
+        map_option = {
+            title : {show:false},
+            tooltip : {
+                trigger: 'item',
+                formatter: function(params) {
+                    if (typeof(params.value)[2] == "undefined") {
+                        return params.name + ' : ' + params.value;
+                    } else {
+                        return params.name + ' : ' + params.value[2];
+                    }
+                },
+                textStyle: {
+                    color: '#FFF',
+                    fontSize:24
+                }
+            },
+            legend: {
+                show:false
+            },
+            geo: {
+                map: 'china',
+                label: {
+                    normal: {show: false},
+                    emphasis: {show: false}
+                },
+                roam: false,
+                itemStyle: {
+                    normal: {
+                        areaColor: 'rgba(0,153,255,0.6)',
+                        borderColor: '#09F'
+                    },
+                    emphasis: {
+                        areaColor: 'rgba(0,153,255,0.6)',
+                        borderColor: '#09F'
+                    }
+                }
+            },
+            series: [{
+                name: '战略布局点',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                zlevel: 1,
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                symbolSize: function (val) {
+                    return val[2]*2 ;
+                },
+                label: {
+                    normal: {show: false},
+                    emphasis: {show: false}
+                },
+                itemStyle: {
+                    normal: {color: 'rgba(255,255,0,0.8)'},
+                    emphasis: {color: 'rgba(246,33,87,1)'}
+                },
+                data: mapData
+            },
+                {
+                    name: '战略布局TOP5',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    hoverAnimation: true,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            fontFamily:'微软雅黑',
+                            fontSize: 24,
+                            color:'#FFF',
+                            formatter: '{b}',
+                            position: 'right',
+                            shadowBlur: 5,
+                            shadowColor: '#000'
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    symbolSize: function (val) {
+                        return val[2] / 30;
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(255,255,255,1)'
+                        }
+                    },
+                    data: mapData.sort(function(a, b) {
+                        return b.value[2] - a.value[2];
+                    }).slice(0, 0)
+                },
+                {
+                    name: '点',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    symbol: 'pin',
+                    symbolSize: function(val) {
+                        return val[2]/10;
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            fontFamily:'Arial, Helvetica, sans-serif',
+                            formatter:'{@[2]}',
+                            textStyle: {
+                                color: '#FFF',
+                                fontSize: 18,
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(246,33,87,1)', //标志颜色
+                        }
+                    },
+                    zlevel: 3,
+                    data: mapData.sort(function(a, b) {
+                        return b.value[2] - a.value[2];
+                    }).slice(0, 5)
+                }]
+        };
+
+        myChart.setOption(map_option, true);
+    }
+
+
+    function submit(){
+        var s1 = $('#x option:selected').val();
+        var s2 = $('#y option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=2){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load();
+            n++;
+            addResutl("x",s1);
+            addResutl("y",s2);
+        }
+
+    }
+    function load(){
+        var myChart = echarts.init(document.getElementById('bar'), 'macarons');
+
+        var d = data2;
+        var arr1=[];
+        var arr2=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].仓库节点);
+            arr2.push(d[i].周期内覆盖线路数量);
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'订单品种数',
+                    type:'bar',
+                    data:arr2,
+
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+
+    }
+
+    function submit3(){
+        var s1 = $('#x12 option:selected').val();
+        var s2 = $('#y12 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#x12').css("background-color","red");
+            setTimeout(function() {
+                $('#x12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#y12').css("background-color","red");
+            setTimeout(function() {
+                $('#y12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load3();
+            n++;
+            addResutl("x12",s1);
+            addResutl("y12",s2);
+        }
+    }
+    function load3(){
+        var myChart = echarts.init(document.getElementById('map2'), 'macarons');
+
+        var d = data2;
+        var arr1=[];
+        var arr2=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].仓库节点累计品目数百分比);
+            arr2.push(d[i].周期内覆盖线路累计数量占比.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'订单品种数',
+                    type:'line',
+                    data:arr2,
+
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+
+    function submit4(){
+        var s1 = $('#x1 option:selected').val();
+        var s2 = $('#y1 option:selected').val();
+        var s3 = $('#z1 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#z1').css("background-color","red");
+            setTimeout(function() {
+                $('#z1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+
+        if(m==0){
+            load4();
+            n++;
+            addResutl("x1",s1);
+            addResutl("y1",s2);
+            addResutl("z1",s3);
+        }
+    }
+    function load4(){
+        var options = {
+            id:"bootstrap-table2",
+            toolbar:null,
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [  {
+                field: '仓库节点',
+                title: '仓库节点'
+            },
+                {
+                    field: '周期内运输总距离',
+                    title: '周期内运输总距离'
+                }]
+        };
+        $.table.init(options);
+    }
+
+
+    function submit6(){
+        var s1 = $('#x2 option:selected').val();
+        var s2 = $('#y2 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x2').css("background-color","red");
+            setTimeout(function() {
+                $('#x2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load6();
+            n++;
+            addResutl("x2",s1);
+            addResutl("y2",s2);
+        }
+    }
+    function load6(){
+        var myChart = echarts.init(document.getElementById('map5'), 'macarons');
+
+        var d = data3;
+        var arr1=[];
+        var arr2=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].仓库节点);
+            arr2.push(d[i].周期内运输总距离);
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'订单品种数',
+                    type:'bar',
+                    data:arr2,
+
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    function submit7(){
+        var s1 = $('#x3 option:selected').val();
+        var s2 = $('#y3 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=4){
+            $('#x3').css("background-color","red");
+            setTimeout(function() {
+                $('#x3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y3').css("background-color","red");
+            setTimeout(function() {
+                $('#y3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load7();
+            n++;
+            addResutl("x3",s1);
+            addResutl("y3",s2);
+        }
+    }
+    function load7(){
+        var myChart = echarts.init(document.getElementById('map6'), 'macarons');
+
+        var d = data3;
+        var arr1=[];
+        var arr2=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].仓库节点累计品目数百分比);
+            arr2.push(d[i].周期内配送总距离累计数量占比.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'订单品种数',
+                    type:'line',
+                    data:arr2,
+
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    function submit8(){
+        var s1 = $('#s41 option:selected').val();
+        // var s2 = $('#s42 option:selected').val();
+        var s3 = $('#s43 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=4){
+            $('#s41').css("background-color","red");
+            setTimeout(function() {
+                $('#s41').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        // if(s2!=3){
+        //     $('#s42').css("background-color","red");
+        //     setTimeout(function() {
+        //         $('#s42').css("background-color","white");
+        //     },3000); //一秒内不能重复点击
+        //     m++;
+        // }
+        if(s3!=4){
+            $('#s43').css("background-color","red");
+            setTimeout(function() {
+                $('#s43').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load8();
+            n++;
+            addResutl("s41",s1);
+            // addResutl("s42",s2);
+            addResutl("s43",s3);
+        }
+    }
+    function load8(){
+        var options = {
+            id:"bootstrap-table3",
+            toolbar:null,
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [    {
+                field: '分布区域',
+                title: '分布区域'
+            },
+                {
+                    field: '区域内仓库节点分布数量',
+                    title: '仓库节点分布数量'
+                },
+                {
+                    field: '各区域仓库节点分布数量占比',
+                    title: '各区域仓库节点分布数量'
+                }]
+        };
+        $.table.init(options);
+    }
+
+
+    function submit9(){
+        var s1 = $('#x4 option:selected').val();
+        var s2 = $('#y4 option:selected').val();
+        var s3 = $('#z4 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#x4').css("background-color","red");
+            setTimeout(function() {
+                $('#x4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#y4').css("background-color","red");
+            setTimeout(function() {
+                $('#y4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#z4').css("background-color","red");
+            setTimeout(function() {
+                $('#z4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load9();
+            n++;
+            addResutl("x4",s1);
+            addResutl("y4",s2);
+            addResutl("z4",s3);
+        }
+
+
+    }
+    function load9(){
+        var options = {
+            id:"bootstrap-table4",
+            toolbar:null,
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [    {
+                field: '分布区域',
+                title: '分布区域'
+            },
+                {
+                    field: '区域内仓库节点分布数量',
+                    title: '区域内仓库节点分布数量'
+                },
+                {
+                    field: '各区域仓库节点分布数量占比',
+                    title: '各区域仓库节点分布数量占比'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function submit10(){
+        var s1 = $('#x5 option:selected').val();
+        var s2 = $('#y5 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#x5').css("background-color","red");
+            setTimeout(function() {
+                $('#x5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#y5').css("background-color","red");
+            setTimeout(function() {
+                $('#y5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load10();
+            n++;
+            addResutl("x5",s1);
+            addResutl("y5",s2);
+        }
+    }
+    function load10(){
+        var myChart = echarts.init(document.getElementById('map9'), 'macarons');
+        var  option = {
+            backgroundColor:'#000',
+            "animation": true,
+            "title": {
+                "text": "",
+                "subtext": "",
+                "x": "center",
+                "y": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 60,
+                    "fontWeight": "normal",
+                    "align": "center",
+                    "width": "200px"
+                },
+                "subtextStyle": {
+                    "color": "#fff",
+                    "fontSize": 20,
+                    "fontWeight": "normal",
+                    "align": "center"
+                }
+            },
+            "legend": {
+                "width": "70%",
+                "left": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 16
+                },
+                "icon": "circle",
+                "right": "0",
+                "bottom": "0",
+                "padding": [30, 60],
+                "itemGap": 40,
+                "data": ["East",
+                    "North",
+                    "South",
+                    "West"
+
+                ]
+            },
+            "series": [{
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["40%", "53%"],
+                "color": ["#FEE449", "#00FFFF", "#00FFA8", "#9F17FF", "#FFE400", "#F76F01", "#01A4F7", "#FE2C8A"],
+                "startAngle": 135,
+                "labelLine": {
+                    "normal": {
+                        "length": 25
+                    }
+                },
+                "label": {
+                    "normal": {
+                        "formatter": "{b|{b}:}  {per|{d}%} ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#b3e5ff",
+                                "fontSize": 16,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 14,
+                                "padding": [5, 8],
+                                "borderRadius": 2
+                            }
+                        },
+                        "textStyle": {
+                            "color": "#fff",
+                            "fontSize": 16
+                        }
+                    }
+                },
+                "emphasis": {
+                    "label": {
+                        "show": true,
+                        "formatter": "{b|{b}:}  {per|{d}%}  ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#fff",
+                                "fontSize": 18,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 25,
+                                "padding": [5, 6],
+                                "borderRadius": 2
+                            }
+                        }
+                    }
+                },
+                "data": [{
+                    "name": "East",
+                    "value": 11636
+                },{
+                    "name": "North",
+                    "value": 24340
+                },{
+                    "name": "South",
+                    "value": 23639
+                },{
+                    "name": "West",
+                    "value": 6692
+                }
+                ]
+            }, {
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["35%", "36%"],
+                "label": {
+                    "show": false
+                },
+                "data": [{
+                    "value": 78,
+                    "name": "实例1",
+                    "itemStyle": {
+                        "normal": {
+                            "color": {
+                                "x": 0,
+                                "y": 0,
+                                "x2": 1,
+                                "y2": 0,
+                                "type": "linear",
+                                "global": false,
+                                "colorStops": [{
+                                    "offset": 0,
+                                    "color": "#9F17FF"
+                                }, {
+                                    "offset": 0.2,
+                                    "color": "#01A4F7"
+                                }, {
+                                    "offset": 0.5,
+                                    "color": "#FE2C8A"
+                                }, {
+                                    "offset": 0.8,
+                                    "color": "#FEE449"
+                                }, {
+                                    "offset": 1,
+                                    "color": "#00FFA8"
+                                }]
+                            }
+                        }
+                    }
+                }]
+            }]
+        }
+        myChart.setOption(option);
+    }
+
+    // function submit11(){
+    //     var s1 = $('#x6 option:selected').val();
+    //     var s2 = $('#y6 option:selected').val();
+    //
+    //     var m = 0;
+    //     if(s1!=2){
+    //         $('#x6').css("background-color","red");
+    //         setTimeout(function() {
+    //             $('#x6').css("background-color","white");
+    //         },3000); //一秒内不能重复点击
+    //         m++;
+    //     }
+    //     if(s2!=2){
+    //         $('#y6').css("background-color","red");
+    //         setTimeout(function() {
+    //             $('#y6').css("background-color","white");
+    //         },3000); //一秒内不能重复点击
+    //         m++;
+    //     }
+    //
+    //
+    //     if(m==0){
+    //         load11();
+    //     }
+    //
+    //
+    // }
+    // function load11(){
+    //     var myChart = echarts.init(document.getElementById('map12'), 'macarons');
+    //     var  option = {
+    //         backgroundColor:'#000',
+    //         "animation": true,
+    //         "title": {
+    //             "text": 24,
+    //             "subtext": "",
+    //             "x": "center",
+    //             "y": "center",
+    //             "textStyle": {
+    //                 "color": "#fff",
+    //                 "fontSize": 60,
+    //                 "fontWeight": "normal",
+    //                 "align": "center",
+    //                 "width": "200px"
+    //             },
+    //             "subtextStyle": {
+    //                 "color": "#fff",
+    //                 "fontSize": 20,
+    //                 "fontWeight": "normal",
+    //                 "align": "center"
+    //             }
+    //         },
+    //         "legend": {
+    //             "width": "70%",
+    //             "left": "center",
+    //             "textStyle": {
+    //                 "color": "#fff",
+    //                 "fontSize": 16
+    //             },
+    //             "icon": "circle",
+    //             "right": "0",
+    //             "bottom": "0",
+    //             "padding": [30, 60],
+    //             "itemGap": 40,
+    //             "data": ["East",
+    //                 "North",
+    //                 "South",
+    //                 "West"
+    //
+    //             ]
+    //         },
+    //         "series": [{
+    //             "type": "pie",
+    //             "center": ["50%", "50%"],
+    //             "radius": ["40%", "53%"],
+    //             "color": ["#FEE449", "#00FFFF", "#00FFA8", "#9F17FF", "#FFE400", "#F76F01", "#01A4F7", "#FE2C8A"],
+    //             "startAngle": 135,
+    //             "labelLine": {
+    //                 "normal": {
+    //                     "length": 25
+    //                 }
+    //             },
+    //             "label": {
+    //                 "normal": {
+    //                     "formatter": "{b|{b}:}  {per|{d}%} ",
+    //                     "backgroundColor": "rgba(255, 147, 38, 0)",
+    //                     "borderColor": "transparent",
+    //                     "borderRadius": 4,
+    //                     "rich": {
+    //                         "a": {
+    //                             "color": "#999",
+    //                             "lineHeight": 22,
+    //                             "align": "center"
+    //                         },
+    //                         "hr": {
+    //                             "borderColor": "#aaa",
+    //                             "width": "100%",
+    //                             "borderWidth": 1,
+    //                             "height": 0
+    //                         },
+    //                         "b": {
+    //                             "color": "#b3e5ff",
+    //                             "fontSize": 16,
+    //                             "lineHeight": 33
+    //                         },
+    //                         "c": {
+    //                             "fontSize": 14,
+    //                             "color": "#eee"
+    //                         },
+    //                         "per": {
+    //                             "color": "#FDF44E",
+    //                             "fontSize": 14,
+    //                             "padding": [5, 8],
+    //                             "borderRadius": 2
+    //                         }
+    //                     },
+    //                     "textStyle": {
+    //                         "color": "#fff",
+    //                         "fontSize": 16
+    //                     }
+    //                 }
+    //             },
+    //             "emphasis": {
+    //                 "label": {
+    //                     "show": true,
+    //                     "formatter": "{b|{b}:}  {per|{d}%}  ",
+    //                     "backgroundColor": "rgba(255, 147, 38, 0)",
+    //                     "borderColor": "transparent",
+    //                     "borderRadius": 4,
+    //                     "rich": {
+    //                         "a": {
+    //                             "color": "#999",
+    //                             "lineHeight": 22,
+    //                             "align": "center"
+    //                         },
+    //                         "hr": {
+    //                             "borderColor": "#aaa",
+    //                             "width": "100%",
+    //                             "borderWidth": 1,
+    //                             "height": 0
+    //                         },
+    //                         "b": {
+    //                             "color": "#fff",
+    //                             "fontSize": 18,
+    //                             "lineHeight": 33
+    //                         },
+    //                         "c": {
+    //                             "fontSize": 14,
+    //                             "color": "#eee"
+    //                         },
+    //                         "per": {
+    //                             "color": "#FDF44E",
+    //                             "fontSize": 25,
+    //                             "padding": [5, 6],
+    //                             "borderRadius": 2
+    //                         }
+    //                     }
+    //                 }
+    //             },
+    //             "data": [{
+    //                 "name": "East",
+    //                 "value": 11636
+    //             },{
+    //                 "name": "North",
+    //                 "value": 24340
+    //             },{
+    //                 "name": "South",
+    //                 "value": 23639
+    //             },{
+    //                 "name": "West",
+    //                 "value": 6692
+    //             }
+    //             ]
+    //         }, {
+    //             "type": "pie",
+    //             "center": ["50%", "50%"],
+    //             "radius": ["35%", "36%"],
+    //             "label": {
+    //                 "show": false
+    //             },
+    //             "data": [{
+    //                 "value": 78,
+    //                 "name": "实例1",
+    //                 "itemStyle": {
+    //                     "normal": {
+    //                         "color": {
+    //                             "x": 0,
+    //                             "y": 0,
+    //                             "x2": 1,
+    //                             "y2": 0,
+    //                             "type": "linear",
+    //                             "global": false,
+    //                             "colorStops": [{
+    //                                 "offset": 0,
+    //                                 "color": "#9F17FF"
+    //                             }, {
+    //                                 "offset": 0.2,
+    //                                 "color": "#01A4F7"
+    //                             }, {
+    //                                 "offset": 0.5,
+    //                                 "color": "#FE2C8A"
+    //                             }, {
+    //                                 "offset": 0.8,
+    //                                 "color": "#FEE449"
+    //                             }, {
+    //                                 "offset": 1,
+    //                                 "color": "#00FFA8"
+    //                             }]
+    //                         }
+    //                     }
+    //                 }
+    //             }]
+    //         }]
+    //     }
+    //     myChart.setOption(option);
+    // }
+
+    function submit13(){
+        var s1 = $('#x7 option:selected').val();
+        var s2 = $('#y7 option:selected').val();
+        var s3 = $('#z7 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=2){
+            $('#x7').css("background-color","red");
+            setTimeout(function() {
+                $('#x7').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y7').css("background-color","red");
+            setTimeout(function() {
+                $('#y7').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#z7').css("background-color","red");
+            setTimeout(function() {
+                $('#z7').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load13();
+            n++;
+            addResutl("x7",s1);
+            addResutl("y7",s2);
+            addResutl("z7",s3);
+        }
+    }
+    function load13(){
+        var options = {
+            id:"bootstrap-table5",
+            toolbar:null,
+            data:data5,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [   {
+                field: '平均时效分布区间',
+                title: '平均时效(天数)分布区间'
+            },
+                {
+                    field: '平均时效分布区间对应仓库节点数量',
+                    title: '平均时效(天数)分布区间对应仓库节点数量'
+                },
+                {
+                    field: '平均时效分布区间(天数)对应仓库节点数量占比情况',
+                    title: '平均时效分布区间(天数)对应仓库节点数量占比情况'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+    function submit131(){
+        var s1 = $('#x17 option:selected').val();
+        var s2 = $('#y17 option:selected').val();
+        var s3 = $('#z17 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x17').css("background-color","red");
+            setTimeout(function() {
+                $('#x17').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y17').css("background-color","red");
+            setTimeout(function() {
+                $('#y17').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#z17').css("background-color","red");
+            setTimeout(function() {
+                $('#z17').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load131();
+            n++;
+            addResutl("x17",s1);
+            addResutl("y17",s2);
+            addResutl("z17",s3);
+        }
+    }
+    function load131(){
+        var options = {
+            id:"bootstrap-table51",
+            toolbar:null,
+            data:data6,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+
+            // importUrl: prefix1 + "/importData",
+            // importTemplateUrl: prefix1 + "/importTemplate",
+            modalName: "【请填写功能名称】",
+            columns: [     {
+                field: 'interval',
+                title: '平均时效(天数)分布区间'
+            },
+                {
+                    field: 'East',
+                    title: 'East区域分布的仓库节点数量'
+                },
+                {
+                    field: 'North',
+                    title: 'North区域分布的仓库节点数量'
+                },
+                {
+                    field: 'South',
+                    title: 'South区域分布的仓库节点数量'
+                },
+                {
+                    field: 'West',
+                    title: 'West区域分布的仓库节点数量'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+
+    function submit132(){
+        var s1 = $('#x27 option:selected').val();
+        var s2 = $('#y27 option:selected').val();
+
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x27').css("background-color","red");
+            setTimeout(function() {
+                $('#x27').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y27').css("background-color","red");
+            setTimeout(function() {
+                $('#y27').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load132();
+            n++;
+            addResutl("x27",s1);
+            addResutl("y27",s2);
+        }
+    }
+    function load132(){
+        var myChart = echarts.init(document.getElementById('map13'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            // title: {
+            //     text: '平均时效(天数)分布区间'
+            // },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['平均时效(天数)分布区间对应仓库节点数量', '平均时效分布区间(天数)对应仓库节点数量占比情况']
+            },
+            xAxis: {
+                type: 'category',
+                data: ["【0,1）","【1,2）","【2,3）","【3,4）","【4,5）","【5,6）","【6,7）","【7,8）","【8,9）"],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '平均时效(天数)分布区间对应仓库节点数量'
+                },
+                {
+                    type: 'value',
+                    name: '平均时效分布区间(天数)对应仓库节点数量占比情况',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '平均时效(天数)分布区间对应仓库节点数量',
+                    type: 'bar',
+                    data: [2,34,66,39,5,6,8,4,3]
+                },
+                {
+                    name: '平均时效分布区间(天数)对应仓库节点数量占比情况',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [1.20,20.36,39.52,23.35,2.99,3.59,4.79,2.40,1.80]
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+    }
+    function submit14(){
+        var s1 = $('#x8 option:selected').val();
+        var s2 = $('#y8 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x8').css("background-color","red");
+            setTimeout(function() {
+                $('#x8').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y8').css("background-color","red");
+            setTimeout(function() {
+                $('#y8').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load14();
+            n++;
+            addResutl("x8",s1);
+            addResutl("y8",s2);
+        }
+    }
+    function load14(){
+        var myChart = echarts.init(document.getElementById('map13'), 'macarons');
+
+        var d = data10;
+        var arr1=[];
+        var arr2=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].平均时效分布区间);
+            arr2.push(d[i].平均时效分布区间对应仓库节点数量);
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'订单品种数',
+                    type:'line',
+                    data:arr2,
+
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    function submit15(){
+        var s1 = $('#x9 option:selected').val();
+        var s2 = $('#y9 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=4){
+            $('#x9').css("background-color","red");
+            setTimeout(function() {
+                $('#x9').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#y9').css("background-color","red");
+            setTimeout(function() {
+                $('#y9').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load15();
+            n++;
+            addResutl("x9",s1);
+            addResutl("y9",s2);
+        }
+    }
+    function load15(){
+        var myChart1 = echarts.init(document.getElementById('map141'), 'macarons');
+        var myChart2 = echarts.init(document.getElementById('map142'), 'macarons');
+        var myChart3 = echarts.init(document.getElementById('map143'), 'macarons');
+        var myChart4 = echarts.init(document.getElementById('map144'), 'macarons');
+
+        var d = data6;
+        var arr1=[];
+        var arr2=[];
+        var arr3=[];
+        var arr4=[];
+        var arr5=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].interval);
+            arr2.push(d[i].East);
+            arr3.push(d[i].North);
+            arr4.push(d[i].South);
+            arr5.push(d[i].West);
+        }
+
+        var option1 = {
+            "title": {
+                "text": "East",
+            },
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : arr1,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    // type : 'category',
+                    // data : ['10','20','30','40'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'',
+                    type:'bar',
+                    barWidth: '40%',
+                    data:arr2
+                },
+
+            ],
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}'
+                }
+            },
+            itemStyle: {
+                normal: {
+
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(17, 168,171, 1)'
+                    }, {
+                        offset: 1,
+                        color: 'rgba(17, 168,171, 0.1)'
+                    }]),
+                    shadowColor: 'rgba(0, 0, 0, 0.1)',
+                    shadowBlur: 10
+                }
+            }
+        };
+        var option2 = {
+            "title": {
+                "text": "North",
+            },
+
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : arr1,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    // type : 'category',
+                    // data : ['10','20','30','40'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'',
+                    type:'bar',
+                    barWidth: '40%',
+                    data:arr3
+                },
+
+            ],
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}'
+                }
+            },
+            itemStyle: {
+                normal: {
+
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(17, 168,171, 1)'
+                    }, {
+                        offset: 1,
+                        color: 'rgba(17, 168,171, 0.1)'
+                    }]),
+                    shadowColor: 'rgba(0, 0, 0, 0.1)',
+                    shadowBlur: 10
+                }
+            }
+        };
+        var option3 = {
+            "title": {
+                "text": "South",
+            },
+
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : arr1,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    // type : 'category',
+                    // data : ['10','20','30','40'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'',
+                    type:'bar',
+                    barWidth: '40%',
+                    data:arr4
+                },
+
+            ],
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}'
+                }
+            },
+            itemStyle: {
+                normal: {
+
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(17, 168,171, 1)'
+                    }, {
+                        offset: 1,
+                        color: 'rgba(17, 168,171, 0.1)'
+                    }]),
+                    shadowColor: 'rgba(0, 0, 0, 0.1)',
+                    shadowBlur: 10
+                }
+            }
+        };
+        var option4 = {
+
+            "title": {
+                "text": "West",
+            },
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : arr1,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    // type : 'category',
+                    // data : ['10','20','30','40'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'',
+                    type:'bar',
+                    barWidth: '40%',
+                    data:arr5
+                },
+
+            ],
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}'
+                }
+            },
+            itemStyle: {
+                normal: {
+
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(17, 168,171, 1)'
+                    }, {
+                        offset: 1,
+                        color: 'rgba(17, 168,171, 0.1)'
+                    }]),
+                    shadowColor: 'rgba(0, 0, 0, 0.1)',
+                    shadowBlur: 10
+                }
+            }
+        };
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+        myChart3.setOption(option3);
+        myChart4.setOption(option4);
+
+    }
+
+
+    // function submit17(){
+    //     var s1 = $('#x10 option:selected').val();
+    //     var s2 = $('#y10 option:selected').val();
+    //     var s3 = $('#z10 option:selected').val();
+    //     var m = 0;
+    //     if(s1!=4){
+    //         $('#x10').css("background-color","red");
+    //         setTimeout(function() {
+    //             $('#x10').css("background-color","white");
+    //         },3000); //一秒内不能重复点击
+    //         m++;
+    //     }
+    //     if(s2!=3){
+    //         $('#y10').css("background-color","red");
+    //         setTimeout(function() {
+    //             $('#y10').css("background-color","white");
+    //         },3000); //一秒内不能重复点击
+    //         m++;
+    //     }
+    //     if(s3!=2){
+    //         $('#z10').css("background-color","red");
+    //         setTimeout(function() {
+    //             $('#z10').css("background-color","white");
+    //         },3000); //一秒内不能重复点击
+    //         m++;
+    //     }
+    //
+    //     if(m==0){
+    //         load17();
+    //     }
+    //
+    //
+    // }
+    // function load17(){
+    //     var options = {
+    //         id:"bootstrap-table7",
+    //         toolbar:null,
+    //         data:data7,
+    //         method: 'get',
+    //         cache: false,
+    //         striped: true,
+    //         pagination: true,
+    //         pageSize: 10,
+    //         pageNumber:1,
+    //         pageList: [10, 20, 50, 100, 200, 500],
+    //         sidePagination:'client',
+    //         search: true,
+    //         showColumns: true,
+    //         showRefresh: false,
+    //         showExport: true,
+    //         exportTypes: ['csv','txt','xml'],
+    //         modalName: "【请填写功能名称】",
+    //         columns: [   {
+    //             field: '仓库节点',
+    //             title: '仓库节点'
+    //         },
+    //             {
+    //                 field: '周期内配送总数量',
+    //                 title: '周期内配送总数量'
+    //             }]
+    //     };
+    //     $.table.init(options);
+    // }
+
+    function submit18(){
+        var s1 = $('#x11 option:selected').val();
+        var s2 = $('#y11 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#x11').css("background-color","red");
+            setTimeout(function() {
+                $('#x11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#y11').css("background-color","red");
+            setTimeout(function() {
+                $('#y11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load18();
+            n++;
+            addResutl("x11",s1);
+            addResutl("y11",s2);
+        }
+    }
+    function load18(){
+        var options = {
+            id:"bootstrap-table8",
+            toolbar:null,
+            data:data7,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns:[{"field":"仓库节点","title":"仓库节点"},{"field":"周期内配送总体积数量","title":"周期内配送总体积数量（立方米）"},{"field":"周期内配送总体积数量累计数量","title":"周期内配送总体积数量（立方米）累计数量"},{"field":"周期内配送总体积数量累计数量占比","title":"周期内配送总体积数量（立方米）累计数量占比"},{"field":"仓库节点累计品目数量","title":"仓库节点累计品目数量"},{"field":"仓库节点累计品目数量占比","title":"仓库节点累计品目数量占比"}]
+        };
+        $.table.init(options);
+    }
+
+    function submit19(){
+        var s1 = $('#x14 option:selected').val();
+        var s2 = $('#y14 option:selected').val();
+        var s3 = $('#z14 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x14').css("background-color","red");
+            setTimeout(function() {
+                $('#x14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y14').css("background-color","red");
+            setTimeout(function() {
+                $('#y14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#z14').css("background-color","red");
+            setTimeout(function() {
+                $('#z14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load19();
+            n++;
+            addResutl("x14",s1);
+            addResutl("y14",s2);
+            addResutl("z14",s3);
+        }
+
+
+    }
+    function load19(){
+        var myChart = echarts.init(document.getElementById('map18'), 'macarons');
+        var  option = {
+            backgroundColor:'#000',
+            "animation": true,
+            "title": {
+                "text": "",
+                "subtext": "",
+                "x": "center",
+                "y": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 60,
+                    "fontWeight": "normal",
+                    "align": "center",
+                    "width": "200px"
+                },
+                "subtextStyle": {
+                    "color": "#fff",
+                    "fontSize": 20,
+                    "fontWeight": "normal",
+                    "align": "center"
+                }
+            },
+            "legend": {
+                "width": "70%",
+                "left": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 16
+                },
+                "icon": "circle",
+                "right": "0",
+                "bottom": "0",
+                "padding": [30, 60],
+                "itemGap": 40,
+                "data": ["East",
+                    "North",
+                    "South",
+                    "West"
+
+                ]
+            },
+            "series": [{
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["40%", "53%"],
+                "color": ["#FEE449", "#00FFFF", "#00FFA8", "#9F17FF", "#FFE400", "#F76F01", "#01A4F7", "#FE2C8A"],
+                "startAngle": 135,
+                "labelLine": {
+                    "normal": {
+                        "length": 25
+                    }
+                },
+                "label": {
+                    "normal": {
+                        "formatter": "{b|{b}:}  {per|{d}%} ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#b3e5ff",
+                                "fontSize": 16,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 14,
+                                "padding": [5, 8],
+                                "borderRadius": 2
+                            }
+                        },
+                        "textStyle": {
+                            "color": "#fff",
+                            "fontSize": 16
+                        }
+                    }
+                },
+                "emphasis": {
+                    "label": {
+                        "show": true,
+                        "formatter": "{b|{b}:}  {per|{d}%}  ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#fff",
+                                "fontSize": 18,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 25,
+                                "padding": [5, 6],
+                                "borderRadius": 2
+                            }
+                        }
+                    }
+                },
+                "data": [{
+                    "name": "East",
+                    "value": 11636
+                },{
+                    "name": "North",
+                    "value": 24340
+                },{
+                    "name": "South",
+                    "value": 23639
+                },{
+                    "name": "West",
+                    "value": 6692
+                }
+                ]
+            }, {
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["35%", "36%"],
+                "label": {
+                    "show": false
+                },
+                "data": [{
+                    "value": 78,
+                    "name": "实例1",
+                    "itemStyle": {
+                        "normal": {
+                            "color": {
+                                "x": 0,
+                                "y": 0,
+                                "x2": 1,
+                                "y2": 0,
+                                "type": "linear",
+                                "global": false,
+                                "colorStops": [{
+                                    "offset": 0,
+                                    "color": "#9F17FF"
+                                }, {
+                                    "offset": 0.2,
+                                    "color": "#01A4F7"
+                                }, {
+                                    "offset": 0.5,
+                                    "color": "#FE2C8A"
+                                }, {
+                                    "offset": 0.8,
+                                    "color": "#FEE449"
+                                }, {
+                                    "offset": 1,
+                                    "color": "#00FFA8"
+                                }]
+                            }
+                        }
+                    }
+                }]
+            }]
+        }
+        myChart.setOption(option);
+    }
+</script>
+
+</body>
+</html>

@@ -21,10 +21,17 @@
     <a id="scroll-up" href="#" class="btn btn-sm display"><i class="fa fa-angle-double-up"></i></a>
 	<script th:src="@{/js/jquery.min.js?v=3.6.3}"></script>
 	<script th:src="@{/js/bootstrap.min.js?v=3.3.7}"></script>
+	<script th:src="@{/js/jquery.base64.js}"></script>
+
 	<!-- bootstrap-table 表格插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.js}"></script>
+
+
 	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js?v=1.18.3}"></script>
 	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js?v=1.18.3}"></script>
 	<script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js?v=1.18.3}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
 	<!-- jquery-validate 表单验证插件 -->
 	<script th:src="@{/ajax/libs/validate/jquery.validate.min.js?v=1.19.3}"></script>
 	<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js?v=1.19.3}"></script>
@@ -47,7 +54,18 @@
 <div th:fragment="ztree-js">
     <script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
 </div>
-
+<div th:fragment="layer-js">
+	<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+</div>
+<div th:fragment="layer-ext-js">
+	<script th:src="@{/js/plugins/layer/layer.ext.js}"></script>
+</div>
+<div th:fragment="layer-demo-js">
+	<script th:src="@{/js/layer-demo.js}"></script>
+</div>
+<div th:fragment="point-finereport-js">
+	<script th:src="@{/js/finereport.js}"></script>
+</div>
 <!-- select2下拉框插件 -->
 <div th:fragment="select2-css">
     <link th:href="@{/ajax/libs/select2/select2.min.css?v=4.0.13}" rel="stylesheet"/>
@@ -56,7 +74,15 @@
 <div th:fragment="select2-js">
     <script th:src="@{/ajax/libs/select2/select2.min.js?v=4.0.13}"></script>
 </div>
-
+<div th:fragment="point-public-css">
+	<link th:href="@{/css/point/public.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="point-index4-css">
+	<link th:href="@{/css/point/index4.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="steps-css">
+	<link th:href="@{/css/jquery.steps.css}" rel="stylesheet"/>
+</div>
 <!-- bootstrap-select下拉框插件 -->
 <div th:fragment="bootstrap-select-css">
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.min.css?v=1.13.18}" rel="stylesheet"/>
@@ -97,7 +123,9 @@
 <div th:fragment="cropper-js">
     <script th:src="@{/ajax/libs/cropper/cropper.min.js?v=1.5.12}"></script>
 </div>
-
+<div th:fragment="steps-js">
+	<script th:src="@{/js/jquery.steps.min.js}"></script>
+</div>
 <!-- jasny功能扩展插件 -->
 <div th:fragment="jasny-bootstrap-css">
     <link th:href="@{/ajax/libs/jasny/jasny-bootstrap.min.css?v=3.1.3}" rel="stylesheet"/>

@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
+
+<head includeDefault="true">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title> 企业物流能力与标准化 Lab</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/three.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/stats.min.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/DragControls.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/OrbitControls.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/FirstPersonControls.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/TransformControls.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/MTLLoader.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/OBJLoader.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/dat.gui.min.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/EffectComposer.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/RenderPass.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/OutlinePass.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/FXAAShader.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/CopyShader.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/ShaderPass.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/ThreeBSP.js}"></script>
+    <script th:src="@{/js/ThreeJs/ThreeJs_Drag.js}"></script>
+    <script th:src="@{/js/ThreeJs/ThreeJs_Composer.js}"></script>
+    <script th:src="@{/js/uploadself.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/Tween.js}"></script>
+    <script th:src="@{/js/ThreeJs/js/STLLoader1.js}"></script>
+    <script th:src="@{/js/ThreeJs/config.js}"></script>
+
+</head>
+<style>
+
+</style>
+</head>
+
+<body>
+<div id="app">
+        <div STYLE="z-index:9999;">
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+        var scene, camera, renderer, controls, light, amblight, pointLight1, pointLight2, composer, transformControls, options;
+        var ctx = "http://edu.glc360.com";
+        //     var ctx = "http://localhost:8084";
+        var size = 20;
+        var minX = 1000000;
+        var maxX = 0;
+        var minY = 1000000;
+        var maxY = 0;
+        var minZ = 1000000;
+        var maxZ = 0;
+        var group = new THREE.Group();
+        var geometry = new THREE.Geometry();
+        //创建立方体的顶点
+        var vertices = [
+            new THREE.Vector3(1, 1, 1), //v0
+            new THREE.Vector3(-1, 1, 1), //v1
+            new THREE.Vector3(-1, -1, 1), //v2
+            new THREE.Vector3(1, -1, 1), //v3
+            new THREE.Vector3(1, -1, -1), //v4
+            new THREE.Vector3(1, 1, -1), //v5
+            new THREE.Vector3(-1, 1, -1), //v6
+            new THREE.Vector3(-1, -1, -1) //v7
+        ];
+        geometry.vertices = vertices;
+        var faces = [
+            new THREE.Face3(0, 1, 2),
+            new THREE.Face3(0, 2, 3),
+            new THREE.Face3(0, 3, 4),
+            new THREE.Face3(0, 4, 5),
+            new THREE.Face3(1, 6, 7),
+            new THREE.Face3(1, 7, 2),
+            new THREE.Face3(6, 5, 4),
+            new THREE.Face3(6, 4, 7),
+            new THREE.Face3(5, 6, 1),
+            new THREE.Face3(5, 1, 0),
+            new THREE.Face3(3, 2, 7),
+            new THREE.Face3(3, 7, 4)
+        ];
+        geometry.faces = faces;
+        var shelf = new THREE.BoxGeometry(1, 1, 1);
+        let edgesMtl = new THREE.LineBasicMaterial({
+            color: "#1E90FF"
+        });
+        let edgesMtl1 = new THREE.LineBasicMaterial({
+            color: "yellow",
+            linewidth: 10
+        });
+        let edgesMtl2 = new THREE.LineBasicMaterial({
+            color: "#0000CD",
+            linewidth: 10
+        });
+        let cubeEdges = new THREE.EdgesGeometry(shelf, 2);
+        let cubeEdges1 = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1), 1);
+        var groups = new THREE.Group();
+
+
+        // 初始化场景
+        function initScene() {
+            scene = new THREE.Scene();
+        }
+
+        // 初始化相机
+        function initCamera() {
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000000);
+            camera.position.set(1000, 500, -1000);
+        }
+
+        // 初始化灯光
+        function initLight() {
+            //添加环境光
+            amblight = new THREE.AmbientLight(0xffffff, 1);
+            amblight.position.set(0, 0, 0);
+            scene.add(amblight);
+            //添加平行光
+            light = new THREE.DirectionalLight(0xffffff, 0.3);
+            light.position.set(0, 200, 0);
+            scene.add(light);
+            //添加点光源
+            pointLight1 = new THREE.PointLight(0xffffff, 0.3);
+            pointLight1.position.set(-500, 200, 0);
+            pointLight2 = new THREE.PointLight(0xffffff, 0.3);
+            pointLight2.position.set(500, 200, 0);
+            scene.add(pointLight1);
+            scene.add(pointLight2);
+        }
+
+
+        // 初始化渲染器
+        function initRenderer() {
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x39609B);
+            document.body.appendChild(renderer.domElement);
+        }
+
+
+        // 初始化轨迹球控件
+        function initControls() {
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.5;
+            // 视角最小距离
+            controls.minDistance = 0.1;
+            // 视角最远距离
+            controls.maxDistance = 100000;
+            // 最大角度
+            // controls.maxPolarAngle = Math.PI / 2.2;
+            controls.target = new THREE.Vector3(50, 50, 0);
+        }
+
+        // 初始化
+        function init() {
+            initScene();
+            initRenderer();
+            initCamera();
+            initControls();
+            initLight();
+            // onloadData();
+            composer = new THREE.ThreeJs_Composer(renderer, scene, camera, options);
+            scene.background = new THREE.Color('#121C2B');
+        }
+
+        // 窗口变动触发的方法
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            // composer.render();
+            update();
+        }
+
+        // 更新控件
+        function update() {
+
+            controls.update();
+            TWEEN.update();
+
+        }
+
+
+
+        function formatNum(strNum) {
+            strNum = parseInt(strNum);
+            if (strNum.length <= 3) {
+                return strNum;
+            }
+            if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+                return strNum;
+            }
+            var a = RegExp.$1,
+                b = RegExp.$2,
+                c = RegExp.$3;
+            var re = new RegExp();
+            re.compile("(\\d)(\\d{3})(,|$)");
+            while (re.test(b)) {
+                b = b.replace(re, "$1,$2$3");
+            }
+            return a + "" + b + "" + c;
+        }
+
+        function randomNum(minNum, maxNum) {
+            switch (arguments.length) {
+                case 1:
+                    return parseInt(Math.random() * minNum + 1, 10);
+                    break;
+                case 2:
+                    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+        }
+
+
+
+
+        function onloadData(url) {
+            scene.remove(groups);
+            groups = new THREE.Group();
+            $.getJSON(url,
+                function(data) {
+                    var d = data.shelf;
+                    var lines = [];
+                    var m = 1;
+                    var towWall = 0;
+                    var ds = 0;
+                    for (var i = 0; i < d.length; i++) {
+                        ds++;
+                        if (maxX < d[i].x) {
+                            maxX = d[i].x;
+                        }
+                        if (minX > d[i].x) {
+                            minX = d[i].x;
+                        }
+
+                        if (maxY < d[i].y) {
+                            maxY = d[i].y;
+                        }
+                        if (minY > d[i].y) {
+                            minY = d[i].y;
+                        }
+                        if (maxZ < d[i].z) {
+                            maxZ = d[i].z;
+                        }
+                        if (minZ > d[i].z) {
+                            minZ = d[i].z;
+                        }
+                    }
+                    onloadm();
+                    var materiald1 = new THREE.MeshPhongMaterial({
+                        color: "green",
+                        specular: "green",
+                    });
+                    var materiald2 = new THREE.MeshPhongMaterial({
+                        color: "red",
+                        specular: "red",
+                    });
+                    var materiald3 = new THREE.MeshPhongMaterial({
+                        color: "yellow",
+                        specular: "yellow",
+                    });
+
+                    for (var i = 0; i < d.length; i++) {
+                        lines.push(d[i]);
+
+                        if (m == 8) {
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+                            var cube
+                            // if((m1/8)<50*size){
+                            //     cube = new THREE.LineSegments(cubeEdges,edgesMtl2 );
+                            // }else{
+                            cube = new THREE.LineSegments(cubeEdges, edgesMtl);
+                            // }
+
+                            cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size, Math.abs(lines[1].z - lines[0].z) * size, Math.abs(lines[3].y - lines[0].y) * size);
+                            cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                            groups.add(cube);
+                            var mm = randomNum(1, 10);
+                            var lo = 1;
+
+                            var materiald = materiald1;
+                            if (mm < 2) {
+                                materiald = materiald2;
+                            } else if (mm < 4) {
+                                materiald = materiald3;
+                            }
+                            // if ((m1 / 8) < (50 * size)) {
+                            //     mm = 10;
+                            //     lo = 3;
+                            // }
+                            if (mm == 2) {
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set(0 - m1 / 8, m2 / 8, m3 / 8 - 3 * 2);
+                                sphere.scale.set(3 * 1.2, 3 * 1, 3 * 1.1);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set(0 - m1 / 8, m2 / 8, m3 / 8 + 3 * 2);
+                                sphere.scale.set(3 * 1.2, 3 * 1, 3 * 1.1);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+
+                            } else if (mm == 3) {
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set((0 - (m1 / 8)), m2 / 8, (m3 / 8));
+                                sphere.scale.set(3 * 1.2, 3 * 1, 3 * 1.1);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set(0 - m1 / 8, m2 / 8, m3 / 8 - 3 * 2);
+                                sphere.scale.set(3 * 1.2, 3 * 1, 3 * 1.1);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set(0 - m1 / 8, m2 / 8, m3 / 8 + 3 * 2);
+                                sphere.scale.set(3 * 1.2, 3 * 1, 3 * 1.1);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+                            } else {
+                                var sphere = new THREE.Mesh(geometry, materiald);
+                                sphere.position.set(0 - ((m1 / 8)), m2 / 8, (m3 / 8));
+                                sphere.scale.set(3 * 1.2 * lo, 3 * 1 * lo, 3 * 1.1 * lo);
+                                sphere.geometry.verticesNeedUpdate = false;
+                                sphere.geometry.normalsNeedUpdate = false;
+                                groups.add(sphere);
+                            }
+
+
+                            lines = [];
+                            towWall++
+                            m = 0;
+                        }
+                        m++;
+                    }
+
+                    var d2 = data.wall;
+                    var lines = [];
+                    var m = 1;
+                    var towWall1 = 0;
+
+
+                    var materiald = new THREE.MeshPhongMaterial({
+                        color: '#96ABC8',
+                    });
+                    var materiald1 = new THREE.MeshPhongMaterial({
+                        color: '#5F7480',
+                    })
+
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+                        if (m == 8) {
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+
+                            if (towWall1 < 3) {
+                                var cube = new THREE.Mesh(geometry, materiald);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                                groups.add(cube);
+                            } else {
+                                var cube = new THREE.Mesh(geometry, materiald1);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                                groups.add(cube);
+                            }
+                            lines = [];
+                            towWall1++
+                            m = 0;
+                        }
+                        m++;
+                    }
+
+                    var d2 = data.piller;
+                    var lines = [];
+                    var m = 1;
+                    var towWall = 0;
+                    var b = '#96ABC8';
+
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+                        if (m == 8) {
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+                            if (((m1 / 8)) > 1300 && ((m1 / 8)) < 1700) {
+
+                                var cube = new THREE.Mesh(geometry, materiald);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - (m1 / 8 + 100), m2 / 8, m3 / 8);
+                                groups.add(cube);
+                            } else {
+
+                                var cube = new THREE.Mesh(geometry, materiald);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                                groups.add(cube);
+                            }
+                            lines = [];
+                            towWall++
+                            m = 0;
+                        }
+                        m++;
+                    }
+                    var d2 = data.pointsWallCell;
+                    var lines = [];
+                    var m = 1;
+                    var towWall = 0;
+                    var b = 'rgba(190 ,190 ,190)';
+                    var materiald = new THREE.MeshBasicMaterial({
+                        color: b,
+                        specular: b,
+                    })
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+
+                        if (m == 8) {
+
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+
+                            var cube = new THREE.Mesh(geometry, materiald);
+                            cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                            cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                            groups.add(cube);
+                            lines = [];
+                            towWall++
+                            m = 0;
+                        }
+                        m++;
+                    }
+                    var d2 = data.pointsOutboundCell;
+                    var lines = [];
+                    var m = 1;
+                    var towWall = 0;
+                    var b = 'yellow';
+                    var materiald = new THREE.MeshBasicMaterial({
+                        color: b,
+                        specular: b,
+                    })
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+
+                        if (m == 8) {
+
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+
+                            var cube = new THREE.LineSegments(cubeEdges1, edgesMtl1);
+                            cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                            cube.position.set(0 - m1 / 8, m2 / 8 + 0.5, m3 / 8);
+                            groups.add(cube);
+                            lines = [];
+                            towWall++
+                            m = 0;
+                        }
+                        m++;
+                    }
+                    var d2 = data.pointsfloorCell;
+                    var lines = [];
+                    var m = 1;
+                    var towWall = 0;
+                    var b = 'rgba(190 ,190 ,190)';
+                    var materiald = new THREE.MeshBasicMaterial({
+                        color: b,
+                        specular: b,
+                    })
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+
+                        if (m == 8) {
+
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+
+                            var cube = new THREE.Mesh(geometry, materiald);
+                            cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                            cube.position.set(0 - m1 / 8, m2 / 8 + 0.5, m3 / 8);
+                            groups.add(cube);
+                            lines = [];
+                            towWall++
+                            m = 0;
+                        }
+                        m++;
+                    }
+                    var d3 = data.rackBoardMatrix;
+                    for (var i = 0; i < d3.length; i++) {
+                        var sid, x, y, z, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16;
+                        var arr = d3[i];
+                        r1 = arr[0];
+                        r2 = arr[1];
+                        r3 = arr[2];
+                        r4 = arr[3];
+                        r5 = arr[4];
+                        r6 = arr[5];
+                        r7 = arr[6];
+                        r8 = arr[7];
+                        r9 = arr[8];
+                        r10 = arr[9];
+                        r11 = arr[10];
+                        r12 = arr[11];
+                        r13 = arr[12];
+                        r14 = arr[13];
+                        r15 = arr[14];
+                        r16 = arr[15];
+                        x = arr[17];
+                        y = arr[18];
+                        console.log(x * size + ":" + y * size);
+
+                        // initEcharts(460 + i * 60, x * size, y * size, 100, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16);
+                    }
+                    var d2 = data.channel;
+                    for (var i = 0; i < d2.length; i++) {
+                        var mis = d2[i];
+                        // var k = randomNum(1, 10);
+                        // if (k < 5) {
+                        onloadChache(mis);
+                        // }
+                    }
+                    var d2 = data.dui;
+                    var doubledui = [];
+                    var t1 = 0;
+                    console.log(doubledui);
+                    if (d2 != null) {
+                        for (var i = 0; i < d2.length - 1; i++) {
+                            onloaddui(d2[i]);
+                            // doubledui.push(d2[i]);
+                            // if(t1==2){
+                            //     onloaddui(doubledui[0],doubledui[1]);
+                            //     doubledui=[];
+                            //     t1=0;
+                            // }
+
+                            // t1++;
+                        }
+                    }
+                    var d2 = data.robotPointsCell;
+                    var doubledui = [];
+                    var t1 = 0;
+                    if (d2 != null) {
+                        for (var i = 0; i < 6; i++) {
+                            onloadMaduo(d2[i]);
+                            // doubledui.push(d2[i]);
+                            // if(t1==2){
+                            //     onloaddui(doubledui[0],doubledui[1]);
+                            //     doubledui=[];
+                            //     t1=0;
+                            // }
+
+                            // t1++;
+                        }
+                    }
+
+                    var d2 = data.pointsWorkshopCell;
+                    var lines = [];
+                    var m = 1;
+                    var towWall1 = 0;
+                    var b = 'rgba(190 ,190 ,190)';
+                    var materiald = new THREE.MeshPhongMaterial({
+                        color: '#96ABC8',
+                    });
+                    var materiald1 = new THREE.MeshPhongMaterial({
+                        color: '#5F7480',
+                    })
+                    var materiald2 = new THREE.MeshPhongMaterial({
+                        color: 'yellow',
+                    })
+                    for (var i = 0; i < d2.length; i++) {
+                        lines.push(d2[i]);
+                        if (m == 8) {
+                            var m1 = 0;
+                            var m2 = 0;
+                            var m3 = 0;
+                            for (var l = 0; l < lines.length; l++) {
+                                m1 = m1 + (lines[l].x) * size;
+                                m2 = m2 + (lines[l].z) * size;
+                                m3 = m3 + (lines[l].y) * size;
+                            }
+
+                            if (towWall1 == 5) {
+                                onliadChanel(m1 - 33 * size, m2, m3, 1);
+                                onloadTrun(m1, m2, m3, -1);
+                            } else if (towWall1 == 6) {
+                                onliadChanel(m1 - 41.2 * size, m2 - 23 * size, m3, 2);
+                                onliadChanel(m1 - 41.2 * size, m2 - 2.35 * size, m3, 2);
+                                onloadTi(m1 - 41.2 * size, m2 - 2.35 * size, m3, 2);
+                            }
+                            if (towWall1 < 4) {
+                                var cube = new THREE.Mesh(geometry, materiald);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8 - 2 * size, m3 / 8);
+                                groups.add(cube);
+                            } else if (towWall1 < 8 && towWall1 > 4) {
+                                var cube = new THREE.Mesh(geometry, materiald1);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8 - 2 * size, m3 / 8);
+                                groups.add(cube);
+                            } else {
+                                var cube = new THREE.Mesh(geometry, materiald1);
+                                cube.scale.set(Math.abs(lines[6].x - lines[0].x) * size / 2, Math.abs(lines[1].z - lines[0].z) * size / 2, Math.abs(lines[3].y - lines[0].y) * size / 2);
+                                cube.position.set(0 - m1 / 8, m2 / 8, m3 / 8);
+                                groups.add(cube);
+                            }
+                            lines = [];
+                            towWall1++
+                            m = 0;
+                        }
+                        m++;
+                    }
+
+                });
+            ontuopan();
+            onloaddui1();
+            scene.add(groups);
+
+        }
+
+        function initEcharts(sid, x, y, z, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16) {
+            console.log(x + "," + y)
+            var canvas = document.createElement("canvas");
+            canvas.width = 850;
+            canvas.height = 400;
+            canvas.style.width = 850 + "px";
+            canvas.style.height = 400 + "px";
+            var ctx = canvas.getContext("2d");
+
+            ctx.fillStyle = '#181818'; //填充实体颜色
+            ctx.globalAlpha = .6;
+            ctx.strokeStyle = "#00f88f"; //填充边框颜色
+            ctx.lineWidth = 4;
+            ctx.fillRect(0, 0, 850, 400);
+
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.globalAlpha = 1;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '30px "微软雅黑 font-weight:bold"';
+            ctx.fillText("物料对象指标", canvas.width * (1 / 10) + 50, canvas.height / 8 - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.globalAlpha = 1;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("sku数", canvas.width * (1 / 10) + 50, canvas.height * (5 / 16) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r8), canvas.width * (1 / 10) + 50, canvas.height * (7 / 16) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("可放货位数", canvas.width * (1 / 10) + 50, canvas.height * (9 / 16) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r9), canvas.width * (1 / 10) + 50, canvas.height * (11 / 16) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("货位需求数", canvas.width * (1 / 10) + 50, canvas.height * (13 / 16) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r10), canvas.width * (1 / 10) + 50, canvas.height * (15 / 16) - 12);
+
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '30px "微软雅黑 font-weight:bold"';
+            ctx.fillText("容器对象指标", canvas.width * (5 / 10), canvas.height / 8 - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("容器容积率", canvas.width * (5 / 10), canvas.height * (10 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r10 * 100) / 10000 + "%", canvas.width * (5 / 10), canvas.height * (13 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("层数", canvas.width * (5 / 10), canvas.height * (16 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r2), canvas.width * (5 / 10), canvas.height * (18 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("排数", canvas.width * (5 / 10), canvas.height * (21 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r3), canvas.width * (5 / 10), canvas.height * (24 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("列数", canvas.width * (5 / 10), canvas.height * (26 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r4), canvas.width * (5 / 10), canvas.height * (29 / 32) - 12);
+
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '30px "微软雅黑 font-weight:bold"';
+            ctx.fillText("货架对象指标", canvas.width * (9 / 10) - 50, canvas.height / 8 - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("货架类别", canvas.width * (9 / 10) - 50, canvas.height * (10 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r1), canvas.width * (9 / 10) - 50, canvas.height * (13 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("面积", canvas.width * (9 / 10) - 50, canvas.height * (16 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r6), canvas.width * (9 / 10) - 50, canvas.height * (19 / 32) - 12);
+
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("单位面积存量", canvas.width * (9 / 10) - 50, canvas.height * (21 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText(parseInt(r13), canvas.width * (9 / 10) - 50, canvas.height * (24 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("单位面积成本", canvas.width * (9 / 10) - 50, canvas.height * (27 / 32) - 12);
+
+            ctx.fillStyle = "#a4f8ec"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("¥" + parseInt(r16), canvas.width * (9 / 10) - 50, canvas.height * (30 / 32) - 12);
+
+
+            ctx.fillStyle = "#d8ee0a"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = '24px "微软雅黑 font-weight:bold"';
+            ctx.fillText("------------------------------------------------------------------------------------------------------------------------------", canvas.width / 5, 80);
+
+            for (var i = 0; i < 20; i++) {
+                ctx.fillStyle = "#d8ee0a"
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = '24px "微软雅黑 font-weight:bold"';
+                ctx.fillText("|", canvas.width * (3 / 10) + 20, i * 20);
+            }
+            for (var i = 0; i < 20; i++) {
+                ctx.fillStyle = "#d8ee0a"
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = '24px "微软雅黑 font-weight:bold"';
+                ctx.fillText("|", canvas.width * (7 / 10) - 20, i * 20);
+            }
+
+
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+            var material = new THREE.SpriteMaterial({
+                map: texture
+            });
+            var text = new THREE.Sprite(material);
+            text.scale.set(400, 200, 200);
+            text.position.set(x, sid, y);
+
+            //设置具有几何顶点的几何（Geometry）或缓冲区几何（BufferGeometry）设置顶点位置，看名字就知道了，一个是直接将数据保存在js里面的，另一个是保存在WebGL缓冲区内的，而且肯定保存到WebGL缓冲区内的效率更高
+            var geometry1 = new THREE.Geometry();
+            geometry1.vertices.push(new THREE.Vector3(x, 0, y));
+            geometry1.vertices.push(new THREE.Vector3(x, sid, y));
+            //使用Line方法将线初始化
+            var line = new THREE.Line(geometry1, new THREE.LineDashedMaterial({
+                color: '#2b2b2b', //线段的颜色
+                dashSize: 5, //短划线的大小
+                gapSize: 3 //短划线之间的距离
+            }));
+            line.computeLineDistances(); //不可或缺的，若无，则线段不能显示为虚线
+
+            groups.add(text);
+            groups.add(line);
+            // scene.add(groups);
+        }
+
+        function onloadm() {
+            var k1 = randomNum(0, maxX) * size;
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/car.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/car.obj', function(object) {
+                    object.position.set(-k1, -1.3 * size, -250);
+                    object.rotation.y = 3;
+                    object.scale.set(10, 10, 10);
+                    groups.add(object);
+                });
+            });
+            var k2 = randomNum(0, maxX) * size;
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/car.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/car.obj', function(object) {
+                    object.position.set(-k2, -1.3 * size, -250);
+                    object.rotation.y = 3;
+                    object.scale.set(10, 10, 10);
+                    groups.add(object);
+                });
+            });
+            var k3 = randomNum(0, maxX) * size;
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/car.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/car.obj', function(object) {
+                    object.position.set(-k3, -1.3 * size, -250);
+                    object.rotation.y = 3;
+                    object.scale.set(10, 10, 10);
+                    groups.add(object);
+                });
+            });
+        }
+
+        function onloadChache(mis) {
+            var mtlLoader = new THREE.MTLLoader();
+            var m = randomNum(-10, 10) / 10;
+            var l = randomNum(0, 600);
+            var k = randomNum(1, 10);
+
+            mtlLoader.load('../../obj/chache1.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/chache1.obj', function(object) {
+                    object.position.set(-62 * size, 0, 105 * size);
+                    object.rotation.y = Math.PI;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function onloaddui1() {
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - (6 * size), -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 10.5 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 15 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 20 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 24.5 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 30 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 44.5 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 35 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set(0 - 40 * size, -14, 30 * size);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 55, 18);
+                    groups.add(object);
+                });
+            });
+        }
+
+        function onloaddui(mis) {
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/dui.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/dui.obj', function(object) {
+                    object.position.set((0 - mis.x * size + 20), -2, mis.y * size + 50);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, mis.z * size * 0.17, 18);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function onliadChanel(m1, m2, m3, t) {
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/chanel.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/chanel.obj', function(object) {
+                    object.position.set(0 - (m1 + 27 * size), 5 * size, m2 + 74.2 * size);
+                    object.rotation.y = -Math.PI / t;
+                    object.scale.set(120, 50, 100);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function onloadTrun(m1, m2, m3, t) {
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/trun.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/trun.obj', function(object) {
+                    object.position.set(0 - (m1 - 11.5 * size), 5 * size, m2 + 77 * size);
+                    object.rotation.y = 0;
+                    object.scale.set(0 - 120, 50, 100);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function onloadTi(m1, m2, m3, t) {
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/提升机.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/提升机.obj', function(object) {
+                    object.position.set(0 - (m1 + 27 * size), 0 * size, m2 + 114 * size);
+                    object.rotation.y = 0;
+                    object.scale.set(0 - 30, 30, 30);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/提升机.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/提升机.obj', function(object) {
+                    object.position.set(0 - (m1 + 90 * size), 0 * size, 26 * size);
+                    object.rotation.y = Math.PI / 2;
+                    object.scale.set(40, 50, 40);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function onloadMaduo(mis) {
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('../../obj/maduo.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/maduo.obj', function(object) {
+                    object.position.set(0 - mis.x * size, 3.6 * size, mis.y * size + 2 * size);
+                    object.rotation.y = Math.PI / 4;
+                    object.scale.set(30, 30, 30);
+                    groups.add(object);
+                });
+            });
+
+        }
+
+        function ontuopan() {
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (1 * 100 + 200), 0, 1 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (2 * 100 + 200), 0, 1 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (3 * 100 + 200), 0, 1 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../bj/tuopan.obj', function(object) {
+                    object.position.set(0 - (4 * 100 + 200), 0, 1 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (5 * 100 + 200), 0, 1 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (1 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (2 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (3 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (4 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (5 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (5 * 100 + 200), 0, 2 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (1 * 100 + 200), 0, 3 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('.../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (2 * 100 + 200), 0, 3 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (3 * 100 + 200), 0, 3 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('./static/obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (4 * 100 + 200), 0, 3 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+
+            var mtlLoader = new THREE.MTLLoader();
+
+            mtlLoader.load('../../obj/tuopan.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load('../../obj/tuopan.obj', function(object) {
+                    object.position.set(0 - (5 * 100 + 200), 0, 3 * 40);
+                    object.rotation.y = -Math.PI / 2;
+                    object.scale.set(18, 18, 18);
+                    groups.add(object);
+                });
+            });
+        }
+        init();
+        onloadData("../../obj/demo.json");
+        animate();
+    </script>
+
+</body>
+
+</html>

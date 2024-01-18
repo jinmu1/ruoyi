@@ -1,0 +1,2396 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('物料分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">物料分析</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>物料入库单</h5>
+            </div>
+<!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+<!--                <a class="btn btn-info" onclick="$.table.importExcel()" >-->
+<!--                    <i class="fa fa-upload"></i> 导入-->
+<!--                </a>-->
+<!--                <a class="btn btn-warning" onclick="$.table.exportExcel()" >-->
+<!--                    <i class="fa fa-download"></i> 导出-->
+<!--                </a>-->
+<!--            </div>-->
+            <table id="bootstrap-table"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>物料出库单</h5>
+            </div>
+            <div class="btn-group-sm" id="toolbar1" role="group">
+                <a class="btn btn-info" onclick="$.table.importExcel()" >
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <table id="table1"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>物料库存单</h5>
+            </div>
+            <div class="btn-group-sm" id="toolbar2" role="group">
+                <a class="btn btn-info" onclick="$.table.importExcel()" >
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <table id="table2"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>1.每日物料入库托盘数量分析-选择字段</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z" id="z" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	按照入库日期统计每天托盘入库总数量（托）	</option>
+                                <option  value='2'  >	按照入库日期统计每天出现的物料种类数量（种）	</option>
+                                <option  value='3'  >	按照入库日期统计每天出现的订单种类数量（种）	</option>
+                                <option  value='4'  >	按照出库日期统计每天托盘入库总数量（托）	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select name="x" id="x" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	订单编码	</option>
+                                <option  value='2'  >	入库日期	</option>
+                                <option  value='3'  >	物料编码	</option>
+                                <option  value='4'  >	出库日期	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y" id="y" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	每日出库托盘数量（托）	</option>
+                                <option  value='2'  >	每日物料种类数量（种）	</option>
+                                <option  value='3'  >	每日订单种类数量（种）	</option>
+                                <option  value='4'  >	每日入库托盘数量（托）	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>每日物料入库托盘数量分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="order"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>每日物料入库托盘数量分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table3"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>2.每日物料出库托盘数量分析-选择字段</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z1" id="z1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	按照入库日期统计每天出现的订单种类数量（种）	</option>
+                                <option  value='2'  >	按照出库日期统计每天托盘入库总数量（托）	</option>
+                                <option  value='3'  >	按照入库日期统计每天出现的物料种类数量（种）	</option>
+                                <option  value='4'  >	按照入库日期统计每天托盘入库总数量（托）	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x1" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	入库日期	</option>
+                                <option  value='2'  >	出库日期	</option>
+                                <option  value='3'  >	订单编码	</option>
+                                <option  value='4'  >	物料编码	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	每日物料种类数量（种）	</option>
+                                <option  value='2'  >	每日订单种类数量（种）	</option>
+                                <option  value='3'  >	每日入库托盘数量（托）	</option>
+                                <option  value='4'  >	每日出库托盘数量（托）	</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="reload2()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>每日物料出库托盘数量分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>每日物料出库托盘数量分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table5"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>3.物料入库量ABC分类分析-选择字段</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z2" id="z2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	按照物料编码周期内的托盘入库总数量（托）进行ABC分类分析	</option>
+                                <option  value='2'  >	按照订单编码周期内的托盘入库总数量（托）进行ABC分类分析	</option>
+                                <option  value='3'  >	按照物料编码周期内的托盘出库总数量（托）进行ABC分类分析	</option>
+                                <option  value='4'  >	按照出库日期统计每天托盘入库总数量（托）	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x2" id="x2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	物料编码累计数量	</option>
+                                <option  value='2'  >	物料品目累计数量占比	</option>
+                                <option  value='3'  >	订单品目累计数量	</option>
+                                <option  value='4'  >	订单编码	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y2" id="y2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	周期内订单入库托盘数量（托）累计数量占比	</option>
+                                <option  value='2'  >	周期内物料出库托盘数量（托）累计数量占比	</option>
+                                <option  value='3'  >	周期内订单出库托盘数量（托）累计数量占比	</option>
+                                <option  value='4'  >	周期内物料入库托盘数量（托）累计数量占比	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload3()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>3.物料入库量ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>3.物料入库量ABC分类分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table7"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>4.物料出库量ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z3" id="z3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	按照订单编码周期内的托盘入库总数量（托）进行ABC分类分析	</option>
+                                <option  value='2'  >	按照物料编码周期内的托盘入库总数量（托）进行ABC分类分析	</option>
+                                <option  value='3'  >	按照出库日期统计每天托盘入库总数量（托）	</option>
+                                <option  value='4'  >	按照物料编码周期内的托盘出库总数量（托）进行ABC分类分析	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x3" id="x3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	订单品目累计数量	</option>
+                                <option  value='2'  >	物料品目累计数量占比	</option>
+                                <option  value='3'  >	订单编码	</option>
+                                <option  value='4'  >	物料编码累计数量	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y3" id="y3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	周期内物料入库托盘数量（托）累计数量占比	</option>
+                                <option  value='2'  >	周期内订单出库托盘数量（托）累计数量占比	</option>
+                                <option  value='3'  >	周期内物料出库托盘数量（托）累计数量占比	</option>
+                                <option  value='4'  >	周期内订单入库托盘数量（托）累计数量占比	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload4()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物料出库量ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物料出库量ABC分类分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table9"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>5.物料入库周期（天/次）分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z4" id="z4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	将每个物料编码按照3月-6月内的入库周期进行直方图分析	</option>
+                                <option  value='2'  >	将每个物料编码按照周期内出库过账总数量（箱）进行直方图分析	</option>
+                                <option  value='3'  >	将每个物料编码按照一个月内的出库周期进行直方图分析	</option>
+                                <option  value='4'  >	将每个订单编码按照周期内入库过账总数量（箱）进行直方图分析	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x4" id="x4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	周期内物料对应出库过账总数量（SKU）分布区间	</option>
+                                <option  value='2'  >	周期内订单对应出库过账总数量（SKU）分布区间	</option>
+                                <option  value='3'  >	3月-6月内物料入库周期（天/次）分布区间	</option>
+                                <option  value='4'  >	3月-6月内物料出库周期（天/次）分布区间	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y4" id="y4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	区间内物料分布的数量	</option>
+                                <option  value='2'  >	区间内订单分布数量	</option>
+                                <option  value='3'  >	周期内订单数量在总数量中占比	</option>
+                                <option  value='4'  >	周期内物料数量在总数量中占比	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload5()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>5.物料入库周期（天/次）分析-直方图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order5"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>5.物料入库周期（天/次）分析-饼图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="echarts" id="order6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>5.物料入库周期（天/次）分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table10"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>6.物料出库周期（天/次）分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z4" id="z5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	将每个物料编码按照周期内出库过账总数量（箱）进行直方图分析	</option>
+                                <option  value='2'  >	将每个物料编码按照3月-6月内的出库周期进行直方图分析	</option>
+                                <option  value='3'  >	将每个物料编码按照一个月内的出库周期进行直方图分析	</option>
+                                <option  value='4'  >	将每个订单编码按照周期内入库过账总数量（箱）进行直方图分析	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x4" id="x5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	3月-6月内物料出库周期（天/次）分布区间	</option>
+                                <option  value='2'  >	周期内物料对应出库过账总数量（SKU）分布区间	</option>
+                                <option  value='3'  >	周期内订单对应出库过账总数量（SKU）分布区间	</option>
+                                <option  value='4'  >	3月-6月内物料出库周期（天/次）分布区间	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y4" id="y5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	区间内订单分布数量	</option>
+                                <option  value='2'  >	区间内物料分布的数量	</option>
+                                <option  value='3'  >	周期内订单数量在总数量中占比	</option>
+                                <option  value='4'  >	周期内物料数量在总数量中占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload6()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>6.物料出库周期（天/次）分析-直方图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order7"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>6.物料出库周期（天/次）分析-饼图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="echarts" id="order8"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>6.物料出库周期（天/次）分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table11"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>7.物料平均库存量维度的ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z2" id="z6" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	对每个物料编码按照周期内出库过账总数量进行ABC分析	</option>
+                                <option  value='2'  >	对每个物料编码按照周期内平均库存数量（吨）进行ABC分析	</option>
+                                <option  value='3'  >	对每个物料编码按照周期内出库周期进行ABC分类分析	</option>
+                                <option  value='4'  >	对每个物料编码按照周期内入库周期进行ABC分类分析	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x2" id="x6" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	订单编码	</option>
+                                <option  value='2'  >	物料编码累计数量	</option>
+                                <option  value='3'  >	订单品目累计数量	</option>
+                                <option  value='4'  >	物料品目累计数量占比	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y2" id="y6" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='1'  >	物料品目累计数量占比	</option>
+                                <option  value='2'  >	物料当日可用库存数量占比	</option>
+                                <option  value='3'  >	物料周期内平均库存量累计数量占比	</option>
+                                <option  value='4'  >	物料当日可用库存量累计数量占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload7()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>7.物料平均库存量维度的ABC分类分析</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order10"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>7.物料平均库存量维度的ABC分类分析-生成的数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table12"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var prefix = ctx + "system/goodsm";
+    var prefix1= ctx + "system/goodsm3";
+    var prefix2= ctx + "system/goodsm4";
+    var prefix3= ctx + "system/goodsm5";
+    var prefix4= ctx + "system/goodsm6";
+    var prefix11= ctx + "system/goodsm1";
+    var prefix12= ctx + "system/goodsm2";
+
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9,data10;
+    $.getJSON("../../../file/goods2.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+        data5=data.data5;
+        data6=data.data6;
+        data7=data.data7;
+        loadTable1();
+       $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            // submit();
+            // submit1();
+            // submit2();
+            // reloadE();
+            // reloadN();
+            // reloadQ();
+            // reloadEN();
+            // reloadEN1();
+            // reloadEQ();
+            // reloadEQ1();
+            // reloadEI();
+            // reloadEI1();
+        });
+        // loadTable2();
+        // loadTable3();
+        // loadTable4();
+        // loadTable5();
+        // loadTable6();
+        // loadTable7();
+        // loadTable8();
+        // loadTable9();
+        // load();
+        load1();
+        load2();
+        load3();
+        load4();
+        load5();
+        load6();
+        load7();
+        // load8();
+        // load9();
+        // load10();
+        // load11();
+        // loads();
+        // load131()
+        // load13();
+        // load14();
+        // load15();
+        //
+        // load17();
+        // load18();
+        // load19();
+
+    });
+    function addResutl(opId,opValue) {
+      $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function end(){
+        window.location.href=ctx+"end?score="+n+"&drillID="+$('#drillID').text()+"&userID="+$('#userID').text()+"&issueID="+$('#issueID').text();
+    }
+
+
+    function loadTable1() {
+        var options = {
+            id:"bootstrap-table",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '入库日期',
+                title: '入库日期'
+            },
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '规格型号',
+                    title: '规格型号'
+                },
+                {
+                    field: '包装单元',
+                    title: '包装单元'
+                },
+                {
+                    field: '入库数量',
+                    title: '入库数量'
+                },
+                {
+                    field: '入库件数',
+                    title: '入库件数'
+                },
+                {
+                    field: '转换为托盘数量',
+                    title: '转换为托盘数量'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"table1",
+            toolbar:null,
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '出库日期',
+                title: '出库日期'
+            },
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '规格型号',
+                    title: '规格型号'
+                },
+                {
+                    field: '规格型号说明',
+                    title: '规格型号说明'
+                },
+                {
+                    field: '过账数量',
+                    title: '过账数量'
+                },
+                {
+                    field: '托盘存放件数',
+                    title: '托盘存放件数'
+                },
+                {
+                    field: '转化为托盘数量',
+                    title: '转化为托盘数量'
+                }]
+        };
+        $.table.init(options1);
+        var options2 = {
+            id:"table2",
+
+            toolbar:"null",
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [   {
+                field: '物料编码',
+                title: '物料编码'
+            },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '规格型号',
+                    title: '规格型号'
+                },
+                {
+                    field: '规格型号说明',
+                    title: '规格型号说明'
+                },
+                {
+                    field: '平均库存量',
+                    title: '平均库存量'
+                }]
+        };
+        $.table.init(options2);
+    }
+
+    function reload1(){
+        var x=$("#x option:selected").val();
+        var y=$("#y option:selected").val();
+        var z=$("#z option:selected").val();
+        var m=0;
+        if(x!="2"){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="4"){
+            m++;
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="1"){
+            m++;
+            $('#z').css("background-color","red");
+            setTimeout(function() {
+                $('#z').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load1();
+        }
+    }
+    function load1(){
+        var myChart = echarts.init(document.getElementById('order'), 'macarons');
+
+            var d = data4;
+            var arr1=[];
+            var arr2=[];
+            var arr3=[];
+            var arr4=[];
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].入库日期);
+                arr2.push(d[i].物料托盘数量);
+                arr3.push(d[i].平均数);
+                arr4.push(d[i].中位数);
+            }
+
+            var   option = {
+                backgroundColor:'rgba(255, 255, 255, 0)',
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                legend: [
+                    {
+                        left:'left',
+                        data:['订单编号']
+                    }
+                ],
+                dataZoom : {
+                    show : true,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    splitLine:{
+                        show: false
+
+                    }
+                },
+                series: [
+                    {
+                        name:'每日出库订单数量',
+                        type:'line',
+                        data:arr2,
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+                    },{
+                        name:'平均数',
+                        type:'line',
+                        data:arr3,
+
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+
+                    },{
+                        name:'中位数',
+                        type:'line',
+                        data:arr4,
+
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+        var options = {
+            id:"bootstrap-table3",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '入库日期',
+                title: '入库日期'
+            },
+                {
+                    field: '物料托盘数量',
+                    title: '物料托盘数量'
+                },
+                {
+                    field: '平均数',
+                    title: '平均数'
+                },
+                {
+                    field: '中位数',
+                    title: '中位数'
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+    function reload2(){
+        var x=$("#x1 option:selected").val();
+        var y=$("#y1 option:selected").val();
+        var z=$("#z1 option:selected").val();
+        var m=0;
+        if(x!="2"){
+            $('#x1').css("background-color","red");
+            setTimeout(function() {
+                $('#x1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="4"){
+            m++;
+            $('#y1').css("background-color","red");
+            setTimeout(function() {
+                $('#y1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="2"){
+            m++;
+            $('#z1').css("background-color","red");
+            setTimeout(function() {
+                $('#z1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load2();
+        }
+    }
+    function load2(){
+        var myChart = echarts.init(document.getElementById('order1'), 'macarons');
+
+            var d = data4;
+            var arr1=[];
+            var arr2=[];
+            var arr3=[];
+            var arr4=[];
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].入库日期1);
+                arr2.push(d[i].物料托盘数量1);
+                arr3.push(d[i].平均数1);
+                arr4.push(d[i].中位数1);
+            }
+
+            var   option = {
+                backgroundColor:'rgba(255, 255, 255, 0)',
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                legend: [
+                    {
+                        left:'left',
+                        data:['每日入库订单种类数量','平均数','中位数']
+                    }
+                ],
+                dataZoom : {
+                    show : true,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                    splitLine:{
+                        show: true
+
+                    }
+                },
+                series: [
+                    {
+                        name:'每日出库订单数量',
+                        type:'line',
+                        data:arr2,
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+                    },{
+                        name:'平均数',
+                        type:'line',
+                        data:arr3,
+
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+
+                    },{
+                        name:'中位数',
+                        type:'line',
+                        data:arr4,
+
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+        var options = {
+            id:"bootstrap-table5",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [  {
+                field: '入库日期1',
+                title: '入库日期'
+            },
+                {
+                    field: '物料托盘数量1',
+                    title: '物料托盘数量'
+                },
+                {
+                    field: '平均数1',
+                    title: '平均数'
+                },
+                {
+                    field: '中位数1',
+                    title: '中位数'
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+    function reload3(){
+        var x=$("#x2 option:selected").val();
+        var y=$("#y2 option:selected").val();
+        var z=$("#z2 option:selected").val();
+        var m=0;
+        if(x!="2"){
+            $('#x2').css("background-color","red");
+            setTimeout(function() {
+                $('#x2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="4"){
+            m++;
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="1"){
+            m++;
+            $('#z2').css("background-color","red");
+            setTimeout(function() {
+                $('#z2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load3();
+        }
+    }
+    function load3(){
+        var myChart = echarts.init(document.getElementById('order2'), 'macarons');
+
+            var d = data4;
+            var arr1=[];
+            var arr2=[];
+            var arr3=[];
+            var arr4=[];
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].物料品目累计数量占比);
+                arr2.push(d[i].周期内物料入库托盘数量累计数量占比.replace("%",""));
+            }
+
+            var   option = {
+                backgroundColor:'rgba(255, 255, 255, 0)',
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                legend: [
+                    {
+                        left:'left',
+                        data:['每日入库订单种类数量','平均数','中位数']
+                    }
+                ],
+                dataZoom : {
+                    show : true,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    },
+                    splitLine:{
+                        show: true
+
+                    }
+                },
+                series: [
+                    {
+                        name:'每日出库订单数量',
+                        type:'line',
+                        data:arr2,
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+
+
+        var options = {
+            id:"bootstrap-table7",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '物料编码',
+                title: '物料编码'
+            },
+                {
+                    field: '周期内物料入库托盘数量',
+                    title: '周期内物料入库托盘数量'
+                },
+                {
+                    field: '周期内物料入库托盘数量累计数量',
+                    title: '周期内物料入库托盘数量'
+                },
+                {
+                    field: '周期内物料入库托盘数量累计数量占比',
+                    title: '周期内物料入库托盘数量'
+                },
+                {
+                    field: '物料品目累计数量',
+                    title: '物料品目累计数量'
+                },
+                {
+                    field: '物料品目累计数量占比',
+                    title: '物料品目累计数量占比'
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+    function submit3(){
+        var s1 = $('#s31 option:selected').val();
+        var s2 = $('#s32 option:selected').val();
+        var s3 = $('#s33 option:selected').val();
+        var s4 = $('#s34 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s31').css("background-color","red");
+            setTimeout(function() {
+                $('#s31').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s32').css("background-color","red");
+            setTimeout(function() {
+                $('#s32').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s33').css("background-color","red");
+            setTimeout(function() {
+                $('#s33').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s34').css("background-color","red");
+            setTimeout(function() {
+                $('#s34').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable5();
+        }
+
+    }
+    function loadTable5() {
+        var options = {
+            id:"bootstrap-table8",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: '订单编码',
+                    title: '订单编码'
+                },
+                {
+                    field: '周期内订单对应物料种类总数量',
+                    title: '周期内订单对应物料种类总数量'
+                },
+                {
+                    field: '订单编码累计品目数',
+                    title: '订单编码累计品目数'
+                },
+                {
+                    field: '周期内订单对应物料种类总数量1',
+                    title: '周期内订单对应物料种类总数量'
+                }]
+        };
+        $.table.init(options);
+    }
+    function reload4(){
+        var x=$("#x3 option:selected").val();
+        var y=$("#y3 option:selected").val();
+        var z=$("#z3 option:selected").val();
+        var m=0;
+        if(x!="2"){
+            $('#x3').css("background-color","red");
+            setTimeout(function() {
+                $('#x3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="3"){
+            m++;
+            $('#y3').css("background-color","red");
+            setTimeout(function() {
+                $('#y3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="4"){
+            m++;
+            $('#z3').css("background-color","red");
+            setTimeout(function() {
+                $('#z3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load4();
+        }
+    }
+    function load4(){
+        var myChart = echarts.init(document.getElementById('order4'), 'macarons');
+
+            var d = data5;
+            var arr1=[];
+            var arr2=[];
+
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].物料品目累计数量);
+                arr2.push(d[i].周期内物料出库托盘数量累计数量占比*100);
+            }
+
+            var   option = {
+                backgroundColor:'rgba(255, 255, 255, 0)',
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                legend: [
+                    {
+                        left:'left',
+                        data:['每日入库订单种类数量','平均数','中位数']
+                    }
+                ],
+                dataZoom : {
+                    show : true,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    },
+                    splitLine:{
+                        show: true
+
+                    }
+                },
+                series: [
+                    {
+                        name:'每日出库订单数量',
+                        type:'line',
+                        data:arr2,
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+        var options = {
+            id:"bootstrap-table9",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [{
+                field: '物料编码',
+                title: '物料编码'
+            },
+                {
+                    field: '周期内物料出库托盘数量',
+                    title: '周期内物料出库托盘数量'
+                },
+                {
+                    field: '周期内物料出库托盘数量累计数量',
+                    title: '周期内物料出库托盘数量'
+                },
+                {
+                    field: '周期内物料出库托盘数量累计数量占比',
+                    title: '周期内物料出库托盘数量'
+                },
+                {
+                    field: '物料品目累计数量',
+                    title: '物料品目累计数量'
+                },
+                {
+                    field: '物料品目累计数量占比',
+                    title: '物料品目累计数量占比'
+                }]
+        };
+        $.table.init(options);
+
+    }
+    function reload5(){
+        var x=$("#x4 option:selected").val();
+        var y=$("#y4 option:selected").val();
+        var z=$("#z4 option:selected").val();
+        var m=0;
+        if(x!="3"){
+            $('#x4').css("background-color","red");
+            setTimeout(function() {
+                $('#x4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="1"){
+            m++;
+            $('#y4').css("background-color","red");
+            setTimeout(function() {
+                $('#y4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="1"){
+            m++;
+            $('#z4').css("background-color","red");
+            setTimeout(function() {
+                $('#z4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load5();
+        }
+    }
+    function load5(){
+        var myChart = echarts.init(document.getElementById('order5'), 'macarons');
+        var myChart1 = echarts.init(document.getElementById('order6'), 'macarons');
+
+
+        var option = {
+            title: {
+                text: '物料入库周期分布区间'
+            },
+            tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: ['(0,5]', '(5,10]', '(10,20]', '(20,30]', '(30,40]', '(40,50]', '(50,60]', '(60,70]', '(70,80]', '(80,90]']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: '数量',
+                data: [110, 102, 113, 114, 0, 114, 0, 0, 0, 168],
+                type: 'bar'
+            }]
+        };
+        myChart.setOption(option);
+
+        // 配置项和数据
+        var option1 = {
+            title: {
+                text: '3月-6月内物料入库周期分布情况'
+            },
+            tooltip: {},
+            series: [{
+                name: '物料数量',
+                type: 'pie',
+                data: [
+                    {value: 110, name: '(0,5]'},
+                    {value: 102, name: '(5,10]'},
+                    {value: 113, name: '(10,20]'},
+                    {value: 114, name: '(20,30]'},
+                    {value: 0, name: '(30,40]'},
+                    {value: 114, name: '(40,50]'},
+                    {value: 0, name: '(50,60]'},
+                    {value: 0, name: '(60,70]'},
+                    {value: 0, name: '(70,80]'},
+                    {value: 168, name: '(80,90]'},
+                ]
+            }]
+        };
+        myChart1.setOption(option1);
+        var data = [  {"period": "(0,5]", "count": 110, "percentage": "15.26%"},  {"period": "(5,10]", "count": 102, "percentage": "14.15%"},  {"period": "(10,20]", "count": 113, "percentage": "15.67%"},  {"period": "(20,30]", "count": 114, "percentage": "15.81%"},  {"period": "(30,40]", "count": 0, "percentage": "0.00%"},  {"period": "(40,50]", "count": 114, "percentage": "15.81%"},  {"period": "(50,60]", "count": 0, "percentage": "0.00%"},  {"period": "(60,70]", "count": 0, "percentage": "0.00%"},  {"period": "(70,80]", "count": 0, "percentage": "0.00%"},  {"period": "(80,90]", "count": 168, "percentage": "23.30%"}];
+
+
+        var options = {
+            id:"bootstrap-table10",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            data:data,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'period',
+                    title: '3月-6月内物料入库周期（天/次）分布区间'
+                },
+                {
+                    field: 'count',
+                    title: '区间内物料分布数量'
+                },
+                {
+                    field: 'percentage',
+                    title: '对应物料分布数量在总数量中占比'
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+    function reload6(){
+        var x=$("#x5 option:selected").val();
+        var y=$("#y5 option:selected").val();
+        var z=$("#z5 option:selected").val();
+        var m=0;
+        if(x!="1"){
+            $('#x5').css("background-color","red");
+            setTimeout(function() {
+                $('#x5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="2"){
+            m++;
+            $('#y5').css("background-color","red");
+            setTimeout(function() {
+                $('#y5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="2"){
+            m++;
+            $('#z5').css("background-color","red");
+            setTimeout(function() {
+                $('#z5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load6();
+        }
+    }
+    function load6(){
+        var myChart = echarts.init(document.getElementById('order7'), 'macarons');
+        var myChart1 = echarts.init(document.getElementById('order8'), 'macarons');
+
+
+        var option = {
+            title: {
+                text: '3月-6月内物料出库周期（天/次）分布区间',
+                subtext: '对应物料分布数量在总数量中占比'
+            },
+            tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: ['(0,1]', '(1,3]', '(3,5]', '(5,10]', '(10,20]', '(20,30]', '(40,50]', '(80,90]']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: '物料分布数量',
+                type: 'bar',
+                data: [69, 157, 87, 84, 81, 76, 53, 103],
+                itemStyle: {
+                    emphasis: {
+                        color: '#FFC300'
+                    },
+                    normal: {
+                        color: '#3398DB'
+                    }
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c} ({d}%)'
+                }
+            }]
+        };
+        myChart.setOption(option);
+
+        // 配置项和数据
+        var option1 = {
+            title: {
+                text: '3月-6月内物料出库周期分布饼状图',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            series: [
+                {
+                    name: '物料数量',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {value: 110, name: '(0,5]'},
+                        {value: 102, name: '(5,10]'},
+                        {value: 113, name: '(10,20]'},
+                        {value: 114, name: '(20,30]'},
+                        {value: 114, name: '(40,50]'},
+                        {value: 168, name: '(80,90]'}
+                    ]
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+        const data = [
+            {
+                range: "(0,1]",
+                count: 69,
+                proportion: "9.72%"
+            },
+            {
+                range: "(1,3]",
+                count: 157,
+                proportion: "22.11%"
+            },
+            {
+                range: "(3,5]",
+                count: 87,
+                proportion: "12.25%"
+            },
+            {
+                range: "(5,10]",
+                count: 84,
+                proportion: "11.83%"
+            },
+            {
+                range: "(10,20]",
+                count: 81,
+                proportion: "11.41%"
+            },
+            {
+                range: "(20,30]",
+                count: 76,
+                proportion: "10.70%"
+            },
+            {
+                range: "(30,40]",
+                count: 0,
+                proportion: "0.00%"
+            },
+            {
+                range: "(40,50]",
+                count: 53,
+                proportion: "7.46%"
+            },
+            {
+                range: "(50,60]",
+                count: 0,
+                proportion: "0.00%"
+            },
+            {
+                range: "(60,70]",
+                count: 0,
+                proportion: "0.00%"
+            },
+            {
+                range: "(70,80]",
+                count: 0,
+                proportion: "0.00%"
+            },
+            {
+                range: "(80,90]",
+                count: 103,
+                proportion: "14.51%"
+            }
+        ];
+
+
+        var options = {
+            id:"bootstrap-table11",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            data:data,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'range',
+                    title: '3月-6月内物料出库周期（天/次）分布区间'
+                },
+                {
+                    field: 'count',
+                    title: '区间内物料分布数量'
+                },
+                {
+                    field: 'proportion',
+                    title: '对应物料分布数量在总数量中占比'
+                }]
+        };
+        $.table.init(options);
+
+    }
+    function reload7(){
+        var x=$("#x6 option:selected").val();
+        var y=$("#y6 option:selected").val();
+        var z=$("#z6 option:selected").val();
+        var m=0;
+        if(x!="4"){
+            $('#x6').css("background-color","red");
+            setTimeout(function() {
+                $('#x6').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="3"){
+            m++;
+            $('#y6').css("background-color","red");
+            setTimeout(function() {
+                $('#y6').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="2"){
+            m++;
+            $('#z6').css("background-color","red");
+            setTimeout(function() {
+                $('#z6').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            load7();
+        }
+    }
+    function load7(){
+        var myChart = echarts.init(document.getElementById('order10'), 'macarons');
+
+            var d = data5;
+            var arr1=[];
+            var arr2=[];
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].物料品目数累计数量占比);
+                arr2.push(d[i].物料每月平均库存量累计数量占比.replace("%",""));
+            }
+
+            var   option = {
+                backgroundColor:'rgba(255, 255, 255, 0)',
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                legend: [
+                    {
+                        left:'left',
+                        data:['每日入库订单种类数量','平均数','中位数']
+                    }
+                ],
+                dataZoom : {
+                    show : true,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    },
+                    splitLine:{
+                        show: true
+
+                    }
+                },
+                series: [
+                    {
+                        name:'每日出库订单数量',
+                        type:'line',
+                        data:arr2,
+                        itemStyle : {
+                            normal : {
+                                color:'#39c7aa'
+                            }
+                        },
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+
+        shou()
+        var options = {
+            id:"bootstrap-table12",
+            toolbar:null,
+
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '物料编码',
+                title: '物料编码'
+            },
+                {
+                    field: '物料周期内平均库存量',
+                    title: '物料周期内平均库存量'
+                },
+                {
+                    field: '物料每月平均库存量累计数量',
+                    title: '物料每月平均库存量累计数量'
+                },
+                {
+                    field: '物料每月平均库存量累计数量占比',
+                    title: '物料每月平均库存量累计数量占比'
+                },
+                {
+                    field: '物料品目数累计数量',
+                    title: '物料品目数累计数量'
+                },
+                {
+                    field: '物料品目数累计数量占比',
+                    title: '物料品目数累计数量占比'
+                }]
+        };
+        $.table.init(options);
+
+    }
+</script>
+<script id="importTpl" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5">
+                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据
+                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+            </div>
+            <font color="red" class="pull-left mt10">
+                提示：仅允许导入“xls”或“xlsx”格式文件！
+            </font>
+        </div>
+    </form>
+</script>
+</body>
+</html>

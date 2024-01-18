@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('仿真分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+    </style>
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h3></h3>
+            </div>
+            <div class="ibox-content">
+                <div style="font-size:26px;text-align: center">存储</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+        <div class="ibox-title">
+            <h3>初始物料库存表单</h3>
+        </div>
+        <div class="ibox-content">
+            <table id="bootstrap-tables"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox-title">
+                <h3>各物料服务水平与订货提前期</h3>
+            </div>
+            <div class="ibox-content">
+               <div id="lines1" style="height: 400px"></div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>各类物料库存策略选择</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <table class="table table-bordered  width1">
+                            <tbody>
+                            <tr>
+                                <th>物料类型</th>
+                                <th>库存策略</th>
+                                <th>目标库存服务水平设置</th>
+                                <th>订货提前期最大值设置</th>
+                                <th>订货提前期最小值设置</th>
+                                <th>订货提前期标准差最大设置值</th>
+                                <th>订货提前期标准差最小值设置</th>
+                            </tr>
+
+                            <tr>
+                                <th>A类物料</th>
+                                <td>
+                                    <div class="col-sm-12 control-label">
+                                        <select class="form-control m-b" name="carLength" id="type1" style="background:#090639; color: #000;color:#fff;">
+                                            <option>定期订货策略</option>
+                                            <option>定量订货策略</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="100" id="type2"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>%
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="7" id="type3"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="3" id="type4"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="1.5" id="type5"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="0" id="type6"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>B类物料</th>
+                                <td>
+                                    <div class="col-sm-12 control-label">
+                                        <select class="form-control m-b" name="carLength" id="type11" style="background:#090639; color: #000;color:#fff;">
+                                            <option>定期订货策略</option>
+                                            <option>定量订货策略</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="100" id="type12"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>%
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="7" id="type13"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="3" id="type14"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="1.5" id="type15"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="0" id="type16"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>C类物料</th>
+                                <td>
+                                    <div class="col-sm-12 control-label">
+                                        <select class="form-control m-b" name="carLength" id="type21" style="background:#090639; color: #000;color:#fff;">
+                                            <option>定期订货策略</option>
+                                            <option>定量订货策略</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="100" id="type22"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>%
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="7" id="type23"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="3" id="type24"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="1.5" id="type25"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                                <td>
+                                    <input name="storageNum" value="0" id="type26"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           data-placement="right" title="请输入" th:type="text"
+                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                           onchange="changeplant()" required=""/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox-title">
+                <h3>选择策略后的库存表单</h3>
+            </div>
+            <div class="ibox-content">
+                <table id="bootstrap-tables1"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox-title">
+                <h3>选择策略后各物料服务水平与订货提前期</h3>
+            </div>
+            <div class="ibox-content">
+                <div id="lines2" style="height: 400px"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h3>存储仿真模拟初始状态值</h3>
+                </div>
+                <div class="ibox-content">
+                    <table id="bootstrap-table"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 border">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a></li>
+                            <li><a href="#">选项2</a></li>
+                        </ul>
+                        <a class="close-link"> <i class="fa fa-times"></i> </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="font-size:26px;text-align: center">存储流程作业资源仿真模拟与优化</div>
+                            <form class="form-horizontal m-t" id="signupForm下" onsubmit="post_data4()"
+                                  target="nm_iframe">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="titled-pane">存储流程下作业资源优化调整</div>
+                                        <div class="table-responsive table1">
+                                            <table class="table table-bordered  width1">
+                                                <thead>
+
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th>存储托盘数量（托）</th>
+                                                    <td><input name="storageNum" value="20000" id="storageNum"
+                                                               onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               data-placement="right" title="请输入" th:type="text"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               onchange="changeplant()" required=""/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>物料持有库存总种类数（种）</th>
+                                                    <td><input name="storageNum" value="20000"
+                                                               onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               data-placement="right" title="请输入" th:type="text"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               onchange="changeplant()" required=""/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>存储区高度（米）</th>
+                                                    <td>
+                                                        <input type="value" id="height" value="9"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>m
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>存储区单层高度（米）</th>
+                                                    <td>
+                                                        <input type="value" id="shelf_height" value="1.5"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>m
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>存储区通道宽度（米）</th>
+                                                    <td>
+                                                        <input type="value" id="forklift_channel" value="3"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>m
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>货架间间隙（米）</th>
+                                                    <td>
+                                                        <input type="value" id="shelf_space" value="0.01"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>m
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="ibox float-e-margins" style="height: 60px">
+                                                    <button class="btn btn-primary" type="submit"
+                                                            style="margin-top: 1%;margin-left: 45%;z-index: 9999">
+                                                        确认并提交
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="titled-pane">资源使用情况</div>
+                                    <div class="table-responsive table1">
+                                        <table class="table table-bordered  width1">
+                                            <tr>
+                                                <th colspan="2"
+                                                    style="text-align:center;vertical-align:middle;">设施资源使用情况
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>存储区需求面积（平方米）</th>
+                                                <td id="area">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>存储区总货位数量（个）</th>
+                                                <td id="cargo">
+
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true"
+         style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body " style="width:1200px;height: 750px">
+                    <div id="lines" class="echarts" style="width:1200px;height: 750px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loadingModal">
+        <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+            <div class="progress progress-striped active" style="margin-bottom: 0;">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            <h5>正在加载...</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="pre()">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="next()">下一步</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var prefix2= "http://localhost:8443";
+    var isClick = true;
+    var data1,data2,data3,data4,data5,data6,data7;
+    $.getJSON("../../../file/simu.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        load();
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function load() {
+        var options1 = {
+            id: "bootstrap-tables",
+            data: data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination: 'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv', 'txt', 'xml'],
+            columns: [{"field": "物料编码", "title": "物料编码"}, {
+                "field": "单位物料采购单价",
+                "title": "单位物料采购单价"
+            }, {"field": "库存资金占用维度下物料ABC类型", "title": "库存资金占用维度下物料ABC类型"}, {
+                "field": "周期内日平均需求数量",
+                "title": "周期内日平均需求数量"
+            }, {"field": "周期内日平均需求数量标准差", "title": "周期内日平均需求数量标准差"}, {
+                "field": "周期内订货提前期均值",
+                "title": "周期内订货提前期均值"
+            }, {"field": "周期内订货提前期标准差", "title": "周期内订货提前期标准差"}, {
+                "field": "周期内可用库存数量均值",
+                "title": "周期内可用库存数量均值"
+            }, {"field": "库存资金占用金额（成本）均值", "title": "库存资金占用金额（成本）均值"}, {"field": "库存综合服务水平", "title": "库存综合服务水平"}]
+        };
+        $.table.init(options1);
+        var myChart = echarts.init(document.getElementById('lines1'), 'macarons');
+        var d = data1;
+        var arr1=[];
+        var arr2=[];
+        var arr3=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].物料编码);
+            arr2.push(d[i].周期内订货提前期均值);
+            arr3.push(d[i].库存综合服务水平.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: [{
+                type: 'value',
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#DCE2E8'
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#556677'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            }, {
+                type: 'value',
+                position: 'right',
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#556677'
+                    },
+                    formatter: '{value}%'
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#DCE2E8'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            }],
+            series: [
+                {
+                    name:'周期内可用库存数量均值',
+                    type:'bar',
+                    data:arr2,
+                    yAxisIndex: 0,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                },     {
+                    name:'库存综合服务水平',
+                    type:'line',
+                    yAxisIndex: 1,
+                    data:arr3,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+
+        var options = {
+            id: "bootstrap-table",
+            data: [{"输入": "存储区面积（平方米）", "初始状态值": "11000"}, {"输入": "存储区货位数量（个）", "初始状态值": "9000"}, {
+                "输入": "存储区托盘数量",
+                "初始状态值": "5985"
+            }, {"输入": "周期内物料持有库存总数量（单位）", "初始状态值": "15000"}, {"输入": "物料持有库存总种类数（种）", "初始状态值": "2825"}, {
+                "输入": "存储区高度（米）",
+                "初始状态值": "24"
+            }, {"输入": "存储区单层高度（米）", "初始状态值": "12"}, {"输入": "存储区通道宽度（米）", "初始状态值": "1"}, {
+                "输入": "货架间间隙（米）",
+                "初始状态值": "1.5"
+            }],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination: 'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv', 'txt', 'xml'],
+            columns: [{"field": "输入", "title": "输入"}, {"field": "初始状态值", "title": "初始状态值"}]
+        };
+        $.table.init(options);
+    }
+    function pre(){
+        window.location.href=ctx+"system/simu/index2";
+    }
+    function next(){
+        window.location.href=ctx+"system/simu/index5";
+    }
+    showLoading = function () {
+        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+    }
+    //隐藏掉loading框
+    hideLoading = function () {
+        $('#loadingModal').modal('hide');
+    }
+
+    function post_data4() {
+        if (isClick) {
+            showLoading();
+            isClick = false;
+            setTimeout(function () {
+                storage();
+            }, 1000);//一秒内不能重复点击
+
+            setTimeout(function () {
+                isClick = true;
+            }, 1000);//一秒内不能重复点击
+        } else {
+            return;
+        }
+        return false;
+    }
+
+    function storage() {
+        var storageNum = $("#storageNum").val();
+        var height = $("#height").val();
+        var forklift_channel = $("#forklift_channel").val();
+        var shelf_space = $("#shelf_space").val();
+        var shelf_height = $("#shelf_height").val();
+        $.post("/getStorage", {
+            "storageNum": storageNum,
+            "height": height,
+            "forklift_channel": forklift_channel,
+            "shelf_space": shelf_space,
+            "shelf_height": shelf_height,
+        }, function (result) {
+            var d = result.rows[0];
+            $("#area").html(parseInt(d.storageArea) + "㎡");
+            $("#cargo").html(parseInt(d.cargo) + "个");
+            addResutl("area",d.storageArea);
+            addResutl("cargo",d.cargo);
+            area3 = parseInt(d.storageArea);
+            hideLoading();
+        });
+
+    }
+
+    function submit2(){
+        var options1 = {
+            id: "bootstrap-tables1",
+            data: data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination: 'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv', 'txt', 'xml'],
+            columns: [{"field": "物料编码", "title": "物料编码"}, {
+                "field": "单位物料采购单价",
+                "title": "单位物料采购单价"
+            }, {"field": "库存资金占用维度下物料ABC类型", "title": "库存资金占用维度下物料ABC类型"}, {
+                "field": "周期内日平均需求数量",
+                "title": "周期内日平均需求数量"
+            }, {"field": "周期内日平均需求数量标准差", "title": "周期内日平均需求数量标准差"}, {
+                "field": "周期内订货提前期均值",
+                "title": "周期内订货提前期均值"
+            }, {"field": "周期内订货提前期标准差", "title": "周期内订货提前期标准差"}, {
+                "field": "周期内可用库存数量均值",
+                "title": "周期内可用库存数量均值"
+            }, {"field": "库存资金占用金额（成本）均值", "title": "库存资金占用金额（成本）均值"}, {"field": "库存综合服务水平", "title": "库存综合服务水平"}]
+        };
+        $.table.init(options1);
+
+        var myChart = echarts.init(document.getElementById('lines2'), 'macarons');
+        var d = data2;
+        var arr1=[];
+        var arr2=[];
+        var arr3=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].物料编码);
+            arr2.push(d[i].周期内订货提前期均值);
+            arr3.push(d[i].库存综合服务水平.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: [{
+                type: 'value',
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#DCE2E8'
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#556677'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            }, {
+                type: 'value',
+                position: 'right',
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#556677'
+                    },
+                    formatter: '{value}%'
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#DCE2E8'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            }],
+            series: [
+                {
+                    name:'周期内可用库存数量均值',
+                    type:'bar',
+                    data:arr2,
+                    yAxisIndex: 0,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                },     {
+                    name:'库存综合服务水平',
+                    type:'line',
+                    yAxisIndex: 1,
+                    data:arr3,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+
+</body>
+</html>

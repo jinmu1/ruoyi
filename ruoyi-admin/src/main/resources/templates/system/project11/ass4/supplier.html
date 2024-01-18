@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('供应商分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">供应商分析</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>物料入库表</h5>
+            </div>
+            <table id="bootstrap-table" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>物料出库表</h5>
+            </div>
+            <table id="bootstrap-table20"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内供应商车辆到达时刻分布分析——数据分析用表制作</h5>
+                </div>
+                <div class="ibox-content" style="height:200px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <label class="control-label">对应的数据表单类型</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">选择字段一</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">选择字段二</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">选择字段三</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">数据处理操作</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确步骤</label>
+                            <div class="col-sm-10">
+                                <div id="element" class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s1" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	出库表单	</option>
+                                            <option value="2">	库存表单	</option>
+                                            <option value="3">	物料入库表	</option>
+                                            <option value="4">	现场调研测量表单	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s2" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	客户采购订单编码	</option>
+                                            <option value="2">	物料编码	</option>
+                                            <option value="3">	入库日期	</option>
+                                            <option value="4">	出库日期	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s3" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	物料编码	</option>
+                                            <option value="2">	输入时间	</option>
+                                            <option value="3">	入库日期	</option>
+                                            <option value="4">	出库日期	</option>
+
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s4" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	物料编码	</option>
+                                            <option value="2">	客户采购订单编码	</option>
+                                            <option value="3">	供应商编码	</option>
+                                            <option value="4">	到达车辆编码	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s5" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	统计同一入库日期同一输入时间下的到达车辆编码	</option>
+                                            <option value="2">	删除同一入库日期同一输入时间下的重复到达车辆编码	</option>
+                                            <option value="3">	删除同一日期同一客户采购订单编码下的重复供应商编码	</option>
+                                            <option value="4">	统计删除重复项后周期内每一个供应商编码对应的物料编码种类数量	</option>
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内供应商车辆到达时刻分布分析——数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table2"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内供应商车辆到达时刻分布分析——数据图表制作
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z" id="z" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计同一个采购订单编码周期内的入库过账总数量	</option>
+                                <option value="2">	统计周期内每日到达车辆的平均数量	</option>
+                                <option value="3">	统计周期内每天不同时刻的到达车辆最大值	</option>
+                                <option value="4">	统计同一个物料编码周期内的入库过账总数量	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x" id="x" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	物料编码	</option>
+                                <option value="2">	出库日期	</option>
+                                <option value="3">	入库日期	</option>
+                                <option value="4">	每日不同时刻分布	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y" id="y" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	过账数量	</option>
+                                <option value="2">	周期内每日不同时刻到达车辆到达最大值	</option>
+                                <option value="3">	周期内每日到达车辆的平均数量	</option>
+                                <option value="4">	周期内每日采购订单总数量	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内供应商车辆到达时刻分布分析——数据图表
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内供应商车辆到达时刻分布分析——数据图表对应数据源</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table3"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据分析用表制作</h5>
+                </div>
+                <div class="ibox-content" >
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-1">
+                                <label class="control-label">对应的数据表单类型</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label">选择字段一</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label">选择字段二</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label">选择字段三</label>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <label class="control-label">数据处理操作一</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label">数据处理操作二</label>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <div  class="row">
+                                <label class="col-sm-2 control-label">选择正确步骤</label>
+                                <div class="col-sm-1">
+                                    <select class="type form-control m-b" id="s21" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	物料入库表	</option>
+                                        <option value="2">	物料出库表	</option>
+                                        <option value="3">	库存表单	</option>
+                                        <option value="4">	现场调研测量表单	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s22" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	到达车辆编码	</option>
+                                        <option value="2">	入库日期	</option>
+                                        <option value="3">	输入时间	</option>
+                                        <option value="4">	订单创建时间	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s23" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	到达车辆编码	</option>
+                                        <option value="2">	客户编码	</option>
+                                        <option value="3">	客户订单编码	</option>
+                                        <option value="4">	客户采购订单编码	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s24" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	到达车辆代码	</option>
+                                        <option value="2">	供应商编码	</option>
+                                        <option value="3">	客户编码	</option>
+                                        <option value="4">	客户订单编码	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s25" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	计算同一入库日期下出现的物料编码次数	</option>
+                                        <option value="2">	计算同一出库日期下出现的采购订单编码次数	</option>
+                                        <option value="3">	删除周期内同一客户采购订单编码下重复的供应商编码	</option>
+                                        <option value="4">	删除同一日期同一物料编码下的重复供应商代码	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s26" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	统计删除重复项后周期内每一个供应商编码对应的订单创建编码种类数量	</option>
+                                        <option value="2">	统计删除重复项后统计周期内每一个供应商编码对应的客户采购订单编码种类数量	</option>
+                                        <option value="3">	统计删除重复项后周期内每一个供应商编码对应的到达车辆编码种类数量	</option>
+                                        <option value="4">	统计删除重复项后周期内每一个供应商编码对应的物料编码种类数量	</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据处理操作一对应数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table6"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据处理操作二对应数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table61"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据图表制作</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z2" id="z2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	按照采购订单编码周期内的入库数量进行ABC的供应商分类分析	</option>
+                                <option value="2">	按照周期内供应商对应的客户采购订单种类数量进行PCB的供应商分类分析	</option>
+                                <option value="3">	按照周期内供应商对应的客户采购订单种类数量进行ABC的供应商分类分析	</option>
+                                <option value="4">	按照周期内供应商对应的客户采购订单种类数量进行EIQ的供应商分类分析	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x2" id="x2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	到达车辆累计品目数量占比	</option>
+                                <option value="2">	供应商累计品目数量占比	</option>
+                                <option value="3">	物料累计品目数量占比	</option>
+                                <option value="4">	采购订单累计品目数量占比	</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select name="y2" id="y2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	供应商累计品目数量占比	</option>
+                                <option value="2">	周期内供应商对应的物料种类累计数量占比	</option>
+                                <option value="3">	周期内供应商对应的客户采购订单种类累计数量占比	</option>
+                                <option value="4">	物料累计品目数量占比	</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload3()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据图表
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应采购订单种类数量的供应商分类分析——数据图表对应的数据源</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table4"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商分类分析——数据分析用表制作</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+
+                            <div class="col-sm-12">
+                                <label class="col-sm-1 control-label">选择正确的选项：</label>
+                                <div class="col-sm-2 ">
+                                    <label class="control-label">对应的数据表单</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">数据处理操作一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">数据处理操作二</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-sm-12">
+                                <label class="col-sm-1 control-label">选择正确步骤</label>
+                                <div class="col-sm-2">
+                                    <select class="type form-control m-b" id="s31" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	物料入库表	</option>
+                                        <option value="2">	物料出库表	</option>
+                                        <option value="3">	库存表单	</option>
+                                        <option value="4">	现场调研测量表单	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s32" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	入库日期	</option>
+                                        <option value="2">	输入时间	</option>
+                                        <option value="3">	出库日期	</option>
+                                        <option value="4">	订单创建日期	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <select class="router form-control m-b" id="s33" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	到达车辆编码	</option>
+                                        <option value="2">	订单创建编码	</option>
+                                        <option value="3">	物料编码	</option>
+                                        <option value="4">	客户采购订单编码	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="router form-control m-b" id="s34" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	订单创建编码	</option>
+                                        <option value="2">	客户采购订单编码	</option>
+                                        <option value="3">	到达车辆编码	</option>
+                                        <option value="4">	供应商编码	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="router form-control m-b" id="s35" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	计算同一入库日期下出现的物料编码次数	</option>
+                                        <option value="2">	计算同一出库日期下出现的采购订单编码次数	</option>
+                                        <option value="3">	删除同一日期同一采购订单编码下的重复供应商代码	</option>
+                                        <option value="4">	删除同一日期同一物料编码下的重复供应商编码	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="router form-control m-b" id="s36" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	统计删除重复项后周期内每一个供应商编码对应的到达车辆编码种类数量	</option>
+                                        <option value="2">	统计删除重复项后周期内每一个供应商编码对应的物料编码种类数量	</option>
+                                        <option value="3">	统计删除重复项后统计周期内每一个供应商编码对应的客户采购订单编码种类数量	</option>
+                                        <option value="4">	统计删除重复项后周期内每一个供应商编码对应的订单创建编码种类数量	</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商分类分析——数据处理操作一对应数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table7"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商分类分析——数据处理操作二对应数据分析用表</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table71"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商的供应商分类分析——数据图表制作
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z" id="z1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	按照采购订单编码周期内的入库数量进行ABC分类分析	</option>
+                                <option value="2">	按照物料编码周期内的入库数量进行ABC分类分析	</option>
+                                <option value="3">	按照周期内供应商对应的采购订单种类数量进行ABC分类分析	</option>
+                                <option value="4">	按照周期内供应商对应的物料种类数量进行ABC分类分析	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	到达车辆编码累计品目数量占比	</option>
+                                <option value="2">	物料编码累计品目数量占比	</option>
+                                <option value="3">	供应商编码累计品目数量占比	</option>
+                                <option value="4">	客户采购订单编码累计品目数量占比	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	供应商累计品目数量占比	</option>
+                                <option value="2">	周期内供应商编码对应的物料种类累计数量占比	</option>
+                                <option value="3">	周期内供应商编码对应的采购订单种类累计数量占比	</option>
+                                <option value="4">	物料编码累计品目数量占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="reload2()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商分类分析——数据图表
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="order4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基于周期内供应商对应物料种类数量的供应商分类分析——数据图表对应数据源</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table8"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+
+    var ctx = [[@{/}]];
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var data1,data2,data3,data4,data5,data6,data7;
+    $.getJSON("../../../obj/file/supplier.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+        data5=data.data5;
+        data6=data.data6;
+        data7=data.data7;
+        loadTable1();
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            submit();
+            submit1();
+            submit2();
+            submit3();
+
+            reload1();
+            reload2();
+            reload3();
+        });
+        // loadTable2();
+        // load1();
+        // load2();
+        // load3();
+        // loadTable3();
+        // loadTable4();
+        // loadTable5();
+
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function loadTable1() {
+        for(var dd=0;dd<52100;dd++){
+            data1.push(null);
+        }
+        for(var dd=0;dd<73120;dd++){
+            data2.push(null);
+        }
+        var options = {
+            id:"bootstrap-table",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns:[{"field":"入库日期","title":"入库日期"},{"field":"输入时间","title":"输入时间"},{"field":"库位","title":"库位"},{"field":"移动类型文本","title":"移动类型文本"},{"field":"物料编码","title":"物料编码"},{"field":"物料描述","title":"物料描述"},{"field":"入库数量","title":"入库数量"},{"field":"单位","title":"单位"},{"field":"客户采购订单编码","title":"客户采购订单编码"},{"field":"供应商编码","title":"供应商编码"},{"field":"一级分类","title":"一级分类"},{"field":"到达车辆编码","title":"到达车辆编码"},{"field":"入库卸货月台数量","title":"入库卸货月台数量"}]
+        };
+        $.table.init(options);
+        var options = {
+            id:"bootstrap-table20",
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{"field":"出库日期","title":"出库日期"},{"field":"SAP售达方代码","title":"SAP售达方代码"},{"field":"客户编码","title":"客户编码"},{"field":"客户订单编码","title":"客户订单编码"},{"field":"物料编码","title":"物料编码"},{"field":"物料描述","title":"物料描述"},{"field":"出库数量","title":"出库数量"},{"field":"销售单价","title":"销售单价"},{"field":"单位名称","title":"单位名称"},{"field":"单位代码","title":"单位代码"},{"field":"工厂代码","title":"工厂代码"},{"field":"销售组织","title":"销售组织"},{"field":"一级分类","title":"一级分类"}]
+        };
+        $.table.init(options);
+    }
+    function submit(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s4 = $('#s4 option:selected').val();
+        var s5 = $('#s5 option:selected').val();
+
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s4').css("background-color","red");
+            setTimeout(function() {
+                $('#s4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=2){
+            $('#s5').css("background-color","red");
+            setTimeout(function() {
+                $('#s5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            n++;
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+            addResutl("s4",s4);
+            addResutl("s5",s5);
+
+            loadTable2();
+        }
+
+    }
+    function loadTable2() {
+        var options = {
+            id:"bootstrap-table2",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{"field":"入库日期","title":"入库日期"},{"field":"输入时间","title":"输入时间"},{"field":"到达车辆编码","title":"到达车辆编码"}]
+        };
+        $.table.init(options);
+    }
+    function reload1(){
+        var x=$("#x option:selected").val();
+        var y=$("#y option:selected").val();
+        var z=$("#z option:selected").val();
+        total++;
+        var m=0;
+        if(x!="4"){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },2000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="2"){
+            m++;
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },2000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="3"){
+            m++;
+            $('#z').css("background-color","red");
+            setTimeout(function() {
+                $('#z').css("background-color","white");
+            },2000); //一秒内不能重复点击
+        }
+        if (m==0){
+            n++;
+            addResutl("x",x);
+            addResutl("y",y);
+            addResutl("z",z);
+            load1();
+        }
+    }
+    function load1(){
+        var myChart = echarts.init(document.getElementById('order'), 'macarons');
+
+        var d = data3;
+        var arr1=[];
+        var arr2=[];
+        var arr3=[];
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].每日不同时刻分布);
+            arr2.push(d[i].周期内每日不同时刻到达车辆到达最大值);
+            arr3.push(d[i].入库卸货月台数量);
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'周期内每日不同时刻到达车辆到达最大值',
+                    type:'line',
+                    data:arr2,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                },
+                {
+                    name:'入库卸货月台数量',
+                    type:'line',
+                    data:arr3,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+
+        var options = {
+            id:"bootstrap-table3",
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '每日不同时刻分布',
+                    title: '每日不同时刻分布'
+                },
+                {
+                    field: '周期内每日不同时刻到达车辆到达最大值',
+                    title: '周期内每日不同时刻到达车辆到达最大值'
+                },
+                {
+                    field: '入库卸货月台数量',
+                    title: '入库卸货月台数量'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function submit1(){
+        var s1 = $('#s11 option:selected').val();
+        var s2 = $('#s12 option:selected').val();
+        var s3 = $('#s13 option:selected').val();
+        var s4 = $('#s14 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s13').css("background-color","red");
+            setTimeout(function() {
+                $('#s13').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s14').css("background-color","red");
+            setTimeout(function() {
+                $('#s14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            n++;
+            addResutl("s11",s1);
+            addResutl("s12",s2);
+            addResutl("s13",s3);
+            addResutl("s14",s4);
+            loadTable3();
+        }
+
+    }
+    function loadTable3() {
+        var options = {
+            id:"bootstrap-table4",
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [ {
+                field: '客户代码',
+                title: '客户代码'
+            },
+                {
+                    field: '客户对应订单种类数量',
+                    title: '客户对应订单种类数量'
+                },
+                {
+                    field: '客户对应订单种类累计数量',
+                    title: '客户对应订单种类累计数量'
+                },
+                {
+                    field: '客户对应订单种类累计数量占比',
+                    title: '客户对应订单种类累计数量占比'
+                },
+                {
+                    field: '客户代码品目累计数量',
+                    title: '客户代码品目累计数量'
+                },
+                {
+                    field: '客户代码品目累计数量占比',
+                    title: '客户代码品目累计数量占比'
+                }]
+        };
+        $.table.init(options);
+    }
+
+
+    function submit2(){
+        var s1 = $('#s21 option:selected').val();
+        var s2 = $('#s22 option:selected').val();
+        var s3 = $('#s23 option:selected').val();
+        var s4 = $('#s24 option:selected').val();
+        var s5 = $('#s25 option:selected').val();
+        var s6 = $('#s26 option:selected').val();
+
+        total++;
+        var m = 0;
+        if(s1!=1){
+            $('#s21').css("background-color","red");
+            setTimeout(function() {
+                $('#s21').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s22').css("background-color","red");
+            setTimeout(function() {
+                $('#s22').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s23').css("background-color","red");
+            setTimeout(function() {
+                $('#s23').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s24').css("background-color","red");
+            setTimeout(function() {
+                $('#s24').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=3){
+            $('#s25').css("background-color","red");
+            setTimeout(function() {
+                $('#s25').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s6!=2){
+            $('#s26').css("background-color","red");
+            setTimeout(function() {
+                $('#s26').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            n++;
+            addResutl("s21",s1);
+            addResutl("s22",s2);
+            addResutl("s23",s3);
+            addResutl("s24",s4);
+            addResutl("s25",s5);
+            addResutl("s26",s6);
+            loadTable4();
+        }
+
+    }
+    function loadTable4() {
+        var options = {
+            id:"bootstrap-table6",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{"field":"入库日期","title":"入库日期"},{"field":"客户采购订单编码","title":"客户采购订单编码"},{"field":"供应商编码","title":"供应商编码"}]
+        };
+        $.table.init(options);
+        var options = {
+            id:"bootstrap-table61",
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {"field":"供应商编码","title":"供应商编码"},{"field":"周期内供应商对应客户采购订单编码种类数量","title":"周期内供应商对应客户采购订单编码种类数量"}
+            ]
+        };
+        $.table.init(options);
+    }
+
+
+    function submit3(){
+        var s1 = $('#s31 option:selected').val();
+        var s2 = $('#s32 option:selected').val();
+        var s3 = $('#s33 option:selected').val();
+        var s4 = $('#s34 option:selected').val();
+        var s5 = $('#s35 option:selected').val();
+        var s6 = $('#s36 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=1){
+            $('#s31').css("background-color","red");
+            setTimeout(function() {
+                $('#s31').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s32').css("background-color","red");
+            setTimeout(function() {
+                $('#s32').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s33').css("background-color","red");
+            setTimeout(function() {
+                $('#s33').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s34').css("background-color","red");
+            setTimeout(function() {
+                $('#s34').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=4){
+            $('#s35').css("background-color","red");
+            setTimeout(function() {
+                $('#s35').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s6!=2){
+            $('#s36').css("background-color","red");
+            setTimeout(function() {
+                $('#s36').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            n++;
+            addResutl("s31",s1);
+            addResutl("s32",s2);
+            addResutl("s33",s3);
+            addResutl("s34",s4);
+            addResutl("s35",s5);
+            addResutl("s36",s6);
+            loadTable5();
+        }
+
+    }
+
+    function loadTable5() {
+        var options = {
+            id:"bootstrap-table7",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [   {
+                field: '入库日期',
+                title: '入库日期'
+            },
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '供应商编码',
+                    title: '供应商编码'
+                }]
+        };
+        $.table.init(options);
+        var options = {
+            id:"bootstrap-table71",
+            data:data6,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [   {
+                field: '供应商编码',
+                title: '供应商编码'
+            },
+                {
+                    field: '周期内供应商编码对应物料编码种类数量',
+                    title: '周期内供应商编码对应物料编码种类数量'
+                }]
+        };
+        $.table.init(options);
+    }
+    function reload3(){
+        var x=$("#x2 option:selected").val();
+        var y=$("#y2 option:selected").val();
+        var z=$("#z2 option:selected").val();
+        total++;
+        var m=0;
+        if(x!="2"){
+            $('#x2').css("background-color","red");
+            setTimeout(function() {
+                $('#x2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="3"){
+            m++;
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="3"){
+            m++;
+            $('#z2').css("background-color","red");
+            setTimeout(function() {
+                $('#z2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            n++;
+            addResutl("x2",x);
+            addResutl("y2",y);
+            addResutl("z2",z);
+            load3();
+        }
+    }
+    function load3(){
+        var myChart = echarts.init(document.getElementById('order2'), 'macarons');
+
+        var d = data4;
+        var arr1=[];
+        var arr2=[];
+
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].供应商累计品目数量占比);
+            arr2.push(d[i].周期内供应商对应客户采购订单编码种类数量的累计数量占比.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'周期内供应商对应客户采购订单编码种类数量的累计数量占比',
+                    type:'line',
+                    data:arr2,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+        var options = {
+            id:"bootstrap-table4",
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{"field":"供应商编码","title":"供应商编码"},{"field":"周期内供应商对应客户采购订单编码种类数量","title":"周期内供应商对应客户采购订单编码种类数量"},{"field":"周期内供应商对应客户采购订单编码种类数量的累计数量","title":"周期内供应商对应客户采购订单编码种类数量的累计数量"},{"field":"周期内供应商对应客户采购订单编码种类数量的累计数量占比","title":"周期内供应商对应客户采购订单编码种类数量的累计数量占比"},{"field":"供应商累计品目数量","title":"供应商累计品目数量"},{"field":"供应商累计品目数量占比","title":"供应商累计品目数量占比"},{"field":"供应商分类","title":"供应商分类"}]
+        };
+        $.table.init(options);
+
+    }
+    function reload2(){
+        var x=$("#x1 option:selected").val();
+        var y=$("#y1 option:selected").val();
+        var z=$("#z1 option:selected").val();
+        total++;
+        var m=0;
+        if(x!="3"){
+            $('#x1').css("background-color","red");
+            setTimeout(function() {
+                $('#x1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="2"){
+            m++;
+            $('#y1').css("background-color","red");
+            setTimeout(function() {
+                $('#y1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="4"){
+            m++;
+            $('#z1').css("background-color","red");
+            setTimeout(function() {
+                $('#z1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            n++;
+            addResutl("x1",x);
+            addResutl("y1",y);
+            addResutl("z1",z);
+            load2();
+        }
+    }
+    function load2(){
+        var myChart = echarts.init(document.getElementById('order4'), 'macarons');
+
+        var d = data6;
+        var arr1=[];
+        var arr2=[];
+
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].供应商编码累计品目数量占比);
+            arr2.push(d[i].周期内供应商对应的物料种类数量的累计数量占比.replace("%",""));
+        }
+
+        var   option = {
+            backgroundColor:'rgba(255, 255, 255, 0)',
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: [
+                {
+                    left:'left',
+                    data:['订单编号']
+                }
+            ],
+            dataZoom : {
+                show : true,
+                realtime : true
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                },
+                splitLine:{
+                    show: false
+
+                }
+            },
+            series: [
+                {
+                    name:'周期内供应商对应物料种类数量的累计数量占比',
+                    type:'line',
+                    data:arr2,
+                    itemStyle : {
+                        normal : {
+                            color:'#39c7aa'
+                        }
+                    },
+
+                }
+            ]
+        };
+        myChart.setOption(option);
+        var options = {
+            id:"bootstrap-table8",
+            data:data6,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{"field":"供应商编码","title":"供应商编码"},{"field":"周期内供应商编码对应物料编码种类数量","title":"周期内供应商编码对应物料编码种类数量"},{"field":"周期内供应商编码对应物料编码种类数量的累计数量","title":"周期内供应商编码对应物料编码种类数量的累计数量"},{"field":"周期内供应商对应的物料种类数量的累计数量占比","title":"周期内供应商对应的物料种类数量的累计数量占比"},{"field":"供应商编码累计品目数量","title":"供应商编码累计品目数量"},{"field":"供应商编码累计品目数量占比","title":"供应商编码累计品目数量占比"},{"field":"供应商分类","title":"供应商分类"}]
+        };
+        $.table.init(options);
+
+    }
+</script>
+
+</body>
+</html>

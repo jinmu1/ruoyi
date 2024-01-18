@@ -1,0 +1,2866 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('物料分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">物流网络数据分析指标评价</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物流网络总成本各构成项优化前后对比数据用表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-tables"></table>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物流网络总成本各构成项优化前后对比分析图表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="z1" id="s1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	配送成本（元）	</option>
+                                <option value="2">	仓储成本（元）	</option>
+                                <option value="3">	库存持有成本（元）	</option>
+                                <option value="4">	各总成本构成项	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select name="x1" id="s2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	优化前数值	</option>
+                                <option value="2">	优化前数值与优化后数值	</option>
+                                <option value="3">	优化后数值	</option>
+                                <option value="4">	优化率	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div id="charts" style="height:400px" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物流网络总成本各构成项优化率分析数据图表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z1" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	（优化前数值—优化后数值）/优化前数值	</option>
+                                <option value="2">	（优化后数值—优化前数值）/优化前数值	</option>
+                                <option value="3">	（优化前数值—优化后数值）/优化后数值	</option>
+                                <option value="4">	（优化后数值—优化前数值）/优化后数值	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select name="x1" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	配送成本（元）	</option>
+                                <option value="2">	仓储成本（元）	</option>
+                                <option value="3">	各总成本构成项	</option>
+                                <option value="4">	库存持有成本（元）	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="z1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	优化前数值	</option>
+                                <option value="2">	优化前数值与优化后数值	</option>
+                                <option value="3">	优化后数值	</option>
+                                <option value="4">	优化率	</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>运输/配送成本类指标统计计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单订单配送成本 ：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s61" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	设备成本总和	</option>
+                                    <option value="2">	人工工资总和	</option>
+                                    <option value="3">	总配送成本	</option>
+                                    <option value="4">	仓库租赁（或购置）成本	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s62" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">总订单数量</option>
+                                    <option value="2">库存金额</option>
+                                    <option value="3">产品销售金额</option>
+                                    <option value="4">仓储总成本</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s63" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总订单数量/总配送成本	</option>
+                                    <option value="2">	人工工资总和 / 仓储总成本	</option>
+                                    <option value="3">	仓储总成本/人工工资总和	</option>
+                                    <option value="4">	总配送成本/总订单数量	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">物料单位供应成本：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s71" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	设备成本总和	</option>
+                                    <option value="2">	总运输成本	</option>
+                                    <option value="3">	仓库租赁（或购置）成本	</option>
+                                    <option value="4">	其他运营成本（水电等）	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s72" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日均吞吐量	</option>
+                                    <option value="2">	产品销售金额 	</option>
+                                    <option value="3">	总托数	</option>
+                                    <option value="4">	日均库存物流量	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s73" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总订单数量/总配送成本	</option>
+                                    <option value="2">	总运输成本/总托数	</option>
+                                    <option value="3">	人工工资总和/ 仓储总成本	</option>
+                                    <option value="4">	总托数/总供应运输成本	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位距离运输费率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s81" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	产品销售金额	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	总运输成本	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s82" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输距离	</option>
+                                    <option value="2">	订单总数	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	 设施面积	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s83" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和 / 仓储总成本	</option>
+                                    <option value="2">	总供应运输成本/总托数	</option>
+                                    <option value="3">	总配送成本/总订单数量	</option>
+                                    <option value="4">	总运输成本/总运输距离	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位数量运输费率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s91" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输成本	</option>
+                                    <option value="2">	设备成本总和	</option>
+                                    <option value="3">	仓库租赁（或购置）成本	</option>
+                                    <option value="4">	库存金额	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s92" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日均吞吐量	</option>
+                                    <option value="2">	产品销售金额 	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	总运输量	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s93" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总供应运输成本/总托数	</option>
+                                    <option value="2">	总运输成本/总运输量	</option>
+                                    <option value="3">	总配送成本/总运输距离	</option>
+                                    <option value="4">	总运输量/供应商运输成本	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储产出类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table2"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table3"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储成本类指标统计计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单订单仓储作业成本：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s101" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总供应运输成本	</option>
+                                    <option value="2">	总配送成本	</option>
+                                    <option value="3">	总仓储成本	</option>
+                                    <option value="4">	总运输成本	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s102" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总托数	</option>
+                                    <option value="2">	总订单数量	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	总运输量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s103" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总供应运输成本/总托数	</option>
+                                    <option value="2">	总配送成本/总订单数量	</option>
+                                    <option value="3">	总仓储成本/总订单数量	</option>
+                                    <option value="4">	总订单数量/总仓储成本	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单托仓储作业成本：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s111" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输成本	</option>
+                                    <option value="2">	总仓储成本	</option>
+                                    <option value="3">	总供应运输成本	</option>
+                                    <option value="4">	总配送成本	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s112" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	出入库总托数	</option>
+                                    <option value="2">	总运输距离	</option>
+                                    <option value="3">	总运输量	</option>
+                                    <option value="4">	总订单数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s113" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总供应运输成本/总托数	</option>
+                                    <option value="2">	总配送成本/总订单数量	</option>
+                                    <option value="3">	总订单数量/总仓储成本	</option>
+                                    <option value="4">	总仓储成本/出入库总托数	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单物料仓储作业成本：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s114" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输成本	</option>
+                                    <option value="2">	总供应运输成本	</option>
+                                    <option value="3">	总仓储成本	</option>
+                                    <option value="4">	总配送成本	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s115" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总订单数量	</option>
+                                    <option value="2">	总运输距离	</option>
+                                    <option value="3">	总运输量	</option>
+                                    <option value="4">	总物料数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s116" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总仓储成本/总订单数量	</option>
+                                    <option value="2">	总仓储成本/出入库总托数	</option>
+                                    <option value="3">	总仓储成本/总物料数量	</option>
+                                    <option value="4">	总物料数量/总仓储成本	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储成本类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table4"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储成本类指标优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table5"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart2"  style="height:400px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>成本维度库存相关指标统计计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">周期库存平均金额：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s121" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总仓储成本	</option>
+                                    <option value="2">	总配送成本	</option>
+                                    <option value="3">	期初库存金额	</option>
+                                    <option value="4">	总运输成本	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s122" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	期末库存金额	</option>
+                                    <option value="2">	总订单数量	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	总运输量（箱）	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s123" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	期末库存金额/期初库存金额	</option>
+                                    <option value="2">	（期初库存金额+期末库存金额）/2	</option>
+                                    <option value="3">	期初库存金额/期末库存金额	</option>
+                                    <option value="4">	期初库存金额+期末库存金额	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit4()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>成本维度库存相关指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table6"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>成本维度库存相关指标优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table7"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>运输/配送效率类指标统计计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">日平均单车配送频次：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s161" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和	</option>
+                                    <option value="2">	日平均配送次数	</option>
+                                    <option value="3">	总配送成本	</option>
+                                    <option value="4">	仓库租赁（或购置）成本	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s162" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总订单数量	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	日平均车辆数	</option>
+                                    <option value="4">	产品销售金额	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s163" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总配送成本/总订单数量	</option>
+                                    <option value="2">	日平均车辆数/日平均配送次数	</option>
+                                    <option value="3">	仓储总成本/人工工资总和	</option>
+                                    <option value="4">	日平均配送次数/日平均车辆数	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单总缺货率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s171" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量	</option>
+                                    <option value="3">	满足7天时效内完成的订单数量	</option>
+                                    <option value="4">	缺货订单数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s172" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	订单总数量	</option>
+                                    <option value="2">	配送次数	</option>
+                                    <option value="3">	库存金额	</option>
+                                    <option value="4">	仓库数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s173" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总成本/人工工资总和	</option>
+                                    <option value="2">	总运输成本/总运输距离	</option>
+                                    <option value="3">	缺货订单数量/订单总数量	</option>
+                                    <option value="4">	总配送成本/总订单数量	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">1天订单时效满足率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s181" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量	</option>
+                                    <option value="3">	满足3天时效内完成的订单数量	</option>
+                                    <option value="4">	缺货订单数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s182" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均车辆数	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	订单总数量	</option>
+                                    <option value="4">	产品销售金额	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s183" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数/日平均车辆数	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量/订单总数量	</option>
+                                    <option value="3">	仓储总成本/人工工资总和	</option>
+                                    <option value="4">	总配送成本/总订单数量	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">3天订单时效满足率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s191" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量	</option>
+                                    <option value="3">	满足3天时效内完成的订单数量	</option>
+                                    <option value="4">	缺货订单数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s192" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均车辆数	</option>
+                                    <option value="2">	订单总数量	</option>
+                                    <option value="3">	库存金额	</option>
+                                    <option value="4">	产品销售金额	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s193" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数/日平均车辆数	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量/订单总数量	</option>
+                                    <option value="3">	满足3天时效内完成的订单数量/订单总数量	</option>
+                                    <option value="4">	总配送成本/总订单数量	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">7天订单时效满足率：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s201" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数	</option>
+                                    <option value="2">	满足7天时效内完成的订单数量	</option>
+                                    <option value="3">	仓库租赁（或购置）成本	</option>
+                                    <option value="4">	人工工资总和	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s202" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均车辆数	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	产品销售金额	</option>
+                                    <option value="4">	订单总数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s203" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	日平均配送次数/日平均车辆数	</option>
+                                    <option value="2">	满足1天时效内完成的订单数量/订单总数量	</option>
+                                    <option value="3">	满足3天时效内完成的订单数量/订单总数量	</option>
+                                    <option value="4">	满足7天时效内完成的订单数量/订单总数量	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit5()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库内设施类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table8"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库内设施类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table9"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>仓储效率类指标统计计算</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+                        <div class="form-horizontal m-t">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="col-sm-3 control-label">指标：</label>
+
+                                    <div class="col-sm-3">
+                                        <label class="control-label">选择字段一</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="control-label">选择字段二</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="control-label">指标统计计算公式</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">仓库平均单位面积存量：</label>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s204" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	日平均配送次数	</option>
+                                        <option value="2">	总配送成本	</option>
+                                        <option value="3">	各仓库总存储量	</option>
+                                        <option value="4">	人工工资总和	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s205" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	各仓库总面积	</option>
+                                        <option value="2">	库存金额	</option>
+                                        <option value="3">	日平均车辆数	</option>
+                                        <option value="4">	总订单数量	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s206" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	日平均配送次数/日平均车辆数	</option>
+                                        <option value="2">	总存储量/仓库总面积	</option>
+                                        <option value="3">	总配送成本/总订单数量	</option>
+                                        <option value="4">	出入库总量/仓库总面积	</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">仓库平均单位面积流量：</label>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s211" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	日平均配送次数	</option>
+                                        <option value="2">	人工工资总和	</option>
+                                        <option value="3">	总配送成本	</option>
+                                        <option value="4">	各仓库出入库总量	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s212" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	各仓库总面积	</option>
+                                        <option value="2">	库存金额	</option>
+                                        <option value="3">	日平均车辆数	</option>
+                                        <option value="4">	总订单数量	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s213" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	日平均配送次数/日平均车辆数	</option>
+                                        <option value="2">	总存储量/仓库总面积	</option>
+                                        <option value="3">	总配送成本/总订单数量	</option>
+                                        <option value="4">	出入库总量/仓库总面积	</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit7()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>运输/配送效率类指标计算内容项目优化前后数值表</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+                        <table id="bootstrap-table12"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>运输/配送效率类指标计算优化前后数值表</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+                        <table id="bootstrap-table13"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>优化率对比图</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+
+                        <div style="width: 50%; height: 500px;" id="chart6"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>库存效率类指标计算</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+                        <div class="form-horizontal m-t">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="col-sm-3 control-label">指标：</label>
+
+                                    <div class="col-sm-3">
+                                        <label class="control-label">选择字段一</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="control-label">选择字段二</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="control-label">指标统计计算公式</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">周期库存周转率：</label>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s221" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	期间销售成本	</option>
+                                        <option value="2">	人工工资总和	</option>
+                                        <option value="3">	总配送成本	</option>
+                                        <option value="4">	仓库租赁（或购置）成本	</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s222" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	周期内库存总金额	</option>
+                                        <option value="2">	总订单数量	</option>
+                                        <option value="3">	周期库存平均金额	</option>
+                                        <option value="4">	产品销售金额	</option>
+
+
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s223" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	周期库存平均金额/期间销售成本	</option>
+                                        <option value="2">	期间销售成本/周期库存平均金额	</option>
+                                        <option value="3">	期间销售成本+周期库存平均金额	</option>
+                                        <option value="4">	周期天数/库存周转率	</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">周期库存周转天数：</label>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s231" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	日平均配送次数	</option>
+                                        <option value="2">	人工工资总和	</option>
+                                        <option value="3">	总配送成本	</option>
+                                        <option value="4">	周期天数	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s232" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	周期库存周转率	</option>
+                                        <option value="2">	周期内库存总金额	</option>
+                                        <option value="3">	周期内库存总金额	</option>
+                                        <option value="4">	产品销售金额	</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="type form-control m-b" id="s233" data-first-title="请选择">
+                                        <option value="">请选择</option>
+                                        <option value="1">	期间销售成本/周期库存平均金额	</option>
+                                        <option value="2">	人工工资总和 / 仓储总成本	</option>
+                                        <option value="3">	周期天数/周期库存周转率	</option>
+                                        <option value="4">	总配送成本/总订单数量	</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>库存效率类各指标计算内容项目优化前后数值表</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:500px">
+                        <table id="bootstrap-table14"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>库存效率类各指标计算优化前后数值表</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项1</a>
+                                    </li>
+                                    <li><a href="#">选项2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="ibox-content" style="height:700px">
+                        <table id="bootstrap-table15"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>实验结果提交</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="height:300px">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                            <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                            <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                            <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var options = {
+        id:"bootstrap-tables",
+        toolbar:"toolbar",
+        modalName: "【请填写功能名称】",
+        data:[  {
+            "总成本构成项": "配送成本（元）",
+            "优化前数值": 16190706,
+            "优化后数值": 14409728,
+            "优化率": "-11.00%"
+        },
+            {
+                "总成本构成项": "仓储成本（元）",
+                "优化前数值": 5320000,
+                "优化后数值": 4522000,
+                "优化率": "-15.00%"
+            },
+            {
+                "总成本构成项": "库存持有成本（元）",
+                "优化前数值": 2557971,
+                "优化后数值": 2174275,
+                "优化率": "-15.00%"
+            },
+            {
+                "总成本构成项": "仓库建设成本（元）",
+                "优化前数值": 2926000,
+                "优化后数值": 3087100,
+                "优化率": "5.51%"
+            },
+            {
+                "总成本构成项": "总成本（元）",
+                "优化前数值": 26994677.00,
+                "优化后数值": 24193103.69,
+                "优化率": "-10.38%"
+            }],
+        columns: [
+            {
+                field: '总成本构成项',
+                title: '总成本构成项'
+            },
+            {
+                field: '优化前数值',
+                title: '优化前数值'
+            },
+            {
+                field: '优化后数值',
+                title: '优化后数值'
+            },
+            {
+                field: '优化率',
+                title: '优化率'
+            }]
+    };
+    $.table.init(options);
+    function submit(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var m = 0;
+        if(s1!=4){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable1();
+        }
+
+    }
+    function loadTable1() {
+        var myChart = echarts.init(document.getElementById('charts'));
+
+        var option = {
+            title: {
+                text: '总成本构成图'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['优化前数值', '优化后数值']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: ['配送成本（元）', '仓储成本（元）', '库存持有成本（元）', '仓库建设成本（元）', '总成本（元）']
+            },
+            series: [
+                {
+                    name: '优化前数值',
+                    type: 'bar',
+                    data: [16190706, 5320000, 2557971, 2926000, 26994677.00]
+                },
+                {
+                    name: '优化后数值',
+                    type: 'bar',
+                    data: [14409728, 4522000, 2174275, 3087100, 24193103.69]
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+
+    function submit1(){
+        var s1 = $('#x1 option:selected').val();
+        var s2 = $('#y1 option:selected').val();
+        var s3 = $('#z1 option:selected').val();
+
+        var m = 0;
+        if(s1!=2){
+            $('#x1').css("background-color","red");
+            setTimeout(function() {
+                $('#x1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#z1').css("background-color","red");
+            setTimeout(function() {
+                $('#z1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load2();
+        }
+
+    }
+    function load2(){
+        var myChart = echarts.init(document.getElementById('chart'));
+
+        var option = {
+            title: {
+                text: '总成本优化率',
+            },
+            xAxis: {
+                type: 'category',
+                data: ['配送成本', '仓储成本', '库存持有成本', '仓库建设成本', '总成本']
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                }
+            },
+            series: [{
+                data: [-11, -15, -15, 5.51, -10.38],
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c} %'
+                    }
+                }
+            }]
+        };
+
+        myChart.setOption(option);
+
+    }
+
+    function submit2(){
+        var s1 = $('#s61 option:selected').val();
+        var s2 = $('#s62 option:selected').val();
+        var s3 = $('#s63 option:selected').val();
+        var s11 = $('#s71 option:selected').val();
+        var s12 = $('#s72 option:selected').val();
+        var s13 = $('#s73 option:selected').val();
+        var s21 = $('#s81 option:selected').val();
+        var s22 = $('#s82 option:selected').val();
+        var s23 = $('#s83 option:selected').val();
+        var s31 = $('#s91 option:selected').val();
+        var s32 = $('#s92 option:selected').val();
+        var s33 = $('#s93 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s61').css("background-color","red");
+            setTimeout(function() {
+                $('#s61').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s62').css("background-color","red");
+            setTimeout(function() {
+                $('#s62').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s63').css("background-color","red");
+            setTimeout(function() {
+                $('#s63').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=2){
+            $('#s71').css("background-color","red");
+            setTimeout(function() {
+                $('#s71').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=3){
+            $('#s72').css("background-color","red");
+            setTimeout(function() {
+                $('#s72').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=2){
+            $('#s73').css("background-color","red");
+            setTimeout(function() {
+                $('#s73').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s21!=3){
+            $('#s81').css("background-color","red");
+            setTimeout(function() {
+                $('#s81').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=1){
+            $('#s82').css("background-color","red");
+            setTimeout(function() {
+                $('#s82').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=4){
+            $('#s83').css("background-color","red");
+            setTimeout(function() {
+                $('#s83').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s31!=1){
+            $('#s91').css("background-color","red");
+            setTimeout(function() {
+                $('#s91').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s32!=4){
+            $('#s92').css("background-color","red");
+            setTimeout(function() {
+                $('#s92').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s33!=2){
+            $('#s93').css("background-color","red");
+            setTimeout(function() {
+                $('#s93').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+
+        if(m==0){
+            loadTable2();
+        }
+
+    }
+    function loadTable2() {
+        var options = {
+            id:"bootstrap-table2",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:  [
+                {name: "总配送成本（元）", preValue: 890488830, postValue: 792535059},
+                {name: "总运输成本（元）", preValue: 728581770, postValue: 648437575},
+                {name: "总订单数量（个）", preValue: 332111, postValue: 394511},
+                {name: "总托数（托）", preValue: 65321, postValue: 85321},
+                {name: "总运输距离（公里）", preValue: 1294594, postValue: 1178081},
+                {name: "总运输量（箱）", preValue: 1644121, postValue: 2567121},
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'preValue',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'postValue',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table3",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data: [
+                {
+                    "指标": "单订单配送成本",
+                    "优化前数值": 2681.30,
+                    "优化后数值": 2257.20,
+                    "优化率": "-15.82%"
+                },
+                {
+                    "指标": "物料单位供应成本",
+                    "优化前数值": 11153.87,
+                    "优化后数值": 7599.98,
+                    "优化率": "-31.86%"
+                },
+                {
+                    "指标": "单位距离运输费率",
+                    "优化前数值": 562.79,
+                    "优化后数值": 550.42,
+                    "优化率": "-2.20%"
+                },
+                {
+                    "指标": "单位数量运输费率",
+                    "优化前数值": 443.14,
+                    "优化后数值": 252.59,
+                    "优化率": "-43.00%"
+                }
+            ],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+        var data = [
+
+            {
+                name: '单订单配送成本',
+                value: -15.82
+            },
+            {
+                name: '物料单位供应成本',
+                value: -31.86
+            },
+            {
+                name: '单位距离运输费率',
+                value: -2.20
+            },
+            {
+                name: '单位数量运输费率',
+                value: -43.00
+            }
+
+        ];
+
+        // 指标名称
+        var indicatorName = data.map(function(item) {
+            return item.name;
+        });
+
+        // 指标数值
+        var indicatorValue = data.map(function(item) {
+            return item.value;
+        });
+        var myChart = echarts.init(document.getElementById("chart1"));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: "指标优化率柱状图",
+                subtext: "数据来源：指标数据",
+                x: "center"
+            },
+            tooltip: {},
+            xAxis: {
+                data: indicatorName
+            },
+            yAxis: {},
+            series: [
+                {
+                    name: "优化率",
+                    type: "bar",
+                    data: indicatorValue
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function submit3(){
+        var s1 = $('#s101 option:selected').val();
+        var s2 = $('#s102 option:selected').val();
+        var s3 = $('#s103 option:selected').val();
+        var s11 = $('#s111 option:selected').val();
+        var s12 = $('#s112 option:selected').val();
+        var s13 = $('#s113 option:selected').val();
+        var s14 = $('#s114 option:selected').val();
+        var s15 = $('#s115 option:selected').val();
+        var s16 = $('#s116 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s101').css("background-color","red");
+            setTimeout(function() {
+                $('#s101').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s102').css("background-color","red");
+            setTimeout(function() {
+                $('#s102').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s103').css("background-color","red");
+            setTimeout(function() {
+                $('#s103').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=2){
+            $('#s111').css("background-color","red");
+            setTimeout(function() {
+                $('#s111').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=1){
+            $('#s112').css("background-color","red");
+            setTimeout(function() {
+                $('#s112').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=4){
+            $('#s113').css("background-color","red");
+            setTimeout(function() {
+                $('#s113').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s14!=3){
+            $('#s114').css("background-color","red");
+            setTimeout(function() {
+                $('#s114').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s15!=4){
+            $('#s115').css("background-color","red");
+            setTimeout(function() {
+                $('#s115').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s16!=3){
+            $('#s116').css("background-color","red");
+            setTimeout(function() {
+                $('#s116').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable3();
+        }
+
+    }
+    function loadTable3() {
+        var options = {
+            id:"bootstrap-table4",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[ {index: "总仓储成本", before: 25214976, after: 24343055},
+                {index: "总订单数量", before: 15438638, after: 20832142},
+                {index: "出入库总托数", before: 2959495, after: 3086991},
+                {index: "总物料数量", before: 46210858, after: 45797040}
+            ],
+            columns: [
+                {
+                    field: 'index',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table5",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[   { name: '人均处理物流量', before: 267365.66, after: 485735.10, rate: "81.67%" },
+                { name: '人均处理订单量', before: 2183.57, after: 4410.41, rate: "101.98%" },
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'rate',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var myChart = echarts.init(document.getElementById("chart2"));
+        var data = [
+            { name: '人均处理物流量', value: 82 },
+            { name: '人均处理订单量', value: 102 }
+        ];
+
+        myChart.setOption({
+            title: {
+                text: '指标优化率'
+            },
+            xAxis: {
+                type: 'category',
+                data: data.map(function(item) {
+                    return item.name;
+                })
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.map(function(item) {
+                    return item.value;
+                })
+            }]
+        });
+    }
+
+    function submit4(){
+        var s1 = $('#s121 option:selected').val();
+        var s2 = $('#s122 option:selected').val();
+        var s3 = $('#s123 option:selected').val();
+
+
+        var m = 0;
+        if(s1!=3){
+            $('#s121').css("background-color","red");
+            setTimeout(function() {
+                $('#s121').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s122').css("background-color","red");
+            setTimeout(function() {
+                $('#s122').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s123').css("background-color","red");
+            setTimeout(function() {
+                $('#s123').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable4();
+        }
+
+    }
+    function loadTable4() {
+        var options = {
+            id:"bootstrap-table6",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[ {
+                "各指标计算内容项目": "期初库存金额",
+                "优化前数值": 5015629,
+                "优化后数值": 5520754
+            },
+                {
+                    "各指标计算内容项目": "期末库存金额",
+                    "优化前数值": 4726685,
+                    "优化后数值": 4974200
+                },
+            ],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table7",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[ {
+                "name": "周期库存平均金额（元）",
+                "before": 5268192.06,
+                "after": 4850442.77,
+                "rate":" -7.93%"
+            }
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'rate',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+
+    }
+
+
+    function submit5(){
+        var s1 = $('#s161 option:selected').val();
+        var s2 = $('#s162 option:selected').val();
+        var s3 = $('#s163 option:selected').val();
+        var s11 = $('#s171 option:selected').val();
+        var s12 = $('#s172 option:selected').val();
+        var s13 = $('#s173 option:selected').val();
+        var s21 = $('#s181 option:selected').val();
+        var s22 = $('#s182 option:selected').val();
+        var s23 = $('#s183 option:selected').val();
+
+        var s31 = $('#s191 option:selected').val();
+        var s32 = $('#s192 option:selected').val();
+        var s33 = $('#s193 option:selected').val();
+
+        var s41 = $('#s201 option:selected').val();
+        var s42 = $('#s202 option:selected').val();
+        var s43 = $('#s203 option:selected').val();
+        var m = 0;
+        if(s1!=2){
+            $('#s161').css("background-color","red");
+            setTimeout(function() {
+                $('#s161').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s162').css("background-color","red");
+            setTimeout(function() {
+                $('#s162').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s163').css("background-color","red");
+            setTimeout(function() {
+                $('#s163').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=4){
+            $('#s171').css("background-color","red");
+            setTimeout(function() {
+                $('#s171').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=1){
+            $('#s172').css("background-color","red");
+            setTimeout(function() {
+                $('#s172').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=3){
+            $('#s173').css("background-color","red");
+            setTimeout(function() {
+                $('#s173').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s21!=2){
+            $('#s181').css("background-color","red");
+            setTimeout(function() {
+                $('#s181').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=3){
+            $('#s182').css("background-color","red");
+            setTimeout(function() {
+                $('#s182').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=2){
+            $('#s183').css("background-color","red");
+            setTimeout(function() {
+                $('#s183').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s31!=3){
+            $('#s191').css("background-color","red");
+            setTimeout(function() {
+                $('#s191').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s32!=2){
+            $('#s192').css("background-color","red");
+            setTimeout(function() {
+                $('#s192').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s33!=3){
+            $('#s193').css("background-color","red");
+            setTimeout(function() {
+                $('#s193').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s41!=2){
+            $('#s201').css("background-color","red");
+            setTimeout(function() {
+                $('#s201').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s42!=4){
+            $('#s202').css("background-color","red");
+            setTimeout(function() {
+                $('#s202').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s43!=4){
+            $('#s203').css("background-color","red");
+            setTimeout(function() {
+                $('#s203').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable5();
+        }
+
+    }
+    function loadTable5() {
+        var options = {
+            id:"bootstrap-table8",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[
+                {"各指标计算内容项目":"缺货订单数量（个）","优化前数值":4085,"优化后数值":2567},
+                {"各指标计算内容项目":"满足1天时效内完成的订单数量（个）","优化前数值":126203,"优化后数值":224871},
+                {"各指标计算内容项目":"满足3天时效内完成的订单数量（个）","优化前数值":298899,"优化后数值":386621},
+                {"各指标计算内容项目":"满足7天时效内完成的订单数量（个）","优化前数值":332100,"优化后数值":394501},
+                {"各指标计算内容项目":"订单总数量（个）","优化前数值":332111,"优化后数值":394511},
+                {"各指标计算内容项目":"日平均配送次数（次）","优化前数值":324,"优化后数值":258},
+                {"各指标计算内容项目":"日平均车辆数（辆）","优化前数值":76,"优化后数值":53},
+
+            ],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table9",
+            toolbar:null,
+            modalName: "【请填写功能名称】",
+            data:[
+
+                {"指标":"日平均单车配送频次","优化前数值":"4.26 ","优化后数值":"4.87 ","优化率":"14.186%"},
+                {"指标":"订单总缺货率","优化前数值":"1.23%","优化后数值":"0.65%","优化率":"-47.100%"},
+                {"指标":"1天订单时效满足率","优化前数值":"38.000%","优化后数值":"57.000%","优化率":"49.999%"},
+                {"指标":"3天订单时效满足率","优化前数值":"90.000%","优化后数值":"98.000%","优化率":"8.889%"},
+                {"指标":"7天订单时效满足率","优化前数值":"99.997%","优化后数值":"99.997%","优化率":"0.001%"},
+
+
+            ],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var myChart = echarts.init(document.getElementById("chart4"));
+        var option = {
+            title: {
+                text: '运输/配送效率类指标计算优化前后数值表'
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    type : 'shadow'
+                }
+            },
+            xAxis: {
+                data: ['日平均单车配送频次', '订单总缺货率', '1天订单时效满足率', '3天订单时效满足率', '7天订单时效满足率']
+            },
+            yAxis: {},
+            series: [{
+                name: '优化率',
+                type: 'bar',
+                data: [14, -47, 50, 9, 0]
+            }]
+        };
+        myChart.setOption(option);
+    }
+
+    function submit7(){
+        var s1 = $('#s204 option:selected').val();
+        var s2 = $('#s205 option:selected').val();
+        var s3 = $('#s206 option:selected').val();
+
+        var s11 = $('#s211 option:selected').val();
+        var s12 = $('#s212 option:selected').val();
+        var s13 = $('#s213 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s204').css("background-color","red");
+            setTimeout(function() {
+                $('#s204').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s205').css("background-color","red");
+            setTimeout(function() {
+                $('#s205').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s206').css("background-color","red");
+            setTimeout(function() {
+                $('#s206').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=4){
+            $('#s211').css("background-color","red");
+            setTimeout(function() {
+                $('#s211').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=1){
+            $('#s212').css("background-color","red");
+            setTimeout(function() {
+                $('#s212').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=4){
+            $('#s213').css("background-color","red");
+            setTimeout(function() {
+                $('#s213').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable7();
+        }
+
+    }
+    function loadTable7() {
+        var options = {
+            id:"bootstrap-table12",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[
+                {"各指标计算内容项目":"各仓库总存储量（托）","优化前数值":41146,"优化后数值":40713},
+                {"各指标计算内容项目":"各仓库出入库总量（托）","优化前数值":1644121,"优化后数值":1644121},
+                {"各指标计算内容项目":"各仓库总面积（面积）","优化前数值":24000,"优化后数值":22781},
+
+            ],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table13",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[
+                {"指标":"仓库平均单位面积存量","优化前数值":"1.71 ","优化后数值":"1.79 ","优化率":"4.242%"},
+                {"指标":"仓库平均单位面积流量","优化前数值":"68.51 ","优化后数值":"72.17 ","优化率":"5.351%"},
+
+            ],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+        var myChart1 = echarts.init(document.getElementById("chart6"));
+        var option = {
+            title: {
+                text: '运输/配送效率类指标计算优化前后数值表'
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    type : 'shadow'
+                }
+            },
+            xAxis: {
+                data: ['仓库平均单位面积存量', '仓库平均单位面积流量']
+            },
+            yAxis: {},
+            series: [{
+                name: '优化率',
+                type: 'bar',
+                data: [4.242, 5.351]
+            }]
+        };
+        myChart1.setOption(option);
+
+
+    }
+
+    function submit8(){
+        var s1 = $('#s221 option:selected').val();
+        var s2 = $('#s222 option:selected').val();
+        var s3 = $('#s223 option:selected').val();
+
+        var s11 = $('#s231 option:selected').val();
+        var s12 = $('#s232 option:selected').val();
+        var s13 = $('#s233 option:selected').val();
+
+
+        var m = 0;
+        if(s1!=1){
+            $('#s221').css("background-color","red");
+            setTimeout(function() {
+                $('#s221').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s222').css("background-color","red");
+            setTimeout(function() {
+                $('#s222').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s223').css("background-color","red");
+            setTimeout(function() {
+                $('#s223').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=4){
+            $('#s231').css("background-color","red");
+            setTimeout(function() {
+                $('#s231').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=1){
+            $('#s232').css("background-color","red");
+            setTimeout(function() {
+                $('#s232').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=3){
+            $('#s233').css("background-color","red");
+            setTimeout(function() {
+                $('#s233').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable8();
+        }
+
+    }
+    function loadTable8() {
+        var options = {
+            id: "bootstrap-table14",
+            toolbar: "toolbar",
+            modalName: "【请填写功能名称】",
+            data: [
+                {"各指标计算内容项目": "期间销售成本（元）", "优化前数值": 299940855, "优化后数值": 323494085},
+                {"各指标计算内容项目": "周期库存平均金额（元）", "优化前数值": 5268192.064, "优化后数值": 4850442.772},
+                {"各指标计算内容项目": "周期天数（天数）", "优化前数值": 50, "优化后数值": 50},
+
+            ],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id: "bootstrap-table15",
+            toolbar: "toolbar4",
+            modalName: "【请填写功能名称】",
+            data: [
+                {"指标": "周期库存周转率", "优化前数值": "56.93 ", "优化后数值": "66.69 ", "优化率": "17.142%"},
+                {"指标": "周期库存周转天数", "优化前数值": "1.14 ", "优化后数值": "1.33 ", "优化率": "17.142%"},
+
+            ],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+    }
+
+</script>
+
+</body>
+</html>

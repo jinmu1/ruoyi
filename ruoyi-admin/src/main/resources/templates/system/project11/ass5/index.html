@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>定期订购理解</h5>
+                </div>
+                <div class="ibox-content" style="height:200px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <label class=" control-label">选择正确的选项：</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label">定期订购概念</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label">适用物料类型</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <label class="control-label">选择正确步骤</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="type form-control m-b" id="s21" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	订购周期固定，每次订购数量不定	</option>
+                                    <option value="2">	订购周期固定，每次订购数量固定	</option>
+                                    <option value="3">	订购周期不定，每次订购数量不定	</option>
+                                    <option value="4">	订购周期不定，每次订购数量固定	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-5">
+                                <select class="router form-control m-b" id="s22" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	库存资金占用维度下物料ABC分类中的B类和C类物料	</option>
+                                    <option value="2">	库存资金占用维度下物料ABC分类中的A物料	</option>
+                                    <option value="3">	出库量维度下物料ABC分类中的A类物料	</option>
+                                    <option value="4">	出库频次维度下物料ABC分类中的B类和C类物料	</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库存资金占用维度下物料ABC分类数据示例表单</h5>
+                </div>
+                <div class="ibox-content"  style="height:700px">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>安全库存数量计算</h5>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+
+                            <div class="col-sm-12">
+                                <label class="col-sm-2 control-label">选择正确的选项：</label>
+                                <div class="col-sm-2">
+                                    <label class="control-label">安全库存定义的理解</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">统计字段一</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">统计字段二</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">统计字段三</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">统计字段四</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">统计字段五</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">安全库存数量计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-sm-12">
+                                <label class="col-sm-2 control-label">选择正确步骤</label>
+                                <div id="element" class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s1" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	针对于确定性的因素设定的库存	</option>
+                                            <option value="2">	针对于不确定性的因素设定的库存	</option>
+                                            <option value="3">	针对积压成本而设置的库存点	</option>
+                                            <option value="4">	针对占用体积空间而设置的库存点	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <select class="router form-control m-b" id="s2" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	入库总数量	</option>
+                                            <option value="2">	日均入库数量	</option>
+                                            <option value="3">	日均需求数量	</option>
+                                            <option value="4">	需求总数量	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <select class="router form-control m-b" id="s3" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	日均需求标准差	</option>
+                                            <option value="2">	日均入库量标准差	</option>
+                                            <option value="3">	日均需求方差	</option>
+                                            <option value="4">	日均入库量方差差	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <select class="router form-control m-b" id="s4" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	存储周期	</option>
+                                            <option value="2">	运输周期	</option>
+                                            <option value="3">	订购提前期	</option>
+                                            <option value="4">	订购次数	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <select class="router form-control m-b" id="s5" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	运输周期标准差	</option>
+                                            <option value="2">	订购提前期标准差	</option>
+                                            <option value="3">	存储周期标准差	</option>
+                                            <option value="4">	订购次数标准差	</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <select class="router form-control m-b" id="s7" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	周期天数	</option>
+                                            <option value="2">	服务水平	</option>
+                                            <option value="3">	周转次数	</option>
+                                            <option value="4">	周转率	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s8" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	安全库存数量=SQRT(服务水平对应的安全系数)*SQRT（订购提前期均值*日均需求标准差^2+订购提前期标准差^2*日需求均值^2）	</option>
+                                            <option value="2">	安全库存数量=日均需求标准差*SQRT（订购提前期均值*服务水平对应的安全系数^2+订购提前期标准差^2*日需求均值^2）	</option>
+                                            <option value="3">	安全库存数量=服务水平对应的安全系数*SQRT（订购提前期均值*订购提前期标准差^2+日需求量标准差^2*日需求均值^2）	</option>
+                                            <option value="4">	安全库存数量=服务水平对应的安全系数*SQRT（订购提前期均值*日均需求标准差^2+订购提前期标准差^2*日需求均值^2）	</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>示例物料安全库存数量计算数值</h5>
+                </div>
+                <div class="ibox-content"  style="height:400px">
+                    <table id="bootstrap-table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>再订购点数量计算</h5>
+                </div>
+                <div class="ibox-content" style="height:200px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-2">
+                                    <label class="control-label">再订购点数量的理解</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确步骤</label>
+                            <div class="col-sm-10">
+                                <div  class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s11" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	保证生产/销售不中断的库存数量	</option>
+                                            <option value="2">	需要发起订货需求的库存数量	</option>
+                                            <option value="3">	总成本最低下的库存数量	</option>
+                                            <option value="4">	总占用体积空间最小的库存数量	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s12" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	订购提前期均值	</option>
+                                            <option value="2">	日需求标准差	</option>
+                                            <option value="3">	安全库存数量	</option>
+                                            <option value="4">	订购周期	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s13" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	日需求量均值	</option>
+                                            <option value="2">	订购提前期标准差	</option>
+                                            <option value="3">	在途库存数量	</option>
+                                            <option value="4">	盘点库存数量	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s14" data-first-title="请选择">
+                                            <option value="">请选择</option>
+
+                                            <option value="1">	订购周期	</option>
+                                            <option value="2">	服务水平	</option>
+                                            <option value="3">	订购次数	</option>
+                                            <option value="4">	订购提前期均值	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s15" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	再订购点数量=安全库存数量*日均需求量*订购提前期均值	</option>
+                                            <option value="2">	再订购点数量=安全库存数量+日均需求量*订购提前期均值	</option>
+                                            <option value="3">	再订购点数量=日均需求量+安全库存数量*订购提前期均值	</option>
+                                            <option value="4">	再订购点数量=安全库存数量+日均需求量/订购提前期均值	</option>
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>示例物料再订购点数量计算数值</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table2"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>订购数量计算</h5>
+                </div>
+                <div class="ibox-content" style="height:200px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-2">
+                                    <label class="control-label">订购数量的理解</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确步骤</label>
+                            <div class="col-sm-10">
+                                <div  class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s31" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	总成本最低下的库存数量	</option>
+                                            <option value="2">	需要发起订货需求的库存数量	</option>
+                                            <option value="3">	向供应商发起的采购数量	</option>
+                                            <option value="4">	总占用体积空间最小的库存数量	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s32" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	日需求标准差	</option>
+                                            <option value="2">	再订购点数量	</option>
+                                            <option value="3">	订购提前期均值	</option>
+                                            <option value="4">	订购周期	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s33" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	订购周期	</option>
+                                            <option value="2">	订购提前期标准差	</option>
+                                            <option value="3">	服务水平	</option>
+                                            <option value="4">	盘点库存数量	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s34" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	订购次数	</option>
+                                            <option value="2">	服务水平	</option>
+                                            <option value="3">	在途库存数量	</option>
+                                            <option value="4">	订购周期	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s35" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	订购数量=再订购点数量-盘点库存数量*在途库存数量	</option>
+                                            <option value="2">	订购数量=盘点库存数量+在途库存数量	</option>
+                                            <option value="3">	订购数量=再订购点数量-盘点库存数量-在途库存数量	</option>
+                                            <option value="4">	订购数量=再订购点数量+盘点库存数量+在途库存数量	</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>示例物料订购数量计算数值</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table3"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+
+    var ctx = [[@{/}]];
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9;
+    $.getJSON("../../../obj/file/eoq.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            submit();
+            submit1();
+            submit2();
+            submit3();
+        });
+        // loadTable();
+        // loadTable1();
+        // loadTable2();
+        // loadTable3();
+        // loadTable4();
+        // loadTable5();
+        // // loadTable11();
+        // load1();
+        // // load2();
+        // load3();
+        // load4();
+        // load5();
+        // load8();
+        // load9();
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function submit(){
+        var s1 = $('#s21 option:selected').val();
+        var s2 = $('#s22 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=1){
+            $('#s21').css("background-color","red");
+            setTimeout(function() {
+                $('#s21').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s22').css("background-color","red");
+            setTimeout(function() {
+                $('#s22').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable();
+            n++;
+            addResutl("s21",s1);
+            addResutl("s22",s2);
+        }
+
+
+    }
+    function loadTable() {
+        var options = {
+            id:"bootstrap-table",
+            toolbar:null,
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {"field":"物料编码","title":"物料编码"},
+                {"field":"销售单价（元/件）","title":"销售单价（元/件）"},
+                {"field":"平均库存（件/月）","title":"平均库存（件/月）"},
+                {"field":"平均资金占用额（元）","title":"平均资金占用额（元）"},
+                {"field":"平均资金占用额累计（元）","title":"平均资金占用额累计（元）"},
+                {"field":"平均资金占用额累计百分比","title":"平均资金占用额累计百分比"},
+                {"field":"物料累计品目数","title":"物料累计品目数"},
+                {"field":"物料累计品目数百分比","title":"物料累计品目数百分比"},
+                {"field":"类别","title":"类别"},
+
+            ]
+        };
+        $.table.init(options);
+    }
+    function submit1(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s4 = $('#s4 option:selected').val();
+        var s5 = $('#s5 option:selected').val();
+
+        var s7 = $('#s7 option:selected').val();
+        var s8 = $('#s8 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=1){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=3){
+            $('#s4').css("background-color","red");
+            setTimeout(function() {
+                $('#s4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=2){
+            $('#s5').css("background-color","red");
+            setTimeout(function() {
+                $('#s5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s7!=2){
+            $('#s7').css("background-color","red");
+            setTimeout(function() {
+                $('#s7').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s8!=4){
+            $('#s8').css("background-color","red");
+            setTimeout(function() {
+                $('#s8').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable1();
+            n++;
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+            addResutl("s4",s4);
+            addResutl("s5",s5);
+            addResutl("s7",s7);
+            addResutl("s8",s8);
+
+        }
+
+    }
+    function loadTable1() {
+        var options = {
+            id:"bootstrap-table1",
+            toolbar:null,
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {"field":"物料编码","title":"物料编码"},
+                {"field":"日需求数量均值（箱）","title":"日需求数量均值（箱）"},
+                {"field":"日需求标准差","title":"日需求标准差"},
+                {"field":"订购提前期均值（天）","title":"订购提前期均值（天）"},
+                {"field":"订购提前期标准差","title":"订购提前期标准差"},
+                {"field":"订购周期（天）","title":"订购周期（天）"},
+                {"field":"服务水平","title":"服务水平"},
+                {"field":"服务水平对应安全系数","title":"服务水平对应安全系数"},
+                {"field":"安全库存数量（箱）","title":"安全库存数量（箱）"},
+
+            ]
+        };
+        $.table.init(options);
+    }
+
+    function submit2(){
+        var s1 = $('#s11 option:selected').val();
+        var s2 = $('#s12 option:selected').val();
+        var s3 = $('#s13 option:selected').val();
+        var s4 = $('#s14 option:selected').val();
+        var s5 = $('#s15 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=1){
+            $('#s13').css("background-color","red");
+            setTimeout(function() {
+                $('#s13').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s14').css("background-color","red");
+            setTimeout(function() {
+                $('#s14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=2){
+            $('#s15').css("background-color","red");
+            setTimeout(function() {
+                $('#s15').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable2();
+            n++;
+            addResutl("s11",s1);
+            addResutl("s12",s2);
+            addResutl("s13",s3);
+            addResutl("s14",s4);
+            addResutl("s15",s5);
+        }
+
+    }
+    function loadTable2() {
+        var options = {
+            id:"bootstrap-table2",
+            toolbar:null,
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {"field":"物料编码","title":"物料编码"},
+                {"field":"安全库存数量（箱）","title":"安全库存数量（箱）"},
+                {"field":"日需求数量均值（箱）","title":"日需求数量均值（箱）"},
+                {"field":"订购提前期均值（天）","title":"订购提前期均值（天）"},
+                {"field":"再订购点数量（箱）","title":"再订购点数量（箱）"},
+
+            ]
+        };
+        $.table.init(options);
+    }
+
+    function submit3(){
+        var s1 = $('#s31 option:selected').val();
+        var s2 = $('#s32 option:selected').val();
+        var s3 = $('#s33 option:selected').val();
+        var s4 = $('#s34 option:selected').val();
+        var s5 = $('#s35 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#s31').css("background-color","red");
+            setTimeout(function() {
+                $('#s31').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s32').css("background-color","red");
+            setTimeout(function() {
+                $('#s32').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s33').css("background-color","red");
+            setTimeout(function() {
+                $('#s33').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=3){
+            $('#s34').css("background-color","red");
+            setTimeout(function() {
+                $('#s34').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=3){
+            $('#s35').css("background-color","red");
+            setTimeout(function() {
+                $('#s35').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable3();
+            n++;
+            addResutl("s31",s1);
+            addResutl("s32",s2);
+            addResutl("s33",s3);
+            addResutl("s34",s4);
+            addResutl("s35",s5);
+        }
+
+    }
+    function loadTable3() {
+        var options = {
+            id:"bootstrap-table3",
+            toolbar:null,
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns:[
+                {"field":"物料编码","title":"物料编码"},
+                {"field":"再订购点数量（箱）","title":"再订购点数量（箱）"},
+                {"field":"盘点库存数量（箱）","title":"盘点库存数量（箱）"},
+                {"field":"在途库存数量（箱）","title":"在途库存数量（箱）"},
+                {"field":"订购数量（箱）","title":"订购数量（箱）"},
+
+            ]
+        };
+        $.table.init(options);
+    }
+
+</script>
+
+</body>
+</html>

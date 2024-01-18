@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/plugins/bootstrap/bootstrap-table.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/bootstrap-table-export.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/jquery.base64.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/tableExport.js}"></script>
+
+</head>
+
+
+<body>
+    <div>
+        <input type="file" class="form-control btn-block" placeholder="" readonly id="input_file" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;">
+    </div>
+
+    <div>
+
+    </div>
+    <div id="reportTableDiv" class="span10" style="width:90%">
+        <div style="text-align: center;">
+            <h2>请输入单位人员作业量</h2>
+        </div>
+        <div>
+            单位人员作业量:<input type="text" name="fname" id="id" value="50" />托天
+            <input type="submit" value="Submit" onclick="su" />
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var ctx = "http://edu.glc360.com";
+        //      var ctx = "http://localhost:8084";
+        $("button#open_file").click(function() {
+            OpenFile();
+        });
+        var file_addr = "";
+        $("#id").val($("#id").val());
+
+        function su() {
+            localStorage.setItem("id", $("#id").val());
+        }
+
+
+        function formatNum(strNum) {
+            strNum = parseInt(strNum);
+            if (strNum.length <= 3) {
+                return strNum;
+            }
+            if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+                return strNum;
+            }
+            var a = RegExp.$1,
+                b = RegExp.$2,
+                c = RegExp.$3;
+            var re = new RegExp();
+            re.compile("(\\d)(\\d{3})(,|$)");
+            while (re.test(b)) {
+                b = b.replace(re, "$1,$2$3");
+            }
+            return a + "" + b + "" + c;
+        }
+    </script>
+</body>
+
+</html>

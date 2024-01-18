@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('仿真分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+    </style>
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h3></h3>
+            </div>
+            <div class="ibox-content">
+                <div style="font-size:26px;text-align: center">上架流程作业资源仿真模拟与优化</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h3>上架流程下作业资源仿真模拟</h3>
+                </div>
+                <div class="ibox-content">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 border">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a></li>
+                            <li><a href="#">选项2</a></li>
+                        </ul>
+                        <a class="close-link"> <i class="fa fa-times"></i> </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="widget-header widget-header-flat">
+                            <h4>初始上架人员仿真分析</h4>
+                        </div>
+                        <div class="col-lg-12" style="height: 300px">
+                            <div class="col-sm-10">
+                                <div id="unload-queue" style="height:300px">
+
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div id="unload-pie" style="height:300px">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div style="font-size:26px;text-align: center">上架流程作业资源仿真模拟与优化</div>
+                            <form class="form-horizontal m-t" id="signupForms" onsubmit="post_data3()"
+                                  target="nm_iframe">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="titled-pane">上架流程下作业资源优化调整</div>
+                                        <div class="table-responsive table1">
+                                            <table class="table table-bordered  width1">
+                                                <thead>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th>每日上架托盘数量（托）</th>
+                                                    <td><input name="putawayNum" value="1000" id="putawayNum"
+                                                               onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                               data-placement="right" title="请输入" th:type="text"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>每日上架物料种类数量（种）</th>
+                                                    <td>
+                                                        <input type="value" id="everyDay_putaway_time" value="8"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>h
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>上架人员行走速度（米/秒）</th>
+                                                    <td>
+                                                        <input type="value" id="putaway_speed" value="1.1"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""/>m/s
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>资源利用率(MAX)</th>
+                                                    <td>
+                                                        <input type="value" id="utilization2" value="80"
+                                                               style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                               required=""
+                                                               oninput="if(value>100)value=100;if(value<0)value=0"/>%
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="ibox float-e-margins" style="height: 60px">
+                                                    <button class="btn btn-primary" type="submit"
+                                                            style="margin-top: 1%;margin-left: 45%;z-index: 9999">
+                                                        确认并提交
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="titled-pane">资源使用情况</div>
+                                    <div class="table-responsive table1">
+                                        <table class="table table-bordered  width1">
+                                            <tr>
+                                                <th colspan="2"
+                                                    style="text-align:center;vertical-align:middle;">人员与设备资源使用情况
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>上架人员需求数量（个）</th>
+                                                <td id="putawayEmp">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+
+                                                <th style="white-space: nowrap;">上架人员利用率（%）
+                                                    <!--                                                            <a-->
+                                                    <!--                                                                style="margin-left: 20%" class="bullet-button"-->
+                                                    <!--                                                                onclick="showImage3()">点击查看</a>-->
+                                                </th>
+                                                <td id="putawayEmpRate" >
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>上架人员总行走距离统计（米）</th>
+                                                <td id="putawayDistance">
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="widget-header widget-header-flat">
+                            <h4>优化后上架人员仿真分析</h4>
+                        </div>
+                        <div class="col-lg-12" style="height: 300px">
+                            <div class="col-sm-10">
+                                <div id="unload-queue1" style="height:300px">
+
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div id="unload-pie1" style="height:300px">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true"
+         style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body " style="width:1200px;height: 750px">
+                    <div id="lines" class="echarts" style="width:1200px;height: 750px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loadingModal">
+        <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+            <div class="progress progress-striped active" style="margin-bottom: 0;">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            <h5>正在加载...</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="pre()">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="next()">下一步</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var prefix2= "http://lpp.glc360.com";
+    var isClick = true;
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    var options = {
+        id:"bootstrap-table",
+        data:[{"输入":"每日上架托盘数量（托）","初始状态值":"2000"},{"输入":"每日上架物料种类数量（种）","初始状态值":"1831"},{"输入":"上架人员数量（个）","初始状态值":"23"},{"输入":"上架人员行走速度（秒/米）","初始状态值":"1"},{"输入":"上架人员作业速度（秒/作业单位）","初始状态值":"1.5"}],
+        method: 'get',
+        cache: false,
+        striped: true,
+        pagination: true,
+        pageSize: 10,
+        pageNumber:1,
+        pageList: [10, 20, 50, 100, 200, 500],
+        sidePagination:'client',
+        search: true,
+        showColumns: true,
+        showRefresh: false,
+        showExport: true,
+        exportTypes: ['csv','txt','xml'],
+        columns:[{"field":"输入","title":"输入"},{"field":"初始状态值","title":"初始状态值"}]
+    };
+    $.table.init(options);
+    function pre(){
+        window.location.href=ctx+"system/simu/index1";
+    }
+    function next(){
+        window.location.href=ctx+"system/simu/index4";
+    }
+    showLoading = function () {
+        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+    }
+    //隐藏掉loading框
+    hideLoading = function () {
+        $('#loadingModal').modal('hide');
+    }
+
+    function post_data3() {
+        if (isClick) {
+            showLoading();
+            isClick = false;
+            setTimeout(function () {
+                putaway();
+            }, 1000);//一秒内不能重复点击
+
+            setTimeout(function () {
+                isClick = true;
+            }, 1000);//一秒内不能重复点击
+        } else {
+            return;
+        }
+        return false;
+    }
+    var dataCount = 16*60*60;
+    var data = generateData(dataCount,23);
+    function generateData(count,maxNum) {
+        var baseValue = Math.ceil(Math.random() * 1000);
+        var time = +new Date(2018, 2, 2)+60*60*8*1000;
+        var smallBaseValue;
+
+        function next(idx) {
+            smallBaseValue = idx % 30 === 0
+                ? Math.random() * 700
+                : (smallBaseValue + Math.random() * 500 - 250);
+            baseValue += Math.random() * 20 - 10;
+            return  Math.ceil(Math.max(
+                0,
+                Math.round(baseValue + smallBaseValue) + 1000)
+            );
+        }
+
+        var categoryData = [];
+        var valueData = [];
+
+        for (var i = 0; i < count; i++) {
+            categoryData.push(echarts.format.formatTime('hh:mm:ss', time));
+            valueData.push(randomNum(1,maxNum));
+            time += 1000;
+        }
+
+        return {
+            categoryData: categoryData,
+            valueData: valueData
+        };
+    }
+    var myChart = echarts.init(document.getElementById('unload-queue'), 'macarons');
+    var option = {
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        title: {
+            left: 'center',
+            text: '卸货服务台过程模拟'
+            ,show:false
+        },
+        toolbox: {
+
+        },
+        grid: {
+            left: '3%',
+            right: '6.5%',
+            bottom: '15%',
+            top:'12%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: data.categoryData,
+            axisLabel:{
+                show:true,
+                textStyle:{
+                    color:"#595959"
+                }
+            },
+            axisLine: {
+                show: true,
+                lineStyle:{
+                    color:'#BDB9B9'
+                }
+            },
+            axisTick: {
+                show: true
+            },
+        },
+        yAxis: {
+            axisLine: {
+                show: true,
+                lineStyle:{
+                    color:'#BDB9B9'
+                }
+            },
+            axisTick: {
+                show: true
+            },
+            axisLabel: {
+                formatter: function(value){
+                    var var1=value*1;
+                    return var1;
+                },
+                textStyle:{
+                    color:"#595959"
+                }
+            },
+            splitLine:{
+                show:true
+            },
+            splitArea: {
+                show:true,
+                areaStyle: {
+                    color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
+                }
+            },
+
+        },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 10
+        }, {
+            start: 0,
+            end: 10,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        }],
+        series: [
+            {
+                name: '等待队列',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: "#51D0E5"
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: "#6adbff"
+                        }, {
+                            offset: 1,
+                            color: "#08a1fe"
+                        }])
+                    }
+                },
+                data:data.valueData
+            }
+        ]
+    };
+    option.series[0].markPoint = {
+        data: [
+            {type: 'max', name: '最大值'}
+        ],
+    };
+    myChart.setOption(option);
+    var myChart = echarts.init(document.getElementById('unload-pie'), 'macarons');
+    let angle = 0;//角度，用来做简单的动画效果的
+    let value =91;
+    var  option = {
+        backgroundColor:"#061740",
+        title: {
+            text: '{a|'+ value +'}{c|%}',
+            x: 'center',
+            y: 'center',
+            textStyle: {
+                rich:{
+                    a: {
+                        fontSize: 48,
+                        color: '#29EEF3'
+                    },
+
+                    c: {
+                        fontSize: 20,
+                        color: '#ffffff',
+                        // padding: [5,0]
+                    }
+                }
+            }
+        },
+        legend: {
+            type: "plain",
+            orient: "vertical",
+            right: 0,
+            top: "10%",
+            align: "auto",
+            data: [{
+                name: '涨价后没吃过',
+                icon: "circle"
+            }, {
+                name: '天天吃',
+                icon: "circle"
+            }, {
+                name: '三五天吃一次',
+                icon: "circle"
+            }, {
+                name: '半个月吃一次',
+                icon: "circle"
+            }],
+            textStyle: {
+                color: "white",
+                fontSize: 16,
+                padding: [10, 1, 10, 0]
+            },
+            selectedMode:false
+        },
+        series: [ {
+            name: "ring5",
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                return {
+                    type: 'arc',
+                    shape: {
+                        cx: api.getWidth() / 2,
+                        cy: api.getHeight() / 2,
+                        r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.6,
+                        startAngle: (0+angle) * Math.PI / 180,
+                        endAngle: (90+angle) * Math.PI / 180
+                    },
+                    style: {
+                        stroke: "#0CD3DB",
+                        fill: "transparent",
+                        lineWidth: 1.5
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: "ring5",
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                return {
+                    type: 'arc',
+                    shape: {
+                        cx: api.getWidth() / 2,
+                        cy: api.getHeight() / 2,
+                        r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.6,
+                        startAngle: (180+angle) * Math.PI / 180,
+                        endAngle: (270+angle) * Math.PI / 180
+                    },
+                    style: {
+                        stroke: "#0CD3DB",
+                        fill: "transparent",
+                        lineWidth: 1.5
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: "ring5",
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                return {
+                    type: 'arc',
+                    shape: {
+                        cx: api.getWidth() / 2,
+                        cy: api.getHeight() / 2,
+                        r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65,
+                        startAngle: (270+-angle) * Math.PI / 180,
+                        endAngle: (40+-angle) * Math.PI / 180
+                    },
+                    style: {
+                        stroke: "#0CD3DB",
+                        fill: "transparent",
+                        lineWidth: 1.5
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: "ring5",
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                return {
+                    type: 'arc',
+                    shape: {
+                        cx: api.getWidth() / 2,
+                        cy: api.getHeight() / 2,
+                        r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65,
+                        startAngle: (90+-angle) * Math.PI / 180,
+                        endAngle: (220+-angle) * Math.PI / 180
+                    },
+                    style: {
+                        stroke: "#0CD3DB",
+                        fill: "transparent",
+                        lineWidth: 1.5
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: "ring5",
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                let x0 = api.getWidth() / 2;
+                let y0 = api.getHeight() / 2;
+                let r = Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65;
+                let point = getCirlPoint(x0, y0, r, (90+-angle))
+                return {
+                    type: 'circle',
+                    shape: {
+                        cx: point.x,
+                        cy: point.y,
+                        r: 4
+                    },
+                    style: {
+                        stroke: "#0CD3DB",//粉
+                        fill: "#0CD3DB"
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: "ring5",  //绿点
+            type: 'custom',
+            coordinateSystem: "none",
+            renderItem: function(params, api) {
+                let x0 = api.getWidth() / 2;
+                let y0 = api.getHeight() / 2;
+                let r = Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65;
+                let point = getCirlPoint(x0, y0, r, (270+-angle))
+                return {
+                    type: 'circle',
+                    shape: {
+                        cx: point.x,
+                        cy: point.y,
+                        r: 4
+                    },
+                    style: {
+                        stroke: "#0CD3DB",      //绿
+                        fill: "#0CD3DB"
+                    },
+                    silent: true
+                };
+            },
+            data: [0]
+        }, {
+            name: '吃猪肉频率',
+            type: 'pie',
+            radius: ['58%', '45%'],
+            silent: true,
+            clockwise: true,
+            startAngle: 90,
+            z: 0,
+            zlevel: 0,
+            label: {
+                normal: {
+                    position: "center",
+
+                }
+            },
+            data: [{
+                value: value,
+                name: "",
+                itemStyle: {
+                    normal: {
+                        color: { // 完成的圆环的颜色
+                            colorStops: [{
+                                offset: 0,
+                                color: '#4FADFD' // 0% 处的颜色
+                            }, {
+                                offset: 1,
+                                color: '#28E8FA' // 100% 处的颜色
+                            }]
+                        },
+                    }
+                }
+            },
+                {
+                    value: 100-value,
+                    name: "",
+                    label: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: "#173164"
+                        }
+                    }
+                }
+            ]
+        },
+
+            {
+                name: "",
+                type: "gauge",
+                radius: "58%",
+                center: ['50%', '50%'],
+                startAngle: 0,
+                endAngle: 359.9,
+                splitNumber: 8,
+                hoverAnimation: true,
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    length: 60,
+                    lineStyle: {
+                        width: 5,
+                        color: "#061740"
+                    }
+                },
+                axisLabel: {
+                    show: false
+                },
+                pointer: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        opacity: 0
+                    }
+                },
+                detail: {
+                    show: false
+                },
+                data: [{
+                    value: 0,
+                    name: ""
+                }]
+            },
+
+        ]
+    };
+
+    //获取圆上面某点的坐标(x0,y0表示坐标，r半径，angle角度)
+    function getCirlPoint(x0, y0, r, angle) {
+        let x1 = x0 + r * Math.cos(angle * Math.PI / 180)
+        let y1 = y0 + r * Math.sin(angle * Math.PI / 180)
+        return {
+            x: x1,
+            y: y1
+        }
+    }
+
+    function draw(){
+        angle = angle+3
+        myChart.setOption(option, true)
+        //window.requestAnimationFrame(draw);
+    }
+
+    setInterval(function() {
+        //用setInterval做动画感觉有问题
+        draw()
+    }, 100);
+    myChart.setOption(option);
+    function  onloadIMg(){
+        var data =  generateData(dataCount, emp3)
+        var myChart = echarts.init(document.getElementById('unload-queue1'), 'macarons');
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                }
+            },
+            title: {
+                left: 'center',
+                text: '卸货服务台过程模拟'
+                ,show:false
+            },
+            toolbox: {
+
+            },
+            grid: {
+                left: '3%',
+                right: '6.5%',
+                bottom: '15%',
+                top:'12%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: data.categoryData,
+                axisLabel:{
+                    show:true,
+                    textStyle:{
+                        color:"#595959"
+                    }
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'#BDB9B9'
+                    }
+                },
+                axisTick: {
+                    show: true
+                },
+            },
+            yAxis: {
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'#BDB9B9'
+                    }
+                },
+                axisTick: {
+                    show: true
+                },
+                axisLabel: {
+                    formatter: function(value){
+                        var var1=value*1;
+                        return var1;
+                    },
+                    textStyle:{
+                        color:"#595959"
+                    }
+                },
+                splitLine:{
+                    show:true
+                },
+                splitArea: {
+                    show:true,
+                    areaStyle: {
+                        color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
+                    }
+                },
+
+            },
+            dataZoom: [{
+                type: 'inside',
+                start: 0,
+                end: 10
+            }, {
+                start: 0,
+                end: 10,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+            series: [
+                {
+                    name: '等待队列',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {
+                            color: "#51D0E5"
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: "#6adbff"
+                            }, {
+                                offset: 1,
+                                color: "#08a1fe"
+                            }])
+                        }
+                    },
+                    data:data.valueData
+                }
+            ]
+        };
+        option.series[0].markPoint = {
+            data: [
+                {type: 'max', name: '最大值'}
+            ],
+        };
+        myChart.setOption(option);
+        var myChart = echarts.init(document.getElementById('unload-pie1'), 'macarons');
+        let angle = 0;//角度，用来做简单的动画效果的
+        let value =$("#putawayEmpRate").html();
+        var  option = {
+            backgroundColor:"#061740",
+            title: {
+                text: '{a|'+ value +'}{c|%}',
+                x: 'center',
+                y: 'center',
+                textStyle: {
+                    rich:{
+                        a: {
+                            fontSize: 48,
+                            color: '#29EEF3'
+                        },
+
+                        c: {
+                            fontSize: 20,
+                            color: '#ffffff',
+                            // padding: [5,0]
+                        }
+                    }
+                }
+            },
+            legend: {
+                type: "plain",
+                orient: "vertical",
+                right: 0,
+                top: "10%",
+                align: "auto",
+                data: [{
+                    name: '涨价后没吃过',
+                    icon: "circle"
+                }, {
+                    name: '天天吃',
+                    icon: "circle"
+                }, {
+                    name: '三五天吃一次',
+                    icon: "circle"
+                }, {
+                    name: '半个月吃一次',
+                    icon: "circle"
+                }],
+                textStyle: {
+                    color: "white",
+                    fontSize: 16,
+                    padding: [10, 1, 10, 0]
+                },
+                selectedMode:false
+            },
+            series: [ {
+                name: "ring5",
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    return {
+                        type: 'arc',
+                        shape: {
+                            cx: api.getWidth() / 2,
+                            cy: api.getHeight() / 2,
+                            r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.6,
+                            startAngle: (0+angle) * Math.PI / 180,
+                            endAngle: (90+angle) * Math.PI / 180
+                        },
+                        style: {
+                            stroke: "#0CD3DB",
+                            fill: "transparent",
+                            lineWidth: 1.5
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: "ring5",
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    return {
+                        type: 'arc',
+                        shape: {
+                            cx: api.getWidth() / 2,
+                            cy: api.getHeight() / 2,
+                            r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.6,
+                            startAngle: (180+angle) * Math.PI / 180,
+                            endAngle: (270+angle) * Math.PI / 180
+                        },
+                        style: {
+                            stroke: "#0CD3DB",
+                            fill: "transparent",
+                            lineWidth: 1.5
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: "ring5",
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    return {
+                        type: 'arc',
+                        shape: {
+                            cx: api.getWidth() / 2,
+                            cy: api.getHeight() / 2,
+                            r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65,
+                            startAngle: (270+-angle) * Math.PI / 180,
+                            endAngle: (40+-angle) * Math.PI / 180
+                        },
+                        style: {
+                            stroke: "#0CD3DB",
+                            fill: "transparent",
+                            lineWidth: 1.5
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: "ring5",
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    return {
+                        type: 'arc',
+                        shape: {
+                            cx: api.getWidth() / 2,
+                            cy: api.getHeight() / 2,
+                            r: Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65,
+                            startAngle: (90+-angle) * Math.PI / 180,
+                            endAngle: (220+-angle) * Math.PI / 180
+                        },
+                        style: {
+                            stroke: "#0CD3DB",
+                            fill: "transparent",
+                            lineWidth: 1.5
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: "ring5",
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    let x0 = api.getWidth() / 2;
+                    let y0 = api.getHeight() / 2;
+                    let r = Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65;
+                    let point = getCirlPoint(x0, y0, r, (90+-angle))
+                    return {
+                        type: 'circle',
+                        shape: {
+                            cx: point.x,
+                            cy: point.y,
+                            r: 4
+                        },
+                        style: {
+                            stroke: "#0CD3DB",//粉
+                            fill: "#0CD3DB"
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: "ring5",  //绿点
+                type: 'custom',
+                coordinateSystem: "none",
+                renderItem: function(params, api) {
+                    let x0 = api.getWidth() / 2;
+                    let y0 = api.getHeight() / 2;
+                    let r = Math.min(api.getWidth(), api.getHeight()) / 2 * 0.65;
+                    let point = getCirlPoint(x0, y0, r, (270+-angle))
+                    return {
+                        type: 'circle',
+                        shape: {
+                            cx: point.x,
+                            cy: point.y,
+                            r: 4
+                        },
+                        style: {
+                            stroke: "#0CD3DB",      //绿
+                            fill: "#0CD3DB"
+                        },
+                        silent: true
+                    };
+                },
+                data: [0]
+            }, {
+                name: '吃猪肉频率',
+                type: 'pie',
+                radius: ['58%', '45%'],
+                silent: true,
+                clockwise: true,
+                startAngle: 90,
+                z: 0,
+                zlevel: 0,
+                label: {
+                    normal: {
+                        position: "center",
+
+                    }
+                },
+                data: [{
+                    value: value,
+                    name: "",
+                    itemStyle: {
+                        normal: {
+                            color: { // 完成的圆环的颜色
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#4FADFD' // 0% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: '#28E8FA' // 100% 处的颜色
+                                }]
+                            },
+                        }
+                    }
+                },
+                    {
+                        value: 100-value,
+                        name: "",
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: "#173164"
+                            }
+                        }
+                    }
+                ]
+            },
+
+                {
+                    name: "",
+                    type: "gauge",
+                    radius: "58%",
+                    center: ['50%', '50%'],
+                    startAngle: 0,
+                    endAngle: 359.9,
+                    splitNumber: 8,
+                    hoverAnimation: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        length: 60,
+                        lineStyle: {
+                            width: 5,
+                            color: "#061740"
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    },
+                    pointer: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            opacity: 0
+                        }
+                    },
+                    detail: {
+                        show: false
+                    },
+                    data: [{
+                        value: 0,
+                        name: ""
+                    }]
+                },
+
+            ]
+        };
+        myChart.setOption(option);
+    }
+   var emp3 =0;
+    function putaway() {
+        var putawayNum = $("#putawayNum").val();
+        var storageNum = $("#storageNum").val();
+        var height = $("#height").val();
+        var forklift_channel = $("#forklift_channel").val();
+        var shelf_space = $("#shelf_space").val();
+        var putaway_speed = $("#putaway_speed").val();
+        var shelf_height = $("#shelf_height").val();
+        var utilization = $("#utilization2").val();
+        $.post("/putaway", {
+            "putawayNum": putawayNum,
+            "storageNum": storageNum,
+            "height": height,
+            "forklift_channel": forklift_channel,
+            "shelf_space": shelf_space,
+            "shelf_height": shelf_height,
+            "putaway_speed": putaway_speed,
+            "utilization": utilization,
+        }, function (result) {
+            var d = result.rows[0];
+            $("#putawayEmp").html(parseInt(d.putawayEmp) + "个");
+            var rate = d.putawayRate;
+            if(rate*100>100){
+                rate=0.99;
+
+            }
+            $("#putawayEmpRate").html(parseInt(rate * 100) + "%");
+            $("#putawayDistance").html(parseInt(d.distance) + "m");
+            addResutl("putawayEmp",d.putawayEmp);
+            addResutl("putawayEmpRate",rate*100);
+            addResutl("putawayDistance",d.distance);
+            emp3 = parseInt(d.putawayEmp);
+            hideLoading();
+            onloadIMg();
+        });
+
+    }
+
+    function showImage3() {
+        var myChart1 = echarts.init(document.getElementById("lines"));
+        rate1 = $("#putawayEmpRate").html();
+        $.post("/demo/table/list1", {"emp": emp3, "rate": rate1}, function (result) {
+            var d = result.rows;
+            var XName = [];
+            var yName = [];
+            for (var i = 0; i < d.length; i++) {
+                XName[i] = d[i].time;
+                yName[i] = parseInt(d[i].goods_code);
+            }
+
+            myChart1.setOption(option = {
+                title: {
+                    text: '推荐人数为：' + emp3 + "人",
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['柱状图', '柱状图1', '折线图']
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: XName
+                }],
+                yAxis: [{
+                    type: 'value',
+                    name: '利用率',
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                }],
+                series: [{
+                    name: '',
+                    type: 'bar',
+                    data: yName,
+                    itemStyle: {
+                        normal: {
+                            color: '#be9252',
+                            label: {
+                                show: true,
+                                color: '#be9252',
+                                /*position: 'top',*/
+                                /*formatter: '{b}: {c} '*/
+                            }
+                        }
+                    },
+                },
+                ]
+            });
+        });
+        $(window).resize(myChart1.resize);
+        myChart1.resize();
+        window.addEventListener("resize", function () {
+            myChart1.resize();
+        });
+
+        $('#myModal').modal('show');
+    }
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+
+</body>
+</html>

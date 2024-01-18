@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/plugins/bootstrap/bootstrap-table.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/bootstrap-table-export.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/jquery.base64.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap/tableExport.js}"></script>
+
+</head>
+
+
+<body>
+    <div>
+        <input type="file" class="form-control btn-block" placeholder="" readonly id="input_file" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;">
+    </div>
+
+    <div>
+
+    </div>
+    <div id="reportTableDiv" class="span10" style="width:90%">
+        <div style="text-align: center;">
+            <h2>各城市租金情况</h2>
+        </div>
+
+        <table id="reportTable"  style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var ctx = "http://edu.glc360.com";
+        //     var ctx = "http://localhost:8084";
+        $("button#open_file").click(function() {
+            OpenFile();
+        });
+        var file_addr = "";
+
+        function OpenFile() {
+            var tn = 0;
+            $("input#input_file").change(function() {
+                if (tn == 0) {
+                    console.log(this.files[0]);
+                    file_addr = this.files[0].path; //Get file absolute path
+                    console.log(file_addr);
+                    onloadData(file_addr);
+                    this.files[0].path = "";
+                }
+                tn += 1;
+            });
+            $("input#input_file").trigger("click");
+        }
+
+        function onloadData() {
+
+
+
+                    var main = [
+                        {"城市":"深圳","平均租金(元/m7·月)":42.43},
+                        {"城市":"广州","平均租金(元/m7·月)":32.89},
+                        {"城市":"东莞","平均租金(元/m7·月)":31.99},
+                        {"城市":"南京","平均租金(元/m7·月)":29.24},
+                        {"城市":"佛山","平均租金(元/m7·月)":30.2},
+                        {"城市":"嘉兴","平均租金(元/m7·月)":33.79},
+                        {"城市":"长沙","平均租金(元/m7·月)":26.39},
+                        {"城市":"天津","平均租金(元/m7·月)":30.05},
+                        {"城市":"无锡","平均租金(元/m7·月)":30.8},
+                        {"城市":"大连","平均租金(元/m7·月)":19.55},
+                        {"城市":"长春","平均租金(元/m7·月)":19.96},
+                        {"城市":"重庆","平均租金(元/m7·月)":25.18},
+                        {"城市":"武汉","平均租金(元/m7·月)":25.67},
+                        {"城市":"郑州","平均租金(元/m7·月)":23.19},
+                        {"城市":"沈阳","平均租金(元/m7·月)":20.55},
+                        {"城市":"合肥","平均租金(元/m7·月)":25.65},
+                        {"城市":"昆明","平均租金(元/m7·月)":25.71},
+                        {"城市":"哈尔滨","平均租金(元/m7·月)":21.6},
+                        {"城市":"成都","平均租金(元/m7·月)":24.11},
+                        {"城市":"青岛","平均租金(元/m7·月)":23.05},
+                        {"城市":"西安","平均租金(元/m7·月)":26.04},
+                        {"城市":"贵阳","平均租金(元/m7·月)":22.83},
+                        {"城市":"太原","平均租金(元/m7·月)":17.07},
+                        {"城市":"济南","平均租金(元/m7·月)":24.88},
+                        {"城市":"南昌","平均租金(元/m7·月)":22.71},
+                        {"城市":"石家庄","平均租金(元/m7·月)":20.81},
+                        {"城市":"兰州","平均租金(元/m7·月)":20.07},
+
+                    ];
+                    $('#reportTable').bootstrapTable({
+                        method: 'get',
+                        cache: false,
+                        height: 400,
+                        striped: true,
+                        pagination: true,
+                        pageSize: 20,
+                        pageNumber: 1,
+                        pageList: [10, 20, 50, 100, 200, 500],
+                        search: true,
+                        showColumns: true,
+                        showRefresh: true,
+                        showExport: true,
+                        exportTypes: ['excel'],
+                        clickToSelect: true,
+                        columns: [{
+                            field: "城市",
+                            title: "城市",
+                            align: "center",
+                            valign: "middle",
+                            sortable: "true"
+                        }, {
+                            field: "平均租金(元/m7·月)",
+                            title: "平均租金(元/m7·月)",
+                            align: "center",
+                            valign: "middle",
+                            sortable: "true",
+                            formatter: function(value, row, index) {
+                                return "¥" + int2str(parseInt(value));
+                            }
+                        }],
+                        data: main,
+                        onPageChange: function(size, number) {
+                            console.log("页面发生了变化")
+                                //$("#pageSizeInput").val(size);
+                                //$("#pageNumberInput").val(number);
+
+                            //var form = $('#tableForm');
+                            //form.action= '${base}/showReport';
+                            //form.submit();
+                        },
+                        //onSort: function (name, order) {
+                        // },
+                        //formatShowingRows: function (pageFrom, pageTo, totalRows) {
+                        //	return '';
+                        // },
+                        //formatRecordsPerPage: function () {
+                        //	return '';
+                        //  },
+                        //              formatNoMatches: function(){
+                        //              	return '�޷�������ļ�¼';
+                        //              }
+                    });
+
+                    $(window).resize(function() {
+                        $('#reportTable').bootstrapTable('resetView');
+                    });
+
+
+        }
+        onloadData();
+
+        function int2str(num) {
+            num = parseInt(num);
+            let numberStr = num.toString()
+            let str = numberStr.split('').reverse()
+            for (let i = 0; i < str.length; i++) {
+                if ((i + 1) % 4 === 0) {
+                    str.splice(i, 0, ',')
+                }
+            }
+            str.reverse()
+            let handleResult = ''
+            for (let j = 0; j < str.length; j++) {
+                handleResult += str[j]
+            }
+            return handleResult
+        }
+
+        function formatNum(strNum) {
+            strNum = parseInt(strNum);
+            if (strNum.length <= 3) {
+                return strNum;
+            }
+            if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+                return strNum;
+            }
+            var a = RegExp.$1,
+                b = RegExp.$2,
+                c = RegExp.$3;
+            var re = new RegExp();
+            re.compile("(\\d)(\\d{3})(,|$)");
+            while (re.test(b)) {
+                b = b.replace(re, "$1,$2$3");
+            }
+            return a + "" + b + "" + c;
+        }
+    </script>
+</body>
+
+</html>

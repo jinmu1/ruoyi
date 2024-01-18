@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">供应链物流网络总成本计算</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓运输/配送费用计算数据制作表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>仓库名称</p>
+                            <select  name="z" id="s1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	武汉	</option>
+                                <option value="2">	上海	</option>
+                                <option value="3">	廊坊	</option>
+                                <option value="4">	杭州	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>送达方</p>
+                            <select  name="x" id="s2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	汕头	</option>
+                                <option value="2">	北京	</option>
+                                <option value="3">	成都	</option>
+                                <option value="4">	包头	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段一</p>
+                            <select name="y" id="s3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	要求到货时间	</option>
+                                <option value="2">	订单创建时间	</option>
+                                <option value="3">	实际运输时间	</option>
+                                <option value="4">	出库单创建时间	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段二</p>
+                            <select name="y" id="s4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	单位(箱)	</option>
+                                <option value="2">	货物运输体积	</option>
+                                <option value="3">	发货单号	</option>
+                                <option value="4">	要求到货时间	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段三</p>
+                            <select name="y" id="s5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	订单编码	</option>
+                                <option value="2">	物料编码	</option>
+                                <option value="3">	运输方	</option>
+                                <option value="4">	客户编码	</option>
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓运输/配送数据</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓运输/配送费用计算示例——费率表选择</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>表单选择</p>
+                            <select  name="z" id="s11" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	《订单表》	</option>
+                                <option value="2">	《仓储信息表》	</option>
+                                <option value="3">	《客配价格阶梯表》	</option>
+                                <option value="4">	《客户信息表》	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>表单所属物流节点</p>
+                            <select  name="x" id="s12" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	包头仓	</option>
+                                <option value="2">	武汉仓	</option>
+                                <option value="3">	上海仓	</option>
+                                <option value="4">	廊坊仓	</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓运输/配送费用计算示例——廊坊仓《客配价格阶梯表》</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table11"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓运输/配送费用计算示例——运输/配送费用计算步骤</h5>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>步骤一</p>
+                            <select  name="z" id="x" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	统计周期内订单表中上海仓至北京仓不同运输方发生运输的体积数量	</option>
+                                <option value="2">	根据所统计到周期内运输方每日的运输体积对应到的收费单价计算该运输方每日的运输/配送费用（运输/配送费用=体积*该体积区间内的收费单价）	</option>
+                                <option value="3">	统计周期内订单表中廊坊仓至包头仓不同运输方发生运输的体积数量	</option>
+                                <option value="4">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>步骤二</p>
+                            <select  name="x" id="y" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	根据所统计到周期内运输方每日的运输体积对应到的收费单价计算该运输方每日的运输/配送费用（运输/配送费用=体积*该体积区间内的收费单价）	</option>
+                                <option value="2">	查询廊坊仓《客配价格阶梯表》中廊坊仓至包头仓不同体积区间的收费单价	</option>
+                                <option value="3">	统计周期内订单表中上海仓至北京仓不同运输方发生运输的体积数量	</option>
+                                <option value="4">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>步骤三</p>
+                            <select  name="x" id="z" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+                                <option value="2">	查询廊坊仓《客配价格阶梯表》中廊坊仓至包头仓不同体积区间的收费单价	</option>
+                                <option value="3">	根据所统计到周期内运输方每日的运输体积对应到的收费单价计算该运输方每日的运输/配送费用（运输/配送费用=体积*该体积区间内的收费单价）	</option>
+                                <option value="4">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>步骤四</p>
+                            <select  name="x" id="v" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	根据所统计到周期内运输方每日的运输体积对应到的收费单价计算该运输方每日的运输/配送费用（运输/配送费用=体积*该体积区间内的收费单价）	</option>
+                                <option value="2">	查询廊坊仓《客配价格阶梯表》中廊坊仓至包头仓不同体积区间的收费单价	</option>
+                                <option value="3">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+                                <option value="4">	对周期内廊坊仓至包头仓每个运输方每日运输/配送费用进行总求和	</option>
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓不同运输方每日发生运输的体积数量（立方米）</h5>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <table id="table1"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>廊坊仓至包头仓不同体积区间收费单价（元/立方米）</h5>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <table id="table2"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>廊坊仓至包头仓各运输方每日运输体积对应收费区间（元/立方米）</h5>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <table id="table3"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内廊坊仓至包头仓不同运输方发生的运输/配送费用（元）</h5>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <table id="table4"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>不同仓库对应的相关单位仓储成本情况示例</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" >
+
+                    <table id="bootstrap-table2"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内仓库租赁/建设成本计算——廊坊仓示例</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>选择字段一</p>
+                            <select  name="z1" id="x2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	单位物料进出仓操作成本	</option>
+                                <option value="2">	周期内入库物料操作体积	</option>
+                                <option value="3">	周期内出库物料操作体积	</option>
+                                <option value="4">	单位物料体积租金成本	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段二</p>
+                            <select  name="y1" id="y2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	仓库平均每天库存体积数量	</option>
+                                <option value="2">	单位物料进出仓操作成本	</option>
+                                <option value="3">	周期内入库物料操作体积	</option>
+                                <option value="4">	周期内出库物料操作体积	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段三</p>
+                            <select  name="y1" id="z2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	物料编码	</option>
+                                <option value="2">	仓库位置	</option>
+                                <option value="3">	周期天数	</option>
+                                <option value="4">	利率	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>计算公式</p>
+                            <select  name="y1" id="v2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内仓库租金成本=周期内所有物料采购总价（元）*利率	</option>
+                                <option value="2">	周期内仓库租金成本=单位物料体积租金成本*仓库平均每天库存体积数量*周期天数	</option>
+                                <option value="3">	周期内仓库租金成本=单位物料进出仓操作成本*（周期内入库物料操作体积+周期内出库物料操作体积）	</option>
+                                <option value="4">	周期内仓库租金成本=对周期内廊坊仓至包头仓每个运输方每日运输费用进行总求和	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit6()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>物料周期内运输次数直方图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <table id="bootstrap-table21"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内仓库操作成本计算——廊坊仓示例</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>选择字段一</p>
+                            <select  name="z1" id="x3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	仓库平均每天库存体积数量	</option>
+                                <option value="2">	单位物料进出仓操作成本	</option>
+                                <option value="3">	单位物料体积租金成本	</option>
+                                <option value="4">	利率	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段二</p>
+                            <select  name="y1" id="y3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期天数	</option>
+                                <option value="2">	仓库平均每天库存体积数量	</option>
+                                <option value="3">	周期内入库物料操作体积	</option>
+                                <option value="4">	利率	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段三</p>
+                            <select  name="y1" id="z3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	仓库平均每天库存体积数量	</option>
+                                <option value="2">	周期内出库物料操作体积	</option>
+                                <option value="3">	周期天数	</option>
+                                <option value="4">	利率	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>计算公式</p>
+                            <select  name="y1" id="v3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内仓库操作成本=对周期内廊坊仓至包头仓每个运输方每日运输费用进行总求和	</option>
+                                <option value="2">	周期内仓库操作成本=单位物料体积租金成本*仓库平均每天库存体积数量*周期天数	</option>
+                                <option value="3">	周期内仓库操作成本=周期内所有物料采购总价*利率	</option>
+                                <option value="4">	周期内仓库操作成本=单位物料进出仓操作成本*（周期内入库物料操作体积+周期内出库物料操作体积）	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit7()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>廊坊仓周期内仓库操作成本计算示例</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <table id="bootstrap-table22"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内库存资金占用成本计算——廊坊仓示例</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table23"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内库存持有成本计算——廊坊仓示例</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>选择字段一</p>
+                            <select  name="z1" id="x4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内各物料安全库存数量	</option>
+                                <option value="2">	周期内所有库存物料总价	</option>
+                                <option value="3">	单位物料进出仓操作成本	</option>
+                                <option value="4">	单位物料体积租金成本	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段二</p>
+                            <select  name="y1" id="y4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	物料编码	</option>
+                                <option value="2">	周期天数	</option>
+                                <option value="3">	利率	</option>
+                                <option value="4">	仓库位置	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段三</p>
+                            <select  name="y1" id="d4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	库存数量	</option>
+                                <option value="2">	库存损耗比例	</option>
+                                <option value="3">	物料编码	</option>
+                                <option value="4">	周期天数	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>库存持有成本计算公式</p>
+                            <select  name="y1" id="z4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	库存资金占用成本=对周期内廊坊仓至包头仓每个运输方每日运输费用进行总求和	</option>
+                                <option value="2">	库存资金占用成本=单位物料进出仓操作成本*（周期内入库物料操作体积+周期内出库物料操作体积）	</option>
+                                <option value="3">	库存资金占用成本=单位物料体积租金成本*仓库平均每天库存体积数量*周期天数	</option>
+                                <option value="4">周期内库存持有成本=周期内所有库存物料总价*利率+周期内所有库存物料总价*利率*库存损耗比例</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>廊坊仓周期内库存资金占用成本计算示例</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <table id="bootstrap-table33"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内全网供应链物流网络总成本计算</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>选择字段一</p>
+                            <select  name="z1" id="x5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内采购成本	</option>
+                                <option value="2">	周期内生产成本	</option>
+                                <option value="3">	周期内运输/配送成本	</option>
+                                <option value="4">	周期内销售成本	</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段二</p>
+                            <select  name="y1" id="y5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内采购成本	</option>
+                                <option value="2">	周期内仓储操作成本	</option>
+                                <option value="3">	周期内销售成本	</option>
+                                <option value="4">	周期内生产成本	</option>
+
+
+                            </select>
+                        </div>
+
+                        <div>
+                            <p>选择字段三</p>
+                            <select  name="y1" id="z5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内采购成本	</option>
+                                <option value="2">	周期内生产成本	</option>
+                                <option value="3">	周期内销售成本	</option>
+                                <option value="4">	周期内仓储租赁/建设成本	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>选择字段四</p>
+                            <select  name="y1" id="v5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内采购成本	</option>
+                                <option value="2">	周期内库存资金占用成本	</option>
+                                <option value="3">	周期内销售成本	</option>
+                                <option value="4">	周期内生产成本	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>计算公式</p>
+                            <select  name="y1" id="w5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	周期内供应链物流网络成本=周期内运输成本*周期内仓储操作成本*周期内仓储租赁/建设成本*周期内库存资金占用成本	</option>
+                                <option value="2">	周期内供应链物流网络成本=周期内采购成本+周期内生产成本+周期内销售成本	</option>
+                                <option value="3">	周期内供应链物流网络成本=周期内运输成本+周期内仓储操作成本+周期内仓储租赁/建设成本+周期内库存资金占用成本	</option>
+                                <option value="4">	周期内供应链物流网络成本=周期内采购成本*周期内生产成本*周期内销售成本	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit9()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>廊坊仓周期内库存资金占用成本计算示例</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <table id="bootstrap-table34"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var prefix = ctx + "system/netsend";
+    var prefix1= ctx + "system/netcost";
+    var prefix2= ctx + "system/netcost1";
+    var prefix3= ctx + "system/netcost2";
+    var prefix4= ctx + "system/netcost3";
+    var prefix5= ctx + "system/netcost4";
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11;
+    $.getJSON("../../../file/cost.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+        data5=data.data5;
+        data6=data.data6;
+        loadTable1();
+
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            submit();
+            submit1();
+            submit2();
+            submit6();
+            submit7();
+            submit8();
+            submit9();
+            // reloadE();
+            // reloadN();
+            // reloadQ();
+            // reloadEN();
+            // reloadEN1();
+            // reloadEQ();
+            // reloadEQ1();
+            // reloadEI();
+            // reloadEI1();
+        });
+
+        // load();
+        // load1();
+        // load2();
+        // load4();
+        // load6();
+        // load7();
+        // load8();
+        // load9();
+
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+
+    function loadTable1() {
+        var options = {
+            id:"bootstrap-table",
+            toolbar:null,
+            data:data6,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [
+                {"field":"订单编号","title":"订单编号"},
+                {"field":"客户编码","title":"客户编码"},
+                {"field":"渠道细分","title":"渠道细分"},
+                {"field":"区域","title":"区域"},
+                {"field":"仓库名称","title":"仓库名称"},
+                {"field":"客户省份","title":"客户省份"},
+                {"field":"送达方","title":"送达方"},
+                {"field":"实际运输时间","title":"实际运输时间"},
+                {"field":"货物运输体积","title":"货物运输体积"},
+                {"field":"体积单位","title":"体积单位"},
+                {"field":"要求到货时间","title":"要求到货时间"},
+                {"field":"订单创建时间","title":"订单创建时间"},
+                {"field":"物料编码","title":"物料编码"},
+                {"field":"运输方编码","title":"运输方编码"},
+                {"field":"订货量","title":"订货量"},
+                {"field":"单位(箱)","title":"单位(箱)"},
+                {"field":"发货单编码","title":"发货单编码"},
+                {"field":"净价","title":"净价"},
+                {"field":"单位(元)","title":"单位(元)"}
+            ]
+        };
+        $.table.init(options);
+    }
+
+    function submit1(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s4 = $('#s4 option:selected').val();
+        var s5 = $('#s5 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s4').css("background-color","red");
+            setTimeout(function() {
+                $('#s4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s5!=3){
+            $('#s5').css("background-color","red");
+            setTimeout(function() {
+                $('#s5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load1();
+            n++;
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+            addResutl("s4",s4);
+            addResutl("s5",s5);
+
+        }
+
+    }
+    function load1(){
+        var options = {
+            id:"bootstrap-table1",
+            toolbar:null,
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                checkbox: true
+            },
+                {
+                    field: 'RDC城市',
+                    title: 'RDC城市'
+                },
+                {
+                    field: '客户城市',
+                    title: '客户城市'
+                },
+                {
+                    field: '实际运输时间',
+                    title: '实际运输时间'
+                },
+                {
+                    field: '体积',
+                    title: '货物运输体积'
+                },
+                {
+                    field: '运输方',
+                    title: '运输方'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function submit2(){
+        var s1 = $('#s11 option:selected').val();
+        var s2 = $('#s12 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load2();
+            n++;
+            addResutl("s1",s11);
+            addResutl("s2",s12);
+        }
+
+    }
+    function load2(){
+        var options = {
+            id:"bootstrap-table11",
+            toolbar:null,
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [  {
+                field: '出发仓库',
+                title: '出发仓库'
+            },
+                {
+                    field: '目的地省份',
+                    title: '目的地省份'
+                },
+                {
+                    field: '目的地城市',
+                    title: '目的地城市'
+                },
+                {
+                    field: 'p1',
+                    title: '(80,90]'
+                },
+                {
+                    field: 'p2',
+                    title: '(68,80]'
+                },
+                {
+                    field: 'p3',
+                    title: '(55,68]'
+                },
+                {
+                    field: 'p4',
+                    title: '(40,55]'
+                },
+                {
+                    field: 'p5',
+                    title: '(28,40]'
+                },
+                {
+                    field: 'p6',
+                    title: '(20,28]'
+                },
+                {
+                    field: 'p7',
+                    title: '(10,20]'
+                },
+                {
+                    field: 'p8',
+                    title: '(8,10]'
+                },
+                {
+                    field: 'p9',
+                    title: '(5,8]'
+                },
+                {
+                    field: 'p10',
+                    title: '(3,5]'
+                },
+                {
+                    field: 'p11',
+                    title: '(1.5,3]'
+                },
+                {
+                    field: 'p12',
+                    title: '(0.5,1.5]'
+                },
+                {
+                    field: 'p13',
+                    title: '(0,0.5]'
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+
+    function submit(){
+        var s1 = $('#x option:selected').val();
+        var s2 = $('#y option:selected').val();
+        var s3 = $('#z option:selected').val();
+        var s4 = $('#v option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#z').css("background-color","red");
+            setTimeout(function() {
+                $('#z').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=3){
+            $('#v').css("background-color","red");
+            setTimeout(function() {
+                $('#v').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load();
+            n++;
+            addResutl("x",s1);
+            addResutl("y",s2);
+            addResutl("z",s3);
+            addResutl("v",s4);
+        }
+
+    }
+    function load(){
+        $('#table').bootstrapTable({
+            columns: [
+                {"field":"运输方编码","title":"运输方编码"},
+                {"field":"6月8日运输体积","title":"6月8日运输体积"},
+                {"field":"6月14日运输体积","title":"6月14日运输体积"},
+                {"field":"7月11日运输体积","title":"7月11日运输体积"},
+                {"field":"7月26日运输体积","title":"7月26日运输体积"},
+                {"field":"7月27日运输体积","title":"7月27日运输体积"},
+                {"field":"8月10日运输体积","title":"8月10日运输体积"}
+
+            ],
+            data: [
+                {"运输方编码":18028799,"6月8日运输体积":4.111186,"6月14日运输体积":7.812,"7月11日运输体积":137.804071,"7月26日运输体积":3.937788,"7月27日运输体积":0,"8月10日运输体积":4.296977},
+                {"运输方编码":18226966,"6月8日运输体积":0,"6月14日运输体积":0,"7月11日运输体积":0,"7月26日运输体积":0,"7月27日运输体积":0.105098,"8月10日运输体积":0}
+
+            ]
+        });
+        $('#table1').bootstrapTable({
+            columns: [ {
+                field: '出发仓库',
+                title: '出发仓库'
+            },
+                {
+                    field: '目的地省份',
+                    title: '目的地省份'
+                },
+                {
+                    field: '目的地城市',
+                    title: '目的地城市'
+                },
+                {
+                    field: 'p1',
+                    title: '(80,90]'
+                },
+                {
+                    field: 'p2',
+                    title: '(68,80]'
+                },
+                {
+                    field: 'p3',
+                    title: '(55,68]'
+                },
+                {
+                    field: 'p4',
+                    title: '(40,55]'
+                },
+                {
+                    field: 'p5',
+                    title: '(28,40]'
+                },
+                {
+                    field: 'p6',
+                    title: '(20,28]'
+                },
+                {
+                    field: 'p7',
+                    title: '(10,20]'
+                },
+                {
+                    field: 'p8',
+                    title: '(8,10]'
+                },
+                {
+                    field: 'p9',
+                    title: '(5,8]'
+                },
+                {
+                    field: 'p10',
+                    title: '(3,5]'
+                },
+                {
+                    field: 'p11',
+                    title: '(1.5,3]'
+                },
+                {
+                    field: 'p12',
+                    title: '(0.5,1.5]'
+                },
+                {
+                    field: 'p13',
+                    title: '(0,0.5]'
+                }
+            ],
+            data: [{
+                "出发仓库": '廊坊仓',
+                "目的地省份":'河北',
+                "目的地城市":'保定',
+                "p1":'71.71',
+                "p2":'71.71',
+                "p3":'71.71',
+                "p4":'71.71',
+                "p5":'73.4',
+                "p6":'76.34',
+                "p7":'79.81',
+                "p8":'83.28',
+                "p9":'85.59',
+                "p10":'87.91',
+                "p11":'90.22',
+                "p12":'132.68',
+                "p13":'165.41',
+
+            }
+            ]
+        });
+        $('#table2').bootstrapTable({
+            columns: [{
+                field: 'transport',
+                title: '运输方'
+            },
+                {
+                    field: '06-08',
+                    title: '6月8日运输体积对应收费区间'
+                },
+                {
+                    field: '06-14',
+                    title: '6月14日运输体积对应收费区间'
+                },
+                {
+                    field: '07-11',
+                    title: '7月11日运输体积对应收费区间'
+                },
+                {
+                    field: '07-26',
+                    title: '7月26日运输体积对应收费区间'
+                },
+                {
+                    field: '07-27',
+                    title: '7月27日运输体积对应收费区间'
+                },
+                {
+                    field: '08-10',
+                    title: '8月10日运输体积对应收费区间'
+                }
+            ],
+            data: [{
+                transport: '18028799',
+                '06-08': '87.91',
+                '06-14': '85.59',
+                '07-11': '71.71',
+                '07-26': '90.224',
+                '07-27': '0.00',
+                '08-10': '87.91'
+            },
+                {
+                    transport: '18226966',
+                    '06-08': '0.00',
+                    '06-14': '0.00',
+                    '07-11': '0.00',
+                    '07-26': '0.00',
+                    '07-27': '65.4',
+                    '08-10': '0.00'
+                }
+            ]
+        });
+        $('#table3').bootstrapTable({
+            columns: [
+                {"field":"运输方编码","title":"运输方编码"},
+                {"field":"6月8日运输体积对应收费区间","title":"6月8日运输体积对应收费区间"},
+                {"field":"6月14日运输体积对应收费区间","title":"6月14日运输体积对应收费区间"},
+                {"field":"7月11日运输体积对应收费区间","title":"7月11日运输体积对应收费区间"},
+                {"field":"7月26日运输体积对应收费区间","title":"7月26日运输体积对应收费区间"},
+                {"field":"7月27日运输体积对应收费区间","title":"7月27日运输体积对应收费区间"},
+                {"field":"8月10日运输体积对应收费区间","title":"8月10日运输体积对应收费区间"}
+            ],
+            data:[
+                {"运输方编码":18028799,"6月8日运输体积对应收费区间":"129.21 ","6月14日运输体积对应收费区间":"126.92 ","7月11日运输体积对应收费区间":"113.20 ","7月26日运输体积对应收费区间":"129.21 ","7月27日运输体积对应收费区间":0,"8月10日运输体积对应收费区间":"129.21 "},
+                {"运输方编码":18226966,"6月8日运输体积对应收费区间":0,"6月14日运输体积对应收费区间":0,"7月11日运输体积对应收费区间":0,"7月26日运输体积对应收费区间":0,"7月27日运输体积对应收费区间":"96.69 ","8月10日运输体积对应收费区间":0}
+
+            ]
+        });
+        $('#table4').bootstrapTable({
+            columns:[
+                {"field":"运输方编码","title":"运输方编码"},
+                {"field":"6月8日运输体积对应费用","title":"6月8日运输体积对应费用"},
+                {"field":"6月14日运输体积对应费用","title":"6月14日运输体积对应费用"},
+                {"field":"7月11日运输体积对应费用","title":"7月11日运输体积对应费用"},
+                {"field":"7月26日运输体积对应费用","title":"7月26日运输体积对应费用"},
+                {"field":"7月27日运输体积对应费用","title":"7月27日运输体积对应费用"},
+                {"field":"8月10日运输体积对应费用","title":"8月10日运输体积对应费用"},
+                {"field":"费用总计","title":"费用总计"}
+
+            ],
+            data:[
+                {"运输方编码":18028799,"6月8日运输体积对应费用":"531.20 ","6月14日运输体积对应费用":"991.52 ","7月11日运输体积对应费用":"15599.54 ","7月26日运输体积对应费用":"508.80 ","7月27日运输体积对应费用":"0.00 ","8月10日运输体积对应费用":"555.21 ","费用总计":"18196.43 "},
+                {"运输方编码":18226966,"6月8日运输体积对应费用":"0.00 ","6月14日运输体积对应费用":"0.00 ","7月11日运输体积对应费用":"0.00 ","7月26日运输体积对应费用":"0.00 ","7月27日运输体积对应费用":"10.16 ","8月10日运输体积对应费用":"0.00 ","费用总计":"18196.43 "},
+
+            ]
+        });
+    }
+
+
+    function load4(){
+        var options = {
+            id:"bootstrap-table2",
+            toolbar:null,
+            data:[
+                {"仓储名称":"廊坊仓","单位物料体积租金成本（RMB/CBM/Day）":1.37,"单位物料进出仓作业成本（RMB/CBM）":" 46.98 "," 周期内入库物料作业体积（CBM） ":5288.951594," 周期内出库物料作业体积（CBM） ":" 1,887 ","仓库周期内平均每天库存体积数量（CBM）":" 1,200.00 ","周期天数（天）":90,"利率":"1.63%","库存损耗比例":"0.10%"}
+
+            ],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns:[
+                {"field":"仓储名称","title":"仓储名称"},
+                {"field":"单位物料体积租金成本（RMB/CBM/Day）","title":"单位物料体积租金成本（RMB/CBM/Day）"},
+                {"field":"单位物料进出仓作业成本（RMB/CBM）","title":"单位物料进出仓作业成本（RMB/CBM）"},
+                {"field":" 周期内入库物料作业体积（CBM） ","title":" 周期内入库物料作业体积（CBM） "},
+                {"field":" 周期内出库物料作业体积（CBM） ","title":" 周期内出库物料作业体积（CBM） "},
+                {"field":"仓库周期内平均每天库存体积数量（CBM）","title":"仓库周期内平均每天库存体积数量（CBM）"},
+                {"field":"周期天数（天）","title":"周期天数（天）"},
+                {"field":"利率","title":"利率"},
+                {"field":"库存损耗比例","title":"库存损耗比例"}
+
+            ]
+        };
+        $.table.init(options);
+    }
+
+
+    function submit6(){
+        var s1 = $('#x2 option:selected').val();
+        var s2 = $('#y2 option:selected').val();
+        var s3 = $('#z2 option:selected').val();
+        var s4 = $('#v2 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=4){
+            $('#x2').css("background-color","red");
+            setTimeout(function() {
+                $('#x2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#z2').css("background-color","red");
+            setTimeout(function() {
+                $('#z2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#v2').css("background-color","red");
+            setTimeout(function() {
+                $('#v2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load6();
+            n++;
+            addResutl("x2",s1);
+            addResutl("y2",s2);
+            addResutl("z2",s3);
+            addResutl("v2",s4);
+        }
+    }
+    function load6(){
+        var options = {
+            id:"bootstrap-table21",
+            toolbar:null,
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '仓储名称',
+                title: '仓储名称'
+            },
+                {
+                    field: '单位物料体积税前租金成本',
+                    title: '单位物料体积租金成本'
+                },
+                {
+                    field: '仓库平均每天库存体积数量',
+                    title: '仓库平均每天库存体积数量'
+                },
+                {
+                    field: '周期天数',
+                    title: '周期天数'
+                },
+                {
+                    field: '周期内仓库租金成本',
+                    title: '周期内仓库租金成本'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function submit7(){
+        var s1 = $('#x3 option:selected').val();
+        var s2 = $('#y3 option:selected').val();
+        var s3= $('#z3 option:selected').val();
+        var s4 = $('#v3 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x3').css("background-color","red");
+            setTimeout(function() {
+                $('#x3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y3').css("background-color","red");
+            setTimeout(function() {
+                $('#y3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#z3').css("background-color","red");
+            setTimeout(function() {
+                $('#z3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#v3').css("background-color","red");
+            setTimeout(function() {
+                $('#v3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            load7();
+            n++;
+            addResutl("x3",s1);
+            addResutl("y3",s2);
+            addResutl("z3",s3);
+            addResutl("v3",s4);
+        }
+    }
+    function load7(){
+        var options = {
+            id:"bootstrap-table22",
+            toolbar:null,
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [ {
+                field: '仓储名称',
+                title: '仓储名称'
+            },
+                {
+                    field: '单位物料税前进出仓操作成本',
+                    title: '单位物料进出仓操作成本'
+                },
+                {
+                    field: '周期内入库物料操作体积',
+                    title: '周期内入库物料操作体积'
+                },
+                {
+                    field: '周期内出库物料操作体积',
+                    title: '周期内出库物料操作体积'
+                },
+                {
+                    field: '周期内仓库操作成本',
+                    title: '周期内仓库操作成本'
+                }]
+        };
+        $.table.init(options);
+
+        var options1 = {
+            id:"bootstrap-table23",
+            toolbar:null,
+            data:data5,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            modalName: "【请填写功能名称】",
+            columns: [  {
+                field: '物料编码',
+                title: '物料编码'
+            },
+                {
+                    field: '各物料周期内平均每日需求数量均值',
+                    title: '各物料周期内平均每日需求数量'
+                },
+                {
+                    field: '各物料周期内平均每日需求数量标准差',
+                    title: '各物料周期内平均每日需求数量'
+                },
+                {
+                    field: '周期内各物料安全库存数量',
+                    title: '周期内各物料安全库存数量'
+                },
+                {
+                    field: '物料采购单价',
+                    title: '物料采购单价'
+                },
+                {
+                    field: '周期内单个物料采购总价',
+                    title: '周期内单个物料采购总价'
+                },
+                {
+                    field: '周期内所有物料采购总价',
+                    title: '周期内所有物料采购总价'
+                }]
+        };
+        $.table.init(options1);
+    }
+
+    function submit8(){
+        var s1 = $('#x4 option:selected').val();
+        var s2 = $('#y4 option:selected').val();
+        var s3 = $('#z4 option:selected').val();
+        var s4 = $('#d4 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#x4').css("background-color","red");
+            setTimeout(function() {
+                $('#x4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y4').css("background-color","red");
+            setTimeout(function() {
+                $('#y4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#z4').css("background-color","red");
+            setTimeout(function() {
+                $('#z4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#d4').css("background-color","red");
+            setTimeout(function() {
+                $('#d4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load8();
+            n++;
+            addResutl("x4",s1);
+            addResutl("y4",s2);
+            addResutl("z4",s3);
+            addResutl("d4",s4);
+        }
+    }
+    function load8(){
+        $('#bootstrap-table33').bootstrapTable({
+            toolbar:null,
+            columns: [{
+                field: 'name',
+                title: '仓库名称'
+            },
+                {
+                    field: 'total_price',
+                    title: '周期内物料采购总价'
+                },
+                {
+                    field: 'rate',
+                    title: '利率'
+                },
+                {
+                    field: 'cost',
+                    title: '周期内库存资金占用成本（元）'
+                }
+            ],
+            data: [
+                {
+                    name: '廊坊仓',
+                    total_price: 3622497.10,
+                    rate: 0.0163,
+                    cost: 59046.70
+                }
+
+            ]
+        });
+    }
+
+    function submit9(){
+        var s1 = $('#x5 option:selected').val();
+        var s2 = $('#y5 option:selected').val();
+        var s3 = $('#z5 option:selected').val();
+        var s4 = $('#v5 option:selected').val();
+        var s5 = $('#w5 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=3){
+            $('#x5').css("background-color","red");
+            setTimeout(function() {
+                $('#x5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#y5').css("background-color","red");
+            setTimeout(function() {
+                $('#y5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#z5').css("background-color","red");
+            setTimeout(function() {
+                $('#z5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#v5').css("background-color","red");
+            setTimeout(function() {
+                $('#v5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=3){
+            $('#w5').css("background-color","red");
+            setTimeout(function() {
+                $('#w5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load9();
+            n++;
+            addResutl("x5",s1);
+            addResutl("y5",s2);
+            addResutl("z5",s3);
+            addResutl("v5",s4);
+            addResutl("w5",s5);
+        }
+    }
+    function load9(){
+        $('#bootstrap-table34').bootstrapTable({
+            toolbar:null,
+
+            columns: [{
+                field: 'transport_cost',
+                title: '周期内运输/配送成本（元）'
+            },
+                {
+                    field: 'storage_operation_cost',
+                    title: '周期内仓储操作成本（元）'
+                },
+                {
+                    field: 'storage_rental_cost',
+                    title: '周期内仓库租赁/建设成本（元）'
+                },
+                {
+                    field: 'inventory_cost',
+                    title: '周期内库存资金占用成本（元）'
+                },
+                {
+                    field: 'total_cost',
+                    title: '周期内供应链物流网络总成本（元）'
+                }
+            ],
+            data: [{
+                transport_cost: 23000000,
+                storage_operation_cost: 11900000,
+                storage_rental_cost: 264070,
+                inventory_cost: 2640000,
+                total_cost: 37804070
+            }
+            ]
+        });
+    }
+</script>
+</body>
+</html>

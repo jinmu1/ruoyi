@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
+    <meta charset="UTF-8"/>
+    <title>物流网络实时规划 . 全国</title>
+</head>
+
+<th:block th:include="include :: point-public-css"/>
+<th:block th:include="include :: point-index4-css"/>
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+<script th:src="@{/js/jquery.min.js}"></script>
+
+<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+<style>
+    .layui-layer-content {
+        color: #000000;
+    }
+
+    body, html {
+        overflow-x: hidden;
+    }
+
+    .echarts {
+        height: 350px;
+    }
+
+    .th-inner {
+        color: rgb(171, 225, 245);
+
+    }
+
+    .thead .tr {
+        color: rgb(243, 243, 243);
+    }
+
+    .table-hover > tbody > tr {
+        text-align: right;
+    }
+
+    .table-hover > tbody > tr:hover > td,
+    .table-hover > tbody > tr:hover > th {
+        color: rgb(14, 108, 132);
+        cursor: pointer;
+    }
+
+    /*[class*="col-"]{*/
+    /*    padding: 2px;*/
+    /*    margin:2px*/
+    /*}*/
+    /*.row {*/
+    /*    margin-right: -15px;*/
+    /*    margin-left: -15px;*/
+    /*}*/
+    /*.table1{width:25xp;height: 25%}*/
+</style>
+<script>
+
+    var docEl = document.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+    var clientWidth = docEl.clientWidth;
+    docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+    window.addEventListener(resizeEvt, function () {
+        clientWidth = docEl.clientWidth;
+        docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+    }, false);
+</script>
+<script>
+
+    $(document).ready(function () {
+        var whei = $(window).width()
+        $("html").css({fontSize: whei / 22});
+        $(window).resize(function () {
+            var whei = $(window).width();
+            $("html").css({fontSize: whei / 22})
+        });
+    });
+</script>
+<body style="background: #jjj;height: 100%;width: 100%;">
+
+<div class="main">
+
+    <div class="header">
+        <div class="header-left fl">
+
+        </div>
+        <div class="header-center fl">
+            <div class="header-title">
+                物流网络实时规划
+            </div>
+            <div class="header-img"></div>
+        </div>
+        <div class="header-right fl">
+
+        </div>
+        <div class="header-bottom fl">
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12 border">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 style="text-align: center">填写数据清单 <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a></li>
+                                <li><a href="#">选项2</a></li>
+                            </ul>
+                            <a class="close-link"> <i class="fa fa-times"></i> </a>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content">
+
+                        <form class="form-horizontal m-t" id="signupForm" onsubmit="post_data()" target="nm_iframe">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="table-responsive table1">
+                                        <table class="table table-bordered  width1">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="2" style="text-align:center;vertical-align:middle;">时效参数
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+<!--                                            <tr>-->
+<!--                                                <th>所在省份</th>-->
+<!--                                                <td style="height: 25px"><select name="provinces" id="provinces"-->
+<!--                                                                                 style="background:rgb(14, 108, 132); color: #000;color:#fff;">-->
+<!--                                                    <option value="湖北">湖北</option>-->
+<!--                                                    <option value="广东">广东</option>-->
+<!--                                                    <option value="江西">江西</option>-->
+<!--                                                    <option value="安徽">安徽</option>-->
+<!--                                                    <option value="福建">福建</option>-->
+<!--                                                    <option value="广西">广西</option>-->
+<!--                                                    <option value="云南">云南</option>-->
+<!--                                                    <option value="四川">四川</option>-->
+<!--                                                    <option value="贵州">贵州</option>-->
+<!--                                                    <option value="湖南">湖南</option>-->
+<!--                                                    <option value="浙江">浙江</option>-->
+<!--                                                    <option value="江苏">江苏</option>-->
+<!--                                                    <option value="河南">河南</option>-->
+<!--                                                    <option value="河北">河北</option>-->
+<!--                                                    <option value="山东">山东</option>-->
+<!--                                                    <option value="山西">山西</option>-->
+<!--                                                    <option value="陕西">陕西</option>-->
+<!--                                                    <option value="甘肃">甘肃</option>-->
+<!--                                                    <option value="青海">青海</option>-->
+<!--                                                    <option value="宁夏">宁夏</option>-->
+<!--                                                    <option value="内蒙">内蒙</option>-->
+<!--                                                    <option value="辽宁">辽宁</option>-->
+<!--                                                    <option value="吉林">吉林</option>-->
+<!--                                                    <option value="黑龙江">黑龙江</option>-->
+<!--                                                    <option value="新疆">新疆</option>-->
+<!--                                                    <option value="西藏">西藏</option>-->
+<!--                                                    <option value="海南">海南</option>-->
+<!--                                                </select></td>-->
+<!--                                            </tr>-->
+                                            <tr>
+                                                <th>订单时效</th>
+                                                <td style="height: 25px"><select name="times" id="times"
+                                                                                 style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                    <option value="12">12h</option>
+                                                    <option value="24">24h</option>
+                                                    <option value="48">48h</option>
+                                                    <option selected value="72">72h</option>
+                                                    <option value="96">96h</option>
+                                                </select></td>
+                                            </tr>
+                                            <tr>
+                                                <th>服务水平</th>
+                                                <td style="height: 25px"><select name="times" id="order"
+                                                                                 style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                    <option value="90">90%</option>
+                                                    <option value="95">95%</option>
+                                                    <option value="97">98%</option>
+                                                    <option selected value="100">100%</option>
+                                                </select></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <div class="table-responsive table1">
+                                        <table class="table table-bordered  width1">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="2" style="text-align:center;vertical-align:middle;">运输参数
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th> 车辆规格</th>
+                                                <td><select name="carLength" id="carLength"
+                                                            style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                    <option>小车4米6</option>
+                                                    <option>中车7米2</option>
+                                                    <option>大车9米6</option>
+                                                    <option>超大车17米5</option>
+                                                </select></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-nowrap">税额</th>
+                                                <td>11%</td>
+                                            </tr>
+                                            <tr>
+                                                <th>平均每天出库量</th>
+                                                <td><input name="transportNum" value="1000" id="transportNum"
+                                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                           data-placement="right" title="请输入" th:type="text"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changeplant()" required=""/>托
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>年出库量</th>
+                                                <td id="plant">365000托</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 table1">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="2" style="text-align:center;vertical-align:middle;">库存参数
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>物料种类数</th>
+                                                <td><input type="value" value="6000"
+                                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                           name="inventory_loss" id="goods_num"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changGoosNum()" required=""/>种
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>库存损耗比例</th>
+                                                <td><input type="value" value="0.1" name="inventory_loss"
+                                                           id="inventory_loss"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           required=""/>%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料单价:高值(大于千元)</th>
+                                                <td><input type="value" id="h_price" value="10"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changPrice()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料单价:中值(百元)</th>
+                                                <td><input type="value" id="m_price" value="50"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changPrice()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料单价:低值(低于百元)</th>
+                                                <td><input type="value" id="s_price" value="40"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changPrice()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="table-responsive table1">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="2" style="text-align:center;vertical-align:middle;">仓储参数
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>仓储人员工资</th>
+                                                <td><input type="value" id="warehousing" value="80000"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           required=""/>元/年
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>单仓管理费用</th>
+                                                <td><input type="value" id="managementFee" value="200000"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           required=""/>元/年
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料体积 大(5m&sup3;)</th>
+                                                <td><input type="value" id="b_goods_size" value="10"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changSize()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料体积 中(0.5m&sup3;)</th>
+                                                <td><input type="value" id="m_goods_size" value="40"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changSize()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>物料体积 小(0.05m&sup3;)</th>
+                                                <td><input type="value" id="s_goods_size" value="50"
+                                                           style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                           onchange="changSize()" required=""/>%
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="ibox float-e-margins" style="height: 60px">
+                                        <button class="btn btn-primary" type="submit"
+                                                style="margin-top: -2%;margin-left: 45%;z-index: 9999">确认并提交
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--        <div class="row clearfix">-->
+        <!--            <div class="col-md-4 column">-->
+        <!--                <div class="row clearfix  ">-->
+        <!--                    <div class="col-md-12 column border">-->
+        <!--                        <div class="ibox float-e-margins">-->
+        <!--                            <div class="ibox-title" style="position: center">-->
+        <!--                                <h5 style="text-align: center;"> 方案一</h5>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-tools">-->
+        <!--                                <a class="collapse-link">-->
+        <!--                                    <i class="fa fa-chevron-up"></i>-->
+        <!--                                </a>-->
+        <!--                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+        <!--                                    <i class="fa fa-wrench"></i>-->
+        <!--                                </a>-->
+        <!--                                <ul class="dropdown-menu dropdown-user">-->
+        <!--                                    <li><a href="#">选项1</a>-->
+        <!--                                    </li>-->
+        <!--                                    <li><a href="#">选项2</a>-->
+        <!--                                    </li>-->
+        <!--                                </ul>-->
+        <!--                                <a class="close-link">-->
+        <!--                                    <i class="fa fa-times"></i>-->
+        <!--                                </a>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-content ">-->
+        <!--                                <select class="form-control" id="times1" name="times1" style="margin-top: 0%;width: 30%;z-index: 9999; background:rgb(14, 108, 132); color: #000;color:#fff;" onchange="post_data1()"> <option value="">&#45;&#45;请选择方案&#45;&#45;</option> </select>-->
+        <!--                                <div id="chart_1" class="echarts"></div>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="row clearfix">-->
+        <!--                    <div class="col-md-12 column border">-->
+        <!--                        <div class="ibox float-e-margins">-->
+        <!--                            <div class="ibox-title">-->
+        <!--                                <h5 style="text-align: center;"> 方案二</h5>-->
+        <!--                                <div class="ibox-tools">-->
+        <!--                                    <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>-->
+        <!--                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i> </a>-->
+        <!--                                    <ul class="dropdown-menu dropdown-user">-->
+        <!--                                        <li><a href="#">选项1</a> </li>-->
+        <!--                                        <li><a href="#">选项2</a> </li>-->
+        <!--                                    </ul>-->
+        <!--                                    <a class="close-link"> <i class="fa fa-times"></i> </a>-->
+        <!--                                </div>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-content">-->
+        <!--                                <select class="form-control" id="times3" name="times2" style="margin-top:0%;width: 30%;margin-right:0%;background:rgb(14, 108, 132); color: #000;color:#fff;" onchange="post_data2()"> <option value="">&#45;&#45;请选择方案&#45;&#45;</option> </select>-->
+        <!--                                <div id="chart_4" class="echarts"></div>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4 column">-->
+        <!--                <div class="row clearfix ">-->
+        <!--                    <div class="col-md-12 column border">-->
+        <!--                        <div class="ibox float-e-margins">-->
+        <!--                            <div class="ibox-title " >-->
+        <!--                                <h5 class="text-center" style="text-align: center;"> 方案三</h5>-->
+        <!--                                <div class="ibox-tools">-->
+        <!--                                    <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>-->
+        <!--                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i> </a>-->
+        <!--                                    <ul class="dropdown-menu dropdown-user">-->
+        <!--                                        <li><a href="#">选项1</a> </li>-->
+        <!--                                        <li><a href="#">选项2</a> </li>-->
+        <!--                                    </ul>-->
+        <!--                                    <a class="close-link"> <i class="fa fa-times"></i> </a>-->
+        <!--                                </div>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-content">-->
+        <!--                                <select class="form-control" id="times2" name="times2" style="margin-top:0%;width: 30%;margin-right:0%;background:rgb(14, 108, 132); color: #000;color:#fff;" onchange="post_data2()"> <option value="">&#45;&#45;请选择方案&#45;&#45;</option> </select>-->
+        <!--                                <div id="chart_2" class="echarts"></div>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="row clearfix">-->
+        <!--                    <div class="col-md-12 column border">-->
+        <!--                        <div class="ibox float-e-margins">-->
+        <!--                            <div class="ibox-title">-->
+        <!--                                <h5 style="text-align: center;"> 方案四</h5>-->
+        <!--                                <div class="ibox-tools">-->
+        <!--                                    <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>-->
+        <!--                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i> </a>-->
+        <!--                                    <ul class="dropdown-menu dropdown-user">-->
+        <!--                                        <li><a href="#">选项1</a> </li>-->
+        <!--                                        <li><a href="#">选项2</a> </li>-->
+        <!--                                    </ul>-->
+        <!--                                    <a class="close-link"> <i class="fa fa-times"></i> </a>-->
+        <!--                                </div>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-content">-->
+        <!--                                <select class="form-control" id="times4" name="times2" style="margin-top:0%;width: 30%;margin-right:0%;background:rgb(14, 108, 132); color: #000;color:#fff;" onchange="post_data2()"> <option value="">&#45;&#45;请选择方案&#45;&#45;</option> </select>-->
+        <!--                                <div id="chart_5" class="echarts"></div>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4 column">-->
+        <!--                <div class="row clearfix ">-->
+        <!--                    <div class="col-md-12 column line-2 border">-->
+        <!--                        <div class="ibox float-e-margins">-->
+        <!--                            <div class="ibox-title">-->
+        <!--                                <h5 style="text-align: center;"> 各方案指标分析</h5>-->
+        <!--                            </div>-->
+        <!--                            <div class="ibox-content">-->
+        <!--                                <table id="bootstrap-table" class="echarts"></table>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <div class="row">
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 最优网络布局</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="chart_6" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 不同仓库数量下各项成本曲线图</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="chart_7" class="echarts"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="ibox-title">
+                    <h5 style="text-align: center;"> 各网络节点数据</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="bootstrap-table1" data-auto-refresh="true"
+                         style="position:center;width: 83%;margin-left:10%"></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog" >
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body " style="width:1200px;height: 750px">
+                    <iframe src="https://glc360.oss-cn-hangzhou.aliyuncs.com/pdf/%E5%AE%98%E7%BD%91%E6%96%87%E4%BB%B6/%E9%A1%B5%E9%9D%A2%E8%AF%B4%E6%98%8E_n1.pdf" type="application/x-google-chrome-pdf" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true" style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body mypdfhg motaikuangbox" style="width:1200px;height: 750px">
+                    <iframe
+                            src="https://glc360.oss-cn-hangzhou.aliyuncs.com/pdf/%E5%AE%98%E7%BD%91%E6%96%87%E4%BB%B6/%E8%BE%93%E5%85%A5%E8%AF%B4%E6%98%8E_n1.pdf" type="application/x-google-chrome-pdf" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body mypdfhg motaikuangbox" style="width:1200px;height: 750px">
+                    <iframe
+                            src="https://glc360.oss-cn-hangzhou.aliyuncs.com/pdf/%E5%AE%98%E7%BD%91%E6%96%87%E4%BB%B6/%E5%B8%83%E5%B1%80%E8%AF%B4%E6%98%8E_n1.pdf" type="application/x-google-chrome-pdf" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="myModal3" tabindex="-1" role="dialog" aria-hidden="true" style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body" style="width:1200px;height: 750px">
+                    <iframe
+                            src="https://glc360.oss-cn-hangzhou.aliyuncs.com/pdf/%E5%AE%98%E7%BD%91%E6%96%87%E4%BB%B6/%E6%9B%B2%E7%BA%BF%E8%AF%B4%E6%98%8E_n1.pdf" type="application/x-google-chrome-pdf" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true" style="position:absolute;text-align: center;margin-left: -25%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:1200px;height: 750px">
+                <div class="modal-body" style="width:1200px;height: 750px">
+                    <iframe
+                            src="https://glc360.oss-cn-hangzhou.aliyuncs.com/pdf/%E5%AE%98%E7%BD%91%E6%96%87%E4%BB%B6/%E6%8C%87%E6%A0%87%E8%AF%B4%E6%98%8E.pdf" type="application/x-google-chrome-pdf" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>正在加载...</h5>
+    </div>
+</div>
+<div class="footer" style="margin-left: 45.5%; bottom:0;height: 10%;">
+
+    <a onclick="turn1()" style="font-family: 华文行楷;color: white;font-size: 18px;position:absolute;margin-top: 60px">@环球物流咨询·官网     </a>
+</div>
+<!--</div>-->
+<th:block th:include="include :: echarts-js"/>
+<th:block th:include="include :: point-finereport-js"/>
+<th:block th:include="include :: footer"/>
+
+
+<script th:inline="javascript">
+    function turn1() {
+        window.location.href = "http://glc360.com";
+    }
+
+    function showPDF(urlSrc) {
+        var urlPre = "pdfjs/web/viewer.html?file=" + urlSrc;
+        $("#pdfContainer").attr('src', urlPre);
+        $("#pdf_Modal").modal("show");
+    }
+
+    //展示loading框
+    showLoading = function () {
+        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+    }
+    //隐藏掉loading框
+    hideLoading = function () {
+        $('#loadingModal').modal('hide');
+    }
+
+    function changeplant() {
+        if (parseInt($("#transportNum").val()) > 0) {
+            $("#plant").html(parseInt($("#transportNum").val() * 365) + "托");
+        }
+    }
+
+    function changSize() {
+        var i = 0;
+        if ($("#b_goods_size").val() == null || $("#b_goods_size").val() == "") {
+            i++;
+        }
+        var j = 0;
+        if ($("#m_goods_size").val() == null || $("#m_goods_size").val() == "") {
+            j++;
+        }
+        var k = 0;
+        if ($("#s_goods_size").val() == null || $("#s_goods_size").val() == "") {
+            k++;
+        }
+
+        if (i + j + k == 1) {
+            if (i + j == 0) {
+                var num = 100 - $("#b_goods_size").val() - $("#m_goods_size").val()
+                if (num >= 0) {
+                    $("#s_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            } else if (i + k == 0) {
+                var num = 100 - $("#b_goods_size").val() - $("#s_goods_size").val()
+                if (num >= 0) {
+                    $("#m_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            } else if (j + k == 0) {
+                var num = 100 - $("#m_goods_size").val() - $("#s_goods_size").val()
+                if (num >= 0) {
+                    $("#b_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            }
+        }
+        var value = parseFloat($("#b_goods_size").val()) + parseFloat($("#m_goods_size").val()) + parseFloat($("#s_goods_size").val());
+        if (value > 100) {
+            layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+        }
+    }
+
+    function changPrice() {
+        var i = 0;
+        if ($("#h_price").val() == null || $("#h_price").val() == "") {
+            i++;
+        }
+        var j = 0;
+        if ($("#m_price").val() == null || $("#m_price").val() == "") {
+            j++;
+        }
+        var k = 0;
+        if ($("#s_price").val() == null || $("#s_price").val() == "") {
+            k++;
+        }
+        if (i + j + k == 1) {
+            if (i + j == 0) {
+                var num = 100 - $("#h_price").val() - $("#m_price").val()
+                if (num >= 0) {
+                    $("#s_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            } else if (i + k == 0) {
+                var num = 100 - $("#h_price").val() - $("#s_price").val()
+                if (num >= 0) {
+                    $("#m_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            } else if (j + k == 0) {
+                var num = 100 - $("#m_price").val() - $("#s_price").val()
+                if (num >= 0) {
+                    $("#h_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            }
+        }
+        var value = parseFloat($("#h_price").val()) + parseFloat($("#m_price").val()) + parseFloat($("#s_price").val());
+        if (value > 100) {
+            layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+        }
+    }
+
+    function changGoosNum() {
+        var goods_num = $("#goods_num").val();
+        if (goods_num > 100000) {
+            layer.open({title: "输入提示", content: "请输入小于100000的值", color: "#000000"})
+        }
+    }
+
+    var isClick = true;
+
+    function post_data() {
+        if (isClick) {
+            if ($("#transportNum").val() <= 0) {
+                layer.open({title: "输入提示", content: "请输入大于0的值", color: "#000000"});
+                return;
+            } else if ($("#transportNum").val() > 1000000) {
+                layer.open({title: "输入提示", content: "请输入小于1000000的值", color: "#000000"});
+                return;
+            }
+            if ($("#order").val() > 100) {
+                layer.open({title: "输入提示", content: "订单满足率：请输入100以内的值", color: "#000000"});
+                return;
+            }
+            if ($("#inventory_loss").val() > 100) {
+                layer.open({title: "输入提示", content: "库存损耗：请输入100以内的值", color: "#000000"});
+                return;
+            }
+            // for (var i = 1; i < 500; i++) {
+            //     $("#times1").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times2").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times3").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times4").append("<option value='" + i + "'>方案" + i + "</option>");
+            // }
+            // var provinces = $("#provinces option:selected").val();
+            showLoading();
+            isClick = false;
+            setOption(1, "chart_6");
+            // setOptionAll(provinces, 1);
+
+            // loadTable(provinces);
+            //定时器
+            setTimeout(function () {
+                isClick = true;
+            }, 5000);//一秒内不能重复点击
+        } else {
+            return;
+        }
+        return false;
+    }
+
+    function setOption( num, ids) {
+
+        var myChart1 = echarts.init(document.getElementById(ids));
+        $.post("/system/point/point/network", {
+            "num": num,
+            "times": $("#times option:selected").val(),
+            "order": $("#order option:selected").val(),
+            "goods_num": $("#goods_num").val(),
+            "carLength": $("#carLength option:selected").val(),
+            "transportNum": parseInt($("#transportNum").val()) * 365,
+            "warehousing": $("#warehousing").val(),
+            "b_goods_size": $("#b_goods_size").val(),
+            "m_goods_size": $("#m_goods_size").val(),
+            "s_goods_size": $("#s_goods_size").val(),
+            "managementFee": $("#managementFee").val(),
+            "h_price": $("#h_price").val(),
+            "m_price": $("#m_price").val(),
+            "l_price": $("#l_price").val(),
+            "inventory_loss": $("#inventory_loss").val(),
+            "managementFee": $("#managementFee").val()
+        }, function (result) {
+            var d = result.rows;
+            var data1 = "[";
+            var data2 = "[";
+            for (var i = 0; i < d.length; i++) {
+                if (i < d.length - 1) {
+                    data1 += "{name: \"" + d[i].city + "\", value:" + d[i].gdp + "},";
+                    data2 += "{name: '" + d[i].city1 + "', coord:[" + d[i].lat1 + "," + d[i].lng1 + "], itemStyle: {normal: {color: '#9D8589'}}},"
+                } else {
+                    data1 += "{name: \"" + d[i].city + "\", value:" + d[i].gdp + "}]";
+                    data2 += "{name: '" + d[i].city1 + "', coord:[" + d[i].lat1 + "," + d[i].lng1 + "], itemStyle: {normal: {color: '#9D8589'}}}]"
+                }
+            }
+            data1 = eval('(' + data1 + ')');
+            var data21 = eval('(' + data2 + ')');
+            var uploadedDataURL = "../../../js/point/china.json";
+            // if (provinces == "江苏") {
+            //     uploadedDataURL = "../../../js/point/jiangsu.json";
+            // } else if (provinces == "浙江") {
+            //     uploadedDataURL = "../../../js/point/zhejiang.json";
+            // } else if (provinces == "山东") {
+            //     uploadedDataURL = "../../../js/point/shandong.json";
+            // } else if (provinces == "安徽") {
+            //     uploadedDataURL = "../../../js/point/anhui.json";
+            // } else if (provinces == "江西") {
+            //     uploadedDataURL = "../../../js/point/jiangxi.json";
+            // } else if (provinces == "湖北") {
+            //     uploadedDataURL = "../../../js/point/hubei.json";
+            // } else if (provinces == "湖南") {
+            //     uploadedDataURL = "../../../js/point/hunan.json";
+            // } else if (provinces == "福建") {
+            //     uploadedDataURL = "../../../js/point/fujian.json";
+            // } else if (provinces == "广东") {
+            //     uploadedDataURL = "../../../js/point/guangdong.json";
+            // } else if (provinces == "广西") {
+            //     uploadedDataURL = "../../../js/point/guangxi.json";
+            // } else if (provinces == "贵州") {
+            //     uploadedDataURL = "../../../js/point/guizhou.json";
+            // } else if (provinces == "四川") {
+            //     uploadedDataURL = "../../../js/point/sichuan.json";
+            // } else if (provinces == "云南") {
+            //     uploadedDataURL = "../../../js/point/yunnan.json";
+            // } else if (provinces == "河北") {
+            //     uploadedDataURL = "../../../js/point/hebei.json";
+            // } else if (provinces == "河南") {
+            //     uploadedDataURL = "../../../js/point/henan.json";
+            // } else if (provinces == "辽宁") {
+            //     uploadedDataURL = "../../../js/point/liaoning.json";
+            // } else if (provinces == "吉林") {
+            //     uploadedDataURL = "../../../js/point/jining.json";
+            // } else if (provinces == "黑龙江") {
+            //     uploadedDataURL = "../../../js/point/heilongjiang.json";
+            // } else if (provinces == "陕西") {
+            //     uploadedDataURL = "../../../js/point/shanxisheng.json";
+            // } else if (provinces == "青海") {
+            //     uploadedDataURL = "../../../js/point/qinghai.json";
+            // } else if (provinces == "新疆") {
+            //     uploadedDataURL = "../../../js/point/xinjiang.json";
+            // } else if (provinces == "西藏") {
+            //     uploadedDataURL = "../../../js/point/xizang.json";
+            // } else if (provinces == "内蒙") {
+            //     uploadedDataURL = "../../../js/point/neimenggu.json";
+            // } else if (provinces == "海南") {
+            //     uploadedDataURL = "../../../js/point/hainan.json";
+            // } else if (provinces == "山西") {
+            //     uploadedDataURL = "../../../js/point/shanxi.json";
+            // } else if (provinces == "宁夏") {
+            //     uploadedDataURL = "../../../js/point/ningxia.json";
+            // } else if (provinces == "甘肃") {
+            //     uploadedDataURL = "../../../js/point/gansu.json";
+            // }
+
+
+            $.getJSON(uploadedDataURL, function (geoJson) {
+                echarts.registerMap('guangzhou', geoJson);
+                myChart1.setOption({
+                    title: {
+                        // text           : '江苏某公司新增CDC节点最优成本下的布局图',
+                        // subtext        : '苏南仓 中央仓 苏北仓',
+                        left: 'center',
+                        top: 25,
+                        textStyle: {
+                            fontSize: '24',
+                            color: '#B03060'
+                        }
+                    },
+                    visualMap: {
+                        min: 0,
+                        max: 100,
+                        text: ['高', '低'],
+                        realtime: false,
+                        calculable: true,
+                        inRange: {
+                            color: ['#FFD8DE', '#b7d6f3', '#FDE6A2', '#3598c1', '#C6E3DE',]
+                        },
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+
+                    series: [{
+                        name: '地图数据',
+                        type: 'map',
+                        zoom: 1.05,
+                        roam: true, //是否开启鼠标缩放和平移漫游
+                        mapType: 'guangzhou', // 自定义扩展图表类型
+                        itemStyle: {
+                            normal: {
+                                borderColor: 'white',
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    textStyle: {
+                                        color: 'darkslategray',
+                                    },
+
+                                },
+                                emphasis: {
+                                    textStyle: {
+                                        color: 'darkslategray',
+                                    },
+                                }
+                            }
+                        },
+                        data: data1,
+                        label: {//区域名样式
+                            normal: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: 8,
+                                    left: 2,
+                                    color: 'black'
+                                }
+                            },
+                            emphasis: {
+                                textStyle: {
+                                    color: 'rgba(255,255,255,1)'
+                                }
+                            }
+                        },
+
+
+                    }, {
+                        name: '中国',
+                        type: 'map',
+                        mapType: 'guangzhou',
+                        selectedMode: 'multiple',
+                        label: {
+                            normal: {
+                                show: false
+
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        data: [],
+                        markPoint: {
+                            symbol: 'pin',
+                            symbolSize: 100,
+                            itemStyle: {
+
+                                normal: {
+                                    borderColor: '#33CBFF',
+                                    color: '#33CBFF',
+                                    borderWidth: 0.2,            // 标注边线线宽，单位px，默认为1
+                                    label: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            label: {
+                                normal: {
+                                    show: true,
+                                    formatter: function (d) {
+                                        return d.name
+                                    }
+                                }
+                            },
+                            data: data21
+                        }
+                    }]
+                });
+                $(window).resize(myChart1.resize);
+                loadLine( 1);
+
+                hideLoading();
+                window.addEventListener("resize", function () {
+                    myChart1.resize();
+                });
+
+            });
+        });
+    }
+
+    function setOptionAll(num) {
+        // var  times1 = $("#times1 option:selected").val();
+        // var  times2 = $("#times2 option:selected").val();
+        // var  times3 = $("#times3 option:selected").val();
+        // var  times4 = $("#times4 option:selected").val();
+        var myChart1 = echarts.init(document.getElementById(ids));
+        $.post("/system/netWork/network", {
+            "num": num,
+            "times": $("#times option:selected").val(),
+            "times1": $("#times1 option:selected").val(),
+            "times2": $("#times2 option:selected").val(),
+            "times3": $("#times3 option:selected").val(),
+            "times4": $("#times4 option:selected").val(),
+            "order": $("#order option:selected").val(),
+            "carLength": $("#carLength option:selected").val(),
+            "transportNum": parseInt($("#transportNum").val()) * 365,
+            "warehousing": $("#warehousing").val(),
+            "b_goods_size": $("#b_goods_size").val(),
+            "m_goods_size": $("#m_goods_size").val(),
+            "s_goods_size": $("#s_goods_size").val(),
+            "managementFee": $("#managementFee").val(),
+            "h_price": $("#h_price").val(),
+            "m_price": $("#m_price").val(),
+            "l_price": $("#l_price").val(),
+            "inventory_loss": $("#inventory_loss").val(),
+            "managementFee": $("#managementFee").val()
+        }, function (result) {
+            var d = result.rows[0];
+            var data1 = "[";
+            var data2 = "[";
+            for (var i = 0; i < d.length; i++) {
+                if (i < d.length - 1) {
+                    data1 += "{name: \"" + d[i].city + "\", value:" + d[i].gdp + "},";
+                    data2 += "{name: '" + d[i].city1 + "', coord:[" + d[i].lat1 + "," + d[i].lng1 + "], itemStyle: {normal: {color: '#9D8589'}}},"
+                } else {
+                    data1 += "{name: \"" + d[i].city + "\", value:" + d[i].gdp + "}]";
+                    data2 += "{name: '" + d[i].city1 + "', coord:[" + d[i].lat1 + "," + d[i].lng1 + "], itemStyle: {normal: {color: '#9D8589'}}}]"
+                }
+            }
+            data1 = eval('(' + data1 + ')');
+            var data21 = eval('(' + data2 + ')');
+            var uploadedDataURL = "../../../js/point/china.json";
+            // if (provinces == "江苏") {
+            //     uploadedDataURL = "../../js/point/jiangsu.json";
+            // } else if (provinces == "浙江") {
+            //     uploadedDataURL = "../../js/point/zhejiang.json";
+            // } else if (provinces == "山东") {
+            //     uploadedDataURL = "../../js/point/shandong.json";
+            // } else if (provinces == "安徽") {
+            //     uploadedDataURL = "../../js/point/anhui.json";
+            // } else if (provinces == "江西") {
+            //     uploadedDataURL = "../../js/point/jiangxi.json";
+            // } else if (provinces == "湖北") {
+            //     uploadedDataURL = "../../js/point/hubei.json";
+            // } else if (provinces == "湖南") {
+            //     uploadedDataURL = "../../js/point/hunan.json";
+            // } else if (provinces == "福建") {
+            //     uploadedDataURL = "../../js/point/fujian.json";
+            // } else if (provinces == "广东") {
+            //     uploadedDataURL = "../../js/point/guangdong.json";
+            // } else if (provinces == "广西") {
+            //     uploadedDataURL = "../../js/point/guangxi.json";
+            // } else if (provinces == "贵州") {
+            //     uploadedDataURL = "../../js/point/guizhou.json";
+            // } else if (provinces == "四川") {
+            //     uploadedDataURL = "../../js/point/sichuan.json";
+            // } else if (provinces == "云南") {
+            //     uploadedDataURL = "../../js/point/yunnan.json";
+            // } else if (provinces == "河北") {
+            //     uploadedDataURL = "../../js/point/hebei.json";
+            // } else if (provinces == "河南") {
+            //     uploadedDataURL = "../../js/point/henan.json";
+            // } else if (provinces == "辽宁") {
+            //     uploadedDataURL = "../../js/point/liaoning.json";
+            // } else if (provinces == "吉林") {
+            //     uploadedDataURL = "../../js/point/jining.json";
+            // } else if (provinces == "黑龙江") {
+            //     uploadedDataURL = "../../js/point/heilongjiang.json";
+            // } else if (provinces == "陕西") {
+            //     uploadedDataURL = "../../js/point/shanxisheng.json";
+            // } else if (provinces == "青海") {
+            //     uploadedDataURL = "../../js/point/qinghai.json";
+            // } else if (provinces == "新疆") {
+            //     uploadedDataURL = "../../js/point/xinjiang.json";
+            // } else if (provinces == "西藏") {
+            //     uploadedDataURL = "../../js/point/xizang.json";
+            // } else if (provinces == "内蒙") {
+            //     uploadedDataURL = "../../js/point/neimenggu.json";
+            // } else if (provinces == "海南") {
+            //     uploadedDataURL = "../../js/point/hainan.json";
+            // } else if (provinces == "山西") {
+            //     uploadedDataURL = "../../js/point/shanxi.json";
+            // } else if (provinces == "宁夏") {
+            //     uploadedDataURL = "../../js/point/ningxia.json";
+            // } else if (provinces == "甘肃") {
+            //     uploadedDataURL = "../../js/point/gansu.json";
+            // }
+
+            var myChart2 = echarts.init(document.getElementById(ids));
+            $.getJSON(uploadedDataURL, function (geoJson) {
+                echarts.registerMap('guangzhou', geoJson);
+                myChart1.setOption({
+                    title: {
+                        // text           : '江苏某公司新增CDC节点最优成本下的布局图',
+                        // subtext        : '苏南仓 中央仓 苏北仓',
+                        left: 'center',
+                        top: 25,
+                        textStyle: {
+                            fontSize: '24',
+                            color: '#B03060'
+                        }
+                    },
+                    visualMap: {
+                        min: 0,
+                        max: 100,
+                        text: ['高', '低'],
+                        realtime: false,
+                        calculable: true,
+                        inRange: {
+                            color: ['#FFD8DE', '#b7d6f3', '#FDE6A2', '#3598c1', '#C6E3DE',]
+                        },
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+
+                    series: [{
+                        name: '地图数据',
+                        type: 'map',
+                        zoom: 1.05,
+                        roam: true, //是否开启鼠标缩放和平移漫游
+                        mapType: 'guangzhou', // 自定义扩展图表类型
+                        itemStyle: {
+                            normal: {
+                                borderColor: 'white',
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    textStyle: {
+                                        color: 'darkslategray',
+                                    },
+
+                                },
+                                emphasis: {
+                                    textStyle: {
+                                        color: 'darkslategray',
+                                    },
+                                }
+                            }
+                        },
+                        data: data1,
+                        label: {//区域名样式
+                            normal: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: 8,
+                                    left: 2,
+                                    color: 'black'
+                                }
+                            },
+                            emphasis: {
+                                textStyle: {
+                                    color: 'rgba(255,255,255,1)'
+                                }
+                            }
+                        },
+
+
+                    }, {
+                        name: '中国',
+                        type: 'map',
+                        mapType: 'guangzhou',
+                        selectedMode: 'multiple',
+                        label: {
+                            normal: {
+                                show: false
+
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        data: [],
+                        markPoint: {
+                            symbol: 'pin',
+                            symbolSize: 100,
+                            itemStyle: {
+
+                                normal: {
+                                    borderColor: '#33CBFF',
+                                    color: '#33CBFF',
+                                    borderWidth: 0.2,            // 标注边线线宽，单位px，默认为1
+                                    label: {
+                                        show: true
+                                    }
+                                }
+                            },
+                            label: {
+                                normal: {
+                                    show: true,
+                                    formatter: function (d) {
+                                        return d.name
+                                    }
+                                }
+                            },
+                            data: data21
+                        }
+                    }]
+                });
+                $(window).resize(myChart1.resize);
+                myChart1.resize();
+                window.addEventListener("resize", function () {
+                    myChart1.resize();
+                });
+
+            });
+        });
+    }
+
+
+
+
+
+    function loadTable(provinces) {
+        var url1 = "";
+
+        var carLength = $("#carLength option:selected").val();
+        var times = $("#times option:selected").val();
+        var transportNum = parseInt($("#transportNum").val()) * 365;
+        var warehousing = $("#warehousing").val();
+        var b_goods_size = $("#b_goods_size").val();
+        var m_goods_size = $("#m_goods_size").val();
+        var s_goods_size = $("#s_goods_size").val();
+        var h_price = $("#h_price").val();
+        var m_price = $("#m_price").val();
+        var s_price = $("#s_price").val();
+        var inventory_loss = $("#inventory_loss").val();
+        var managementFee = $("#managementFee").val();
+        var order = $("#order option:selected").val();
+        var goods_num = $("#goods_num").val();
+        // url1 = "/system/point/point/networkplan?provinces="+provinces+
+        //     "&carLength="+carLength+"&transportNum="+transportNum+
+        //     "&warehousing="+warehousing+"&b_goods_size="+b_goods_size+
+        //     "&m_goods_size="+m_goods_size+"&s_goods_size="+s_goods_size+
+        //     "&h_price="+h_price+"&m_price="+m_price+"&s_price="+s_price+
+        //     "&inventory_loss="+inventory_loss+"&times1="+times1+"&times2="+times2+"&times3="+times3+"&times4="+times4+
+        //     "&managementFee="+managementFee+"&times="+times+"&order="+order;
+        //
+        //
+        // onliad(url1);
+        var url2 = "/system/point/point/networkplan1?carLength=" + carLength + "&transportNum=" + transportNum +
+            "&warehousing=" + warehousing + "&b_goods_size=" + b_goods_size +
+            "&m_goods_size=" + m_goods_size + "&s_goods_size=" + s_goods_size +
+            "&h_price=" + h_price + "&m_price=" + m_price + "&s_price=" + s_price +
+            "&inventory_loss=" + inventory_loss +
+            "&managementFee=" + managementFee + "&times=" + times + "&order=" + order + "&goods_num=" + goods_num;
+        loadTable1(url2);
+        $(".fixed-table-loading").hide();
+    }
+
+    function loadTable1(url1) {
+
+        $('#bootstrap-table1').bootstrapTable('destroy');
+        $('#bootstrap-table1').bootstrapTable({
+            method: 'post',
+            url: url1,
+            showLoading: true,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            theadClasses: "thead-dark",
+            showColumns: false,
+            showExport: false,
+            pageNumber: 1, // 初始化加载第一页
+            columns: [
+                {
+                    title: '序号',
+                    align: 'center',
+                    halign: 'center',
+                    formatter: function (value, row, index) {
+                        var option = $("#bootstrap-table1").bootstrapTable('getOptions');
+                        var pageSize = option.pageSize; //获取每页显示的数量
+                        var pageNumber = option.pageNumber; //获取当前是第几页
+                        return pageSize * (pageNumber - 1) + index6 + 1; //返回序号，注意index是从0开始的，所以要加上1
+                    }
+                },
+                {
+                    field: 'city',
+                    title: '仓库所在地址',
+                    halign: "center",
+                },
+                {
+                    field: 'all',
+                    title: '物流总成本'
+                    ,
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(value);
+
+                    }
+                },
+                {
+                    field: 'transportCost',
+                    title: '运输成本',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(value);
+
+                    }
+                },
+                {
+                    field: 'storageCost',
+                    title: '仓储成本',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(value);
+
+                    }
+                },
+                {
+                    field: 'buildCost',
+                    title: '仓库建设成本',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(value);
+
+                    }
+                },
+                {
+                    field: 'inventoryCost',
+                    title: '库存持有成本',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(value);
+
+                    }
+                },
+                {
+                    field: 'throughput_num',
+                    halign: "center",
+                    title: '日出库能力(托)',
+                    formatter: function (value, row, index) {
+                        return parseInt(value / 365);
+
+                    }
+                },
+                {
+                    field: 'order_rate',
+                    halign: "right",
+                    title: '订单满足率',
+                    formatter: function (value, row, index) {
+                        return parseInt(value * 100) / 100 + "%";
+
+                    }
+                },
+                {
+                    field: 'area',
+                    halign: "center",
+                    title: '仓库面积（㎡）'
+                },
+                {
+                    field: 'emp',
+                    halign: "center",
+                    title: '仓储人数'
+                },
+                {
+                    field: 'rate',
+                    halign: "center",
+                    title: '物流费率',
+                    formatter: function (value) {
+                        return parseInt(value * 30000) / 100 + "%";
+                    }
+                },
+                {
+                    field: 'inventory_num',
+                    halign: "center",
+                    title: '平均库存天数',
+                    formatter: function (value, row, index) {
+                        return parseInt(value);
+                    }
+                },
+                {
+                    field: 'storage_area',
+                    halign: "center",
+                    title: '单位面积存量(托)',
+                    formatter: function (value, row, index) {
+                        return parseInt(value) / 100;
+                    }
+                },
+                // {
+                //     field: 'sales_account',
+                //     halign: "center",
+                //     title: '销售额',
+                //     formatter:function(value,row,index){
+                //         return "¥"+int2str(parseInt(value*100)/300);
+                //     }
+                // },
+                // {
+                //     field: 'plat_transport',
+                //     halign: "center",
+                //     title: '单托配送成本',
+                //     formatter:function(value,row,index){
+                //         return "¥"+int2str(parseInt(value));
+                //     }
+                // },
+                // {
+                //     field: 'order_cost',
+                //     halign: "center",
+                //     title: '单托成本',
+                //     formatter:function(value,row,index){
+                //         return "¥"+int2str(parseInt(value));
+                //     }
+                // },
+                {
+                    field: 'order_cost',
+                    halign: "center",
+                    title: '单订单物流成本',
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(parseInt(value * 4));
+                    }
+                },
+                {
+                    field: 'area_cost',
+                    halign: "center",
+                    title: '单位面积物流成本',
+                    formatter: function (value, row, index) {
+                        return "¥" + int2str(parseInt(value));
+                    }
+                }
+            ]
+        });
+        $(window).resize(function () {
+            $('#bootstrap-table1').bootstrapTable('resetView')
+        })
+        $(".fixed-table-loading").hide();
+    }
+
+    // 数字转换成货币格式的字符串，例如把1234567转换成 1,234,567 这样的
+    function int2str(num) {
+        num = parseInt(num);
+        let numberStr = num.toString()
+        let str = numberStr.split('').reverse()
+        for (let i = 0; i < str.length; i++) {
+            if ((i + 1) % 4 === 0) {
+                str.splice(i, 0, ',')
+            }
+        }
+        str.reverse()
+        let handleResult = ''
+        for (let j = 0; j < str.length; j++) {
+            handleResult += str[j]
+        }
+        return handleResult
+    }
+
+    function onliad(url1) {
+        $('#bootstrap-table').bootstrapTable('destroy');
+        $('#bootstrap-table').bootstrapTable({
+            method: 'post',
+            url: url1,
+            showLoading: true,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            showExport: false,
+
+            pageNumber: 1, // 初始化加载第一页
+            columns: [
+                {
+                    field: 'indicators',
+                    title: '指标',
+                    halign: "center",
+                },
+                {
+                    field: 'planA',
+                    title: '方案一',
+                    sortable: true,
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        if (index6 < 5) {
+                            return "¥" + int2str(value);
+                        } else {
+                            return value;
+                        }
+
+                    }
+                },
+                {
+                    field: 'planB',
+                    title: '方案二',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        if (index6 < 5) {
+                            return "¥" + int2str(value);
+                        } else {
+                            return value;
+                        }
+
+                    }
+                },
+                {
+                    field: 'planC',
+                    title: '方案三',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        if (index6 < 5) {
+                            return "¥" + int2str(value);
+                        } else {
+                            return value;
+                        }
+
+                    }
+                },
+                {
+                    field: 'planD',
+                    title: '方案四',
+                    halign: "center",
+                    formatter: function (value, row, index) {
+                        if (index6 < 5) {
+                            return "¥" + int2str(value);
+                        } else {
+                            return value;
+                        }
+
+                    }
+                }]
+        });
+        $('#bootstrap-table').bootstrapTable('insertRow', {
+            row: {
+                index: 5,
+                proName: '',
+                proNo: '',
+                property: '',
+                total: '',
+                unit: '',
+                totalAmount: '',
+                remarks: ''
+
+            }
+        })
+    }
+
+    function loadLine(provinces, num) {
+        $.post("/system/point/point/networkLine", {
+            "provinces": provinces,
+            "num": num,
+            "goods_num": $("#goods_num").val(),
+            "times": $("#times option:selected").val(),
+            "order": $("#order").val(),
+            "carLength": $("#carLength option:selected").val(),
+            "transportNum": parseInt($("#transportNum").val()) * 365,
+            "warehousing": $("#warehousing").val(),
+            "b_goods_size": $("#b_goods_size").val(),
+            "m_goods_size": $("#m_goods_size").val(),
+            "s_goods_size": $("#s_goods_size").val(),
+            "managementFee": $("#managementFee").val(),
+            "h_price": $("#h_price").val(),
+            "m_price": $("#m_price").val(),
+            "l_price": $("#l_price").val(),
+            "inventory_loss": $("#inventory_loss").val(),
+            "managementFee": $("#managementFee").val()
+        }, function (result) {
+            var myChart1 = echarts.init(document.getElementById("chart_7"));
+            //数据
+            var data = result.rows;
+            var XName = []
+            var data1 = [
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+            for (var i = 0; i < data.length; i++) {
+                XName[i] = data[i].city;
+                data1[0][i] = parseInt(parseInt(data[i].all) / 10000);
+                data1[1][i] = parseInt(parseInt(data[i].transportCost) / 10000);
+                data1[2][i] = parseInt(parseInt(data[i].storageCost) / 10000);
+                data1[3][i] = parseInt(parseInt(data[i].inventoryCost) / 10000);
+                data1[4][i] = parseInt(parseInt(data[i].buildCost) / 10000);
+            }
+
+            const colorList = ["#d0fcff", "#9E87FF", '#9a6839', '#fe9a8b', '#F56948', '#9E87FF']
+            option = {
+                // backgroundColor:'rgba(128, 128, 128, 0.0)', //rgba设置透明度0.1
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                legend: {
+                    icon: 'circle',
+                    top: '2%',
+                    itemWidth: 48,
+                    itemGap: 40,
+                    textStyle: {
+                        color: '#eceef3'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        return ' 仓库数量' + ' : ' + params[0].name + '<br/>'
+                            + params[0].seriesName + ' : ' + "¥" + formatNum(parseInt(params[0].value)) + '万<br/>'
+                            + params[1].seriesName + ':' + "¥" + formatNum(parseInt(params[1].value)) + '万<br/>'
+                            + params[2].seriesName + ':' + "¥" + formatNum(parseInt(params[2].value)) + '万<br/>'
+                            + params[3].seriesName + ':' + "¥" + formatNum(parseInt(params[3].value)) + '万<br/>'
+                            + params[4].seriesName + ':' + "¥" + formatNum(parseInt(params[4].value)) + '万';
+                    },
+                    axisPointer: {
+                        label: {
+                            show: true,
+                            backgroundColor: '#fff',
+                            color: '#e8e8e8',
+                            borderColor: 'rgba(0,0,0,0)',
+                            shadowColor: 'rgba(0,0,0,0)',
+                            shadowOffsetY: 0,
+
+                        },
+                        lineStyle: {
+                            width: 0
+                        }
+                    },
+                    backgroundColor: '#fff',
+                    textStyle: {
+                        color: '#5c6c7c'
+                    },
+
+                    // formatter: "{a} : ¥{c}", // 这里是鼠标移上去的显示数据
+                    padding: [10, 10],
+                    extraCssText: 'box-shadow: 1px 0 2px 0 rgba(163,163,163,0.5)'
+                },
+                grid: {
+                    top: "10%",
+                    bottom: "15%"//也可设置left和right设置距离来控制图表的大小
+
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: XName,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#DCE2E8'
+                        }
+                    },
+                    name: '       仓库数量',
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        textStyle: {
+                            color: '#ebeef1'
+                        },
+
+                        // 默认x轴字体大小
+                        fontSize: 12,
+                        // margin:文字到x轴的距离
+                        margin: 20
+                    },
+                    axisPointer: {
+                        label: {
+                            // padding: [11, 5, 7],
+                            padding: [0, 0, 10, 0],
+                            /*
+                除了padding[0]建议必须是0之外，其他三项可随意设置
+
+                和CSSpadding相同，[上，右，下，左]
+
+                如果需要下边线超出文字，设左右padding即可，注：左右padding最好相同
+
+                padding[2]的10:
+
+                10 = 文字距下边线的距离 + 下边线的宽度
+
+                如：UI图中文字距下边线距离为7 下边线宽度为2
+
+                则padding: [0, 0, 9, 0]
+
+                            */
+                            // 这里的margin和axisLabel的margin要一致!
+                            margin: 20,
+
+                            // 移入时的字体大小
+                            fontSize: 12,
+                            backgroundColor: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#fff' // 0% 处的颜色
+                                }, {
+                                    // offset: 0.9,
+                                    offset: 0.86,
+                                    /*
+            0.86 = （文字 + 文字距下边线的距离）/（文字 + 文字距下边线的距离 + 下边线的宽度）
+
+                                    */
+                                    color: '#fff' // 0% 处的颜色
+                                }, {
+                                    offset: 0.86,
+                                    color: '#33c0cd' // 0% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: '#33c0cd' // 100% 处的颜色
+                                }],
+                                global: false // 缺省为 false
+                            }
+                        }
+                    },
+                    boundaryGap: false
+                }],
+                yAxis: [{
+                    type: 'value',
+                    axisTick: {
+                        show: false
+                    },
+                    name: '各细分成本（元）',
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#DCE2E8'
+                        }
+                    },
+
+                    axisLabel: {
+                        show: true,
+                        formatter: "¥{value}万",
+                        textStyle: {
+                            color: '#e3e4ea'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }, {
+                    type: 'value',
+                    name: '总成本（元）',
+                    position: 'right',
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#e4e8e8'
+                        },
+                        show: true,
+                        formatter: "¥{value}万",
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#DCE2E8'
+                        },
+                        formatter: "¥{value}万",
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }],
+                series: [{
+                    name: '总成本',
+                    type: 'line',
+                    data: data1[0],
+                    markPoint: {
+                        label: {
+                            show: true,
+                            formatter: function (params) {
+                                var data = params.data;
+                                var val = parseInt(data.value);
+                                return '￥' + formatNum(val) + '万'
+                            },
+                            borderWidth: 10,
+                            color: '#0eddfd',
+                            padding: 4,
+
+                        },
+                        data: [
+                            {
+                                type: 'min',//最小值
+                            }
+                        ]
+                    },
+                    symbolSize: 1,
+                    yAxisIndex: 1,
+                    symbol: 'circle',
+                    smooth: true,
+
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     width: 2,
+                    //     color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                    //         offset: 1,
+                    //         color: "#9E87FF"
+                    //     },
+                    //         {
+                    //             offset: 0,
+                    //             color: '#fe9a8b'
+                    //         }
+                    //     ]),
+                    //     shadowColor: 'rgba(254,154,139, 0.3)',
+                    //     shadowBlur: 10,
+                    //     shadowOffsetY: 20
+                    // },
+                    itemStyle: {
+                        normal: {
+                            color: colorList[1],
+                            borderColor: colorList[1],
+                            label: {
+                                show: true,
+                                formatter: '¥{c}万',
+                                borderWidth: 10,
+                                color: '#0eddfd',
+                                padding: 4,
+
+                            }
+                        }
+                    }
+                }, {
+                    name: '运输成本',
+                    type: 'line',
+                    data: data1[1],
+                    symbolSize: 1,
+
+                    symbol: 'circle',
+                    smooth: true,
+                    yAxisIndex: 0,
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     width: 1,
+                    //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                    //         offset: 1,
+                    //         color: '#9E87FF'
+                    //     },
+                    //         {
+                    //             offset: 0,
+                    //             color: '#9a6839'
+                    //         }
+                    //     ]),
+                    //     shadowColor: 'rgba(158,135,255, 0.3)',
+                    //     shadowBlur: 10,
+                    //     shadowOffsetY: 20
+                    // },
+                    itemStyle: {
+                        normal: {
+                            color: colorList[2],
+                            borderColor: colorList[2]
+                        }
+                    },
+                }, {
+                    name: '仓储成本',
+                    type: 'line',
+                    data: data1[2],
+                    symbolSize: 1,
+                    symbol: 'circle',
+                    smooth: true,
+                    yAxisIndex: 0,
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     width: 1,
+                    //     color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [{
+                    //         offset: 1,
+                    //         color: '#fe9a8b'
+                    //     },
+                    //         {
+                    //             offset: 0,
+                    //             color: '#5389ea'
+                    //         }
+                    //     ]),
+                    //     shadowColor: '#3daf5d',
+                    //     shadowBlur: 10,
+                    //     shadowOffsetY: 20
+                    // },
+                    itemStyle: {
+                        normal: {
+                            color: colorList[3],
+                            borderColor: colorList[3]
+                        }
+                    }
+                },
+
+                    {
+                        name: '库存持有成本',
+                        type: 'line',
+                        data: data1[3],
+                        symbolSize: 1,
+                        symbol: 'circle',
+                        smooth: true,
+                        yAxisIndex: 0,
+                        showSymbol: false,
+                        // lineStyle: {
+                        //     width: 1 ,
+                        //     color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [{
+                        //         offset: 1,
+                        //         color: '#f56948'
+                        //     },
+                        //         {
+                        //             offset: 0,
+                        //             color: '#78ecc6'
+                        //         }
+                        //     ]),
+                        //     shadowColor: 'rgb(173,143,32)',
+                        //     shadowBlur: 10,
+                        //     shadowOffsetY: 20
+                        // },
+                        itemStyle: {
+                            normal: {
+                                color: colorList[4],
+                                borderColor: colorList[4]
+                            }
+                        }
+                    },
+                    {
+                        name: '仓库建设成本',
+                        type: 'line',
+                        data: data1[4],
+                        symbolSize: 1,
+                        symbol: 'circle',
+                        smooth: true,
+                        yAxisIndex: 0,
+                        showSymbol: false,
+                        // lineStyle: {
+                        //     width: 1,
+                        //     color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [{
+                        //         offset: 0,
+                        //         color: '#d0fcff'
+                        //     },
+                        //         {
+                        //             offset: 1,
+                        //             color: '#e1b8f5'
+                        //         }
+                        //     ]),
+                        //     shadowColor: 'rgba(115,221,255, 0.3)',
+                        //     shadowBlur: 10,
+                        //     shadowOffsetY: 20
+                        // },
+                        itemStyle: {
+                            normal: {
+                                color: colorList[0],
+                                borderColor: colorList[0]
+                            }
+                        }
+                    }
+                ]
+            };
+            loadTable(provinces);
+            myChart1.setOption(option);
+
+        });
+    }
+
+    function formatNum(strNum) {
+        if (strNum.length <= 3) {
+            return strNum;
+        }
+        if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+            return strNum;
+        }
+        var a = RegExp.$1,
+            b = RegExp.$2,
+            c = RegExp.$3;
+        var re = new RegExp();
+        re.compile("(\\d)(\\d{3})(,|$)");
+        while (re.test(b)) {
+            b = b.replace(re, "$1,$2$3");
+        }
+        return a + "" + b + "" + c;
+    }
+
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('EIQ分析')" />
+
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div style="font-size:26px;text-align: center;color: #76838f;" ><h3>PCB分析</h3></div>
+                    <div class="content" style="color: #76838f;">
+                        <div style="line-height: 33px;text-align:left;text-indent:25px">储运单位分析（PCB分析）也称货态分析，即考察配送中心各作业环节的基本储运单位类型（P表示托盘单位、C表示件单位、B表示单品）。不同的储运单位所配备的储存和搬运设备是不同的。</div>
+                        <div style="line-height: 33px;text-align:left;text-indent:25px">配送中心储区是指一个可以独立进行储存或分拣作业的区域，储运模式是指该储区的进货储存单位和分拣出货单位的类型。配送中心的储运模式主要包括P- P、C→C、P→C、C→B和B→B等5种单储运模式以及P→(P、C)、C→(C、B)和P→(P、C、B)等三种复合储运模式，储运模式的选择取决于配送中心订单的订货单位和订货量。根据配送中心的储运模式和物料出货频率即可进行储区配置。</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-title">
+                <h5>单个出库示例表单数据</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">选项1</a>
+                        </li>
+                        <li><a href="#">选项2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content" style="height:300px">
+            <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>单个出库示例表单的物料物流包装单元分析数据用表制作</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">选择：</label>
+
+                                <div class="col-sm-2">
+                                    <label class="control-label">对应表单</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">统计方法</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">选择正确的选项：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s201" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	入库表	</option>
+                                    <option value="2">	出库表	</option>
+                                    <option value="3">	库存表	</option>
+                                    <option value="4">	资源数据表	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s202" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	订单编码	</option>
+                                    <option value="2">	物料数量	</option>
+                                    <option value="3">	订单数量	</option>
+                                    <option value="4">	物料编码	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s203" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	入库数量	</option>
+                                    <option value="2">	库存数量	</option>
+                                    <option value="3">	出库数量	</option>
+                                    <option value="4">	单价	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s204" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	统计周期内物料出库总数量	</option>
+                                    <option value="2">匹配出物料的单品与箱装、箱装与托盘之间的对应物流储运单位的关系	</option>
+                                    <option value="3">	统计周期内物料库存平均数量	</option>
+                                    <option value="4">	统计周期内物料出库平均数量	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>单个示例物料的物流包装单元各单位计算公式</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-1">
+                                    <label class="control-label">物料编码</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">出库数量（个）</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">单品与箱的对应数量关系</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">箱装与托盘的对应数量关系</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">需求数量对应托盘数量（P）</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">需求数量对应对应箱装数量（C）</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">需求数量对应对应单品数量（B）</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-1">
+                                <label class="control-label">4704404</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label">假设数值为N</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label">数值记为A</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label">数值记为B</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s221" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	对【N/(A*B)】的计算数值进行向上取整，取整数值记为M	</option>
+                                    <option value="2">	对【N/(A*B)】的计算数值进行向下取整，取整数值记为M	</option>
+                                    <option value="3">	对【(A*B)/N】的计算数值进行向上取整，取整数值记为M	</option>
+                                    <option value="4">	对【(A*B)/N】的计算数值进行向下取整，取整数值记为M	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s222" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	对【(N-M*A*B)/B】的计算数值进行向下取整,取整数值记为T	</option>
+                                    <option value="2">	对【(N-M*A*B)/A】的计算数值进行向下取整,取整数值记为T	</option>
+                                    <option value="3">	对【N-M*A*B】的计算数值进行向上取整,取整数值记为T	</option>
+                                    <option value="4">	对【N-M*A*B】的计算数值进行向下取整,取整数值记为T	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s223" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	计算【(N-M*A*B)/(T*B)】的数值，并向下取整	</option>
+                                    <option value="2">	计算【(N-M*A*B)/(T*B)】的数值	</option>
+                                    <option value="3">	计算【(N-M*A*B)/(T*B)】的数值，并向上取整	</option>
+                                    <option value="4">	计算【N-M*A*B-T*A】的数值	</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>单个出库示例表单的物料物流包装单元各单位数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table14"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title" >
+                    <h5>单个出库示例表单下物料物流包装单元模式分析</h5>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>P模式</p>
+                            <select  name="z1" id="s1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应托盘数量数值计算非零，或对应箱装和单品数量为零	</option>
+                                <option value="2">	对应托盘数量数值计算非零，且对应箱装和单品数量为零	</option>
+                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
+                                <option value="4">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>C模式</p>
+                            <select  name="y1" id="s2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应托盘数量数值计算非零，且对应箱装和单品数量为零	</option>
+                                <option value="2">	对应箱装数量数值计算非零，或对应托盘和单品数量为零	</option>
+                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
+                                <option value="4">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
+
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>B模式</p>
+                            <select  name="y1" id="s3" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+                                <option value="2">	对应单品数量数值计算非零，或对应托盘箱装件数量为零	</option>
+                                <option value="3">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+                                <option value="4">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>P+C模式</p>
+                            <select  name="y1" id="s4" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+                                <option value="2">	对应托盘和箱装数量数值计算非零，或对应单品数量计算数值为零	</option>
+                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
+                                <option value="4">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>P+B模式</p>
+                            <select  name="y1" id="s5" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应托盘和单品数量数值计算非零，或对应箱装数量计算数值为零	</option>
+                                <option value="2">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
+                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
+                                <option value="4">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>C+B模式</p>
+                            <select  name="y1" id="s6" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应箱装和单品数量数值计算非零，且对应托盘数量计算数值为零	</option>
+                                <option value="2">	对应箱装和单品数量数值计算非零，或对应托盘数量计算数值为零	</option>
+                                <option value="3">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+                                <option value="4">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>P+C+B模式</p>
+                            <select  name="y1" id="s7" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+                                <option value="2">	对应托盘、箱装和单品数量数值计算都为零	</option>
+                                <option value="3">	对应托盘、箱装和单品数量数值计算都非零	</option>
+                                <option value="4">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>单个出库示例表单下物料物流包装单元各单位数值计算与模式判断数据表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+
+    var data1,data2,data3;
+    $.getJSON("../../../file/pcb.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        loadTable();
+        // load1();
+    });
+
+    $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+        var d = result.rows;
+        for(var i=0;i<result.total;i++){
+            $("#"+d[i].opId).val(d[i].opValue);
+        }
+        // submit();
+        submit1();
+        submit8();
+
+    });
+    function addResutl(opId,opValue) {
+      $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+
+    function submit(){
+        var s1 = $('#s201 option:selected').val();
+        var s2 = $('#s202 option:selected').val();
+        var s3 = $('#s203 option:selected').val();
+        var s4 = $('#s204 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#s201').css("background-color","red");
+            setTimeout(function() {
+                $('#s201').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=4){
+            $('#s202').css("background-color","red");
+            setTimeout(function() {
+                $('#s202').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s203').css("background-color","red");
+            setTimeout(function() {
+                $('#s203').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s204').css("background-color","red");
+            setTimeout(function() {
+                $('#s204').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            addResutl("s201",s1);
+            addResutl("s202",s2);
+            addResutl("s203",s3);
+            addResutl("s204",s4);
+            n++;
+            layer.confirm('选择正确！',function(index){
+                layer.msg('选择正确！');
+            });
+        }
+
+    }
+    function submit8(){
+        var s1 = $('#s221 option:selected').val();
+        var s2 = $('#s222 option:selected').val();
+        var s3 = $('#s223 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=2){
+            $('#s221').css("background-color","red");
+            setTimeout(function() {
+                $('#s221').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s222').css("background-color","red");
+            setTimeout(function() {
+                $('#s222').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s223').css("background-color","red");
+            setTimeout(function() {
+                $('#s223').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            addResutl("s221",s1);
+            addResutl("s222",s2);
+            addResutl("s223",s3);
+             n++;
+            loadTable8();
+        }
+
+    }
+    function loadTable8() {
+        var options = {
+            id:"bootstrap-table14",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:data1,
+            height: 400,
+            showHeader: true,
+            columns: [
+                {field:"物料编码",title:"物料编码"},
+                {field:"出库数量（个）：N",title:"出库数量（个）：N"},
+                {field:"单品与箱的对应数量关系：A",title:"单品与箱的对应数量关系：A"},
+                {field:"箱与托盘的对应数量关系：B",title:"箱与托盘的对应数量关系：B"},
+                {field:"A*B",title:"A*B"},
+                {field:"N/(A*B)",title:"N/(A*B)"},
+                {field:"需求数量对应托盘数量（P）",title:"需求数量对应托盘数量（P）"},
+                {field:"N-M*A*B",title:"N-M*A*B"},
+                {field:"(N-M*A*B)/A",title:"(N-M*A*B)/A"},
+                {field:"需求数量对应对应箱装数量（C）",title:"需求数量对应对应箱装数量（C）"},
+                {field:"需求数量对应对应单品数量（B）",title:"需求数量对应对应单品数量（B）"}]
+        };
+        $.table.init(options);
+
+    }
+    function submit1(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s4 = $('#s4 option:selected').val();
+        var s5 = $('#s5 option:selected').val();
+        var s6 = $('#s6 option:selected').val();
+        var s7 = $('#s7 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=2){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=1){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s4').css("background-color","red");
+            setTimeout(function() {
+                $('#s4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=2){
+            $('#s5').css("background-color","red");
+            setTimeout(function() {
+                $('#s5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s6!=1){
+            $('#s6').css("background-color","red");
+            setTimeout(function() {
+                $('#s6').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s7!=3){
+            $('#s7').css("background-color","red");
+            setTimeout(function() {
+                $('#s7').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+            addResutl("s4",s4);
+            addResutl("s5",s5);
+            addResutl("s6",s6);
+            addResutl("s7",s7);
+            n++;
+            load1();
+        }
+
+    }
+    function load1(){
+        var options = {
+            id:"bootstrap-table1",
+            toolbar:null,
+            data:data2,
+            height: 400,
+            showHeader: true,
+            modalName: "【请填写功能名称】",
+            columns: [ [
+                {field:"物料编码",title:"物料编码"},
+                {field:"出库数量对应托盘数量（P）",title:"出库数量对应托盘数量（P）"},
+                {field:"出库数量对应对应箱装数量（C）",title:"出库数量对应对应箱装数量（C）"},
+                {field:"出库数量对应对应单品数量（B）",title:"出库数量对应对应单品数量（B）"},
+                {field:"物料对应出库环节物流包装单元模式判断",title:"物料对应出库环节物流包装单元模式判断"},
+
+            ]]
+        };
+        $.table.init(options);
+    }
+    function loadTable(){
+        var options = {
+            id:"bootstrap-table",
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '出库日期',
+                    title: '出库日期'
+                },
+                {
+                    field: '订单编号',
+                    title: '订单编号'
+                },
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '出库数量（个）',
+                    title: '出库数量（个）'
+                },
+                {
+                    field: '出货单位',
+                    title: '出货单位'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+</script>
+
+</body>
+</html>

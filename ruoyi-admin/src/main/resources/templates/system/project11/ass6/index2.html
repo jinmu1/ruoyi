@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+
+
+    </style>
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">案例企业作业决策优化模拟</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>初始仿真日志表</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table1"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>决策优化后仿真日志表</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table2"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>各类型作业资源利用率统计</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确的选项：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择统计内容</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择统计内容</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择统计内容</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">选择正确步骤</label>
+                            <div class="col-sm-10">
+                                <div  class="row">
+                                    <div class="col-sm-3">
+                                        <select class="type form-control m-b" id="s21" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	统计周期内不同流程下作业人员被占用的数量在整体人员数量中的占比	</option>
+                                            <option value="2">	统计周期内不同流程下不同种类作业人员被占用的时长在整体工作时长中的占比	</option>
+                                            <option value="3">	统计周期内不同流程下作业人员每天不同时刻被占用的平均时长在总时长中的占比	</option>
+                                            <option value="4">	统计周期内不同流程下作业人员每天不同时刻被占用的平均时长在总时长中的占比	</option>
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="router form-control m-b" id="s22" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	统计周期内不同流程下作业设备每天不同时刻被占用的平均数量在总数量中的占比	</option>
+                                            <option value="2">	统计周期内不同流程下作业设备每天不同时刻被占用的平均时长在总时长中的占比	</option>
+                                            <option value="3">	统计周期内不同流程下不同种类作业设施被占用的时长在整体工作时长中的占比	</option>
+                                            <option value="4">	统计周期内不同流程下作业设备被占用的数量在整体工作时间中的占比	</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="router form-control m-b" id="s23" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">	统计周期内不同流程下作业设施每天不同时刻被占用的平均时长在总时长中的占比	</option>
+                                            <option value="2">	统计周期内不同流程下不同种类作业设备被占用的时长在整体工作时长中的占比	</option>
+                                            <option value="3">	统计周期内不同流程下作业设施每天不同时刻被占用的平均数量在总数量中的占比	</option>
+                                            <option value="4">	统计周期内不同流程下作业设施被占用的数量在整体工作时间中的占比	</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit2()" type="button">生成图表</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="pre()">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="next()">下一步</button>
+        </div>
+    </div>
+</div>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>正在加载...</h5>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<th:block th:include="include :: layer-js"/>
+<script th:src="@{/js/plugins/layer/layer.ext.js}"></script>
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+
+    function next(){
+        window.location.href=ctx+"system/project1/ass6/index3";
+    }
+    function pre(){
+        window.location.href=ctx+"system/simu/index8";
+    }
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9;
+    $.getJSON("../../../file/zuoye.json", function (data) {
+        data1=data.data5;
+        data2=data.data6;
+        data3=data.data7;
+        data4=data.data8;
+
+        loadTable1();
+    });
+
+    function loadTable1() {
+        var options = {
+            id:"table1",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [  {
+                field: '入库卸货月台',
+                title: '入库卸货月台'
+            },
+                {
+                    field: '入库理货区',
+                    title: '入库理货区'
+                },
+                {
+                    field: '分拣缓存区',
+                    title: '分拣缓存区'
+                },
+                {
+                    field: '出库理货区',
+                    title: '出库理货区'
+                },
+                {
+                    field: '出库装车月台',
+                    title: '出库装车月台'
+                },
+                {
+                    field: '卸货人员',
+                    title: '卸货人员'
+                },
+                {
+                    field: '理货人员',
+                    title: '理货人员'
+                },
+                {
+                    field: '上架人员',
+                    title: '上架人员'
+                },
+                {
+                    field: '补货人员',
+                    title: '补货人员'
+                },
+                {
+                    field: '分拣人员',
+                    title: '分拣人员'
+                },
+                {
+                    field: '打包人员',
+                    title: '打包人员'
+                },
+                {
+                    field: '装车人员',
+                    title: '装车人员'
+                },
+                {
+                    field: '入库卸货电动叉车',
+                    title: '入库卸货电动叉车'
+                },
+                {
+                    field: '入库上架电动叉车',
+                    title: '入库上架电动叉车'
+                },
+                {
+                    field: '下架分拣电动叉车',
+                    title: '下架分拣电动叉车'
+                },
+                {
+                    field: '出库装车电动叉车',
+                    title: '出库装车电动叉车'
+                }]
+
+        };
+        var options1 = {
+            id:"table2",
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [  {
+                field: '入库卸货月台',
+                title: '入库卸货月台'
+            },
+                {
+                    field: '入库理货区',
+                    title: '入库理货区'
+                },
+                {
+                    field: '分拣缓存区',
+                    title: '分拣缓存区'
+                },
+                {
+                    field: '出库理货区',
+                    title: '出库理货区'
+                },
+                {
+                    field: '出库装车月台',
+                    title: '出库装车月台'
+                },
+                {
+                    field: '卸货人员',
+                    title: '卸货人员'
+                },
+                {
+                    field: '理货人员',
+                    title: '理货人员'
+                },
+                {
+                    field: '上架人员',
+                    title: '上架人员'
+                },
+                {
+                    field: '补货人员',
+                    title: '补货人员'
+                },
+                {
+                    field: '分拣人员',
+                    title: '分拣人员'
+                },
+                {
+                    field: '打包人员',
+                    title: '打包人员'
+                },
+                {
+                    field: '装车人员',
+                    title: '装车人员'
+                },
+                {
+                    field: '入库卸货电动叉车',
+                    title: '入库卸货电动叉车'
+                },
+                {
+                    field: '入库上架电动叉车',
+                    title: '入库上架电动叉车'
+                },
+                {
+                    field: '下架分拣电动叉车',
+                    title: '下架分拣电动叉车'
+                },
+                {
+                    field: '出库装车电动叉车',
+                    title: '出库装车电动叉车'
+                }
+            ]
+
+        };
+
+        $.table.init(options);
+        $.table.init(options1);
+
+    }
+    function submit2(){
+        var x=$("#s21 option:selected").val();
+        var y=$("#s22 option:selected").val();
+        var z=$("#s23 option:selected").val();
+        var m=0;
+        if(x!="2"){
+            $('#s21').css("background-color","red");
+            setTimeout(function() {
+                $('#s21').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="3"){
+            m++;
+            $('#s22').css("background-color","red");
+            setTimeout(function() {
+                $('#s22').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            return;
+        }
+        if(z!="2"){
+            m++;
+            $('#s23').css("background-color","red");
+            setTimeout(function() {
+                $('#s23').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        if (m==0){
+            layer.load('正在生成中....', 5);
+        }
+    }
+
+</script>
+
+</body>
+</html>

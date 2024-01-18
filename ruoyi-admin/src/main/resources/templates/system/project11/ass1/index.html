@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link  href="../../../static/template4/styles/common.css"  th:href="@{/template4/styles/common.css}" rel="stylesheet"/>
+    <script th:src="@{/ajax/libs/report/echarts/echarts-all.min.js?v=4.2.1}"></script>
+    <script th:src="@{/template4/scripts/Plugin/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/bmap.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/echarts-gl.js}"></script>
+    <script th:src="@{/template4/scripts/common.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/laydate/laydate.js}"></script>
+</head>
+<body>
+
+<header class="header left">
+    <div class="left nav">
+        <div class="left nav">
+            <ul>
+                <li></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="header_center left" style="position:relative">
+        <h2><strong>仓储物流场景整体认知</strong></h2>
+    </div>
+    <div style="">
+
+    </div>
+    <div class="right nav text_right">
+        <ul>
+
+        </ul>
+    </div>
+
+</header>
+<!--内容部分-->
+<div class="con left">
+    <div class="div_any">
+        <div class="div_any_title1" ><img  th:src="@{/template4/images/title_1.png}" >1.投入产出类指标</div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title" ><img  th:src="@{/template4/images/title_1.png}" >仓储产出类指标计算内容项目优化前后数值表</div>
+                <div class="table_p">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>指标计算内容项目</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>产品销售金额（元）</td>
+                            <td>966000000</td>
+                            <td>1009823239</td>
+                        </tr>
+                        <tr>
+                            <td>库存金额（元）</td>
+                            <td>309615385</td>
+                            <td>309615385</td>
+                        </tr>
+                        <tr>
+                            <td>仓储总成本（元）</td>
+                            <td>19524000</td>
+                            <td>18334000</td>
+                        </tr>
+                        <tr>
+                            <td>仓储总人数（个）</td>
+                            <td>61</td>
+                            <td>41</td>
+                        </tr>
+                        <tr>
+                            <td>总设施面积（平方米）</td>
+                            <td>36000</td>
+                            <td>36000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class=" left div_any01  ">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓储投入类指标计算</div>
+                <div class="table_p">
+                    <table>
+                        <tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                            <th>优化率</th>
+                        </tr>
+                        <tr>
+                            <td>人员成本占比</td>
+                            <td>61.08%</td>
+                            <td>48.22%</td>
+                            <td>-21.05%</td>
+                        </tr>
+                        <tr>
+                            <td>设备成本占比</td>
+                            <td>7.82%</td>
+                            <td>14.66%</td>
+                            <td>87.36%</td>
+                        </tr>
+                        <tr>
+                            <td>设施成本占比</td>
+                            <td>29.08%</td>
+                            <td>34.29%</td>
+                            <td>17.93%</td>
+                        </tr>
+                        <tr>
+                            <td>其他运营成本占比</td>
+                            <td>2.02%</td>
+                            <td>2.83%</td>
+                            <td>40.05%</td>
+                        </tr>
+                        <tr>
+                            <td>每订单成本</td>
+                            <td>59.98</td>
+                            <td>37.62</td>
+                            <td>-37.29%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" left div_any01  ">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓储产出类指标计算内容</div>
+                <div class="table_p">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>产品销售金额（元）</td>
+                            <td>4200000</td>
+                            <td>57876000</td>
+                        </tr>
+                        <tr>
+                            <td>库存金额（元）</td>
+                            <td>1346153</td>
+                            <td>2345163</td>
+                        </tr>
+                        <tr>
+                            <td>仓储总成本（元）</td>
+                            <td>15848000</td>
+                            <td>13438000</td>
+                        </tr>
+                        <tr>
+                            <td>仓储总人数（个）</td>
+                            <td>121</td>
+                            <td>81</td>
+                        </tr>
+                        <tr>
+                            <td>总设施面积（平方米）</td>
+                            <td>12000</td>
+                            <td>12000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="right div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓储产出类指标计算</div>
+                <div class="table_p">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th rowspan="2">指标</th>
+                            <th colspan="2">优化前</th>
+                            <th colspan="2">优化后</th>
+                            <th rowspan="2">优化率</th>
+                        </tr>
+                        <tr>
+                            <th>数值</th>
+                            <th>单位</th>
+                            <th>数值</th>
+                            <th>单位</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>单位成本营业额贡献值</td>
+                            <td>0.27</td>
+                            <td>元/元</td>
+                            <td>4.31</td>
+                            <td>元/元</td>
+                            <td>1525%</td>
+                        </tr>
+                        <tr>
+                            <td>单位成本库存金额</td>
+                            <td>0.08</td>
+                            <td>元/元</td>
+                            <td>0.17</td>
+                            <td>元/元</td>
+                            <td>105%</td>
+                        </tr>
+                        <tr>
+                            <td>人均产值</td>
+                            <td>34710.74</td>
+                            <td>元/人</td>
+                            <td>714518.52</td>
+                            <td>元/人</td>
+                            <td>1958%</td>
+                        </tr>
+                        <tr>
+                            <td>单位面积产值</td>
+                            <td>350.00</td>
+                            <td>元/平方米</td>
+                            <td>4823.00</td>
+                            <td>元/平方米</td>
+                            <td>1278%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="div_any">
+        <div class="div_any_title1" ><img  th:src="@{/template4/images/title_1.png}" >2.能力类指标</div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title" ><img  th:src="@{/template4/images/title_1.png}">仓储人员处理能力类指标</div>
+                <div class="table_p">
+                    <table>
+                        <tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        <tr>
+                            <td>仓储吞吐量（托）</td>
+                            <td>32351245</td>
+                            <td>39344543</td>
+                        </tr>
+                        <tr>
+                            <td>仓储处理订单量（个）</td>
+                            <td>264212</td>
+                            <td>357243</td>
+                        </tr>
+                        <tr>
+                            <td>仓储总人数（个）</td>
+                            <td>121</td>
+                            <td>81</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" left div_any01  ">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓储人员处理能力类指标</div>
+                <div class="table_p">
+                    <table>
+                        <tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                            <th>优化率</th>
+                        </tr>
+                        <tr>
+                            <td>人均处理物流量</td>
+                            <td>267365.66</td>
+                            <td>485735.10</td>
+                            <td>81.67%</td>
+                        </tr>
+                        <tr>
+                            <td>人均处理订单量</td>
+                            <td>2183.57</td>
+                            <td>4410.41</td>
+                            <td>101.98%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" left div_any01  ">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓库能力类指标计算内容</div>
+                <div class="table_p">
+                    <table>
+                        <tr>
+                            <th>各指标计算内容项目</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        <tr>
+                            <td>仓储总吞吐量（托）</td>
+                            <td>3 2351245</td>
+                            <td>39344543</td>
+                        </tr>
+                        <tr>
+                            <td>周期内仓储总吞吐量（托）</td>
+                            <td>5318013</td>
+                            <td>8782143</td>
+                        </tr>
+                        <tr>
+                            <td>周期内库存总物流数量（箱）</td>
+                            <td>10368988</td>
+                            <td>16334548</td>
+                        </tr>
+                        <tr>
+                            <td>总设施面积（平方米）</td>
+                            <td>12000</td>
+                            <td>12000</td>
+                        </tr>
+                        <tr>
+                            <td>周期天数（天）</td>
+                            <td>60</td>
+                            <td>60</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="right div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">仓库能力类指标计算内容</div>
+                <div class="table_p">
+                    <table>
+                        <tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                            <th>优化率</th>
+                        </tr>
+                        <tr>
+                            <td>单位成本营业额贡献值</td>
+                            <td>0.27</td>
+                            <td>4.31</td>
+                            <td>1525.13%</td>
+                        </tr>
+                        <tr>
+                            <td>单位成本库存金额</td>
+                            <td>0.08</td>
+                            <td>0.17</td>
+                            <td>105.46%</td>
+                        </tr>
+                        <tr>
+                            <td>人均产值</td>
+                            <td>34710.74</td>
+                            <td>714518.52</td>
+                            <td>1958.49%</td>
+                        </tr>
+                        <tr>
+                            <td>单位面积产值</td>
+                            <td>350.00</td>
+                            <td>4823.00</td>
+                            <td>1278.00%</td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="div_any">
+        <div class="div_any_title1" ><img  th:src="@{/template4/images/title_1.png}" >3.效率类指标</div>
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title" ><img  th:src="@{/template4/images/title_1.png}" >库内设施类指标计算内容项目</div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>各指标计算内容项目</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>存储区面积（平方米）</td>
+                            <td>24500</td>
+                            <td>24500</td>
+                        </tr>
+                        <tr>
+                            <td>缓存区面积 （平方米）</td>
+                            <td>7800</td>
+                            <td>7800</td>
+                        </tr>
+                        <tr>
+                            <td>仓储通道总面积 （平方米）</td>
+                            <td>3600</td>
+                            <td>3600</td>
+                        </tr>
+                        <tr>
+                            <td>仓库总面积（平方米）</td>
+                            <td>36000</td>
+                            <td>36000</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title" > <img  th:src="@{/template4/images/title_1.png}" >库内设施类指标计算</div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>指标</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                            <th>提升幅度</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>库内存储区面积占比</td>
+                            <td>68.06%</td>
+                            <td>68.06%</td>
+                            <td>0.00%</td>
+                        </tr>
+                        <tr>
+                            <td>库内缓存区面积占比</td>
+                            <td>21.67%</td>
+                            <td>21.67%</td>
+                            <td>0.00%</td>
+                        </tr>
+                        <tr>
+                            <td>库内通道面积占比</td>
+                            <td>10.00%</td>
+                            <td>10.00%</td>
+                            <td>0.00%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" left div_any02  ">
+            <div class="div_any_child div_height">
+                <div class="div_any_title any_title_width"><img th:src="@{/template4/images/title_3.png}">企业三维场景 </div>
+                <iframe src="http://lpp.glc360.com/system/project1/ass1/demo" style="width:97.5%;height:95%;display: inline-block;padding-left: 1.25%;padding-top:2.2%"></iframe>
+            </div>
+        </div>
+        <div class="right div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">一天中装卸位作业效率计算内容项目</div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>各指标计算内容项目</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>一天中装卸作业总时间（小时）</td>
+                            <td>75</td>
+                            <td>60</td>
+                        </tr>
+                        <tr>
+                            <td>装卸位数量（个）</td>
+                            <td>10</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>规定装卸位可工作时间（小时）</td>
+                            <td>8</td>
+                            <td>8</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><img th:src="@{/template4/images/title_3.png}">一天中装卸位作业效率</div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>各指标计算内容项目</th>
+                            <th>优化前数值</th>
+                            <th>优化后数值</th>
+                            <th>提升幅度</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>一天中装卸位利用率</td>
+                            <td>93.75%</td>
+                            <td>75.00%</td>
+                            <td>-18.75%</td>
+                        </tr>
+                        <tr>
+                            <td>一天中装卸位闲置率</td>
+                            <td>6.25%</td>
+                            <td>25.00%</td>
+                            <td>18.75%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="div_any">
+        <div class="con left" style="width:50%;">
+            <div class="left div_any01" style="width:100%;">
+                <div class="div_any_child" style="width:98%;position:relative;height: 420px;">
+                    <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">一天中仓储人员作业效率类计算内容</div>
+                    <div   style="width: 45%;display: inline-block;height: 400px;margin-top: 15px;">
+                        <div class="table_p">
+                            <table>
+                                <thead><tr>
+                                    <th>各指标计算内容项目</th>
+                                    <th>优化前数值</th>
+                                    <th>优化后数值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>进向工作人员数量（个）</td>
+                                    <td>15</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>出向工作人员数量（个）</td>
+                                    <td>8</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中人员在进向作业总时间（小时）</td>
+                                    <td>110</td>
+                                    <td>50</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中人员在出向作业总时间（小时）</td>
+                                    <td>50</td>
+                                    <td>26</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中规定人员可工作时间（小时）</td>
+                                    <td>8</td>
+                                    <td>8</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="lineChart1t"  style="width: 52%;height: 100%;display: inline-block;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="con left" style="width:50%;">
+            <div class="left div_any01" style="width:100%;">
+                <div class="div_any_child" style="width:98%;position:relative;height: 420px;">
+                    <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">一天中仓储人员作业效率类指标</div>
+                    <div  style="width: 45%;display: inline-block;height: 400px;margin-top: 15px;">
+                        <div class="table_p">
+                            <table>
+                                <thead><tr>
+                                    <th>各指标计算内容项目</th>
+                                    <th>优化前数值</th>
+                                    <th>优化后数值</th>
+                                    <th>提升幅度</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>一天中进向人员利用率</td>
+                                    <td>91.67%</td>
+                                    <td>78.13%</td>
+                                    <td>-13.54%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中进向人员空闲率</td>
+                                    <td>8.33%</td>
+                                    <td>21.88%</td>
+                                    <td>13.54%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中出向人员利用率</td>
+                                    <td>78.13%</td>
+                                    <td>81.25%</td>
+                                    <td>3.13%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中出向人员空闲率</td>
+                                    <td>21.88%</td>
+                                    <td>18.75%</td>
+                                    <td>-3.13%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="lineChart2t"  style="width: 52%;height: 100%;display: inline-block;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="con left" style="width:50%;">
+            <div class="left div_any01" style="width:100%;">
+                <div class="div_any_child" style="width:98%;position:relative;height: 420px;">
+                    <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">一天中仓储作业设备作业效率类指标</div>
+                    <div  style="width: 45%;display: inline-block;height: 400px;margin-top: 15px;">
+                        <div class="table_p">
+                            <table>
+                                <thead><tr>
+                                    <th>各指标计算内容项目</th>
+                                    <th>优化前数值</th>
+                                    <th>优化后数值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>搬运设备数量（个）</td>
+                                    <td>6</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>分拣设备数量（个）</td>
+                                    <td>5</td>
+                                    <td>13</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中搬运设备作业总时间 （小时）</td>
+                                    <td>45</td>
+                                    <td>93</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中分拣设备作业总时间 （小时）</td>
+                                    <td>38</td>
+                                    <td>79</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中规定搬运活动可工作时间（小时）</td>
+                                    <td>8</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中规定分拣活动可工作时间（小时）</td>
+                                    <td>8</td>
+                                    <td>8</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="lineChart3t"  style="width: 52%;height: 100%;display: inline-block;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="con left" style="width:50%;">
+            <div class="left div_any01" style="width:100%;">
+                <div class="div_any_child" style="width:98%;position:relative;height: 420px;">
+                    <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">一天中仓储作业设备作业效率类指标</div>
+                    <div  style="width: 45%;display: inline-block;height: 400px;margin-top: 15px;">
+                        <div class="table_p">
+                            <table>
+                                <thead><tr>
+                                    <th>各指标计算内容项目</th>
+                                    <th>优化前数值</th>
+                                    <th>优化后数值</th>
+                                    <th>提升幅度</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>一天中装卸设备利用率</td>
+                                    <td>93.75%</td>
+                                    <td>77.50%</td>
+                                    <td>-16.25%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中装卸设备闲置率</td>
+                                    <td>6.25%</td>
+                                    <td>22.50%</td>
+                                    <td>16.25%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中分拣设备利用率</td>
+                                    <td>95.00%</td>
+                                    <td>75.96%</td>
+                                    <td>-19.04%</td>
+                                </tr>
+                                <tr>
+                                    <td>一天中分拣设备闲置率</td>
+                                    <td>5.00%</td>
+                                    <td>24.04%</td>
+                                    <td>19.04%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="lineChart4t"  style="width: 52%;height: 100%;display: inline-block;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var myChart = echarts.init(document.getElementById('lineChart1t'));
+    myChart.setOption({
+
+        title:[
+            {text:"优化前后一天中进向人员工作忙闲比",x: 'center', y: '11%',textStyle:{fontSize:"17",color:"white"}},
+            {text:"优化前",x: '10%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+            {text:"优化后",x: '60%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+        ],
+
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '订单数量',
+            type: 'pie',
+            radius: '40%',
+            center: ['25%', '45%'],
+            clockwise: false,
+            data: [{
+                value: 91.67,
+                name: '忙碌占比'
+            }, {
+                value: 8.33,
+                name: '空闲占比'
+            },
+            ],
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#999',
+                        fontSize: 12,
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                },
+                emphasis: {
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        },
+            {
+                name: '忙闲比',
+                type: 'pie',
+                radius: '40%',
+                center: ['70%', '45%'],
+                clockwise: false,
+                data: [{
+                    value: 78,
+                    name: '忙碌占比'
+                }, {
+                    value: 21,
+                    name: '空闲占比'
+                }, ],
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#110',
+                            fontSize: 12,
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderWidth: 4,
+                        borderColor: '#ffffff',
+                    },
+                    emphasis: {
+                        borderWidth: 0,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+
+        ],
+        color: [
+            '#00acee',
+            '#52cdd5',
+            '#79d9f1',
+            '#a7e7ff',
+            '#c8efff'
+        ],
+
+    })
+    var myChart = echarts.init(document.getElementById('lineChart2t'));
+    myChart.setOption({
+
+        title:[
+            {text:"优化前后一天中出向人员工作忙闲比",x: 'center', y: '11%',textStyle:{fontSize:"17",color:"white"}},
+            {text:"优化前",x: '10%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+            {text:"优化后",x: '60%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+        ],
+
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '订单数量',
+            type: 'pie',
+            radius: '40%',
+            center: ['25%', '45%'],
+            clockwise: false,
+            data: [{
+                value: 78,
+                name: '忙碌占比'
+            }, {
+                value: 21,
+                name: '空闲占比'
+            },
+            ],
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#999',
+                        fontSize: 12,
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                },
+                emphasis: {
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        },
+            {
+                name: '忙闲比',
+                type: 'pie',
+                radius: '40%',
+                center: ['70%', '45%'],
+                clockwise: false,
+                data: [{
+                    value: 81,
+                    name: '忙碌占比'
+                }, {
+                    value: 18,
+                    name: '空闲占比'
+                }, ],
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#110',
+                            fontSize: 12,
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderWidth: 4,
+                        borderColor: '#ffffff',
+                    },
+                    emphasis: {
+                        borderWidth: 0,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+
+        ],
+        color: [
+            '#00acee',
+            '#52cdd5',
+            '#79d9f1',
+            '#a7e7ff',
+            '#c8efff'
+        ],
+
+    })
+    var myChart = echarts.init(document.getElementById('lineChart3t'));
+    myChart.setOption({
+
+        title:[
+            {text:"一天中装卸设备工作忙闲比",x: 'center', y: '11%',textStyle:{fontSize:"17",color:"white"}},
+            {text:"优化前",x: '10%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+            {text:"优化后",x: '60%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+        ],
+
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '订单数量',
+            type: 'pie',
+            radius: '40%',
+            center: ['25%', '45%'],
+            clockwise: false,
+            data: [{
+                value: 93.75,
+                name: '忙碌占比'
+            }, {
+                value: 6.25,
+                name: '空闲占比'
+            },
+            ],
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#999',
+                        fontSize: 12,
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                },
+                emphasis: {
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        },
+            {
+                name: '忙闲比',
+                type: 'pie',
+                radius: '40%',
+                center: ['70%', '45%'],
+                clockwise: false,
+                data: [{
+                    value: 77,
+                    name: '忙碌占比'
+                }, {
+                    value: 23,
+                    name: '空闲占比'
+                }, ],
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#110',
+                            fontSize: 12,
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderWidth: 4,
+                        borderColor: '#ffffff',
+                    },
+                    emphasis: {
+                        borderWidth: 0,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+
+        ],
+        color: [
+            '#00acee',
+            '#52cdd5',
+            '#79d9f1',
+            '#a7e7ff',
+            '#c8efff'
+        ],
+
+    })
+    var myChart = echarts.init(document.getElementById('lineChart4t'));
+    myChart.setOption({
+
+        title:[
+            {text:"一天中分拣设备工作忙闲比",x: 'center', y: '11%',textStyle:{fontSize:"17",color:"white"}},
+            {text:"优化前",x: '10%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+            {text:"优化后",x: '60%', y: '15%',textStyle:{fontSize:"14",color:"white"}},
+        ],
+
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '订单数量',
+            type: 'pie',
+            radius: '40%',
+            center: ['25%', '45%'],
+            clockwise: false,
+            data: [{
+                value: 95,
+                name: '忙碌占比'
+            }, {
+                value: 5,
+                name: '空闲占比'
+            },
+            ],
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#999',
+                        fontSize: 12,
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                },
+                emphasis: {
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        },
+            {
+                name: '忙闲比',
+                type: 'pie',
+                radius: '40%',
+                center: ['70%', '45%'],
+                clockwise: false,
+                data: [{
+                    value: 76,
+                    name: '忙碌占比'
+                }, {
+                    value: 24,
+                    name: '空闲占比'
+                }, ],
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#110',
+                            fontSize: 12,
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        borderWidth: 4,
+                        borderColor: '#ffffff',
+                    },
+                    emphasis: {
+                        borderWidth: 0,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+
+        ],
+        color: [
+            '#00acee',
+            '#52cdd5',
+            '#79d9f1',
+            '#a7e7ff',
+            '#c8efff'
+        ],
+
+    })
+</script>
+
+</html>

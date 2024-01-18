@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('ABC分析')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h3></h3>
+            </div>
+            <div class="ibox-content">
+                <div style="font-size:26px;text-align: center">ABC分类</div>
+                <div style="height: 17px;"></div>
+                <div style="line-height: 33px;">ABC分类法又称帕累托分类法，即所谓“关键的少数和一般的多数”的哲理，也就是我们平时所提到的80-20法则。ABC分类法的核心思想是在决定一个事物的众多因素中分清主次，识别出少数的但对事物起决定作用的关键因素和种类繁多的但对事物影响极小的次要因素。ABC分类法基本原理，是运用数理统计的方法，对种类繁多的各种事物属性或所占权重不同要求，进行统计、排列和分类，划分为A、B、C部分，分别给予重点、一般、次要等不同程度的相应管理。</div>
+<!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ABC分类法的作用</div>-->
+<!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、优化库存结构。</div>-->
+<!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、压缩库存总量，减少库存资金，加快物资流通和资金周转速度。</div>-->
+<!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、减少管理工作量。</div>-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content fadeInRight">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="btn-group-sm" id="toolbar" role="group">
+            </div>
+            <table id="bootstrap-table" data-show-export="true"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h3>以平均库存占用资金为主要分类依据的物料ABC分类——数据用表制作步骤</h3>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确的制表顺序：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-2">
+                                    <label class="control-label">第一步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第二步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第三步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第四步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第五步</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">第六步</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确步骤</label>
+
+                            <div class="col-sm-10">
+                                <div id="element" class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s1" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算每种物料的平均资金占用额</option>
+                                            <option value="2">计算每种物料的平均出库量</option>
+                                            <option value="3">计算每种物料的销售单价占用额</option>
+                                            <option value="4">计算每种物料的平均库存量</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s2" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">将每种物料按照平均库存量进行降序排序</option>
+                                            <option value="2">将每种物料按照平均库存资金占用额进行降序排序</option>
+                                            <option value="3">将每种物料按照销售单价进行升序排序</option>
+                                            <option value="4">将每种物料按照平均库存资金占用额进行升序排序</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s3" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">按照排序计算对应物料平均库存资金的累乘计额</option>
+                                            <option value="2">按照排序计算对应物料平均库存量的累加计额</option>
+                                            <option value="3">按照排序计算对应物料出库频次的累加计额</option>
+                                            <option value="4">按照排序计算对应物料平均库存资金的累加计额</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s4" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料平均库存资金在所有物料平均库存资金总占用额中的占比</option>
+                                            <option value="2">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                            <option value="3">计算排序后对应物料平均出库量在所有物料出库量中的占比</option>
+                                            <option value="4">计算排序后对应物料平均库存资金累加计额在所有物料平均库存资金占用总和中的占比</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s5" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后每种物料的累乘品目数</option>
+                                            <option value="2">计算排序后每种物料的累加品目数</option>
+                                            <option value="3">计算每种物料的出库频次</option>
+                                            <option value="4">计算每种物料的出库量</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s6" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料的累加计品目数在总品目数中的百分比</option>
+                                            <option value="2">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                            <option value="3">计算排序后对应物料平均出库量在所有物料出库量总和中的占比</option>
+                                            <option value="4">计算排序后对应物料的累乘计品目数在总品目数乘积中的百分比</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内平均库存资金占用维度下物料ABC分类数据分析用表</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="bootstrap-table5"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h3>周期内平均库存资金占用维度下物料ABC分类分析数据图表制作</h3>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <div class="panel panel-bordered">
+
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x" id="x" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编码'  >物料编码</option>
+                                <option  value='销售单价（元/件）'  >销售单价（元/件）</option>
+                                <option  value='平均库存（件/月）'  >平均库存（件/月）</option>
+                                <option  value='平均资金占用额（元）'  >平均资金占用额（元）</option>
+                                <option  value='平均资金占用额累计（元）'  >平均资金占用额累计（元）</option>
+                                <option  value='平均资金占用额累计百分比'  >平均资金占用额累计百分比</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y" id="y" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编码'  >物料编码</option>
+                                <option  value='销售单价（元/件）'  >销售单价（元/件）</option>
+                                <option  value='平均库存（件/月）'  >平均库存（件/月）</option>
+                                <option  value='平均资金占用额（元）'  >平均资金占用额（元）</option>
+                                <option  value='平均资金占用额累计（元）'  >平均资金占用额累计（元）</option>
+                                <option  value='平均资金占用额累计百分比'  >平均资金占用额累计百分比</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                                <button class="btn btn-primary" onclick="reloadX()" type="button">提交</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内平均库存资金占用维度下物料ABC分类分析数据图表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:400px">
+                    <div class="echarts" id="abc1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内物料出库频次分析基础数据表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+
+                <div class="ibox-content" style="height:700px">
+
+                    <table class="col-sm-12 select-table table-striped"
+                           id="bootstrap-table3" >
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库频次维度下物料ABC分类分析数据分析用表制作</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确的制表顺序：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-2">
+                                    <label class="control-label">第一步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第二步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第三步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第四步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第五步</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">第六步</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确步骤</label>
+
+                            <div class="col-sm-10">
+                                <div id="element1" class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s11" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算每种物料的销售单价占用额</option>
+                                            <option value="2">计算每种物料的平均库存量</option>
+                                            <option value="3">计算每种物料的平均出库量</option>
+                                            <option value="4">统计每种物料在周期内的出库频次</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s12" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">将每种物料按照平均库存量进行降序排序</option>
+                                            <option value="2">将每种物料按照平均库存资金占用额进行升序排序</option>
+                                            <option value="3">将每种物料按照周期内出库频次进行降序排序</option>
+                                            <option value="4">将每种物料按照销售单价进行升序排序</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s13" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">按照排序计算对应物料出库频次的累乘计额</option>
+                                            <option value="2">按照排序计算对应物料平均库存量的累加计额</option>
+                                            <option value="3">按照排序计算对应物料出库频次的累加计额</option>
+                                            <option value="4">按照排序计算对应物料平均库存资金的累加计额</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s14" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料平均库存资金累加计额在所有物料平均库存资金占用总和中的占比</option>
+                                            <option value="2">计算排序后对应物料出库频次累加计额在所有物料出库频次总和中的占比</option>
+                                            <option value="3">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                            <option value="4">计算排序后对应物料出库量累加计额在所有物料出库量总和中的占比</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s15" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算每种物料的出库频次</option>
+                                            <option value="2">计算排序后每种物料的累乘品目数</option>
+                                            <option value="3">计算每种物料的出库量</option>
+                                            <option value="4">计算排序后每种物料的累加品目数</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s16" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料平均出库量在所有物料出库量总和中的占比</option>
+                                            <option value="2">计算排序后对应物料的累乘计品目数在总品目数乘积中的百分比</option>
+                                            <option value="3">计算排序后对应物料的累加计品目数在总品目数中的百分比</option>
+                                            <option value="4">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库频次维度下物料ABC分类分析数据分析用表</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="bootstrap-table7"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库频次维度下物料ABC分类分析数据图表制作</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x1" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编号'  >物料编号</option>
+                                <option  value='出库频次'  >出库频次</option>
+                                <option  value='累计出库频次'  >累计出库频次</option>
+                                <option  value='累计出库频次百分比' >累计出库频次百分比</option>
+                                <option  value='物料累计品目数'  >物料累计品目数</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编号'  >物料编号</option>
+                                <option  value='出库频次'  >出库频次</option>
+                                <option  value='累计出库频次'  >累计出库频次</option>
+                                <option  value='累计出库频次百分比' >累计出库频次百分比</option>
+                                <option  value='物料累计品目数'  >物料累计品目数</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                                <button class="btn btn-primary" onclick="reloadX3()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库频次维度下物料ABC分类分析数据图表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="abc2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内物料出库数量分析基础数据表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+
+                    <table class="col-sm-12 select-table table-striped"
+                           id="bootstrap-table4" >
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库数量维度下物料ABC分类分析数据分析用表制作</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确的制表顺序：</label>
+                            <div class="col-sm-10">
+                                <div class="col-sm-2">
+                                    <label class="control-label">第一步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第二步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第三步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第四步</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">第五步</label>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="control-label">第六步</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">选择正确步骤</label>
+
+                            <div class="col-sm-10">
+                                <div id="element2" class="row">
+                                    <div class="col-sm-2">
+                                        <select class="type form-control m-b" id="s21" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算每种物料的销售单价占用额</option>
+                                            <option value="2">计算每种物料的平均库存量</option>
+                                            <option value="3">统计每种物料在周期内的出库量</option>
+                                            <option value="4">计算每种物料的销售单价</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s22" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">将每种物料按照销售单价进行升序排序</option>
+                                            <option value="2">将每种物料按照周期内出库量进行降序排序</option>
+                                            <option value="3">将每种物料按照平均库存量进行降序排序</option>
+                                            <option value="4">将每种物料按照平均库存资金占用额进行升序排序</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s23" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">按照排序计算对应物料出库量的累加计额</option>
+                                            <option value="2">按照排序计算对应物料平均库存资金的累乘计额</option>
+                                            <option value="3">按照排序计算对应物料平均库存量的累加计额</option>
+                                            <option value="4">按照排序计算对应物料销售单价的累乘计额</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s24" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料出库频次累加计额在所有物料出库频次总和中的占比</option>
+                                            <option value="2">计算排序后对应物料出库量累加计额在所有物料出库量总和中的占比</option>
+                                            <option value="3">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                            <option value="4">计算排序后对应物料平均库存资金在所有物料平均库存资金总占用额中的占比</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s25" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后每种物料的累乘品目数</option>
+                                            <option value="2">计算每种物料的出库量</option>
+                                            <option value="3">计算排序后每种物料的累加品目数</option>
+                                            <option value="4">计算每种物料的出库频次</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="router form-control m-b" id="s26" data-first-title="请选择">
+                                            <option value="">请选择</option>
+                                            <option value="1">计算排序后对应物料平均出库量在所有物料出库量总和中的占比</option>
+                                            <option value="2">计算排序后对应物料平均库存量在所有物料平均库存量中的累乘计额占比</option>
+                                            <option value="3">计算排序后对应物料的累加计品目数在总品目数中的百分比</option>
+                                            <option value="4">计算排序后对应物料的累乘计品目数在总品目数乘积中的百分比</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库数量维度下物料ABC分类分析数据分析用表</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="bootstrap-table8"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库数量维度下物料ABC分类分析数据图表制作</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>X轴</p>
+                            <select  name="x2" id="x2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编码'  >物料编码</option>
+                                <option  value='物料描述'  >物料描述</option>
+                                <option  value='出库量' >出库量</option>
+                                <option  value='累计出库量'  >累计出库量</option>
+                                <option  value='累计出库量百分比'  >累计出库量百分比</option>
+                                <option  value='物料累计品目数'  >物料累计品目数</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y2" id="y2" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option  value='物料编码'  >物料编码</option>
+                                <option  value='物料描述'  >物料描述</option>
+                                <option  value='出库量' >出库量</option>
+                                <option  value='累计出库量'  >累计出库量</option>
+                                <option  value='累计出库量百分比'  >累计出库量百分比</option>
+                                <option  value='物料累计品目数'  >物料累计品目数</option>
+                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                                <button class="btn btn-primary" onclick="reloadX4()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>周期内出库数量维度下物料ABC分类分析数据图表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项1</a>
+                                </li>
+                                <li><a href="#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="abc3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: jquery-cxselect-js" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var data,data1,data2,data3,data4;
+    var total =0;
+    var n=0;
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    $.getJSON("../../../file/abc.json", function (data) {
+        data1=data.data1;
+        data2=data.data2;
+        data3=data.data3;
+        data4=data.data4;
+        data5=data.data5;
+        loadTable7();
+        load5();
+        load7();
+
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            submit();
+            submit1();
+            submit2();
+            reloadX();
+            reloadX3();
+            reloadX4();
+        });
+        // load3();
+        // load6();
+        // load8();
+        // loadTable6();
+        // loadTable7();
+        // loadTable6();
+        // loadTable8();
+        // loadTable9();
+    });
+
+
+    function submit(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s4 = $('#s4 option:selected').val();
+        var s5 = $('#s5 option:selected').val();
+        var s6 = $('#s6 option:selected').val();
+        var m = 0;
+        total++;
+        if(s1!=1){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+
+        }
+        if(s3!=4){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=4){
+            $('#s4').css("background-color","red");
+            setTimeout(function() {
+                $('#s4').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=2){
+            $('#s5').css("background-color","red");
+            setTimeout(function() {
+                $('#s5').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+
+        }
+        if(s6!=1){
+            $('#s6').css("background-color","red");
+            setTimeout(function() {
+                $('#s6').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+
+        }
+        if(m==0){
+            addResutl("s1",s1);
+            addResutl("s2",s2);
+            addResutl("s3",s3);
+            addResutl("s4",s4);
+            addResutl("s5",s5);
+            addResutl("s6",s6);
+            n++;
+            loadTable6();
+        }
+
+    }
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function submit1(){
+        var s1 = $('#s11 option:selected').val();
+        var s2 = $('#s12 option:selected').val();
+        var s3 = $('#s13 option:selected').val();
+        var s4 = $('#s14 option:selected').val();
+        var s5 = $('#s15 option:selected').val();
+        var s6 = $('#s16 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=4){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s13').css("background-color","red");
+            setTimeout(function() {
+                $('#s13').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s14').css("background-color","red");
+            setTimeout(function() {
+                $('#s14').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=4){
+            $('#s15').css("background-color","red");
+            setTimeout(function() {
+                $('#s15').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s6!=3){
+            $('#s16').css("background-color","red");
+            setTimeout(function() {
+                $('#s16').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            addResutl("s11",s1);
+            addResutl("s12",s2);
+            addResutl("s13",s3);
+            addResutl("s14",s4);
+            addResutl("s15",s5);
+            addResutl("s16",s6);
+            n++;
+            loadTable8();
+        }
+
+    }
+    function submit2(){
+        var s1 = $('#s21 option:selected').val();
+        var s2 = $('#s22 option:selected').val();
+        var s3 = $('#s23 option:selected').val();
+        var s4 = $('#s24 option:selected').val();
+        var s5 = $('#s25 option:selected').val();
+        var s6 = $('#s26 option:selected').val();
+        total++;
+        var m = 0;
+        if(s1!=3){
+            $('#s21').css("background-color","red");
+            setTimeout(function() {
+                $('#s21').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s22').css("background-color","red");
+            setTimeout(function() {
+                $('#s22').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=1){
+            $('#s23').css("background-color","red");
+            setTimeout(function() {
+                $('#s23').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s24').css("background-color","red");
+            setTimeout(function() {
+                $('#s24').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s5!=3){
+            $('#s25').css("background-color","red");
+            setTimeout(function() {
+                $('#s25').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s6!=3){
+            $('#s26').css("background-color","red");
+            setTimeout(function() {
+                $('#s26').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        n=n+m;
+        if(m==0){
+            addResutl("s21",s1);
+            addResutl("s22",s2);
+            addResutl("s23",s3);
+            addResutl("s24",s4);
+            addResutl("s25",s5);
+            addResutl("s26",s6);
+            n++;
+            loadTable9();
+        }
+
+    }
+    function reloadX() {
+        var x=$("#x option:selected").val();
+        var y=$("#y option:selected").val();
+        total++;
+        var m=0;
+        if(x!="物料累计品目数百分比"){
+            $('#x').css("background-color","red");
+            setTimeout(function() {
+                $('#x').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+            return;
+        }
+        if(y!="平均资金占用额累计百分比"){
+            m++;
+            $('#y').css("background-color","red");
+            setTimeout(function() {
+                $('#y').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+
+        if (m==0){
+            addResutl("x",x);
+            addResutl("y",y);
+            n++;
+            load3();
+        }
+    }
+    function load3() {
+        var myChart1 = echarts.init(document.getElementById('abc1'), 'macarons');
+
+            var d = data2;
+        var arr1=[];
+        var arr2=[];
+
+        for(var i=0;i<d.length;i++){
+            arr1.push(d[i].物料累计品目数百分比);
+            var m= d[i].平均资金占用额累计百分比.replace("%","");
+            arr2.push(m);
+        }
+        var option = {
+            title: {
+                text: 'ei分析'
+                , show: false
+            },
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            dataZoom :{
+                type: 'slider', // 设置为滑动条型式
+                show: false, // 显示dataZoom组件
+                start: 0, // 默认显示的起始位置为0
+                end: 100, // 默认显示的结束位置为100
+                handleSize: 8, // 滑动条的手柄大小
+                handleStyle: {
+                    color: '#DCE2E8' // 滑动条的手柄颜色
+                },
+                xAxisIndex: [0], // 表示控制第一个x轴
+                filterMode: 'filter' // 设置为filter模式，即数据超过范围时会被过滤掉
+            },
+            toolbox: {
+                show: true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            grid: {
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: 20,
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: arr1,
+
+                axisLabel: {
+                    interval: 0,
+                    fontSize: 12,
+                    formatter: function (value) {
+                        debugger
+                        var ret = "";//拼接加\n返回的类目项
+                        var maxLength = 4;//每项显示文字个数
+                        value = parseInt(value.substring(0, 3));
+                        var valLength = value.length;//X轴类目项的文字个数
+                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+                        if (rowN > 1)//如果类目项的文字大于3,
+                        {
+                            for (var i = 0; i < rowN; i++) {
+                                var temp = "";//每次截取的字符串
+                                var start = i * maxLength;//开始截取的位置
+                                var end = start + maxLength;//结束截取的位置
+                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+                                temp = value.substring(start, end) + "\n";
+                                ret += temp; //凭借最终的字符串
+                            }
+                            return ret+"%";
+                        }
+                        else {
+                            return value+"%";
+                        }
+                    }
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'#BDB9B9'
+                    }
+                },
+
+                axisTick: {
+                    show: true
+                },
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: {
+                    show: true,
+                    lineStyle:{
+                        color:'#BDB9B9'
+                    }
+                },
+                axisTick: {
+                    show: true
+                },
+                axisLabel: {
+                    formatter: function(value){
+                        var var1=value;
+                        return var1+"%";
+                    },
+                    textStyle:{
+                        color:"#595959"
+                    }
+                },
+                splitLine:{
+                    show:true
+                },
+                splitArea: {
+                    show:true,
+                    areaStyle: {
+                        color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
+                    }
+                },
+            },
+            series: [{
+                name: '',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: arr2,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    normal: {
+                        lineStyle:{
+                            width:1
+                        },
+                        color:'#51D0E5',
+                    }
+                }
+            }
+            ]
+        };
+
+        myChart1.setOption(option);
+    }
+    function load5() {
+        var options = {
+            id:"bootstrap-table3",
+            data:data5,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '出库日期',
+                    title: '出库日期'
+                },
+                {
+                    field: '订单编号',
+                    title: '订单编号'
+                },
+                {
+                    field: '物料编号',
+                    title: '物料编号'
+                },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '出货数量',
+                    title: '出货数量'
+                },
+                {
+                    field: '出货单位',
+                    title: '出货单位'
+                },
+                {
+                    field: '销售单价',
+                    title: '销售单价（元/件）'
+                },
+                {
+                    field: '托盘装件数',
+                    title: '托盘装件数'
+                }]
+        };
+        $.table.init(options);
+    }
+    function reloadX3() {
+        var x=$("#x1 option:selected").val();
+        var y=$("#y1 option:selected").val();
+        total++;
+        var m=0;
+        if(x!="物料累计品目数百分比"){
+            $('#x1').css("background-color","red");
+            setTimeout(function() {
+                $('#x1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(y!="累计出库频次百分比"){
+            m++;
+            $('#y1').css("background-color","red");
+            setTimeout(function() {
+                $('#y1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        n=n+m;
+        if (m==0){
+            addResutl("x1",x);
+            addResutl("y1",y);
+            load6();
+        }
+
+    }
+    function load6() {
+        var myChart1 = echarts.init(document.getElementById('abc2'), 'macarons');
+            var d = data3;
+            var arr1=[];
+            var arr2=[];
+
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].物料累计品目数百分比);
+                var m= d[i].累计出库频次百分比.replace("%","");
+                arr2.push(m);
+            }
+            var option = {
+                title: {
+                    text: 'ei分析'
+                    , show: false
+                },
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                dataZoom : {
+                    show : false,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid: {
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                    bottom: 20,
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1,
+                    axisLabel: {
+                        interval: 0,
+                        fontSize: 12,
+                        formatter: function (value) {
+                            debugger
+                            var ret = "";//拼接加\n返回的类目项
+                            var maxLength = 2;//每项显示文字个数
+                            value = parseInt(value.substring(0, 3));
+                            var valLength = value.length;//X轴类目项的文字个数
+                            var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+                            if (rowN > 1)//如果类目项的文字大于3,
+                            {
+                                for (var i = 0; i < rowN; i++) {
+                                    var temp = "";//每次截取的字符串
+                                    var start = i * maxLength;//开始截取的位置
+                                    var end = start + maxLength;//结束截取的位置
+                                    //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+                                    temp = value.substring(start, end) + "\n";
+                                    ret += temp; //凭借最终的字符串
+                                }
+                                return ret+"%";
+                            }
+                            else {
+                                return value+"%";
+                            }
+                        }
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#BDB9B9'
+                        }
+                    },
+                    axisTick: {
+                        show: true
+                    },
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#BDB9B9'
+                        }
+                    },
+                    axisTick: {
+                        show: true
+                    },
+                    axisLabel: {
+                        formatter: function(value){
+                            var var1=value;
+                            return var1+"%";
+                        },
+                        textStyle:{
+                            color:"#595959"
+                        }
+                    },
+                    splitLine:{
+                        show:true
+                    },
+                    splitArea: {
+                        show:true,
+                        areaStyle: {
+                            color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
+                        }
+                    },
+                },
+                series: [{
+                    name: '',
+                    type: 'line',
+                    showSymbol: false,
+                    hoverAnimation: false,
+                    data: arr2,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+                        normal: {
+                            lineStyle:{
+                                width:1
+                            },
+                            color:'#51D0E5',
+                        }
+                    }
+                }
+                ]
+            };
+            myChart1.setOption(option);
+
+    }
+    function load7() {
+        var options = {
+            id:"bootstrap-table4",
+            data:data5,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '出库日期',
+                    title: '出库日期'
+                },
+                {
+                    field: '订单编号',
+                    title: '订单编号'
+                },
+                {
+                    field: '物料编号',
+                    title: '物料编号'
+                },
+                {
+                    field: '物料名称',
+                    title: '物料名称'
+                },
+                {
+                    field: '出货数量',
+                    title: '出货数量'
+                },
+                {
+                    field: '出货单位',
+                    title: '出货单位'
+                },
+                {
+                    field: '销售单价（元/件）',
+                    title: '销售单价（元/件）'
+                },
+                {
+                    field: '托盘装件数',
+                    title: '托盘装件数'
+                }]
+        };
+        $.table.init(options);
+    }
+    function reloadX4() {
+        var x=$("#x2 option:selected").val();
+        var y=$("#y2 option:selected").val();
+        total++;
+        var m=0;
+        if(x!="物料累计品目数百分比"){
+            $('#x2').css("background-color","red");
+            setTimeout(function() {
+                $('#x2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+
+        }
+        if(y!="累计出库量百分比"){
+            m++;
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+        }
+        n=n+m;
+        if (m==0){
+            addResutl("x2",x);
+            addResutl("y2",y);
+            n++;
+            load8();
+        }
+    }
+    function load8() {
+        var myChart1 = echarts.init(document.getElementById('abc3'), 'macarons');
+            var d = data4;
+            var arr1=[];
+            var arr2=[];
+
+            for(var i=0;i<d.length;i++){
+                arr1.push(d[i].物料累计品目数百分比);
+                var m = d[i].累计出库量百分比.replace("%","");
+                arr2.push(m);
+            }
+            var option = {
+                title: {
+                    text: 'ei分析'
+                    , show: false
+                },
+                tooltip: {
+                    trigger: 'axis'
+
+                },
+                dataZoom : {
+                    show : false,
+                    realtime : true
+                },
+                toolbox: {
+                    show: true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                grid: {
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                    bottom: 20,
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: arr1,
+                    axisLabel: {
+                        interval: 0,
+                        fontSize:12,
+                        formatter: function (value) {
+                            debugger
+                            var ret = "";//拼接加\n返回的类目项
+                            var maxLength = 2;//每项显示文字个数
+                            value = parseInt(value.substring(0, 3));
+                            var valLength = value.length;//X轴类目项的文字个数
+                            var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+                            if (rowN > 1)//如果类目项的文字大于3,
+                            {
+                                for (var i = 0; i < rowN; i++) {
+                                    var temp = "";//每次截取的字符串
+                                    var start = i * maxLength;//开始截取的位置
+                                    var end = start + maxLength;//结束截取的位置
+                                    //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+                                    temp = value.substring(start, end) + "\n";
+                                    ret += temp; //凭借最终的字符串
+                                }
+                                return ret+"%";
+                            }
+                            else {
+                                return value+"%";
+                            }
+                        }
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#BDB9B9'
+                        }
+                    },
+                    axisTick: {
+                        show: true
+                    },
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        show: true,
+                        lineStyle:{
+                            color:'#BDB9B9'
+                        }
+                    },
+                    axisTick: {
+                        show: true
+                    },
+                    axisLabel: {
+                        formatter: function(value){
+                            var var1=value*1;
+                            return var1+"%";
+                        },
+                        textStyle:{
+                            color:"#595959"
+                        }
+                    },
+                    splitLine:{
+                        show:true
+                    },
+                    splitArea: {
+                        show:true,
+                        areaStyle: {
+                            color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
+                        }
+                    },
+                },
+                series: [{
+                    name: '',
+                    type: 'line',
+                    showSymbol: false,
+                    hoverAnimation: false,
+                    data: arr2,
+                    axisLabel: {
+                        formatter: function(value){
+                            var var1=value*1;
+                            return var1+"%";
+                        },
+                        textStyle:{
+                            color:"#595959"
+                        }
+                    },
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+                        normal: {
+                            lineStyle:{
+                                width:1
+                            },
+                            color:'#51D0E5',
+                        }
+                    }
+                }
+                ]
+            };
+            myChart1.setOption(option);
+
+    }
+    function loadTable6(){
+        var options = {
+            id:"bootstrap-table5",
+            data:data2,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '销售单价',
+                    title: '销售单价'
+                },
+                {
+                    field: '平均库存',
+                    title: '平均库存'
+                },
+                {
+                    field: '平均资金占用额',
+                    title: '平均资金占用额'
+                },
+                {
+                    field: '平均资金占用额累计',
+                    title: '平均资金占用额累计'
+                },
+                {
+                    field: '平均资金占用额累计百分比',
+                    title: '平均资金占用额累计百分比'
+                },
+                {
+                    field: '物料累计品目数',
+                    title: '物料累计品目数'
+                },
+                {
+                    field: '物料累计品目数百分比',
+                    title: '物料累计品目数百分比'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+    function loadTable8(){
+        var options = {
+            id:"bootstrap-table7",
+            data:data3,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '出库频次',
+                    title: '出库频次'
+                },
+                {
+                    field: '累计出库频次',
+                    title: '累计出库频次'
+                },
+                {
+                    field: '累计出库频次百分比',
+                    title: '累计出库频次百分比'
+                },
+                {
+                    field: '物料累计品目数',
+                    title: '物料累计品目数'
+                },
+                {
+                    field: '物料累计品目数百分比',
+                    title: '物料累计品目数百分比'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+    function loadTable9(){
+        var options = {
+            id:"bootstrap-table8",
+            data:data4,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '物料描述',
+                    title: '物料描述'
+                },
+                {
+                    field: '出库量',
+                    title: '出库量'
+                },
+                {
+                    field: '累计出库量',
+                    title: '累计出库量'
+                },
+                {
+                    field: '累计出库量百分比',
+                    title: '累计出库量百分比'
+                },
+                {
+                    field: '物料累计品目数',
+                    title: '物料累计品目数'
+                },
+                {
+                    field: '物料累计品目数百分比',
+                    title: '物料累计品目数百分比'
+                }]
+        };
+        $.table.init(options);
+
+
+    }
+    function  loadTable7(){
+        var options = {
+            id:"bootstrap-table",
+            data:data1,
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            importTemplateUrl:'',
+            exportTypes: ['csv','txt','xml'],
+            columns: [
+                {
+                    field: '物料编码',
+                    title: '物料编码'
+                },
+                {
+                    field: '平均库存',
+                    title: '平均库存（件/月）'
+                },
+                {
+                    field: '当月出库总量',
+                    title: '当月出库总量（件）'
+                },
+                {
+                    field: '库存周转次数',
+                    title: '库存周转次数'
+                },
+                {
+                    field: '库存周转天数',
+                    title: '库存周转天数'
+                },
+                {
+                    field: '销售单价',
+                    title: '销售单价（元/件）'
+                }
+            ]
+        };
+        $.table.init(options);
+    }
+
+
+</script>
+<script id="importTpl" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5">
+                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据
+                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+            </div>
+            <font color="red" class="pull-left mt10">
+                提示：仅允许导入“xls”或“xlsx”格式文件！
+            </font>
+        </div>
+    </form>
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0db08d5fd7bd34e99daaee5a7e9c65de";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+</body>
+</html>

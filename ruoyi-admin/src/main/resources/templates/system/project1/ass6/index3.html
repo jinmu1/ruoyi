@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <meta charset="UTF-8">
+    <title>仓储物流中心资源仿真模拟数字看板</title>
+    <link  href="../../../static/template4/styles/common.css"  th:href="@{/template4/styles/common.css}" rel="stylesheet"/>
+    <script th:src="@{/ajax/libs/report/echarts/echarts-all.min.js?v=4.2.1}"></script>
+    <script th:src="@{/template4/scripts/Plugin/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/bmap.min.js}"></script>
+    <script th:src="@{/template4/scripts/Plugin/echarts-gl.js}"></script>
+    <script th:src="@{/template4/scripts/common.js}"></script>
+    <!--    <script th:src="@{/template4/scripts/index.js}"></script>-->
+    <script th:src="@{/template4/scripts/Plugin/laydate/laydate.js}"></script>
+</head>
+<body>
+<!--顶部-->
+<header class="header left">
+    <div class="left nav">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+    <div class="header_center left" style="position:relative">
+        <h1><strong>人员利用率优化前后对比</strong></h1>
+    </div>
+    <div style="">
+        <h4 style="float: left"><a  onclick="pre()" style="background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid green;margin-left: 80px;margin-top: 20px;font-size: 16px;text-decoration: none;display: inline-block;">返回</a></h4>
+        <h4 style="float: left"><a onclick="next()" style="background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid green;margin-left: 80px;margin-top: 20px;font-size: 16px;text-decoration: none;display: inline-block;">下一页</a></h4>
+    </div>
+    <div class="right nav text_right">
+        <ul>
+
+        </ul>
+    </div>
+
+</header>
+<!--内容部分-->
+<div class="con left">
+
+</div>
+<div class="div_any">
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img th:src="@{/template4/images/title_1.png}">初始卸货人员资源占用情况</div>
+            <p id="demo8" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始卸货人员利用率</div>
+            <p id="demo81" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后卸货人员资源占用情况</div>
+            <p id="demo82" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后卸货人员利用率</div>
+            <p id="demo83" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始理货人员资源占用情况</div>
+            <p id="demo9" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始理货人员利用率</div>
+            <p id="demo91" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后理货人员资源占用情况</div>
+            <p id="demo92" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后理货人员利用率</div>
+            <p id="demo93" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始上架人员资源占用情况</div>
+            <p id="demo10" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始上架人员利用率</div>
+            <p id="demo101" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后上架人员资源占用情况</div>
+            <p id="demo102" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后上架人员利用率</div>
+            <p id="demo103" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始出库装车月台资源占用情况</div>
+            <p id="demo11" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始出库装车月台利用率</div>
+            <p id="demo111" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后出库装车月台资源占用情况</div>
+            <p id="demo112" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后出库装车月台利用率</div>
+            <p id="demo113" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始补货人员资源占用情况</div>
+            <p id="demo12" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始补货人员利用率</div>
+            <p id="demo121" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后补货人员资源占用情况</div>
+            <p id="demo122" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后补货人员利用率</div>
+            <p id="demo123" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始分拣人员资源占用情况</div>
+            <p id="demo13" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始分拣人员利用率</div>
+            <p id="demo131" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后分拣人员资源占用情况</div>
+            <p id="demo132" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后分拣人员利用率</div>
+            <p id="demo133" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始打包人员资源占用情况</div>
+            <p id="demo14" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始打包人员利用率</div>
+            <p id="demo141" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后打包人员资源占用情况</div>
+            <p id="demo142" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后打包人员利用率</div>
+            <p id="demo143" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始装车人员资源占用情况</div>
+            <p id="demo15" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">初始装车人员利用率</div>
+            <p id="demo151" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后装车人员资源占用情况</div>
+            <p id="demo152" class="p_chart"></p>
+        </div>
+    </div>
+    <div class="left div_any01">
+        <div class="div_any_child">
+            <div class="div_any_title"><img  th:src="@{/template4/images/title_1.png}">优化后装车人员利用率</div>
+            <p id="demo153" class="p_chart"></p>
+        </div>
+    </div>
+
+</div>
+</body>
+
+<th:block th:include="include :: footer" />
+<script>
+    function next(){
+        window.location.href=ctx+"system/project1/ass6/index4";
+    }
+    function pre(){
+        window.location.href=ctx+"system/project1/ass6/index2";
+    }
+    for(var i=8;i<16;i++) {
+        init("", "demo" + i);
+    }
+    for(var i=81;i<160;i+=10) {
+        init1("", "demo" + i);
+    }
+    for(var i=82;i<160;i+=10) {
+        init("", "demo" + i);
+    }
+    for(var i=83;i<160;i+=10) {
+        init1("", "demo" + i);
+    }
+
+    function init(title,id) {
+        var dom = document.getElementById(id);
+        var myChart = echarts.init(dom);
+        var dataCount = 80000;
+        var data = generateData(dataCount);
+        var color1=['#ffd42b', '#ff733f', '#b3ec6a','#ffd42b', '#ff733f', '#b3ec6a'];
+        var option = {
+            color: ['#ffd42b', '#ff733f', '#b3ec6a'],
+            title: [{
+                text: title+"资源占用情况",
+                left: '1%',
+                top: '6%',
+                textStyle: {
+                    color: '#fff',
+                    fontSize:16
+                }
+            }],
+            legend: {
+                x: 300,
+                top: '7%',
+                textStyle: {
+                    color: '#ffd285',
+                },
+                data: [title+"资源占用情况"]
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: false
+                    },
+                    saveAsImage: {
+                        pixelRatio: 2
+                    }
+                }
+            },
+            grid: {
+                left: '1%',
+                right: '1%',
+                top: '16%',
+                bottom: '6%',
+                containLabel: true
+            },
+            toolbox: {
+                "show": false,
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+
+            dataZoom: [{
+                type: 'inside'
+            }, {
+                type: 'slider'
+            }],
+            textStyle: {//图例文字的样式
+                color: '#fff',
+                fontSize: 12
+            },
+            xAxis: {
+                data: data.categoryData,
+                silent: false,
+                splitLine: {
+                    show: false
+                },
+                splitArea: {
+                    show: false
+                }
+            },
+            yAxis: {
+                splitArea: {
+                    show: false
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.valueData,
+                itemStyle: {
+                    color: color1[randomNum(1,6)]
+                },
+                // Set `large` for large data amount
+                large: true
+            }]
+        };
+
+        function generateData(count) {
+            var baseValue = Math.random() * 1000;
+            var time = +new Date(2018, 2, 2)+60*60*8*1000;
+            var smallBaseValue;
+
+            function next(idx) {
+                smallBaseValue = idx % 30 === 0
+                    ? Math.random() * 700
+                    : (smallBaseValue + Math.random() * 500 - 250);
+                baseValue += Math.random() * 20 - 10;
+                return Math.max(
+                    0,
+                    Math.round(baseValue + smallBaseValue) + 1000
+                );
+            }
+
+            var categoryData = [];
+            var valueData = [];
+
+            for (var i = 0; i < count; i++) {
+                categoryData.push(echarts.format.formatTime('MM-dd\nhh:mm:ss', time));
+                valueData.push(next(i).toFixed(2) / 110);
+                time += 1000;
+            }
+
+            return {
+                categoryData: categoryData,
+                valueData: valueData
+            };
+        }
+
+        myChart.setOption(option);
+    };
+    function init1(title,id) {
+        var dom = document.getElementById(id);
+        var myChart = echarts.init(dom);
+        var num =  randomNum(50,99);
+        var option = {
+            color: ['#213B7A', '#54FEFE', '#0097EE', '#3D4969', '#35CEBA'],
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            series: [{
+                name: '利用率',
+                type: 'pie',
+                radius: ['24%', '70%'],
+                roseType: 'area',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{b|{b}}\n{hr|}\n{d|占比{d}%}',
+                        rich: {
+                            b: {
+                                fontSize: 14,
+                                color: 'rgba(255,255,255,0.8)',
+                                align: 'center',
+                                padding: 6
+                            },
+                            hr: {
+                                borderColor: '#0097EE',
+                                width: '100%',
+                                borderWidth: 1,
+                                height: 0
+                            },
+                            d: {
+                                fontSize: 14,
+                                color: '#fff',
+                                align: 'center',
+                                padding: 6,
+                            },
+                        },
+                        position: 'outside'
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                        length: 1,
+                        lineStyle: {
+                            color: '#0097EE',
+                            width: 1
+                        },
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: [{
+                    value: num,
+                    name: '忙'
+                },
+                    {
+                        value: 100-num,
+                        name: '闲'
+                    }
+                ]
+            },
+                // 边框的设置
+                {
+                    radius: ['16%', '20%'],
+                    center: ['50%', '50%'],
+                    type: 'pie',
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    animation: false,
+                    tooltip: {
+                        show: false
+                    },
+                    data: [{
+                        value: 1,
+                        itemStyle: {
+                            color: "#3D4969",
+                        },
+                    }],
+                },
+            ]
+        };
+        myChart.setOption(option);
+    };
+    function  randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+
+
+</html>

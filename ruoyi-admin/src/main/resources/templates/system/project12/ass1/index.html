@@ -1,0 +1,2527 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
+    <meta charset="UTF-8"/>
+    <title>物流网络实时规划 . 全国</title>
+</head>
+<th:block th:include="include :: point-public-css"/>
+<th:block th:include="include :: point-index4-css"/>
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css?v=1.18.3}" rel="stylesheet"/>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.7.3/dist/g6.min.js"></script>
+<script th:src="@{/js/plugins/bootstrap/bootstrap-table.js}"></script>
+<!--<script th:src="@{/js/plugins/bootstrap/bootstrap-table-export.js}"></script>-->
+<script th:src="@{/js/plugins/bootstrap/jquery.base64.js}"></script>
+<!--<script th:src="@{/js/plugins/bootstrap/tableExport.js}"></script>-->
+<style>
+    .layui-layer-content {
+        color: #000000;
+    }
+
+    body, html {
+        overflow-x: hidden;
+    }
+    .g6-tooltip {
+        border: 1px solid #e2e2e2;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #545454;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 10px 8px;
+        box-shadow: rgb(174, 174, 174) 0px 0px 10px;
+    }
+    .echarts {
+        height: 350px;
+    }
+
+    .th-inner {
+        color: rgb(171, 225, 245);
+
+    }
+
+    .thead .tr {
+        display: none;
+    }
+
+    .table-hover > tbody > tr {
+        text-align: right;
+    }
+
+    .table-hover > tbody > tr:hover > td,
+    .table-hover > tbody > tr:hover > th {
+        color: rgb(14, 108, 132);
+        cursor: pointer;
+    }
+
+    /*[class*="col-"]{*/
+    /*    padding: 2px;*/
+    /*    margin:2px*/
+    /*}*/
+    /*.row {*/
+    /*    margin-right: -15px;*/
+    /*    margin-left: -15px;*/
+    /*}*/
+    /*.table1{width:25xp;height: 25%}*/
+</style>
+<script>
+
+    var docEl = document.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+    var clientWidth = docEl.clientWidth;
+    docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+    window.addEventListener(resizeEvt, function () {
+        clientWidth = docEl.clientWidth;
+        docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+    }, false);
+</script>
+<script>
+
+    $(document).ready(function () {
+        var whei = $(window).width()
+        $("html").css({fontSize: whei / 22});
+        $(window).resize(function () {
+            var whei = $(window).width();
+            $("html").css({fontSize: whei / 22})
+        });
+    });
+</script>
+<body style="background: #jjj;height: 100%;width: 100%;">
+
+<div class="main">
+
+    <div class="header">
+        <div class="header-left fl">
+            <img class="imgs" th:src="@{/img/img.png}"
+                 style="width: 60%;margin-left: -5%;margin-top: -46%;z-index: 9999">
+        </div>
+        <div class="header-center fl">
+            <div class="header-title">
+                物流网络实时规划 . 全国
+            </div>
+            <div class="header-img"></div>
+        </div>
+        <div class="header-right fl">
+            <!--            <a  data-toggle="modal" data-target="#myModal"-->
+            <!--                    style="margin-top: 10%;margin-left: 45%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+            <!--            </a>-->
+        </div>
+        <div class="header-bottom fl">
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row" >
+            <div class="col-lg-12">
+                <button type="button" style="z-index: 9999;float:right;" class="btn btn-w-m btn-success" onclick="shou()">开始运算</button>
+                <div id="container"></div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 网络需求分布</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal2"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="chart_6" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 网络选址结果</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal3"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="chart_7" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 各类客户配送体积分布</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal2"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="lineCharts" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 各体积区间客户订单占比</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal3"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="barCharts" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 各配送距离门店数量分布</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal2"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="demo4" class="echarts"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 border">
+                <div class="ibox-title">
+
+                    <h5 style="text-align: center;"> 各门店订货量波动情况</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--                    <a  data-toggle="modal" data-target="#myModal3"-->
+                    <!--                            style="margin-top: 0%;margin-left: 8%;z-index: 9999;background-color: '#008CBA';  color: white;padding: 10px 26px;border: 1px solid #a1aaa1;font-size: 12px;text-decoration: none;display: inline-block;">点击查看说明-->
+                    <!--                    </a>-->
+                    <div id="demo5" class="echarts"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="ibox-title">
+                    <h5 style="text-align: center;"> 各选址节点数据</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="reportTableDiv" class="span10" style="width:100%">
+
+                        <table id="reportTable">
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>正在加载...</h5>
+    </div>
+</div>
+<div class="footer" style="margin-left: 45.5%; bottom:0;height: 10%;">
+
+    <a onclick="turn1()" style="font-family: 华文行楷;color: white;font-size: 18px;position:absolute;margin-top: 60px">@环球物流咨询·官网     </a>
+    <div style="margin-left:800px" ><img th:src="@{/img/weixin.png}" style="width: 100px;height:100px;" /></div>
+</div>
+<!--</div>-->
+<th:block th:include="include :: echarts-js"/>
+<!--<th:block th:include="include :: point-finereport-js"/>-->
+<th:block th:include="include :: layer-js"/>
+<script th:src="@{/js/plugins/layer/layer.ext.js}"></script>
+<!--<th:block th:include="include :: footer"/>-->
+
+<script>
+    layer.use('extend/layer.ext.js'); //载入layer拓展模块
+</script>
+<th:block th:include="include :: layer-demo-js"/>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0521ccff0fe6264c65cdd1c5bdc46249";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<script th:inline="javascript">
+    var windW = $(window).width();
+    if(windW <= 1340){
+        windW = 1340;
+    }
+    var winRate = windW/1920;
+    function turn1() {
+        window.location.href = "http://glc360.com";
+    }
+
+    function showPDF(urlSrc) {
+        var urlPre = "pdfjs/web/viewer.html?file=" + urlSrc;
+        $("#pdfContainer").attr('src', urlPre);
+        $("#pdf_Modal").modal("show");
+    }
+
+    //展示loading框
+    showLoading = function () {
+        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+    }
+    //隐藏掉loading框
+    hideLoading = function () {
+        $('#loadingModal').modal('hide');
+    }
+
+    function changeplant() {
+        if (parseInt($("#transportNum").val()) > 0) {
+            $("#plant").html(parseInt($("#transportNum").val() * 365) + "托");
+        }
+    }
+
+    function changSize() {
+        var i = 0;
+        if ($("#b_goods_size").val() == null || $("#b_goods_size").val() == "") {
+            i++;
+        }
+        var j = 0;
+        if ($("#m_goods_size").val() == null || $("#m_goods_size").val() == "") {
+            j++;
+        }
+        var k = 0;
+        if ($("#s_goods_size").val() == null || $("#s_goods_size").val() == "") {
+            k++;
+        }
+
+        if (i + j + k == 1) {
+            if (i + j == 0) {
+                var num = 100 - $("#b_goods_size").val() - $("#m_goods_size").val()
+                if (num >= 0) {
+                    $("#s_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            } else if (i + k == 0) {
+                var num = 100 - $("#b_goods_size").val() - $("#s_goods_size").val()
+                if (num >= 0) {
+                    $("#m_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            } else if (j + k == 0) {
+                var num = 100 - $("#m_goods_size").val() - $("#s_goods_size").val()
+                if (num >= 0) {
+                    $("#b_goods_size").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+                }
+            }
+        }
+        var value = parseFloat($("#b_goods_size").val()) + parseFloat($("#m_goods_size").val()) + parseFloat($("#s_goods_size").val());
+        if (value > 100) {
+            layer.open({title: "输入提示", content: "物料体积占比不能大于100%", color: "#000000"});
+        }
+    }
+
+    function changPrice() {
+        var i = 0;
+        if ($("#h_price").val() == null || $("#h_price").val() == "") {
+            i++;
+        }
+        var j = 0;
+        if ($("#m_price").val() == null || $("#m_price").val() == "") {
+            j++;
+        }
+        var k = 0;
+        if ($("#s_price").val() == null || $("#s_price").val() == "") {
+            k++;
+        }
+        if (i + j + k == 1) {
+            if (i + j == 0) {
+                var num = 100 - $("#h_price").val() - $("#m_price").val()
+                if (num >= 0) {
+                    $("#s_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            } else if (i + k == 0) {
+                var num = 100 - $("#h_price").val() - $("#s_price").val()
+                if (num >= 0) {
+                    $("#m_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            } else if (j + k == 0) {
+                var num = 100 - $("#m_price").val() - $("#s_price").val()
+                if (num >= 0) {
+                    $("#h_price").val(num);
+                } else {
+                    layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+                }
+            }
+        }
+        var value = parseFloat($("#h_price").val()) + parseFloat($("#m_price").val()) + parseFloat($("#s_price").val());
+        if (value > 100) {
+            layer.open({title: "输入提示", content: "物料单价占比不能大于100%", color: "#000000"});
+        }
+    }
+
+    function changGoosNum() {
+        var goods_num = $("#goods_num").val();
+        if (goods_num > 100000) {
+            layer.open({title: "输入提示", content: "请输入小于100000的值", color: "#000000"})
+        }
+    }
+
+    var isClick = true;
+
+    function post_data() {
+        if (isClick) {
+            if ($("#transportNum").val() <= 0) {
+                layer.open({title: "输入提示", content: "请输入大于0的值", color: "#000000"});
+                return;
+            } else if ($("#transportNum").val() > 1000000) {
+                layer.open({title: "输入提示", content: "请输入小于1000000的值", color: "#000000"});
+                return;
+            }
+            if ($("#order").val() > 100) {
+                layer.open({title: "输入提示", content: "订单满足率：请输入100以内的值", color: "#000000"});
+                return;
+            }
+            if ($("#inventory_loss").val() > 100) {
+                layer.open({title: "输入提示", content: "库存损耗：请输入100以内的值", color: "#000000"});
+                return;
+            }
+            // for (var i = 1; i < 500; i++) {
+            //     $("#times1").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times2").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times3").append("<option value='" + i + "'>方案" + i + "</option>");
+            //     $("#times4").append("<option value='" + i + "'>方案" + i + "</option>");
+            // }
+            var provinces = $("#provinces option:selected").val();
+            showLoading();
+            isClick = false;
+            setOption(provinces, 1, "chart_6");
+            // setOptionAll(provinces, 1);
+
+            // loadTable(provinces);
+            //定时器
+            setTimeout(function () {
+                isClick = true;
+            }, 10000);//一秒内不能重复点击
+        } else {
+            return;
+        }
+        return false;
+    }
+
+    function setOption(provinces, num, ids) {
+
+        var myChart1 = echarts.init(document.getElementById(ids));
+
+    }
+
+    function setOptionAll(provinces, num) {
+
+        var myChart1 = echarts.init(document.getElementById(ids));
+
+    }
+
+
+    // 数字转换成货币格式的字符串，例如把1234567转换成 1,234,567 这样的
+    function int2str(num) {
+        num = parseInt(num);
+        let numberStr = num.toString()
+        let str = numberStr.split('').reverse()
+        for (let i = 0; i < str.length; i++) {
+            if ((i + 1) % 4 === 0) {
+                str.splice(i, 0, ',')
+            }
+        }
+        str.reverse()
+        let handleResult = ''
+        for (let j = 0; j < str.length; j++) {
+            handleResult += str[j]
+        }
+        return handleResult
+    }
+
+
+    function formatNum(strNum) {
+        if (strNum.length <= 3) {
+            return strNum;
+        }
+        if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+            return strNum;
+        }
+        var a = RegExp.$1,
+            b = RegExp.$2,
+            c = RegExp.$3;
+        var re = new RegExp();
+        re.compile("(\\d)(\\d{3})(,|$)");
+        while (re.test(b)) {
+            b = b.replace(re, "$1,$2$3");
+        }
+        return a + "" + b + "" + c;
+    }
+    var price = 20000;
+    var cangchu = 400;
+    //模拟数据
+    const data = {
+        width: "", //容器宽度 N
+        height: "", //容器高度 N
+        defaultNodeStyle: {
+            width: 30,
+            height: 30,
+            img: "@{img/仓库_仓储管理_o}",
+        },
+        defaultLabelCfg: {
+            fill: "#fff", //字体颜色 N
+            fontSize: 12, //字体大小 N
+        },
+        defaultEdgeStyle: {
+            stroke: "#7a9efb", //线的颜色 N
+        },
+        id: "root", // 初始节点id  Y
+        label: "物流网络优化", //初始节点文字  Y
+        isRoot: true,
+        img: "img/物流，全球物流 .png",
+        state: "0", //状态  0 正常状态 1 网络异常 2 数据库
+        children: [
+            // 节点数据
+            {
+                id: "c1", //唯一标识 id
+                label: "网络总成本", //显示文案
+                state: "0", //状态
+                img: "static/img/成本.png",
+                children: [{
+                    id: "c1-1",
+                    label: "运输成本",
+                    description: ["1.aaaa", "2.bbbb", "3.ccccc"],
+                    state: "1",
+                    img: "img/运输成本.png",
+                    children: [{
+                        id: "c1-1-1",
+                        label: "运输费率",
+                        color: "#fff",
+                        img: "img/变量管理.png",
+                        description: ["1.aaaa", "2.bbbb", "3.ccccc"],
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-1-1-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-1-2",
+                        label: "运输量",
+                        description: ["1.aaaa", "2.bbbb", "3.ccccc"],
+                        state: "0",
+                        icon: "04",
+                        img: "img/变量管理.png",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-1-2-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }],
+                }, {
+                    id: "c1-2",
+                    label: "仓储操作成本",
+                    state: "0",
+                    img: "img/仓库_仓储管理_o.png",
+                    children: [{
+                        id: "c1-2-1",
+                        label: "出入库件数",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-2-1-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-2-2",
+                        label: "单位人员作业量",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-2-2-1",
+                            img: "img/导入_输入.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-2-3",
+                        label: "人员年工资",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-2-3-1",
+                            img: "img/导入_输入.png",
+                            label: "查看输入表",
+                        }]
+                    }],
+                }, {
+                    id: "c1-3",
+                    label: "仓库建设成本",
+                    state: "2",
+                    img: "img/仓库库存.png",
+                    // img: './images/icon04.png',
+                    children: [{
+                        id: "c1-3-1",
+                        label: "仓库建设成本",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-1-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-2",
+                        label: "建筑折旧年限",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-2-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-3",
+                        label: "仓库设备成本",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-3-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-4",
+                        label: "设备折旧年限",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-4-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-5",
+                        label: "仓库租金(月)",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-5-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-6",
+                        label: "设备维护成本",
+                        img: "img/变量管理.png",
+                        state: "0",
+                        icon: "04",
+                        // img: './images/icon05.png',
+                        children: [{
+                            id: "c1-3-6-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-3-7",
+                        label: "面积",
+                        state: "0",
+                        icon: "04",
+                        img: "img/变量管理.png",
+                        children: [{
+                            id: "c1-3-7-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }],
+
+                }, {
+                    id: "c1-4",
+                    label: "库存持有成本",
+                    state: "0",
+                    img: "img/查库存.png",
+                    // img: './images/icon05.png',
+                    children: [{
+                        id: "c1-4-2",
+                        label: "每天消耗量",
+                        state: "0",
+                        icon: "05",
+                        img: "img/变量管理.png",
+                        children: [{
+                            id: "c1-4-2-1",
+                            img: "img/表.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-4-3",
+                        label: "零担库损比例",
+                        state: "0",
+                        icon: "05",
+                        img: "img/变量管理.png",
+                        children: [{
+                            id: "c1-4-3-1",
+                            img: "img/导入_输入.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-4-4",
+                        label: "整车库损比例",
+                        state: "0",
+                        icon: "05",
+                        img: "img/变量管理.png",
+                        children: [{
+                            id: "c1-4-4-1",
+                            img: "img/导入_输入.png",
+                            label: "查看输入表",
+                        }]
+                    }, {
+                        id: "c1-4-5",
+                        label: "全年货值",
+                        state: "0",
+                        icon: "05",
+                        img: "img/变量管理.png",
+                        children: [{
+                            id: "c1-4-5-1",
+                            img: "img/导入_输入.png",
+                            label: "查看输入表",
+                        }]
+                    }]
+                }],
+            }, {
+                id: "c2",
+                label: "时效",
+                state: "1", //状态
+                collapsed: false,
+                img: "img/变量管理.png",
+                children: [{
+                    id: "c2-1",
+                    label: "仓储作业时效",
+                    state: "1",
+                    description: ["1.网络", "2.网络", "3.网络"],
+                    img: "img/变量管理.png",
+                }, {
+                    id: "c2-2",
+                    label: "运输时效",
+                    state: "0",
+                    img: "img/变量管理.png",
+                }],
+            }
+        ],
+
+    };
+
+    G6.registerEdge("circle-running", {
+        labelPosition: "center", //文本相对于图形的位置  'start'、'end' 和 'center'。
+        draw(cfg, group) {
+            const startPoint = cfg.startPoint;
+            const endPoint = cfg.endPoint;
+            const {
+                style
+            } = cfg;
+            const shape = group.addShape("path", {
+                attrs: {
+                    stroke: style.stroke,
+                    endArrow: style.endArrow,
+                    path: [
+                        ["M", startPoint.x, startPoint.y],
+                        ["L", startPoint.x, (startPoint.y + endPoint.y) / 2],
+                        ["L", endPoint.x, (startPoint.y + endPoint.y) / 2],
+                        ["L", endPoint.x, endPoint.y],
+                    ],
+                },
+            });
+
+            return shape;
+        },
+        afterDraw(cfg, group) {
+            const shape = group.get("children")[0];
+            const startPoint = shape.getPoint(0);
+            const circle = group.addShape("circle", {
+                attrs: {
+                    x: startPoint.x,
+                    y: startPoint.y,
+                    fill: "#fff",
+                    r: 3,
+                },
+                name: "circle-shape",
+            });
+
+            // 对圆点添加动画
+            circle.animate(
+                (ratio) => {
+                    // 每一帧的操作，入参 ratio：这一帧的比例值（Number）。返回值：这一帧需要变化的参数集（Object）。
+                    // 根据比例值，获得在边 path 上对应比例的位置。
+                    const tmpPoint = shape.getPoint(ratio);
+                    // 返回需要变化的参数集，这里返回了位置 x 和 y
+                    return {
+                        x: tmpPoint.x,
+                        y: tmpPoint.y,
+                    };
+                }, {
+                    repeat: true, // 动画重复
+                    duration: 4000,
+                }
+            ); // 一次动画的时间长度
+        },
+    });
+    const toolbar = new G6.ToolBar();
+    const imageMinimap = new G6.Minimap({
+        width: 200,
+        // graphImg: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*eD7nT6tmYgAAAAAAAAAAAABkARQnAQ'
+    });
+    //提示
+    const fisheye = new G6.Fisheye({
+        trigger: 'mousemove'
+    });
+    const menu = new G6.Menu();
+    const width = 1800;
+    const height = 400;
+
+    const graph = new G6.TreeGraph({
+        container: "container",
+        width,
+        height,
+        linkCenter: true, //指定边是否连入节点的中心
+        plugins: [ menu, imageMinimap], //提示
+        animate: true, //默认打开重布局动画开关。
+        modes: {
+            default: [{
+                type: "collapse-expand", //元素可折叠
+                onChange(item, collapsed) {
+                    // graph.data(data);
+                    // graph.render();
+                    // graph.fitView();
+                },
+            },
+                "zoom-canvas",
+                "drag-canvas",
+            ],
+        },
+        defaultNode: {
+            //默认状态下节点的配置
+            type: "image", //icon-node
+            img: data.defaultNodeStyle.img || "./images/icon01.png",
+            size: [120, 40],
+            style: {
+                width: data.defaultNodeStyle.width || 20,
+                height: data.defaultNodeStyle.height || 20,
+                cursor: "pointer",
+            },
+            labelCfg: {
+                //文本配置项 字体颜色及大小
+                position: "bottom",
+                style: {
+                    fill: data.defaultLabelCfg.fill,
+                    fontSize: data.defaultLabelCfg.fontSize,
+                },
+            },
+        },
+
+        defaultEdge: {
+            //默认状态下边的配置
+            type: "circle-running",
+            style: {
+                stroke: data.defaultEdgeStyle.stroke,
+                // 结束箭头
+                endArrow: true,
+            },
+            labelCfg: {
+                autoRotate: true,
+                refY: 10,
+            },
+        },
+        layout: {
+            //根据传入的数据进行布局。
+            type: "compactBox", //布局类型，支持 dendrogram、compactBox、mindmap 和 indeted。
+            direction: "TB", //布局方向，有  LR , RL , TB , BT , H , V  可选。 L: 左； R: 右； T: 上； B：下； H: 垂直； V: 水平
+            fixedRoot: false, //展开收起时候是否固定根节点，默认为false
+            getId: function getId(d) {
+                return d.id; //指定节点 ID
+            },
+            getHeight: function getHeight() {
+                return 16; //指定节点高度
+            },
+            getWidth: function getWidth() {
+                return 16; //指定节点宽度
+            },
+            getVGap: function getVGap() {
+                return 40; //指定节点之间的垂直间距
+            },
+            getHGap: function getHGap() {
+                return 35; //指定节点之间的水平间距
+            },
+        },
+        fitView: true,
+    });
+    G6.registerEdge(
+        'circle-running', {
+            afterDraw(cfg, group) {
+                // 获得当前边的第一个图形，这里是边本身的 path
+                const shape = group.get('children')[0];
+                // 边 path 的起点位置
+                const startPoint = shape.getPoint(0);
+
+                // 添加红色 circle 图形
+                const circle = group.addShape('circle', {
+                    attrs: {
+                        x: startPoint.x,
+                        y: startPoint.y,
+                        fill: '#fff',
+                        r: 3,
+                    },
+                    // must be assigned in G6 3.3 and later versions. it can be any value you want
+                    name: 'circle-shape',
+                });
+
+                // 对红色圆点添加动画
+                circle.animate(
+                    (ratio) => {
+                        // 每一帧的操作，入参 ratio：这一帧的比例值（Number）。返回值：这一帧需要变化的参数集（Object）。
+                        // 根据比例值，获得在边 path 上对应比例的位置。
+                        const tmpPoint = shape.getPoint(ratio);
+                        // 返回需要变化的参数集，这里返回了位置 x 和 y
+                        return {
+                            x: tmpPoint.x,
+                            y: tmpPoint.y,
+                        };
+                    }, {
+                        repeat: true, // 动画重复
+                        duration: 3000,
+                    },
+                ); // 一次动画的时间长度
+            },
+        },
+        'cubic',
+    ); // 该
+    //指节点定样式
+    const lineDash = [4, 2, 1, 2];
+
+    // 注册名为 'can-running' 的边
+    G6.registerEdge(
+        'can-running', {
+            // 复写setState方法
+            setState(name, value, item) {
+                const shape = item.get('keyShape');
+                // 监听 running 状态
+                if (name === 'running') {
+                    // running 状态为 true 时
+                    if (value) {
+                        let index = 0; // 边 path 图形的动画
+                        shape.animate(
+                            () => {
+                                index++;
+                                if (index > 9) {
+                                    index = 0;
+                                }
+                                const res = {
+                                    lineDash,
+                                    lineDashOffset: -index,
+                                };
+                                // 返回需要修改的参数集，这里修改了 lineDash,lineDashOffset
+                                return res;
+                            }, {
+                                repeat: true, // 动画重复
+                                duration: 3000, // 一次动画的时长为 3000
+                            },
+                        );
+                    } else {
+                        // running 状态为 false 时
+                        // 结束动画
+                        shape.stopAnimate();
+                        // 清空 lineDash
+                        shape.attr('lineDash', null);
+                    }
+                }
+            },
+        },
+        'cubic-horizontal',
+    ); // 该自定义边继承了内置横向三阶贝塞尔曲线边 cubic-horizontal
+
+    // 监听节点的 mouseenter 事件
+    graph.on('node:mouseenter', (ev) => {
+        // 获得当前鼠标操作的目标节点
+        const node = ev.item;
+        // 获得目标节点的所有相关边
+        const edges = node.getEdges();
+        // 将所有相关边的 running 状态置为 true，此时将会触发自定义节点的 setState 函数
+        edges.forEach((edge) => graph.setItemState(edge, 'running', true));
+    });
+
+    // 监听节点的 mouseleave 事件
+    graph.on('node:mouseleave', (ev) => {
+        // 获得当前鼠标操作的目标节点
+        const node = ev.item;
+        // 获得目标节点的所有相关边
+        const edges = node.getEdges();
+        // 将所有相关边的 running 状态置为 false，此时将会触发自定义节点的 setState 函数
+        edges.forEach((edge) => graph.setItemState(edge, 'running', false));
+    });
+    graph.node((node) => {
+        let fill;
+        let stroke;
+        let label;
+        if (node.state == "0") {
+            fill = "#fff";
+        } else if (node.state == "1") {
+            fill = "#fff";
+        } else if (node.state == "2") {
+            fill = "#fff";
+        }
+        stroke = ""; //边框
+        label = node.label;
+        return {
+            label,
+            labelCfg: {
+                style: {
+                    fill,
+                    stroke,
+                },
+            },
+        };
+    });
+    graph.data(data);
+    graph.render();
+    graph.fitView();
+    graph.on("node:click", (evt) => {
+        const {
+            item,
+            target
+        } = evt;
+        var model = item.getModel();
+        var depth = evt.item._cfg.model.depth;
+        var id = evt.item._cfg.model.id;
+        // var thisItem = evt.item._cfg.model;
+        console.log(id)
+        selectCheckUser(id)
+        if (depth == 1) {
+            //指定操作第二层数据
+            for (let i in data.children) {
+                if (data.children[i]["id"] == id) {
+                    data.children[i]["collapsed"] = false; //打开
+                    // thisItem["collapsed"] = false; //打开
+                    // var item = graph.findById(id);
+                    // graph.updateItem(item, thisItem);
+
+                } else {
+                    data.children[i]["collapsed"] = true; //合并
+                    // data.children[i]["collapsed"] = true; //合并
+                    // var item = graph.findById(data.children[i]["id"]);
+                    // graph.updateItem(item, data.children[i]);
+                }
+            }
+            // graph.refresh()
+            graph.changeData(data);
+            // graph.data(data);
+            graph.render();
+            graph.fitView();
+            return false;
+        } else {
+            return true;
+        }
+    });
+    var fullscreen = false;
+    let btn = document.getElementById("fullscreen");
+    let fullarea = document.getElementById("box");
+
+    function shou() {
+        layer.load('正在计算中....', 10);
+        var myChart = echarts.init(document.getElementById('chart_6'));
+        var myChart1 = echarts.init(document.getElementById('chart_7'));
+        var data = [{
+            name: '90000001',
+            value: 7245
+        }, {
+            name: '90000002',
+            value: 3900
+        }, {
+            name: '90000003',
+            value: 8947
+        }, {
+            name: '90000005',
+            value: 10282
+        }, {
+            name: '90000007',
+            value: 6372
+        }, {
+            name: '90000008',
+            value: 3363
+        }, {
+            name: '90000009',
+            value: 8786
+        }, {
+            name: '90000010',
+            value: 3706
+        }, {
+            name: '90000011',
+            value: 8179
+        }, {
+            name: '90000012',
+            value: 13467
+        }, {
+            name: '90000013',
+            value: 2421
+        }, {
+            name: '90000014',
+            value: 13708
+        }, {
+            name: '90000019',
+            value: 1311
+        }, {
+            name: '90000021',
+            value: 18571
+        }, {
+            name: '90000022',
+            value: 10972
+        }, {
+            name: '90000023',
+            value: 8938
+        }, {
+            name: '90000024',
+            value: 2189
+        }, {
+            name: '90000025',
+            value: 3258
+        }, {
+            name: '90000026',
+            value: 1614
+        }, {
+            name: '90000027',
+            value: 8101
+        }, {
+            name: '90000028',
+            value: 5433
+        }, {
+            name: '90000030',
+            value: 8973
+        }, {
+            name: '90000031',
+            value: 1645
+        }, {
+            name: '90000032',
+            value: 1595
+        }, {
+            name: '90000033',
+            value: 321
+        }, {
+            name: '90000034',
+            value: 165
+        }, {
+            name: '90000035',
+            value: 3770
+        }, {
+            name: '90000037',
+            value: 4485
+        }, {
+            name: '90000038',
+            value: 4051
+        }, {
+            name: '90000039',
+            value: 1531
+        }, {
+            name: '90000040',
+            value: 5101
+        }, {
+            name: '90000041',
+            value: 4155
+        }, {
+            name: '90000043',
+            value: 9
+        }, {
+            name: '90000044',
+            value: 18
+        }, {
+            name: '90000045',
+            value: 7
+        }, {
+            name: '90000050',
+            value: 43
+        }, {
+            name: '90000051',
+            value: 93
+        }, {
+            name: '90000052',
+            value: 103
+        }, {
+            name: '90000053',
+            value: 51
+        }, {
+            name: '90000054',
+            value: 132
+        }, {
+            name: '90000055',
+            value: 76
+        }, {
+            name: '90000056',
+            value: 347
+        }, {
+            name: '90000057',
+            value: 79
+        }, {
+            name: '90000058',
+            value: 79
+        }, {
+            name: '90000059',
+            value: 74
+        }, {
+            name: '90000060',
+            value: 96
+        }, {
+            name: '90000061',
+            value: 136
+        }, {
+            name: '90000062',
+            value: 18
+        }, {
+            name: '90000074',
+            value: 13697
+        }, {
+            name: '90000075',
+            value: 1620
+        },
+
+        ];
+        var data1 = [{
+            name: '广州市',
+            value: 7245
+        }
+
+        ];
+        var geoCoordMap = {
+
+            '阿克苏地区': [80.26694348, 41.17502986],
+            '阿拉尔市': [81.28735423, 40.55326389],
+            '安康市': [109.0356011, 32.69051277],
+            '安庆市': [117.1212828, 30.53922248],
+            '安顺市': [105.9544171, 26.25925238],
+            '安阳市': [114.3995004, 36.10594098],
+            '鞍山市': [123.0013725, 41.1150536],
+            '巴彦淖尔市': [107.3943981, 40.74935949],
+            '巴音郭楞蒙古自治州': [86.15171387, 41.77028733],
+            '巴中市': [106.7515853, 31.87288859],
+            '白城市': [122.8455906, 45.62550436],
+            '白山市': [126.4210864, 41.94988402],
+            '白银市': [104.1444508, 36.55082533],
+            '百色市': [106.6245893, 23.90818593],
+            '蚌埠市': [117.3955133, 32.9215237],
+            '包头市': [109.9597986, 40.62714122],
+            '宝鸡市': [107.2445754, 34.36891564],
+            '宝山区': [121.496563, 31.41027947],
+            '保定市': [115.4714638, 38.87998777],
+            '保山市': [99.16801176, 25.11785803],
+            '北海市': [109.1265332, 21.4868365],
+            '北京市': [116.4133837, 39.91092455],
+            '北屯市': [120.7403928, 24.1913552],
+            '本溪市': [123.6925071, 41.49291646],
+            '毕节市': [105.2985888, 27.29021508],
+            '滨州市': [117.977404, 37.3881962],
+            '亳州市': [115.7844632, 33.8506427],
+            '博尔塔拉蒙古自治州': [82.07291476, 44.91219641],
+            '沧州市': [116.8455808, 38.31021514],
+            '昌江黎族自治县': [109.0624641, 19.30399788],
+            '常德市': [111.7054522, 29.03775],
+            '常州市': [119.9814847, 31.81579565],
+            '朝阳市': [120.4574995, 41.57982086],
+            '潮州市': [116.6294702, 23.66262319],
+            '郴州市': [113.0214605, 25.77668327],
+            '成都市': [104.0727473, 30.57899372],
+            '承德市': [117.9693975, 40.95785601],
+            '池州市': [117.502082, 30.68054196],
+            '赤峰市': [118.8955204, 42.2616861],
+            '崇左市': [107.3715202, 22.38311723],
+            '滁州市': [118.3394061, 32.26127087],
+            '楚雄彝族自治州': [101.5344125, 25.05177357],
+            '达州市': [107.4745939, 31.21430772],
+            '大理白族自治州': [100.2745828, 25.61212842],
+            '大连市': [121.6216315, 38.91895367],
+            '大庆市': [125.1086576, 46.59363318],
+            '大同市': [113.3733624, 40.102783],
+            '丹东市': [124.3615473, 40.00640871],
+            '儋州市': [109.5874558, 19.52714611],
+            '德宏傣族景颇族自治州': [98.59135936, 24.4380107],
+            '德阳市': [104.4044194, 31.133115],
+            '德州市': [116.3655567, 37.44130845],
+            '东方市': [108.6585665, 19.10110473],
+            '东莞市': [113.7584205, 23.02730841],
+            '东营市': [118.6813849, 37.43964183],
+            '鄂尔多斯市': [109.7874432, 39.61448231],
+            '鄂州市': [114.9016074, 30.39657217],
+            '恩施土家族苗族自治州': [109.4945926, 30.27793958],
+            '防城港市': [108.3604188, 21.69300529],
+            '奉贤区': [121.4805037, 30.92372011],
+            '佛山市': [113.1285122, 23.02775875],
+            '福州市': [119.3034698, 26.08042942],
+            '抚顺市': [123.9643746, 41.88596959],
+            '抚州市': [116.3645388, 27.95489225],
+            '阜阳市': [115.8204361, 32.89606099],
+            '赣州市': [114.9405034, 25.8351761],
+            '共青城市': [115.82142, 29.24874117],
+            '固原市': [106.2485774, 36.02161726],
+            '广安市': [106.6395527, 30.46174611],
+            '广元市': [105.8504232, 32.44161631],
+            '广州市': [113.2714313, 23.13533631],
+            '贵港市': [109.6055203, 23.11744838],
+            '贵阳市': [106.6365768, 26.65332482],
+            '桂林市': [110.1861949, 25.24169878],
+            '哈尔滨市': [126.5416151, 45.80882583],
+            '哈密市': [93.52121554, 42.82582437],
+            '海口市': [110.2067199, 20.05211309],
+            '海西蒙古族藏族自治州': [97.37629912, 37.38275046],
+            '邯郸市': [114.5456282, 36.63126273],
+            '汉中市': [107.0294302, 33.07379991],
+            '杭州市': [120.2155118, 30.25308298],
+            '合肥市': [117.2334427, 31.82657783],
+            '和田地区': [79.92850706, 37.12044646],
+            '河池市': [108.0914999, 24.69891173],
+            '河源市': [114.7074463, 23.74968437],
+            '菏泽市': [115.487545, 35.23940742],
+            '贺州市': [111.5735263, 24.4094509],
+            '鹤壁市': [114.3035936, 35.75235741],
+            '鹤岗市': [130.3044329, 47.35605616],
+            '衡水市': [115.6754061, 37.74519141],
+            '衡阳市': [112.5784472, 26.89957614],
+            '红河哈尼族彝族自治州': [103.3815491, 23.36999625],
+            '呼和浩特市': [111.7555086, 40.848423],
+            '呼伦贝尔市': [119.7848691, 49.1727328],
+            '葫芦岛市': [120.8433983, 40.71736444],
+            '湖州市': [120.0945166, 30.89896394],
+            '怀化市': [110.0085143, 27.5751609],
+            '淮安市': [119.1197641, 33.55666778],
+            '淮北市': [116.8045373, 33.9616563],
+            '淮南市': [117.0063889, 32.6318474],
+            '黄冈市': [114.8784905, 30.45935886],
+            '黄浦区': [121.4915856, 31.23724715],
+            '黄山市': [118.3454373, 29.72188979],
+            '黄石市': [115.0455329, 30.20520785],
+            '惠州市': [114.423558, 23.11635885],
+            '吉安市': [115.0005107, 27.11972683],
+            '吉林市': [126.5556345, 43.84356783],
+            '济南市': [117.1263994, 36.6565542],
+            '济宁市': [116.5936123, 35.42017739],
+            '佳木斯市': [130.3273591, 46.80568999],
+            '嘉定区': [121.2725951, 31.38015534],
+            '嘉兴市': [120.7635518, 30.75097483],
+            '嘉峪关市': [98.29620384, 39.77796015],
+            '江门市': [113.0885562, 22.58460388],
+            '焦作市': [113.2485478, 35.22096325],
+            '揭阳市': [116.3785122, 23.55574049],
+            '金昌市': [102.1946057, 38.52582009],
+            '金华市': [119.6534362, 29.08463939],
+            '金山区': [121.6173832, 25.22192577],
+            '锦州市': [121.1325963, 41.1009315],
+            '晋城市': [112.8585782, 35.49628459],
+            '晋中市': [112.7595948, 37.69283941],
+            '荆门市': [112.206393, 31.04173258],
+            '荆州市': [112.2455226, 30.34084211],
+            '景德镇市': [117.1845764, 29.27424771],
+            '九江市': [115.9606612, 29.66666085],
+            '酒泉市': [98.50068522, 39.73846908],
+            '喀什地区': [75.99639056, 39.47609675],
+            '开封市': [114.3207651, 34.80401391],
+            '克拉玛依市': [84.89590054, 45.58567524],
+            '昆明市': [102.8394451, 24.88627211],
+            '拉萨市': [91.17845426, 29.65948788],
+            '来宾市': [109.2274582, 23.75654676],
+            '莱芜市': [117.6665907, 36.20884143],
+            '兰州市': [103.8405212, 36.06723469],
+            '廊坊市': [116.6905817, 39.54336666],
+            '乐东黎族自治县': [109.180508, 18.75587149],
+            '乐山市': [103.7725376, 29.55794072],
+            '丽江市': [100.2324645, 26.86065744],
+            '连云港市': [119.2286213, 34.60224953],
+            '凉山彝族自治州': [102.2735027, 27.8877523],
+            '辽源市': [125.1504252, 42.89405501],
+            '聊城市': [115.9915878, 36.46275819],
+            '临沧市': [100.0954404, 23.89046856],
+            '临汾市': [111.5255302, 36.0937419],
+            '临高县': [109.697443, 19.91947477],
+            '临夏回族自治州': [103.2163906, 35.60756218],
+            '临沂市': [118.363533, 35.11067124],
+            '陵水黎族自治县': [110.0444641, 18.5123316],
+            '柳州市': [109.4344219, 24.33196139],
+            '六安市': [116.5264097, 31.74145082],
+            '六盘水市': [104.8375546, 26.59883311],
+            '龙岩市': [117.0234476, 25.08121984],
+            '娄底市': [112.0015035, 27.7032086],
+            '泸州市': [105.4485241, 28.8776683],
+            '洛阳市': [112.4594213, 34.62426278],
+            '漯河市': [114.0234208, 33.58771071],
+            '马鞍山市': [118.5135796, 31.6762656],
+            '茂名市': [110.9315426, 21.66906403],
+            '眉山市': [103.8565633, 30.08252612],
+            '梅州市': [116.1295374, 24.29417753],
+            '绵阳市': [104.6855619, 31.47366305],
+            '闵行区': [121.3886119, 31.11884258],
+            '南昌市': [115.8645894, 28.6894553],
+            '南充市': [106.1175026, 30.84378251],
+            '南京市': [118.8024217, 32.06465289],
+            '南宁市': [108.3734508, 22.8226066],
+            '南平市': [118.087351, 27.38910499],
+            '南通市': [120.9015917, 31.98654943],
+            '南阳市': [112.5345013, 32.9965622],
+            '内江市': [105.064588, 29.58588654],
+            '宁波市': [121.6308428, 29.86606812],
+            '宁德市': [119.5545107, 26.67224171],
+            '攀枝花市': [101.7255412, 26.58803317],
+            '盘锦市': [122.1771182, 40.725791],
+            '平顶山市': [113.1995286, 33.77205075],
+            '平凉市': [106.6714423, 35.54923205],
+            '萍乡市': [113.8936966, 27.66475255],
+            '莆田市': [119.014521, 25.45986546],
+            '濮阳市': [115.0355975, 35.76759303],
+            '浦东新区': [121.5504546, 31.22734829],
+            '普洱市': [100.9725698, 22.83097919],
+            '七台河市': [131.0115446, 45.77630032],
+            '齐齐哈尔市': [123.9245709, 47.35997719],
+            '潜江市': [112.9054741, 30.40835793],
+            '黔东南苗族侗族自治州': [107.9894462, 26.58970297],
+            '黔南布依族苗族自治州': [107.5284027, 26.2606162],
+            '黔西南布依族苗族自治州': [104.9124921, 25.09396735],
+            '钦州市': [108.6605802, 21.98659354],
+            '秦皇岛市': [119.5259672, 39.8947272],
+            '90000001': [113.134976, 23.068695],
+            '90000002': [113.230031, 22.857712],
+            '90000003': [113.361727, 23.328718],
+            '90000004': [113.523425, 23.093964],
+            '90000005': [113.395602, 22.919289],
+            '90000006': [113.609726, 23.121935],
+            '90000007': [113.056031, 23.681763],
+            '90000008': [113.580014, 24.731105],
+            '90000009': [110.271379, 19.996681],
+            '90000010': [113.064274, 22.63654],
+            '90000011': [113.33501, 22.563425],
+            '90000012': [113.302913, 23.229561],
+            '90000013': [116.688628, 23.412788],
+            '90000014': [113.861013, 23.01619],
+            '90000015': [113.667478, 23.095736],
+            '90000016': [114.072126, 22.992054],
+            '90000017': [113.662766, 22.851125],
+            '90000018': [114.094778, 22.845837],
+            '90000019': [113.804658, 23.079131],
+            '90000020': [113.73876, 22.78398],
+            '90000021': [113.860592, 22.556047],
+            '90000022': [114.222172, 22.667599],
+            '90000023': [114.443427, 22.997909],
+            '90000024': [114.709218, 23.788914],
+            '90000025': [116.051981, 24.275554],
+            '90000026': [116.389469, 23.566643],
+            '90000027': [110.370904, 21.304988],
+            '90000028': [113.51872, 22.274027],
+            '90000029': [112.510635, 23.11912],
+            '90000030': [108.29973, 22.866888],
+            '90000031': [109.556685, 23.103812],
+            '90000032': [109.155062, 21.495309],
+            '90000033': [111.610266, 24.408768],
+            '90000034': [109.173408, 21.526883],
+            '90000035': [109.462484, 24.310438],
+            '90000036': [111.515796, 24.424477],
+            '90000037': [110.190421, 22.643341],
+            '90000038': [110.312818, 25.353515],
+            '90000039': [111.25121, 23.505466],
+            '90000040': [106.65961, 23.851686],
+            '90000041': [108.085261, 36.63449697952408],
+            '90000042': [113.906293, 22.548828],
+            '90000043': [110.196927, 25.262084],
+            '90000044': [113.874449, 22.597853],
+            '90000045': [113.708168, 22.981584],
+            '90000046': [108.286302, 22.753231],
+            '90000047': [110.287895, 25.20372],
+            '90000048': [113.099237, 23.006036],
+            '90000049': [113.319045, 23.251608],
+            '90000050': [110.380875, 21.296905],
+            '90000051': [113.70808, 22.981936],
+            '90000052': [110.281783, 19.995789],
+            '90000053': [113.171717, 23.170584],
+            '90000054': [108.358485, 22.862393],
+            '90000055': [113.478718, 22.953471],
+            '90000056': [113.905218, 22.547979],
+            '90000057': [113.296066, 23.070086],
+            '90000058': [116.70922, 23.37894],
+            '90000059': [114.455817, 22.976174],
+            '90000060': [113.849965, 23.016972],
+            '90000061': [113.351161, 23.181414],
+            '90000062': [114.110629, 22.578178],
+            '90000063': [113.070431, 22.618217],
+            '90000064': [113.076815, 22.55139],
+            '90000065': [110.316352, 21.291298],
+            '90000066': [114.695772, 23.711896],
+            '90000067': [113.044134, 23.725939],
+            '90000068': [114.106139, 22.843042],
+            '90000069': [116.389323, 23.566401],
+            '90000070': [111.25121, 23.505466],
+            '90000071': [109.544867, 23.107085],
+            '90000072': [110.188655, 22.647654],
+            '90000073': [113.425734, 23.029279],
+            '90000074': [113.361727, 23.328718],
+            '90000075': [113.425734, 23.029279],
+            '青岛市': [120.3894552, 36.0722275],
+            '青浦区': [121.1305531, 31.15545432],
+            '清远市': [113.0624683, 23.68823029],
+            '庆阳市': [107.6493857, 35.71521598],
+            '琼海市': [110.4805445, 19.26425402],
+            '曲靖市': [103.8024348, 25.49640693],
+            '衢州市': [118.8665967, 28.9755458],
+            '泉州市': [118.6824463, 24.87995233],
+            '日喀则市': [88.89370303, 29.27565782],
+            '日照市': [119.5334154, 35.422839],
+            '三门峡市': [111.2065332, 34.77832725],
+            '三明市': [117.6455212, 26.26973652],
+            '三亚市': [109.5185567, 18.25873629],
+            '厦门市': [118.0964355, 24.48540661],
+            '汕头市': [116.6885286, 23.35909172],
+            '汕尾市': [115.3815526, 22.79126304],
+            '商洛市': [109.9244179, 33.87863385],
+            '商丘市': [115.6624493, 34.42020167],
+            '上海市': [121.4805389, 31.23592904],
+            '上饶市': [117.9494596, 28.46062592],
+            '韶关市': [113.6035273, 24.81588128],
+            '邵阳市': [111.4744329, 27.24527027],
+            '绍兴市': [120.5900226, 30.05765736],
+            '深圳市': [114.0645518, 22.54845664],
+            '沈阳市': [123.4710966, 41.68383007],
+            '十堰市': [110.8045296, 32.63506186],
+            '石河子市': [86.08688567, 44.31197648],
+            '石家庄市': [114.5215319, 38.04831193],
+            '双鸭山市': [131.1479736, 46.68238905],
+            '朔州市': [112.4393709, 39.33710837],
+            '四平市': [124.3564816, 43.17199357],
+            '松江区': [121.2344796, 31.03713518],
+            '松原市': [124.8314819, 45.14740419],
+            '苏州市': [120.5924122, 31.30356407],
+            '宿迁市': [118.281574, 33.96774972],
+            '宿州市': [116.9705439, 33.65209533],
+            '绥化市': [126.9753569, 46.66003218],
+            '随州市': [113.38945, 31.69651677],
+            '遂宁市': [105.5994215, 30.53909767],
+            '台中市': [120.6574238, 24.16660115],
+            '台州市': [121.4274347, 28.66219406],
+            '太原市': [112.5563915, 37.87698903],
+            '泰安市': [117.0944948, 36.20585804],
+            '泰州市': [119.9295663, 32.46067505],
+            '唐山市': [118.1864595, 39.63658372],
+            '天津市': [117.2080928, 39.0911026],
+            '天门市': [113.1724092, 30.66962183],
+            '天水市': [105.7314167, 34.58741188],
+            '通化市': [125.9466063, 41.7338158],
+            '通辽市': [122.2505218, 43.65798008],
+            '铜川市': [108.9524042, 34.90263708],
+            '铜陵市': [117.8184768, 30.95123324],
+            '铜仁市': [109.1964389, 27.73778646],
+            '万宁市': [110.3994344, 18.80010699],
+            '威海市': [122.127541, 37.51643055],
+            '潍坊市': [119.1683779, 36.71265155],
+            '渭南市': [109.5165896, 34.50571552],
+            '温州市': [120.7064769, 28.0010854],
+            '文山壮族苗族自治州': [104.222569, 23.40599429],
+            '乌海市': [106.800391, 39.66200636],
+            '乌兰察布市': [113.1394677, 41.00074833],
+            '乌鲁木齐市': [87.62443994, 43.8307632],
+            '无锡市': [120.3185833, 31.49880973],
+            '芜湖市': [118.4394314, 31.35853666],
+            '吴忠市': [106.2053713, 38.00371291],
+            '梧州市': [111.2855168, 23.48274528],
+            '武汉市': [114.3115816, 30.59846674],
+            '武威市': [102.6445543, 37.93437781],
+            '西安市': [108.9464656, 34.34726882],
+            '西昌市': [102.2714838, 27.9005809],
+            '西宁市': [101.7844502, 36.6233847],
+            '西双版纳傣族自治州': [100.8034468, 22.01360125],
+            '锡林郭勒盟': [116.0543914, 43.93942267],
+            '仙桃市': [113.4496094, 30.33358775],
+            '咸宁市': [114.3285191, 29.84705595],
+            '咸阳市': [108.7154225, 34.33547629],
+            '湘潭市': [112.9504642, 27.83570223],
+            '湘西土家族苗族自治州': [109.7455766, 28.3173691],
+            '襄阳市': [112.1285372, 32.0147968],
+            '孝感市': [113.9634627, 30.92452626],
+            '新乡市': [113.9336005, 35.30963993],
+            '新余市': [114.9235347, 27.8235787],
+            '信阳市': [114.0974828, 32.15301455],
+            '邢台市': [114.5114623, 37.07668595],
+            '兴安盟': [122.0443645, 46.08846371],
+            '徐州市': [117.2905754, 34.21266655],
+            '许昌市': [113.8584755, 34.04143161],
+            '宣城市': [118.7655342, 30.94660155],
+            '雅安市': [103.0495426, 30.01679255],
+            '烟台市': [121.4544154, 37.47003838],
+            '延安市': [109.5011837, 36.65608966],
+            '盐城市': [120.1675443, 33.35510092],
+            '扬州市': [119.4194189, 32.40067694],
+            '阳江市': [111.9884893, 21.86433973],
+            '阳泉市': [113.5876167, 37.86236085],
+            '杨浦区': [121.5325199, 31.26552414],
+            '伊犁哈萨克自治州': [81.33053775, 43.92272314],
+            '宜宾市': [104.6494037, 28.75800703],
+            '宜昌市': [111.2925492, 30.69744648],
+            '宜春市': [114.4235637, 27.82085642],
+            '益阳市': [112.361516, 28.55971118],
+            '银川市': [106.2384936, 38.49246006],
+            '鹰潭市': [117.0755754, 28.26578706],
+            '营口市': [122.2257988, 40.63070304],
+            '永州市': [111.6194551, 26.42586412],
+            '榆林市': [109.741616, 38.29088384],
+            '玉林市': [110.1884531, 22.65983051],
+            '玉树藏族自治州': [97.01318076, 33.01097959],
+            '玉溪市': [102.5535603, 24.35771094],
+            '岳阳市': [113.1354894, 29.36317829],
+            '云浮市': [112.0515127, 22.92091197],
+            '运城市': [111.0133895, 35.03270691],
+            '枣庄市': [117.3305419, 34.81599405],
+            '湛江市': [110.3655544, 21.27672344],
+            '张家界市': [110.4855325, 29.12281556],
+            '张家口市': [114.8925722, 40.7732372],
+            '张掖市': [100.4564115, 38.93206601],
+            '漳州市': [117.6535765, 24.51892979],
+            '长春市': [125.3306021, 43.8219535],
+            '长沙市': [112.9454732, 28.2348894],
+            '长治市': [113.1225589, 36.20126837],
+            '昭通市': [103.7235118, 27.34408386],
+            '肇庆市': [112.4714889, 23.05288877],
+            '镇江市': [119.4304894, 32.19471592],
+            '郑州市': [113.6314192, 34.75343885],
+            '中山市': [113.3994224, 22.52231467],
+            '重庆市': [106.5584342, 29.56899625],
+            '舟山市': [122.2135563, 29.99091168],
+            '周口市': [114.7079827, 33.64308358],
+            '珠海市': [113.5825548, 22.27656465],
+            '株洲市': [113.1404708, 27.83356764],
+            '驻马店市': [114.0284708, 33.01784242],
+            '资阳市': [104.6344353, 30.13495656],
+            '淄博市': [118.0614525, 36.81908568],
+            '自贡市': [104.7844488, 29.34558492],
+            '遵义市': [107.037923, 27.72832533],
+            '长沙中转仓': [112.9454732, 28.2348894],
+            '广西成品仓': [106.77352361813976, 22.100152592954007],
+            '河南成品仓': [114.02342077764726, 33.5877107071022],
+            '郴州总仓': [113.02146049909462, 25.776683273601865],
+        };
+
+        var convertData = function(data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+            return res;
+        };
+        var option = {
+
+            tooltip: {},
+            legend: {
+                left: 'left',
+                data: ['强', '中', '弱'],
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            backgroundColor: 'transparent',
+            geo: {
+                map: 'china',
+                show: true,
+                roam: true,
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#091632',
+                        borderColor: '#1773c3',
+                        shadowColor: '#1773c3',
+                        shadowBlur: 20
+                    }
+                }
+            },
+            series: [{
+                name: '城市',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: function(val) {
+                    return val[2] / 800;
+                },
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#ddb926'
+                    }
+                }
+            }, {
+                name: '前5',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data.sort(function(a, b) {
+                    return b.value - a.value;
+                }).slice(0, 0)),
+                symbolSize: function(val) {
+                    return val[2] / 900000;
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#f4e925',
+                        shadowBlur: 10,
+                        shadowColor: '#333'
+                    }
+                },
+                zlevel: 1
+            }]
+        }
+
+        var option1 = {
+
+            tooltip: {},
+            legend: {
+                left: 'left',
+                data: ['强', '中', '弱'],
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            backgroundColor: 'transparent',
+            geo: {
+                map: 'china',
+                show: true,
+                roam: true,
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#091632',
+                        borderColor: '#1773c3',
+                        shadowColor: '#1773c3',
+                        shadowBlur: 20
+                    }
+                }
+            },
+            series: [{
+                name: '城市',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: convertData(data1),
+                symbolSize: function(val) {
+                    return val[2] / 800;
+                },
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#ddb926'
+                    }
+                }
+            }, {
+                name: '前5',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data1.sort(function(a, b) {
+                    return b.value - a.value;
+                }).slice(0, 1)),
+                symbolSize: function(val) {
+                    return val[2] / 900000;
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#f4e925',
+                        shadowBlur: 10,
+                        shadowColor: '#333'
+                    }
+                },
+                zlevel: 1
+            }]
+        }
+        setTimeout(function() {
+            myChart.setOption(option);
+            myChart1.setOption(option1);
+            onloadData();
+        }, 10000); //一秒内不能重复点击
+
+
+    }
+
+    function selectCheckUser(id) {
+        var src = "";
+        if (id === "c1-1-1-1") {
+            src = "/table"
+        } else if (id === "c1-1-2-1") {
+            src = "/table2"
+        } else if (id === "c1-2-1-1") {
+            src = "/table3"
+        } else if (id === "c1-2-2-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-4 control-label">请输入单位人员作业量：</label><div class="col-sm-4"><input type="text" name="" class="form-control dan" value="50"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">托/人</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        } else if (id === "c1-2-3-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-4 control-label">请输入人员年工资:</label><div class="col-sm-4"><input type="text" name="" class="form-control  gong" value="80000"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">元/年</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+
+        } else if (id === "c1-3-1-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">请输入仓库建设成本:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="0"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">元/平方米</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()" >保存内容</button></div></div>'
+                }
+            });
+
+
+        } else if (id === "c1-3-2-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-4 control-label">请输入仓库使用年限:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="25"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">年</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+
+        } else if (id === "c1-3-3-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-4 control-label">请输入设备成本:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="25"  placeholder="请输入文本"></div><div class="col-sm-4"> <span class="help-block m-b-none">元/平方米</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+
+        } else if (id === "c1-3-4-1") {
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">请输入设备折旧年限:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="25"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">年</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+
+        } else if (id === "c1-3-5-1") {
+
+            src = "/table5"
+
+        } else if (id === "c1-3-6-1") {
+
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">请输入设备维护成本:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="500000"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">元/年</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        } else if (id === "c1-3-7-1") {
+
+            src = "/table2"
+
+        } else if (id === "c1-4-1-1") {
+
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">请输入库存天数:</label><div class="col-sm-4"><input type="text" name="" class="form-control" value="30"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">天</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        } else if (id === "c1-4-2-1") {
+
+            src = "/table3"
+
+        } else if (id === "c1-4-3-1") {
+
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">零担库损比例:</label><div class="col-sm-4"><input type="text" name="" class="form-control lin" value="0.3"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">%</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        } else if (id === "c1-4-4-1") {
+
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">整车库损比例:</label><div class="col-sm-4"><input type="text" name="" class="form-control zhen" value="0"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">%</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        } else if (id === "c1-4-5-1") {
+
+            var pagei = $.layer({
+                type: 1, //0-4的选择,
+                title: false,
+                border: [0],
+                closeBtn: [0],
+                shadeClose: true,
+                area: ['460px', '280px'],
+                page: {
+                    html: '<div class="col-md-12" style="top:100px"><div class="form-group"><label class="col-sm-5 control-label">全年货值:</label><div class="col-sm-4"><input type="text" name="" class="form-control price" value="20000" id="price"  placeholder="请输入文本"></div><div class="col-sm-2"> <span class="help-block m-b-none">万元</span></div> <div class="col-sm-12 col-sm-offset-3"><button class="btn btn-primary juanLu" type="submit" onclick="close()">保存内容</button></div></div>'
+                }
+            });
+
+        }
+
+        if (src !== "") {
+            var pageii = $.layer({
+                type: 2,
+                title: false,
+                fix: false,
+                area: ['910px', '700px'],
+                shadeClose: true,
+                closeBtn: false,
+                offset: [($(window).height() - 700) / 2 + 'px', ''],
+                border: [0],
+                shade: [0.9, '#000'],
+                iframe: {
+                    src: src
+                }
+            });
+        }
+        $('.juanLu').on('click', function() {
+            var lin = 2;
+            var zhen = 5;
+            var dan = 200;
+            var gong = 80000;
+            if ($(".price").val() != null && $(".price").val() != "NAN") {
+                price = parseInt($(".price").val());
+            }
+            if ($(".lin").val() != null) {
+                lin = parseInt($(".lin").val());
+            }
+            if ($(".zhen").val() != null) {
+                zhen = parseInt($(".zhen").val());
+            }
+            if ($(".dan").val() != null) {
+                dan = parseInt($(".dan").val());
+            }
+            if ($(".gong").val() != null) {
+                gong = parseInt($(".gong").val());
+            }
+
+            price = price * (zhen + lin);
+            cangchu = gong / dan;
+            layer.close(pagei);
+        });
+        $('#pagebtn').on('click', function() {
+            layer.close(pageii);
+        });
+
+    }
+    // var ctx = "http://edu.glc360.com";
+
+    function onloadData() {
+
+        var main = [
+            {
+                "origin": "字段",
+                "destination": "次优方案",
+                "destinationCity": "最优方案",
+            },{
+                "origin": "仓库位置",
+                "destination": "东莞",
+                "destinationCity": "广州",
+            }, {
+
+                "origin": "面积",
+                "destination": "9460㎡",
+                "destinationCity": "9460㎡",
+            }, {
+
+                "origin": "总成本",
+                "destination": "¥" + int2str(parseInt(3045060 + price + 5200 * cangchu + 4827387)),
+                "destinationCity": "¥" + int2str(parseInt(2940624 + 5200 * cangchu + price + 4367387)),
+
+            }, {
+
+                "origin": "仓库建设成本",
+                "destination": "¥" + int2str(parseInt(3045060)),
+                "destinationCity": "¥" + int2str(parseInt(2940624)),
+
+            }, {
+
+                "origin": "仓储成本",
+                "destination": "¥" + int2str(parseInt(5200 * cangchu)),
+                "destinationCity": "¥" + int2str(parseInt(5200 * cangchu)),
+
+            }, {
+
+                "origin": "库存持有成本",
+                "destination": "¥" + int2str(parseInt(price)),
+                "destinationCity": "¥" + int2str(parseInt(price)),
+
+            }, {
+
+                "origin": "运输成本",
+                "destination": "¥" + int2str(parseInt(4827387)),
+                "destinationCity": "¥" + int2str(parseInt(4367387)),
+
+            }, {
+
+                "origin": "48小时满足率",
+                "destination": randomNum(72, 80) + "%",
+                "destinationCity": randomNum(75, 80) + "%",
+
+            }];
+        $('#reportTable').bootstrapTable({
+            method: 'get',
+            cache: true,
+            height: 400,
+            striped: false,
+            pagination: true,
+            pageSize: 20,
+            pageNumber: 1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            search: false,
+            showColumns: false,
+            showRefresh: false,
+            showExport: false,
+            exportTypes: ['excel'],
+            clickToSelect: true,
+            columns: [{
+                field: "origin",
+                title: "字段",
+                align: "center",
+                valign: "middle",
+                sortable: "true"
+            }, {
+                field: "destination",
+                title: "方案一",
+                align: "center",
+                valign: "middle",
+                sortable: "true"
+            }, {
+                field: "destinationCity",
+                title: "方案二",
+                align: "center",
+                valign: "middle",
+                sortable: "true"
+            }],
+            data: main,
+            onPageChange: function(size, number) {
+                console.log("页面发生了变化")
+                //$("#pageSizeInput").val(size);
+                //$("#pageNumberInput").val(number);
+
+                //var form = $('#tableForm');
+                //form.action= '${base}/showReport';
+                //form.submit();
+            },
+            //onSort: function (name, order) {
+            // },
+            //formatShowingRows: function (pageFrom, pageTo, totalRows) {
+            //	return '';
+            // },
+            //formatRecordsPerPage: function () {
+            //	return '';
+            //  },
+            //              formatNoMatches: function(){
+            //              	return '�޷�������ļ�¼';
+            //              }
+        });
+
+        showLineCharts();
+    }
+    function showLineCharts(){
+        var box = echarts.init(document.getElementById('lineCharts'));
+        var dataAxis = ['(0,5]','(5,8]', '(8,10]', '(10,20]','(20,30]', '(30,40]', '(40,50]' ,'(50,∞)'];
+        var data = [2*5412, 2*5132, 2*3914, 2*2490, 2*875, 2*312, 2*287,2*14];
+        var fontsz = winRate*14;
+        var option = {
+            tooltip : {   //鼠标触发类型
+                trigger: 'axis',    //item 和 axis 两种
+                axisPointer:{     //坐标轴指示器('line' ,'cross','shadow')
+                    lineStyle: {     //线的颜色
+                        color: '#b38b0d',
+                        width: 1,
+                        type: 'dashed'
+                    }
+                }
+            },
+
+            textStyle: {
+                color:'#c5d3e0',
+                fontSize:fontsz
+            },
+            grid: {
+                left: '4%',
+                right: '6%',
+                bottom: '12%',
+                top: '6%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    axisLine: {
+                        lineStyle:{
+                            color:'#0069d1'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+
+                    boundaryGap : false,
+                    data : dataAxis
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle:{
+                            color:'#0069d1'
+                        }
+                    },splitLine: {
+                        lineStyle:{
+                            color:'#00264d'
+                        }
+                    },
+                    data:dataAxis
+                }
+            ],
+            series : [
+                {
+                    name:'新增关注',
+                    type:'line',
+                    showSymbol: false,
+                    itemStyle: {
+                        normal: {color: '#0283fe'}
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0, 0, 0, 1,[
+                                    {offset: 0, color: 'rgba(2,131,255,1)'},
+                                    {offset: 0.5, color: 'rgba(2,131,255,0.7)'},
+                                    {offset:1, color: 'rgba(2,131,255,0.2)'}
+                                ])
+                        }
+                    },
+                    data:data
+                }
+            ]
+        };
+
+        box.setOption(option);
+        var box1 = echarts.init(document.getElementById('barCharts'));
+        var data1 =  [{value:29, name:'(0,5]'},
+            {value:30, name:'(5,20]'},
+            {value:14, name:'(20,50]'},
+            {value:4, name:'(50,80]'},
+            {value:1, name:'(80,∞)'},
+
+        ];
+        var fontsz = winRate*18;
+
+
+        var  option1 = {
+            legend: [{
+                orient: 'vertical',
+                x: '48%',
+                y:'12%',
+                itemGap: winRate*20,
+                itemWidth:winRate*16,
+                itemHeight:winRate*13,
+                textStyle:{
+                    color: '#c5d3e0',
+                    fontWeight:'normal',
+                    fontSize: fontsz
+                },
+                data:[
+                    {name:'(0,5]',icon:'circle'},
+                    {name:'(5,20]',icon:'circle'},
+                    {name:'(20,50]',icon:'circle'},
+                    {name:'(50,80]',icon:'circle'},
+                    {name:'(80,∞)',icon:'circle'},
+                ]
+            },{
+                orient: 'vertical',
+                x: '78%',
+                y:'12%',
+                itemGap: winRate*20,
+                itemHeight:0,
+                align: 'right',
+                textStyle:{
+                    color: '#c5d3e0',
+                    fontWeight:'normal',
+                    fontSize: fontsz
+                },
+                data:['(0,5]','(5,20]', '(20,50]', '(50,80]','(80,∞)'],
+                formatter: function(name) {
+                    var index = 0;
+                    var dataObj=eval(data1);
+                    for(var key in dataObj){
+                        if(dataObj[key].name == name){
+                            index = key;
+                        }
+                    }
+                    return  dataObj[index].value + "%";
+                }
+            }],
+            color:['#f1bb13','#43b235','#0084ff','#00c7eb','#cc5c5c'],
+            series: [{
+                name:'最近发布头条信息',
+                type:'pie',
+                center : ['20%', '50%'],
+                radius: ['46%', '79%'],
+                hoverAnimation:false,  //是否开启 hover 在扇区上的放大动画效果
+                itemStyle:{
+                    normal: {
+                        borderWidth: 4,
+                        borderColor: '#01155e'
+                    },
+                    emphasis:{  //图形在高亮状态下的样式
+                        borderColor: '#01144d'
+                    }
+                },
+                label: {
+                    normal: {
+                        show: false,
+                        formatter: '{c}% \n {b}',
+                        textStyle: {
+                            color:'#aeceff',
+                            fontSize: fontsz
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: '#004080'
+                        }
+                    }
+                },
+                data:data1
+            }]
+        };
+        box1.setOption(option1);
+
+        var myChart4 = echarts.init( document.getElementById("demo4"));
+        // xdata
+        var xData1 = ['[35,38]','(38,41]','(41,44]','(44,47]','(47,50]','(50,53]','(53,57]','(57,65]','(65,∞)'];
+        // ydata
+        var yData1 = [38, 81, 48, 63,101, 30,  49, 34,12];
+        // pictorialData
+        var pictorialData1 = []
+        yData1.map(v => { pictorialData1.push({ value: v, symbolPosition: 'end' }) })
+
+
+        var option2 = {
+
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            xAxis: [{
+                type: 'category',
+                data: xData1,
+                axisTick: { alignWithLabel: true },
+                axisLabel: { rotate: 30, textStyle: { fontSize: '90%', color: "#fff" } },
+                axisLine: { show: false },
+                axisTick: false
+            }],
+            yAxis:[{
+                type: 'value',
+                name:'单位',
+                nameTextStyle: { color: '#fff', fontSize: '90%', padding: [0, 0, 0, -45]},
+                splitLine: { lineStyle: { color: 'rgba(255,255,255, .1)'}},
+                axisLabel: { textStyle: { fontSize: '90%', color: "#fff" }},
+                axisLine: { show: false },
+                axisTick: false
+            }],
+            series:[{
+                type: 'pictorialBar',
+                symbol: 'rect',
+                symbolSize: [40, 3],
+                symbolOffset: [0, 0],
+                itemStyle: {
+                    color:'#4afefc',
+                },
+                tooltip: { show: false },
+                data: pictorialData1
+            },{
+                type: 'bar',
+                barWidth: 40,
+                data: yData1,
+                itemStyle: {
+                    color: params => {
+                        return new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgba(74,254,252,.6)'
+                        }, {
+                            offset: 1,
+                            color: 'rgba(74,254,252,0)'
+                        }])
+                    }
+                },
+
+            },{
+                name: '访问来源',
+                type: 'pie',
+                radius : '28%',
+                center: ['75%', '35%'],
+//          data:['衬衫','羊毛衫','雪纺衫','裤子','高跟鞋','袜子']
+//          data: [5, 20, 36, 10, 10, 20]
+
+                data:[
+                    {value:21, name:'一月一配',itemStyle: {color: '#C1232B'}},
+                    {value:21, name:'一月两配',itemStyle: {color: '#B5C334'}},
+                    {value:58, name:'一周一配',itemStyle: {color: '#FCCE10'}},
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+        myChart4.setOption(option2);
+        var myChart5 = echarts.init( document.getElementById("demo5"));
+        // xdata
+        var xData2 = ['[1,2.5]','(2.5,4]','(4,5.5]','(5.5,7]','(7,8.5]','(8.5,10]','(10,11.5]','(11.5,13]'];
+        // ydata
+        var yData2 = [38, 101, 48, 63, 30, 81, 49, 34];
+        // pictorialData
+        var pictorialData2 = []
+        yData2.map(v => { pictorialData2.push({ value: v, symbolPosition: 'end' }) })
+
+
+        var option3 = {
+
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            xAxis: [{
+                type: 'category',
+                data: xData2,
+                axisTick: { alignWithLabel: true },
+                axisLabel: { rotate: 30, textStyle: { fontSize: '90%', color: "#fff" } },
+                axisLine: { show: false },
+                axisTick: false
+            }],
+            yAxis:[{
+                type: 'value',
+                name:'单位',
+                nameTextStyle: { color: '#fff', fontSize: '90%', padding: [0, 0, 0, -45]},
+                splitLine: { lineStyle: { color: 'rgba(255,255,255, .1)'}},
+                axisLabel: { textStyle: { fontSize: '90%', color: "#fff" }},
+                axisLine: { show: false },
+                axisTick: false
+            }],
+            series:[{
+                type: 'pictorialBar',
+                symbol: 'rect',
+                symbolSize: [40, 3],
+                symbolOffset: [0, 0],
+                itemStyle: {
+                    color:'#4afefc',
+                },
+                tooltip: { show: false },
+                data: pictorialData2
+            },{
+                type: 'bar',
+                barWidth: 40,
+                data: yData2,
+                itemStyle: {
+                    color: params => {
+                        return new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgba(74,254,252,.6)'
+                        }, {
+                            offset: 1,
+                            color: 'rgba(74,254,252,0)'
+                        }])
+                    }
+                },
+
+            }]
+        };
+        myChart5.setOption(option3);
+    }
+    function trun(){
+        window.location.href=ctx+"system/panel/demo1";
+    }
+
+    function int2str(num) {
+        num = parseInt(num);
+        let numberStr = num.toString()
+        let str = numberStr.split('').reverse()
+        for (let i = 0; i < str.length; i++) {
+            if ((i + 1) % 4 === 0) {
+                str.splice(i, 0, ',')
+            }
+        }
+        str.reverse()
+        let handleResult = ''
+        for (let j = 0; j < str.length; j++) {
+            handleResult += str[j]
+        }
+        return handleResult
+    }
+
+    function formatNum(strNum) {
+        strNum = parseInt(strNum);
+        if (strNum.length <= 3) {
+            return strNum;
+        }
+        if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(strNum)) {
+            return strNum;
+        }
+        var a = RegExp.$1,
+            b = RegExp.$2,
+            c = RegExp.$3;
+        var re = new RegExp();
+        re.compile("(\\d)(\\d{3})(,|$)");
+        while (re.test(b)) {
+            b = b.replace(re, "$1,$2$3");
+        }
+        return a + "" + b + "" + c;
+    }
+
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+</div>
+</body>
+</html>

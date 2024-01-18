@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+<!--<div class="top_nav">-->
+<!--    <div class="nav_warp">-->
+<!--        <div class="nav_warp_logo"></div>-->
+<!--        <div class="nav_warp_text">-->
+<!--            <ul>-->
+<!--                <li>< a href="#">首页</ a>-->
+
+<!--                </li>-->
+<!--                &lt;!&ndash;<li>< a href="/system/test">知识考核</ a>&ndash;&gt;-->
+<!--             &lt;!&ndash;   </li>&ndash;&gt;-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 style="text-align: center">填写数据清单 <small></small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a></li>
+                            <li><a href="#">选项2</a></li>
+                        </ul>
+                        <a class="close-link"> <i class="fa fa-times"></i> </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+
+                    <form class="form-horizontal m-t" id="signupForm" onsubmit="post_data()" target="nm_iframe">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="table-responsive table1">
+                                    <table class="table table-bordered  width1">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" style="text-align:center;vertical-align:middle;">时效参数
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>订单时效</th>
+                                            <td style="height: 25px"><select name="times" id="times"
+                                                                             style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                <option value="12">12h</option>
+                                                <option value="24">24h</option>
+                                                <option value="48">48h</option>
+                                                <option selected value="72">72h</option>
+                                                <option value="96">96h</option>
+                                            </select></td>
+                                        </tr>
+                                        <tr>
+                                            <th>服务水平</th>
+                                            <td style="height: 25px"><select name="times" id="order"
+                                                                             style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                <option value="90">90%</option>
+                                                <option value="95">95%</option>
+                                                <option value="97">98%</option>
+                                                <option selected value="100">100%</option>
+                                            </select></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 ">
+                                <div class="table-responsive table1">
+                                    <table class="table table-bordered  width1">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" style="text-align:center;vertical-align:middle;">运输参数
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th> 车辆规格</th>
+                                            <td><select name="carLength" id="carLength"
+                                                        style="background:rgb(14, 108, 132); color: #000;color:#fff;">
+                                                <option>小车4米6</option>
+                                                <option>中车7米2</option>
+                                                <option>大车9米6</option>
+                                                <option>超大车17米5</option>
+                                            </select></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-nowrap">税额</th>
+                                            <td>11%</td>
+                                        </tr>
+                                        <tr>
+                                            <th>平均每天出库量</th>
+                                            <td><input name="transportNum" value="1000" id="transportNum"
+                                                       onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                       onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                       data-placement="right" title="请输入" th:type="text"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changeplant()" required=""/>托
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>年出库量</th>
+                                            <td id="plant">365000托</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 table1">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" style="text-align:center;vertical-align:middle;">库存参数
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>物料种类数</th>
+                                            <td><input type="value" value="6000"
+                                                       onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                       onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                                       name="inventory_loss" id="goods_num"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changGoosNum()" required=""/>种
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>库存损耗比例</th>
+                                            <td><input type="value" value="0.1" name="inventory_loss"
+                                                       id="inventory_loss"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       required=""/>%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料单价:高值(大于千元)</th>
+                                            <td><input type="value" id="h_price" value="10"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changPrice()" required=""/>%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料单价:中值(百元)</th>
+                                            <td><input type="value" id="m_price" value="50"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changPrice()" required=""/>%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料单价:低值(低于百元)</th>
+                                            <td><input type="value" id="s_price" value="40"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changPrice()" required=""/>%
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="table-responsive table1">
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" style="text-align:center;vertical-align:middle;">仓储参数
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>仓储人员工资</th>
+                                            <td><input type="value" id="warehousing" value="80000"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       required=""/>元/年
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>单仓管理费用</th>
+                                            <td><input type="value" id="managementFee" value="200000"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       required=""/>元/年
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料体积 大(5m&sup3;)</th>
+                                            <td><input type="value" id="b_goods_size" value="10"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changSize()" required=""/>%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料体积 中(0.5m&sup3;)</th>
+                                            <td><input type="value" id="m_goods_size" value="40"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changSize()" required=""/>%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>物料体积 小(0.05m&sup3;)</th>
+                                            <td><input type="value" id="s_goods_size" value="50"
+                                                       style="background:rgb(14, 108, 132); color: #000;color:#fff;"
+                                                       onchange="changSize()" required=""/>%
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">路径规划策略：</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control">
+                                            <option value="">--请选择对应策略--</option>
+                                            <option value="1">最短时间</option>
+                                            <option value="2">避开高速</option>
+                                            <option value="3">避开拥堵</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">物资需求天数：</label>
+                                    <div class="col-sm-4">
+                                        <input type="number" placeholder="天数" id="num" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-8">
+                                        <div class="text-center">
+
+                                            <button type="button" class="btn btn-primary"  onclick="createline()">开始运算</button>
+                                            <div class="col-lg-12">
+                                                <div class="text-center" style="z-index: 9999">
+                                                    <button type="button" class="btn btn-primary" onclick="next()" style="z-index: 9999">下一步</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <!--            <div class="col-lg-3">-->
+            <!--                <div class="ibox float-e-margins">-->
+            <!--                    <div class="ibox-title">-->
+            <!--                        <h5>网络路径规划</h5>-->
+            <!--                        <div class="ibox-tools">-->
+            <!--                            <a class="collapse-link">-->
+            <!--                                <i class="fa fa-chevron-up"></i>-->
+            <!--                            </a>-->
+            <!--                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+            <!--                                <i class="fa fa-wrench"></i>-->
+            <!--                            </a>-->
+            <!--                            <ul class="dropdown-menu dropdown-user">-->
+            <!--                                <li><a href="#">选项1</a>-->
+            <!--                                </li>-->
+            <!--                                <li><a href="#">选项2</a>-->
+            <!--                                </li>-->
+            <!--                            </ul>-->
+            <!--                            <a class="close-link">-->
+            <!--                                <i class="fa fa-times"></i>-->
+            <!--                            </a>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="ibox-content">-->
+            <!--                        <form class="form-horizontal">-->
+
+            <!--                            <div class="form-group">-->
+            <!--                                <label class="col-sm-3 control-label">路径规划策略：</label>-->
+
+            <!--                                <div class="col-sm-8">-->
+            <!--                                    <select class="form-control">-->
+            <!--                                        <option value="">&#45;&#45;请选择对应策略&#45;&#45;</option>-->
+            <!--                                        <option value="1">最短时间</option>-->
+            <!--                                        <option value="2">避开高速</option>-->
+            <!--                                        <option value="3">避开拥堵</option>-->
+            <!--                                    </select>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="form-group">-->
+            <!--                                <label class="col-sm-3 control-label">物资需求天数：</label>-->
+
+            <!--                                <div class="col-sm-8">-->
+            <!--                                    <input type="number" placeholder="天数" id="num" class="form-control">-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+
+            <!--                            <div class="form-group">-->
+            <!--                                <div class="col-sm-offset-3 col-sm-8">-->
+            <!--                                    <div class="text-center">-->
+
+            <!--                                        <button type="button" class="btn btn-primary"  onclick="createline()">开始运算</button>-->
+            <!--                                        <div class="col-lg-12">-->
+            <!--                                            <div class="text-center" style="z-index: 9999">-->
+            <!--                                                <button type="button" class="btn btn-primary" onclick="next()" style="z-index: 9999">下一步</button>-->
+            <!--                                            </div>-->
+            <!--                                        </div>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="form-group">-->
+            <!--                                <div class="col-sm-offset-3 col-sm-8">-->
+            <!--                                    <div class="text-center">-->
+
+            <!--&lt;!&ndash;                                        <button type="button" class="btn btn-primary"  id="show"  style="display: none" onclick="look()">查看输出图表</button>&ndash;&gt;-->
+
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </form>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <div class="col-lg-12">
+                <div id="allmap" style="height: 700px"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Ffk11XhVK5DAWtkd6CGEzmunwETIjqgK"></script>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:supplier:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:supplier:remove')}]];
+    var prefix = ctx + "system/supplier";
+    var data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11;
+    $.getJSON("../../../file/input.json", function (data) {
+        data1=data.data9;
+
+        // loadTable1();
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+            // submit();
+            // submit1();
+            // submit2();
+            // reloadE();
+            // reloadN();
+            // reloadQ();
+            // reloadEN();
+            // reloadEN1();
+            // reloadEQ();
+            // reloadEQ1();
+            // reloadEI();
+            // reloadEI1();
+        });
+        // loadTable2();
+        // loadTable3();
+        // loadTable4();
+        // loadTable5();
+        // loadTable6();
+        // loadTable7();
+        // loadTable8();
+        // loadTable9();
+        // load();
+        // load1();
+        // load2();
+        // load3();
+        // load4();
+        // load6();
+        // load7();
+        // load8();
+        // load9();
+        // load10();
+        // load11();
+        // loads();
+        // load131()
+        // load13();
+        // load14();
+        // load15();
+        //
+        // load17();
+        // load18();
+        // load19();
+
+    });
+    function addResutl(opId,opValue) {
+        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        });
+    }
+    function next(){
+        window.location.href=ctx+"system/project2/ass5/index4";
+    }
+
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        createPoint();
+    }
+    //创建地图函数
+    function createMap() {
+        var map = new BMap.Map("allmap");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(120.2, 30.3);//定义一个中心点坐标
+        map.centerAndZoom(point, 5);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+        map.setMapStyle({
+            styleJson: [
+                {
+                    "featureType": "highway",
+                    "elementType": "all",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "all",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "railway",
+                    "elementType": "all",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "all",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }
+            ]
+        });
+    }
+    //地图事件设置函数：
+    function setMapEvent() {
+        var opts = {
+            position:new BMap.Point(120.2, 30.3)//定义一个中心点坐标, // 指定文本标注所在的地理位置
+            // offset: new BMap.Size(30, -30) // 设置文本偏移量
+        };
+// 创建文本标注对象
+        var label = new BMap.Label('仓库位置', opts);
+// 自定义文本标注样式
+        label.setStyle({
+            color: 'blue',
+            borderRadius: '5px',
+            borderColor: '#ccc',
+            padding: '10px',
+            fontSize: '12px',
+            height: '30px',
+            lineHeight: '30px',
+            fontFamily: '微软雅黑'
+        });
+        map.addOverlay(label);
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    function createPoint() {
+
+        var d =data1;
+        for(var i=0;i<d.length;i++){
+            var arr = parseFloat(d[i].经度);
+            var arr1 = parseFloat(d[i].纬度);
+            var marker1 = new BMap.Marker(new BMap.Point(arr, arr1));
+            map.addOverlay(marker1);
+        }
+    }
+    function createline() {
+        var num =   $("#num").val();
+
+
+        var d = data1;
+        if (num>50){
+            num = d.length - 5;
+        }else {
+            num = num*2;
+        }
+        for (var i = 0; i <num; i += 3) {
+            var p1 = new BMap.Point(parseFloat(d[i].经度), parseFloat(d[i ].纬度));
+            var p2 = new BMap.Point(parseFloat(d[i + 1].经度), parseFloat(d[i + 1].纬度));
+            var p3 = new BMap.Point(parseFloat(d[i + 2].经度), parseFloat(d[i + 2].纬度));
+            // var p4 = new BMap.Point(parseFloat(d[i + 3].经度), parseFloat(d[i + 3].纬度));
+            // var p5 = new BMap.Point(parseFloat(d[i + 4].经度), parseFloat(d[i + 4].纬度));
+            var p6 = new BMap.Point(120.2, 30.3);
+            var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, autoViewport: true}});
+            driving.search(p1,p6, { waypoints: [p2, p3] });
+        }
+        setTimeout(function () {
+            $("#show").show()
+        },5000)
+
+
+    }
+    initMap();
+    // function look(){
+    //     window.location.href=ctx+"system/project2/ass5/index3";
+    // }
+
+</script>
+</body>
+</html>

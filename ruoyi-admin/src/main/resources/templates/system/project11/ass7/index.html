@@ -1,0 +1,4234 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('')" />
+    <style>
+        *{
+            margin: 0;
+            margin: 0;font-size:20px;
+        }
+        .top_nav{
+            width: 100%;
+            height: 60px;
+            background-color: grey;
+        }
+        .nav_warp{
+            width: 900px;
+            height: 60px;
+            margin: 0 auto;
+            font-size: 16px;
+            font-family: 黑体;
+        }
+        .nav_warp ul{
+            list-style: none;
+        }
+        .nav_warp_logo{
+            width: 120px;
+            height: 60px;
+            padding: 10px 5px;
+            float: left;
+        }
+        .nav_warp_text li{
+            float: left;
+            line-height: 50px;
+            text-align: center;
+        }
+        .nav_warp_text a{
+            width:100px;
+            height:50px;
+            text-decoration: none;
+            display: block;
+            color: #fafaff;
+            margin-top: 5px;
+        }
+        /*- - - - 设置二级菜单样式- - - - -*/
+        /*为了兼容IE7写的CSS样式，但是必须写在a:hover前面*/
+        ul li ul li a:link,ul li ul li a:visited{
+            background-color:gray;
+        }
+
+        .nav_warp_text a:hover{
+            background-color:orange;
+        }
+        .nav_warp_text ul li ul li{
+            float:none;
+            margin-left: -40px;
+        }
+        .nav_warp_text ul li ul a{
+            background-color: grey;
+            margin-top: -5px;//抵消上面给全部的a标签设置的margin
+        }
+        .nav_warp_text ul li ul{
+            position:absolute;
+            display:none;/*默认状态下或鼠标离开时隐藏*/
+            width:100px;
+        }
+        .nav_warp_text ul li:hover ul{
+            display:block;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg">
+
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <div>
+            <div style="font-size:26px;text-align: center">仓储指标体系评价</div>
+            <div style="height: 17px;"></div>
+            <!--            <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+            <!--            <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>初始状态相关数值内容</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table1">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化前后公共参数</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table2">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>项目一任务六中实验平台输出内容统计</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table3">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化前后各成本计算</h5>
+                </div>
+                <div class="ibox-content">
+                    <table id="table4">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标统计计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">人员成本占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s1" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	配送成本	</option>
+                                    <option value="2">	库存持有成本	</option>
+                                    <option value="3">	人工工资总和	</option>
+                                    <option value="4">	运输成本	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s2" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总成本	</option>
+                                    <option value="2">	设施面积	</option>
+                                    <option value="3">	订单总数	</option>
+                                    <option value="4">	仓储总人数	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s3" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总配送成本/总订单数量	</option>
+                                    <option value="2">	总运输成本/总托数	</option>
+                                    <option value="3">	仓储总成本/人工工资总和	</option>
+                                    <option value="4">	人工工资总和 / 仓储总成本	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">设备成本占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s11" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	配送成本	</option>
+                                    <option value="2">	设备成本总和	</option>
+                                    <option value="3">	库存持有成本	</option>
+                                    <option value="4">	人工工资总和	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s12" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	设施面积	</option>
+                                    <option value="2">	仓储总成本	</option>
+                                    <option value="3">	订单总数	</option>
+                                    <option value="4">	仓储总人数	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s13" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和 / 仓储总成本	</option>
+                                    <option value="2">	总订单数量/总配送成本	</option>
+                                    <option value="3">	设备成本总和 / 仓储总成本	</option>
+                                    <option value="4">	仓储总成本/人工工资总和	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">设施成本占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s21" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	配送成本	</option>
+                                    <option value="2">	人工工资总和	</option>
+                                    <option value="3">	仓库租赁（或购置）成本	</option>
+                                    <option value="4">	设备成本总和	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s22" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输距离	</option>
+                                    <option value="2">	总托数	</option>
+                                    <option value="3">	仓储总成本	</option>
+                                    <option value="4">	总运输量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s23" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和 / 仓储总成本	</option>
+                                    <option value="2">	仓库租赁（或购置）成本 / 仓储总成本	</option>
+                                    <option value="3">	设备成本总和 / 仓储总成本	</option>
+                                    <option value="4">	仓储总成本/仓库租赁（或购置）成本	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">其他运营成本占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s31" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	其他运营成本（水电等）	</option>
+                                    <option value="2">	设备成本总和	</option>
+                                    <option value="3">	仓库租赁（或购置）成本	</option>
+                                    <option value="4">	人工工资总和	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s32" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	设施面积	</option>
+                                    <option value="2">	订单总数	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s33" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	人工工资总和 / 仓储总成本	</option>
+                                    <option value="2">	其他运营成本（水电等） / 仓储总成本	</option>
+                                    <option value="3">	仓库租赁（或购置）成本 / 仓储总成本	</option>
+                                    <option value="4">	仓储总成本/其他运营成本（水电等） 	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每订单成本：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s41" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	产品销售金额	</option>
+                                    <option value="2">	仓储总成本	</option>
+                                    <option value="3">	人工工资总和	</option>
+                                    <option value="4">	库存金额	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s42" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输距离	</option>
+                                    <option value="2">	总设施面积	</option>
+                                    <option value="3">	订单总数量	</option>
+                                    <option value="4">	仓储总人数	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s43" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	库存金额 / 仓储总成本	</option>
+                                    <option value="2">	仓储总成本 / 订单总数	</option>
+                                    <option value="3">	产品销售金额 / 仓储总成本	</option>
+                                    <option value="4">	订单总数 / 仓储总成本	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table1"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储投入类指标优化率分析数据图表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="panel panel-bordered">
+                        <div>
+                            <p>统计方法</p>
+                            <select  name="z1" id="x1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	（优化前数值—优化后数值）/优化前数值	</option>
+                                <option value="2">	（优化前数值—优化后数值）/优化后数值	</option>
+                                <option value="3">	（优化后数值—优化前数值）/优化前数值	</option>
+                                <option value="4">	（优化后数值—优化前数值）/优化后数值	</option>
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>X轴</p>
+                            <select name="x1" id="y1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	设备成本占比	</option>
+                                <option value="2">	人员成本占比	</option>
+                                <option value="3">	各仓储投入类指标	</option>
+                                <option value="4">	设施成本占比	</option>
+
+
+                            </select>
+                        </div>
+                        <div>
+                            <p>Y轴</p>
+                            <select  name="y1" id="z1" type="text"  class="form-control"    >
+                                <option  value='请选择'  >请选择</option>
+                                <option value="1">	优化前数值	</option>
+                                <option value="2">	优化率	</option>
+                                <option value="3">	优化后数值	</option>
+                                <option value="4">	优化前数值与优化后数值	</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="echarts" id="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储产出类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位成本营业额贡献值：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s61" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">人工工资总和</option>
+                                    <option value="2">产品销售金额</option>
+                                    <option value="3">设备成本总和</option>
+                                    <option value="4">库存金额</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s62" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">仓储总成本</option>
+                                    <option value="2">总运输距离</option>
+                                    <option value="3">总托数</option>
+                                    <option value="4">总运输量</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s63" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">仓储总成本/产品销售金额</option>
+                                    <option value="2">库存金额 / 仓储总成本</option>
+                                    <option value="3">产品销售金额 / 仓储总成本</option>
+                                    <option value="4">产品销售金额 / 总设施面积</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位成本库存金额：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s71" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">产品销售金额</option>
+                                    <option value="2">人工工资总和</option>
+                                    <option value="3">库存金额</option>
+                                    <option value="4">设备成本总和</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s72" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总设施面积	</option>
+                                    <option value="2">	订单总数量	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s73" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总成本/库存金额 	</option>
+                                    <option value="2">	仓储总成本/产品销售金额	</option>
+                                    <option value="3">	库存金额 / 仓储总成本	</option>
+                                    <option value="4">	产品销售金额 / 总设施面积	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">人均产值：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s81" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	产品销售金额	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	设备成本总和	</option>
+                                    <option value="4">	人工工资总和	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s82" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总运输距离	</option>
+                                    <option value="2">	总设施面积	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	订单总数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s83" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总人数/产品销售金额 	</option>
+                                    <option value="2">	仓储总成本 / 订单总数	</option>
+                                    <option value="3">	产品销售金额 / 仓储总成本	</option>
+                                    <option value="4">	产品销售金额 / 仓储总人数	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位面积产值：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s91" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	设备成本总和	</option>
+                                    <option value="2">	人工工资总和	</option>
+                                    <option value="3">	产品销售金额 	</option>
+                                    <option value="4">	其他运营成本（水电等）	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s92" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总人数	</option>
+                                    <option value="2">	总设施面积	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	订单总数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s93" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总成本 / 订单总数	</option>
+                                    <option value="2">	产品销售金额 / 仓储总人数	</option>
+                                    <option value="3">	产品销售金额 / 总设施面积	</option>
+                                    <option value="4">	总设施面积/产品销售金额 	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储产出类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table2"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储产出类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table3"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储人员处理能力类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">人均处理物流量：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s101" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储面积	</option>
+                                    <option value="2">	仓储处理订单量  	</option>
+                                    <option value="3">	仓储吞吐量 	</option>
+                                    <option value="4">	总运输距离	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s102" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储面积	</option>
+                                    <option value="2">	仓储总人数	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s103" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	产品销售金额 / 仓储总人数	</option>
+                                    <option value="2">	库存金额 / 仓储总成本	</option>
+                                    <option value="3">	仓储吞吐量 / 仓储总人数	</option>
+                                    <option value="4">	仓储总人数/仓储吞吐量 	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">人均处理订单量：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s111" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储面积	</option>
+                                    <option value="2">	仓储处理订单量  	</option>
+                                    <option value="3">	总运输距离	</option>
+                                    <option value="4">	仓储吞吐量 	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s112" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	产品销售金额	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	仓储面积	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s113" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总人数/仓储处理订单量	</option>
+                                    <option value="2">	仓储处理订单量  / 仓储总人数	</option>
+                                    <option value="3">	仓储总人数/仓储吞吐量 	</option>
+                                    <option value="4">	库存金额 / 仓储总成本	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储人员处理能力类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table4"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓储人员处理能力类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table5"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart2"  style="height:400px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓库能力类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">单位面积产量：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s121" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储处理订单量  	</option>
+                                    <option value="2">	库存金额	</option>
+                                    <option value="3">	仓储总吞吐量 	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s122" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总设施面积	</option>
+                                    <option value="2">	仓储总人数	</option>
+                                    <option value="3">	产品销售金额	</option>
+                                    <option value="4">	库存金额	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s123" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	 总设施面积 /仓储吞吐量	</option>
+                                    <option value="2">	仓储吞吐量 / 仓储总人数	</option>
+                                    <option value="3">	仓储处理订单量  / 仓储总人数	</option>
+                                    <option value="4">	仓储吞吐量 / 总设施面积	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">周期内日均吞吐量：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s131" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总吞吐量 	</option>
+                                    <option value="2">	总设施面积	</option>
+                                    <option value="3">	仓储处理订单量  	</option>
+                                    <option value="4">	仓储总成本	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s132" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储总人数	</option>
+                                    <option value="2">	总设施面积	</option>
+                                    <option value="3">	周期天数	</option>
+                                    <option value="4">	产品销售金额	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s133" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	周期天数/周期内仓储总吞吐量	</option>
+                                    <option value="2">	周期内仓储总吞吐量/周期天数	</option>
+                                    <option value="3">	仓储吞吐量 / 总设施面积	</option>
+                                    <option value="4">	周期内库存总物流数量/周期天数	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">周期内日均库存物流量：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s141" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总设施面积	</option>
+                                    <option value="2">	仓储处理订单量  	</option>
+                                    <option value="3">	仓储总成本	</option>
+                                    <option value="4">	周期内库存总物流数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s142" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	总设施面积	</option>
+                                    <option value="2">	周期天数	</option>
+                                    <option value="3">	仓储总人数	</option>
+                                    <option value="4">	产品销售金额	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s143" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储吞吐量 / 总设施面积	</option>
+                                    <option value="2">	周期内仓储总吞吐量/周期天数	</option>
+                                    <option value="3">	周期内库存总物流数量/周期天数	</option>
+                                    <option value="4">	周期天数/周期内库存总物流数量	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit4()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓库能力类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table6"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓库能力类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table7"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库内设施类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">库内存储区面积占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s161" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储通道总面积 	</option>
+                                    <option value="2">	缓存区面积 	</option>
+                                    <option value="3">	存储区面积	</option>
+                                    <option value="4">	仓储总吞吐量 	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s162" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓库总面积	</option>
+                                    <option value="2">	缓存区面积 	</option>
+                                    <option value="3">	仓储通道总面积 	</option>
+                                    <option value="4">	仓储总吞吐量 	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s163" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓库总面积/存储区面积	</option>
+                                    <option value="2">	缓存区面积 / 仓库总面积	</option>
+                                    <option value="3">	仓储通道总面积 / 仓库总面积	</option>
+                                    <option value="4">	存储区面积/仓库总面积	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">库内缓存区面积占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s171" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	存储区面积	</option>
+                                    <option value="2">	缓存区面积 	</option>
+                                    <option value="3">	仓储通道总面积 	</option>
+                                    <option value="4">	仓储总吞吐量 	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s172" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓库总面积	</option>
+                                    <option value="2">	存储区面积	</option>
+                                    <option value="3">	仓储总吞吐量 	</option>
+                                    <option value="4">	仓储通道总面积 	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s173" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓库总面积/缓存区面积 	</option>
+                                    <option value="2">	存储区面积/仓库总面积	</option>
+                                    <option value="3">	缓存区面积 / 仓库总面积	</option>
+                                    <option value="4">	仓储通道总面积 / 仓库总面积	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">库内通道面积占比：</label>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s181" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储通道总面积 	</option>
+                                    <option value="2">	存储区面积	</option>
+                                    <option value="3">	缓存区面积 	</option>
+                                    <option value="4">	仓储总吞吐量 	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s182" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	仓储通道总面积 	</option>
+                                    <option value="2">	存储区面积	</option>
+                                    <option value="3">	仓储总吞吐量 	</option>
+                                    <option value="4">	仓库总面积	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="type form-control m-b" id="s183" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	存储区面积/仓库总面积	</option>
+                                    <option value="2">	仓储通道总面积 / 仓库总面积	</option>
+                                    <option value="3">	缓存区面积 / 仓库总面积	</option>
+                                    <option value="4">	仓库总面积/仓储通道总面积 	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit5()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库内设施类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table8"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>库内设施类指标计算优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table9"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="echarts" id="chart4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中装卸位作业效率指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-2 control-label">指标：</label>
+
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">一天中装卸位利用率：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s191" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中搬运设备作业总时间	</option>
+                                    <option value="2">	一天中人员作业总时间	</option>
+                                    <option value="3">	一天中装卸作业总时间	</option>
+                                    <option value="4">	一天中分拣设备作业总时间	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s192" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	装卸位数量	</option>
+                                    <option value="2">	作业数量	</option>
+                                    <option value="3">	搬运设备数量	</option>
+                                    <option value="4">	分拣设备数量	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s193" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	规定搬运设备可工作时间	</option>
+                                    <option value="2">	规定人员可工作时间	</option>
+                                    <option value="3">	规定分拣设备可工作时间	</option>
+                                    <option value="4">	一天中规定装卸位可工作时间	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s194" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	装卸位数量 / （一天中装卸作业总时间 * 一天中规定装卸位可工作时间）	</option>
+                                    <option value="2">	一天中装卸作业总时间 / （装卸位数量 * 一天中规定装卸位可工作时间）	</option>
+                                    <option value="3">	（装卸位数量 * 一天中规定装卸位可工作时间）/一天中装卸作业总时间	</option>
+                                    <option value="4">	（一天中装卸作业总时间 * 一天中规定装卸位可工作时间）/装卸位数量 	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit6()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中装卸位作业效率计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table10"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中装卸位作业效率优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table11"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div style="width: 50%; height: 450px; float: left;" id="chart51"></div>
+                    <div style="width: 50%; height: 450px; float: left;" id="chart52"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储人员作业效率类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">一天中进向人员利用率：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s201" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中分拣设备作业总时间 	</option>
+                                    <option value="2">	一天中人员在出向作业总时间 	</option>
+                                    <option value="3">	一天中搬运设备作业总时间 	</option>
+                                    <option value="4">	一天中人员在进向作业总时间 	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s202" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	进向工作人员数量	</option>
+                                    <option value="2">	出向工作人员数量	</option>
+                                    <option value="3">	搬运设备数量	</option>
+                                    <option value="4">	分拣设备数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s203" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中规定搬运活动可工作时间	</option>
+                                    <option value="2">	一天中规定出向人员可工作时间	</option>
+                                    <option value="1">	一天中规定进向人员可工作时间	</option>
+                                    <option value="4">	一天中规定分拣活动可工作时间	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s204" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中人员在出向作业总时间  / （出向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="2">	一天中人员在进向作业总时间  / （进向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="3">	一天中搬运设备作业总时间 / （搬运设备数量 * 一天中规定搬运活动可工作时间）	</option>
+                                    <option value="4">	一天中分拣设备作业总时间 / （分拣设备数量 * 一天中规定分拣活动可工作时间）	</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">一天中出向人员利用率：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s211" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中人员在进向作业总时间 	</option>
+                                    <option value="2">	一天中人员在出向作业总时间 	</option>
+                                    <option value="3">	一天中搬运设备作业总时间 	</option>
+                                    <option value="4">	一天中分拣设备作业总时间 	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s212" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	进向工作人员数量	</option>
+                                    <option value="2">	搬运设备数量	</option>
+                                    <option value="3">	分拣设备数量	</option>
+                                    <option value="4">	出向工作人员数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s213" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中规定进向人员可工作时间	</option>
+                                    <option value="2">	一天中规定出向人员可工作时间	</option>
+                                    <option value="3">	一天中规定搬运活动可工作时间	</option>
+                                    <option value="4">	一天中规定分拣活动可工作时间	</option>
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s214" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中人员在进向作业总时间  / （进向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="2">	一天中搬运设备作业总时间 / （搬运设备数量 * 一天中规定搬运活动可工作时间）	</option>
+                                    <option value="3">	一天中人员在出向作业总时间  / （出向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="4">	一天中分拣设备作业总时间 / （分拣设备数量 * 一天中规定分拣活动可工作时间）	</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit7()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储人员作业效率类计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table12"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储人员作业效率类指标优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table13"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div style="display: flex; flex-direction: row;">
+                        <div style="width: 50%; height: 300px;" id="chart61"></div>
+                        <div style="width: 50%; height: 300px;" id="chart62"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <div style="width: 50%; height: 300px;" id="chart63"></div>
+                        <div style="width: 50%; height: 300px;" id="chart64"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储作业设备作业效率类指标计算</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <div class="form-horizontal m-t">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="col-sm-3 control-label">指标：</label>
+
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段一</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段二</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">选择字段三</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="control-label">指标统计计算公式</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">一天中搬运设备利用率：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s221" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中装卸作业总时间	</option>
+                                    <option value="2">	一天中人员在出向作业总时间 	</option>
+                                    <option value="3">	一天中搬运设备作业总时间 	</option>
+                                    <option value="4">	一天中分拣设备作业总时间 	</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s222" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	搬运设备数量	</option>
+                                    <option value="2">	出向工作人员数量	</option>
+                                    <option value="3">	装卸位数量	</option>
+                                    <option value="4">	分拣设备数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s223" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中规定人员可工作时间	</option>
+                                    <option value="2">	一天中规定搬运活动可工作时间	</option>
+                                    <option value="3">	一天中规定装卸位可工作时间	</option>
+                                    <option value="4">	一天中规定分拣活动可工作时间	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s224" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中装卸作业总时间 / （装卸位数量 * 规定装卸位可工作时间）	</option>
+                                    <option value="2">	一天中人员在出向作业总时间  / （出向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="3">	一天中搬运设备作业总时间 / （搬运设备数量 * 一天中规定搬运活动可工作时间）	</option>
+                                    <option value="4">	一天中分拣设备作业总时间 / （分拣设备数量 * 一天中规定分拣活动可工作时间）	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">一天中分拣设备利用率：</label>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s231" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中人员在进向作业总时间 	</option>
+                                    <option value="2">	一天中装卸作业总时间	</option>
+                                    <option value="3">	一天中分拣设备作业总时间 	</option>
+                                    <option value="4">	一天中搬运设备作业总时间 	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s232" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	进向工作人员数量	</option>
+                                    <option value="2">	分拣设备数量	</option>
+                                    <option value="3">	装卸位数量	</option>
+                                    <option value="4">	搬运设备数量	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s233" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中规定分拣活动可工作时间	</option>
+                                    <option value="2">	一天中规定装卸位可工作时间	</option>
+                                    <option value="3">	一天中规定人员可工作时间	</option>
+                                    <option value="4">	一天中规定搬运活动可工作时间	</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="type form-control m-b" id="s234" data-first-title="请选择">
+                                    <option value="">请选择</option>
+                                    <option value="1">	一天中人员在进向作业总时间  / （进向工作人员数量 * 一天中规定人员可工作时间）	</option>
+                                    <option value="2">	一天中分拣设备作业总时间 / （分拣设备数量 * 一天中规定分拣活动可工作时间）	</option>
+                                    <option value="3">	一天中装卸作业总时间 / （装卸位数量 * 规定装卸位可工作时间）	</option>
+                                    <option value="4">	一天中搬运设备作业总时间 / （搬运设备数量 * 一天中规定搬运活动可工作时间）	</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-6" th:height="40px">
+                            <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储作业设备作业效率类指标计算内容项目优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:500px">
+                    <table id="bootstrap-table14"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一天中仓储作业设备作业效率类指标优化前后数值表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <table id="bootstrap-table15"></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>优化率对比图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:700px">
+                    <div style="display: flex; flex-direction: row;">
+                        <div style="width: 50%; height: 300px;" id="chart71"></div>
+                        <div style="width: 50%; height: 300px;" id="chart72"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <div style="width: 50%; height: 300px;" id="chart73"></div>
+                        <div style="width: 50%; height: 300px;" id="chart74"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>实验结果提交</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height:300px">
+                    <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
+                        <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
+                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <button class="btn btn-primary" onclick="end()" type="button">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    var ctx = [[@{/}]];
+    var total =0;
+    var n=0;
+
+    function end(){
+        n=(n)/(total);
+        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    }
+    var platformArea = 126;
+    var platformNum = 6;
+    var uploadEmp = 6;
+    var uploadEmpRate=80;
+    var uploadDistance =20000;
+    var uploadForklift = 80;
+    var uploadForkliftRate=6;
+    var tallyArea = 1230;
+    var tallyEmp =12;
+    var tallyEmpDistance = 12305;
+    var tallyEmpRate=73;
+    var putawayEmp=15;
+    var putawayEmpRate=76;
+    var putawayDistance =123562;
+    var area =20000;
+    var cargo =20000;
+    var takeDownEmp =25;
+    var takeDownEmpRate = 80;
+    var takeDownDistance = 129853;
+    var sortingArea = 3991;
+    var sortingEmp = 12;
+    var sortingEmpRate =87;
+    var sortingEmpDistance = 15420;
+    var platformArea1 =126;
+    var platformNum1 = 14;
+    var uploadEmp1 = 13;
+    var uploadEmpRate1=80;
+    var uploadDistance1 = 12831;
+    var uploadForklift1 =80;
+    $.post(ctx + "system/op/list2?&token="+$('#token').text(), function(result) {
+        var d = result.rows;
+        for(var i=0;i<result.total;i++){
+            if(d[i].opId=="platformArea"){
+                platformArea = d[i].opValue;
+            }
+            if(d[i].opId=="platformNum"){
+                platformNum = d[i].opValue;
+            }
+            if(d[i].opId=="uploadEmp"){
+                uploadEmp = d[i].opValue;
+            }
+            if(d[i].opId=="uploadEmpRate"){
+                uploadEmpRate = d[i].opValue;
+            }
+            if(d[i].opId=="uploadDistance"){
+                uploadDistance = d[i].opValue;
+            }
+            if(d[i].opId=="uploadForklift"){
+                uploadForklift = d[i].opValue;
+            }
+            if(d[i].opId=="uploadForkliftRate"){
+                uploadForkliftRate = d[i].opValue;
+            }
+            if(d[i].opId=="tallyArea"){
+                tallyArea = d[i].opValue;
+            }
+            if(d[i].opId=="tallyEmp"){
+                tallyEmp = d[i].opValue;
+            }
+            if(d[i].opId=="tallyEmpDistance"){
+                tallyEmpDistance = d[i].opValue;
+            }
+            if(d[i].opId=="tallyEmpRate"){
+                tallyEmpRate = d[i].opValue;
+            }
+            if(d[i].opId=="putawayEmp"){
+                putawayEmp = d[i].opValue;
+            }
+            if(d[i].opId=="putawayEmpRate"){
+                putawayEmpRate = d[i].opValue;
+            }
+            if(d[i].opId=="putawayDistance"){
+                putawayDistance = d[i].opValue;
+            }
+            if(d[i].opId=="area"){
+                area = d[i].opValue;
+            }
+            if(d[i].opId=="cargo"){
+                cargo = d[i].opValue;
+            }
+            if(d[i].opId=="takeDownEmp"){
+                takeDownEmp = d[i].opValue;
+            }
+
+            if(d[i].opId=="takeDownEmpRate"){
+                takeDownEmpRate = d[i].opValue;
+            }
+
+            if(d[i].opId=="takeDownDistance"){
+                takeDownDistance = d[i].opValue;
+            }
+            if(d[i].opId=="sortingArea"){
+                sortingArea = d[i].opValue;
+            }
+            if(d[i].opId=="sortingEmp"){
+                sortingEmp = d[i].opValue;
+            }
+            if(d[i].opId=="sortingEmpRate"){
+                sortingEmpRate = d[i].opValue;
+            }
+            if(d[i].opId=="sortingEmpDistance"){
+                sortingEmpDistance = d[i].opValue;
+            }
+            if(d[i].opId=="platformArea1"){
+                platformArea1 = d[i].opValue;
+            }
+            if(d[i].opId=="platformNum1"){
+                platformNum1 = d[i].opValue;
+            }
+            if(d[i].opId=="uploadEmp1"){
+                uploadEmp1 = d[i].opValue;
+            }
+            if(d[i].opId=="uploadEmpRate1"){
+                uploadEmpRate1 = d[i].opValue;
+            }
+            if(d[i].opId=="uploadDistance1"){
+                uploadDistance1 = d[i].opValue;
+            }
+            if(d[i].opId=="uploadForklift1"){
+                uploadForklift1 = d[i].opValue;
+            }
+        }
+
+    });
+    loadTable9();
+    function loadTable9() {
+        var options = {
+            id:"table1",
+            data:[{"环节":"入库卸货环节","指标":"每日入库托盘数量（托）","初始状态值":"2000"},
+                {"环节":"入库卸货环节","指标":"每日入库物料种类数量（种）","初始状态值":"1831"},
+                {"环节":"入库卸货环节","指标":"每日到达车辆数量（辆）","初始状态值":"8"},
+                {"环节":"入库卸货环节","指标":"每日到达车辆规格","初始状态值":"中车7米2"},
+                {"环节":"入库卸货环节","指标":"卸货泊车位（月台）数量（个）","初始状态值":"10"},{"环节":"入库卸货环节","指标":"卸货人员数量（个）","初始状态值":"8"},{"环节":"入库卸货环节","指标":"卸货叉车数量（个）","初始状态值":"8"},{"环节":"入库卸货环节","指标":"入库泊车位（月台）长度（米）","初始状态值":"3"},{"环节":"入库卸货环节","指标":"入库泊车位（月台）宽度（米）","初始状态值":"3"},{"环节":"入库卸货环节","指标":"单车卸货作业时间（小时）","初始状态值":"0.5"},{"环节":"入库卸货环节","指标":"每日收货作业总时间（小时）","初始状态值":"6"},{"环节":"入库卸货环节","指标":"入库卸货暂存区面积（平方米）","初始状态值":"300"},{"环节":"理货环节","指标":"每日理货托盘数量（托）","初始状态值":"2000"},{"环节":"理货环节","指标":"每日理货物料种类数量","初始状态值":"1831"},{"环节":"理货环节","指标":"理货暂存区面积（平方米）","初始状态值":"300"},{"环节":"理货环节","指标":"理货人员数量（个）","初始状态值":"6"},{"环节":"理货环节","指标":"理货人员行走速度（秒/米）","初始状态值":"1"},{"环节":"理货环节","指标":"理货人员作业速度（秒/作业单位）","初始状态值":"1.5"},{"环节":"上架环节","指标":"每日上架托盘数量（托）","初始状态值":"2000"},{"环节":"上架环节","指标":"每日上架物料种类数量（种）","初始状态值":"1831"},{"环节":"上架环节","指标":"上架人员数量（个）","初始状态值":"8"},{"环节":"上架环节","指标":"上架人员行走速度（秒/米）","初始状态值":"1"},{"环节":"上架环节","指标":"上架人员作业速度（秒/作业单位）","初始状态值":"1.5"},{"环节":"存储环节","指标":"存储区面积（平方米）","初始状态值":"11000"},{"环节":"存储环节","指标":"存储区货位数量（个）","初始状态值":"9000"},{"环节":"存储环节","指标":"存储区托盘数量","初始状态值":"5985"},{"环节":"存储环节","指标":"周期内库存资金占用总成本（元）","初始状态值":"7857632.798"},{"环节":"存储环节","指标":"物料持有库存总种类数（种）","初始状态值":"2825"},{"环节":"存储环节","指标":"存储区高度（米）","初始状态值":"24"},{"环节":"存储环节","指标":"存储区单层高度（米）","初始状态值":"12"},{"环节":"存储环节","指标":"存储区通道宽度（米）","初始状态值":"1"},{"环节":"存储环节","指标":"货架间间隙（米）","初始状态值":"1.5"},{"环节":"下架环节","指标":"每日下架托盘数量（托）","初始状态值":"2654"},{"环节":"下架环节","指标":"每日下架物料种类数量（种）","初始状态值":"2530"},{"环节":"下架环节","指标":"下架人员数量（个）","初始状态值":"14"},{"环节":"下架环节","指标":"下架人员行走速度（秒/米）","初始状态值":"1"},{"环节":"下架环节","指标":"下架人员作业速度（秒/作业单位）","初始状态值":"1.5"},{"环节":"分拣环节","指标":"每日分拣托盘数量（托）","初始状态值":"2654"},{"环节":"分拣环节","指标":"每日分拣物料种类数量（种）","初始状态值":"2530"},{"环节":"分拣环节","指标":"分拣人员数量（个）","初始状态值":"20"},{"环节":"分拣环节","指标":"分拣暂存区面积（平方米）","初始状态值":"4000"},{"环节":"分拣环节","指标":"分拣区通道宽度（米）","初始状态值":"1.5"},{"环节":"分拣环节","指标":"分拣区托盘间隙（米）","初始状态值":"1"},{"环节":"分拣环节","指标":"分拣人员行走速度（秒/米）","初始状态值":"1"},{"环节":"分拣环节","指标":"分拣人员作业速度（秒/作业单位）","初始状态值":"1.2"},{"环节":"出库装车环节","指标":"每日装车托盘数量（托）","初始状态值":"2654"},{"环节":"出库装车环节","指标":"每日装车物料种类数量（种）","初始状态值":"2530"},{"环节":"出库装车环节","指标":"每日到达车辆数量（辆）","初始状态值":"12"},{"环节":"出库装车环节","指标":"装车泊车位（月台）数量（个）","初始状态值":"10"},{"环节":"出库装车环节","指标":"装货人员数量（个）","初始状态值":"12"},{"环节":"出库装车环节","指标":"装货叉车数量（个）","初始状态值":"12"},{"环节":"出库装车环节","指标":"出库泊车位（月台）长度（米）","初始状态值":"3"},{"环节":"出库装车环节","指标":"出库泊车位（月台）宽度（米）","初始状态值":"3"},{"环节":"出库装车环节","指标":"装车暂存区面积（平方米）","初始状态值":"300"}],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [  {
+                field: '环节',
+                title: '环节'
+            },  {
+                field: '指标',
+                title: '指标'
+            },  {
+                field: '初始状态值',
+                title: '初始状态值'
+            }]
+
+        };
+        var options1 = {
+            id:"table2",
+            data:[{"指标":"周期内产品销售总金额（元）","参数":"1141318"},
+                {"指标":"周期内每日处理订单数量均值（个）","参数":"609"}],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [    {
+                field: '指标',
+                title: '指标'
+            },
+                {
+                    field: '参数',
+                    title: '参数'
+                }
+            ]
+
+        };
+        var options2 = {
+            id:"table3",
+            data:[{"环节":"作业人员资源内容","指标":"入库卸货作业人员需求数量（ 个 ）","实验平台计算数值":platformNum},
+                {"环节":"作业人员资源内容","指标":"理货作业人员需求数量（ 个 ）","实验平台计算数值":tallyEmp},
+                {"环节":"作业人员资源内容","指标":"上架作业人员需求数量（ 个 ）","实验平台计算数值":uploadEmp},
+                {"环节":"作业人员资源内容","指标":"下架作业人员需求数量（ 个 ）","实验平台计算数值":takeDownEmp},
+                {"环节":"作业人员资源内容","指标":"分拣作业人员需求数量（ 个 ）","实验平台计算数值":sortingEmp},
+                {"环节":"作业人员资源内容","指标":"出库装货作业人员需求数量（ 个 ）","实验平台计算数值":uploadEmp1},
+                {"环节":"作业人员资源内容","指标":"仓库各流程总作业人员数量（ 个 ）","实验平台计算数值":platformNum+tallyEmp+uploadEmp+takeDownEmp+sortingEmp+uploadEmp1},
+                {"环节":"作业设备资源内容","指标":"入库卸货叉车需求数量（ 个 ）","实验平台计算数值":uploadForklift},
+                {"环节":"作业设备资源内容","指标":"出库装车叉车需求数量（ 个 ）","实验平台计算数值":uploadForklift1},
+                {"环节":"作业设备资源内容","指标":"仓储各流程装卸搬运设备总数量（个）","实验平台计算数值":uploadForklift+uploadForklift1},
+                {"环节":"作业设施资源内容","指标":"入库卸货月台面积（ 平方米 ）","实验平台计算数值":platformArea},
+                {"环节":"作业设施资源内容","指标":"理货暂存区面积（平方米）","实验平台计算数值":tallyArea},
+                {"环节":"作业设施资源内容","指标":"分拣暂存区面积（平方米）","实验平台计算数值":sortingArea},
+                {"环节":"作业设施资源内容","指标":"出库装车月台面积（平方米）","实验平台计算数值":platformArea1},
+                {"环节":"作业设施资源内容","指标":"仓储各流程暂存区面积汇总（平方米）","实验平台计算数值":platformArea+tallyArea+sortingArea+platformArea1},
+                {"环节":"作业设施资源内容","指标":"存储区面积（平方米）","实验平台计算数值":area},
+                {"环节":"作业设施资源内容","指标":"存储区货位数量（个）","实验平台计算数值":cargo},
+                {"环节":"作业效率内容","指标":"卸货人员利用率（%）","实验平台计算数值":uploadEmpRate},
+                {"环节":"作业效率内容","指标":"卸货叉车利用率（%）","实验平台计算数值":uploadEmpRate},
+                {"环节":"作业效率内容","指标":"理货人员利用率（%）","实验平台计算数值":uploadEmpRate},
+                {"环节":"作业效率内容","指标":"上架人员利用率（%）","实验平台计算数值":putawayEmpRate},
+                {"环节":"作业效率内容","指标":"下架人员利用率（%）","实验平台计算数值":takeDownEmpRate},
+                {"环节":"作业效率内容","指标":"分拣人员利用率（%）","实验平台计算数值":sortingEmpRate},
+                {"环节":"作业效率内容","指标":"装货人员利用率（%）","实验平台计算数值":uploadEmpRate1},
+                {"环节":"作业效率内容","指标":"装货叉车利用率（%）","实验平台计算数值":uploadEmpRate1},
+                {"环节":"非仓储物流作业内容","指标":"周期内库存资金占用总成本（元）","实验平台计算数值":"7857632"}],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [     {
+                field: '环节',
+                title: '环节'
+            },
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '实验平台计算数值',
+                    title: '实验平台计算数值'
+                }
+            ]
+
+        };
+        var options3 = {
+            id:"table4",
+            data:[{"指标":"周期内物流作业人员人工成本（元）","初始状态数值":"340000","您调整优化后计算数值":"280000"},
+                {"指标":"周期内物流作业设备成本（元）","初始状态数值":"32083","您调整优化后计算数值":"32626"},
+                {"指标":"周期内仓库租赁（或购置）成本","初始状态数值":"54060","您调整优化后计算数值":"52800"},
+                {"指标":"周期内其他运营成本（水电等）","初始状态数值":"87450","您调整优化后计算数值":"87450"},
+                {"指标":"周期内仓储总成本统计（元）","初始状态数值":"513593","您调整优化后计算数值":"452876"},
+                {"指标":"周期内库存资金占用总成本（元）","初始状态数值":"7857632","您调整优化后计算数值":"7201304"}],
+            method: 'get',
+            cache: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            pageNumber:1,
+            pageList: [10, 20, 50, 100, 200, 500],
+            sidePagination:'client',
+            search: true,
+            showColumns: true,
+            showRefresh: false,
+            showExport: true,
+            exportTypes: ['csv','txt','xml'],
+            columns: [      {
+                field: '指标',
+                title: '指标'
+            },
+                {
+                    field: '初始状态数值',
+                    title: '初始状态数值'
+                },
+                {
+                    field: '您调整优化后计算数值',
+                    title: '您调整优化后计算数值'
+
+                }
+            ]
+
+        };
+        $.table.init(options);
+        $.table.init(options1);
+        $.table.init(options2);
+        $.table.init(options3);
+    }
+
+    function submit(){
+        var s1 = $('#s1 option:selected').val();
+        var s2 = $('#s2 option:selected').val();
+        var s3 = $('#s3 option:selected').val();
+        var s11 = $('#s11 option:selected').val();
+        var s12 = $('#s12 option:selected').val();
+        var s13 = $('#s13 option:selected').val();
+        var s21 = $('#s21 option:selected').val();
+        var s22 = $('#s22 option:selected').val();
+        var s23 = $('#s23 option:selected').val();
+        var s31 = $('#s31 option:selected').val();
+        var s32 = $('#s32 option:selected').val();
+        var s33 = $('#s33 option:selected').val();
+        var s41 = $('#s41 option:selected').val();
+        var s42 = $('#s42 option:selected').val();
+        var s43 = $('#s43 option:selected').val();
+        var m = 0;
+        if(s1!=3){
+            $('#s1').css("background-color","red");
+            setTimeout(function() {
+                $('#s1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s2').css("background-color","red");
+            setTimeout(function() {
+                $('#s2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s3').css("background-color","red");
+            setTimeout(function() {
+                $('#s3').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=2){
+            $('#s11').css("background-color","red");
+            setTimeout(function() {
+                $('#s11').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=2){
+            $('#s12').css("background-color","red");
+            setTimeout(function() {
+                $('#s12').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=3){
+            $('#s13').css("background-color","red");
+            setTimeout(function() {
+                $('#s13').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s21!=3){
+            $('#s21').css("background-color","red");
+            setTimeout(function() {
+                $('#s21').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=3){
+            $('#s22').css("background-color","red");
+            setTimeout(function() {
+                $('#s22').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=2){
+            $('#s23').css("background-color","red");
+            setTimeout(function() {
+                $('#s23').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s31!=1){
+            $('#s31').css("background-color","red");
+            setTimeout(function() {
+                $('#s31').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s32!=4){
+            $('#s32').css("background-color","red");
+            setTimeout(function() {
+                $('#s32').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s33!=2){
+            $('#s33').css("background-color","red");
+            setTimeout(function() {
+                $('#s33').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+
+        if(s41!=2){
+            $('#s41').css("background-color","red");
+            setTimeout(function() {
+                $('#s41').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s42!=3){
+            $('#s42').css("background-color","red");
+            setTimeout(function() {
+                $('#s42').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s43!=2){
+            $('#s43').css("background-color","red");
+            setTimeout(function() {
+                $('#s43').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable1();
+        }
+
+    }
+    function loadTable1() {
+        var  num =(platformNum+tallyEmp+uploadEmp+takeDownEmp+sortingEmp+uploadEmp1)*5000;
+        var num1 =(uploadForklift+uploadForklift1)*120000;
+        var num3 = (platformArea+tallyArea+sortingArea+platformArea1+area)*30;
+        var num4 = num+num1+num3+380000;
+
+        var options = {
+            id:"bootstrap-table",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[  {
+                item: '人工工资总和（元）',
+                preValue: 340000,
+                postValue: num
+            },
+                {
+                    item: '设备成本总和（元）',
+                    preValue: 32083,
+                    postValue: num1
+                },
+                {
+                    item: '仓库租赁（或购置）成本（元）',
+                    preValue: 54060,
+                    postValue: num3
+                },
+                {
+                    item: '其他运营成本（水电等）（元）',
+                    preValue: 87450,
+                    postValue: 380000
+                },
+                {
+                    item: '仓储总成本（元）',
+                    preValue: 513593,
+                    postValue: num4
+                },
+                {
+                    item: '订单总数量（个）',
+                    preValue: 609,
+                    postValue: 609
+                }],
+            columns: [
+                {
+                    field: 'item',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'preValue',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'postValue',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table1",
+            toolbar:"toolbar1",
+            modalName: "【请填写功能名称】",
+            data:[  {    "指标": "人员成本占比",    "优化前数值": "66.20%",
+                "优化后数值": parseInt(num/num4*100)+"%",    "优化率":  parseInt(61.8-num/num4*100)+"%" },
+                {    "指标": "设备成本占比",    "优化前数值": "6.25%",
+                    "优化后数值": parseInt(num1/num4*100)+"%",  "优化率":  parseInt(87.36-num1/num4*100)+"%"},
+                {    "指标": "设施成本占比",    "优化前数值": "10.53%" ,
+                    "优化后数值": parseInt(num3/num4*100)+"%",   "优化率":  parseInt(17.93-num3/num4*100)+"%" },
+                {    "指标": "其他运营成本占比",    "优化前数值":"17.03%",
+                    "优化后数值": parseInt(380000/num4*100)+"%",    "优化率": parseInt(59.98-num4/357243*100)+"%"  },
+                {    "指标": "每订单成本",    "优化前数值": "843.34",
+                    "优化后数值": parseInt(num4/609)+"",    "优化率": parseInt((843.34-num4/609)/843.34)+"%"  }],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+    }
+
+    function submit1(){
+        var s1 = $('#x1 option:selected').val();
+        var s2 = $('#y1 option:selected').val();
+        var s3 = $('#z1 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#x1').css("background-color","red");
+            setTimeout(function() {
+                $('#x1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=3){
+            $('#y2').css("background-color","red");
+            setTimeout(function() {
+                $('#y2').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#z1').css("background-color","red");
+            setTimeout(function() {
+                $('#z1').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            load2();
+        }
+
+    }
+    function load2(){
+        var myChart = echarts.init(document.getElementById('chart'));
+
+        var option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    type : 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['人员成本占比', '设备成本占比', '设施成本占比', '其他运营成本占比', '每订单成本'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    min: -100,
+                    max: 100
+                }
+            ],
+            series : [
+                {
+                    name:'优化率',
+                    type:'bar',
+                    barWidth: '60%',
+                    data:[  parseInt(61.8-num/num4*100),parseInt(87.36-num1/num4*100), parseInt(17.93-num3/num4*100), parseInt(59.98-num4/357243*100), parseInt((843.34-num4/609)/843.34)]
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+    }
+
+    function submit2(){
+        var s1 = $('#s61 option:selected').val();
+        var s2 = $('#s62 option:selected').val();
+        var s3 = $('#s63 option:selected').val();
+        var s11 = $('#s71 option:selected').val();
+        var s12 = $('#s72 option:selected').val();
+        var s13 = $('#s73 option:selected').val();
+        var s21 = $('#s81 option:selected').val();
+        var s22 = $('#s82 option:selected').val();
+        var s23 = $('#s83 option:selected').val();
+        var s31 = $('#s91 option:selected').val();
+        var s32 = $('#s92 option:selected').val();
+        var s33 = $('#s93 option:selected').val();
+
+        var m = 0;
+        if(s1!=2){
+            $('#s61').css("background-color","red");
+            setTimeout(function() {
+                $('#s61').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s62').css("background-color","red");
+            setTimeout(function() {
+                $('#s62').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s63').css("background-color","red");
+            setTimeout(function() {
+                $('#s63').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=3){
+            $('#s71').css("background-color","red");
+            setTimeout(function() {
+                $('#s71').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=4){
+            $('#s72').css("background-color","red");
+            setTimeout(function() {
+                $('#s72').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=3){
+            $('#s73').css("background-color","red");
+            setTimeout(function() {
+                $('#s73').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s21!=1){
+            $('#s81').css("background-color","red");
+            setTimeout(function() {
+                $('#s81').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=3){
+            $('#s82').css("background-color","red");
+            setTimeout(function() {
+                $('#s82').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=4){
+            $('#s83').css("background-color","red");
+            setTimeout(function() {
+                $('#s83').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s31!=3){
+            $('#s91').css("background-color","red");
+            setTimeout(function() {
+                $('#s91').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s32!=2){
+            $('#s92').css("background-color","red");
+            setTimeout(function() {
+                $('#s92').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s33!=3){
+            $('#s93').css("background-color","red");
+            setTimeout(function() {
+                $('#s93').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+
+        if(m==0){
+            loadTable2();
+        }
+
+    }
+    function loadTable2() {
+        var  num =(platformNum+tallyEmp+uploadEmp+takeDownEmp+sortingEmp+uploadEmp1)*5000;
+        var num1 =(uploadForklift+uploadForklift1)*120000;
+        var num3 = (platformArea+tallyArea+sortingArea+platformArea1+area)*30;
+        var num4 = num1+num+num3+380000;
+        var options = {
+            id:"bootstrap-table2",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[  {    "各指标计算内容项目": "产品销售金额（元）",    "优化前数值": 1141318,    "优化后数值": 1141318  },
+                {    "各指标计算内容项目": "库存金额（元）",    "优化前数值": 7857632,    "优化后数值": 7857632  },
+                {    "各指标计算内容项目": "仓储总成本（元）",    "优化前数值": 513593,    "优化后数值":num4  },
+                {    "各指标计算内容项目": "仓储总人数（个）",    "优化前数值": 68,    "优化后数值": platformNum+tallyEmp+uploadEmp+takeDownEmp+sortingEmp+uploadEmp1  },
+                {    "各指标计算内容项目": "总设施面积（平方米）",    "优化前数值": 15900,    "优化后数值": platformArea+tallyArea+sortingArea+platformArea1+area  }],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table3",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[  {
+                "指标": "单位成本营业额贡献值",
+                "优化前数值": 0.27,
+                "优化后数值": 4.31,
+                "优化率": "1525.13%"
+            },
+                {
+                    "指标": "单位成本库存金额",
+                    "优化前数值": 0.08,
+                    "优化后数值": 0.17,
+                    "优化率": "105.46%"
+                },
+                {
+                    "指标": "人均产值",
+                    "优化前数值": 34710.74,
+                    "优化后数值": 714518.52,
+                    "优化率": "1958.49%"
+                },
+                {
+                    "指标": "单位面积产值",
+                    "优化前数值": 350.00,
+                    "优化后数值": 4823.00,
+                    "优化率": "1278.00%"
+                }],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '优化率',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+        var data = [
+            { name: "单位成本营业额贡献值", rate: 1525 },
+            { name: "单位成本库存金额", rate: 105 },
+            { name: "人均产值", rate: 1958 },
+            { name: "单位面积产值", rate: 1278 }
+        ];
+
+        // 指标名称
+        var indicatorName = data.map(function(item) {
+            return item.name;
+        });
+
+        // 指标数值
+        var indicatorValue = data.map(function(item) {
+            return item.rate;
+        });
+        var myChart = echarts.init(document.getElementById("chart1"));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: "指标优化率柱状图",
+                subtext: "数据来源：指标数据",
+                x: "center"
+            },
+            tooltip: {},
+            xAxis: {
+                data: indicatorName
+            },
+            yAxis: {},
+            series: [
+                {
+                    name: "优化率",
+                    type: "bar",
+                    data: indicatorValue
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function submit3(){
+        var s1 = $('#s101 option:selected').val();
+        var s2 = $('#s102 option:selected').val();
+        var s3 = $('#s103 option:selected').val();
+        var s11 = $('#s111 option:selected').val();
+        var s12 = $('#s112 option:selected').val();
+        var s13 = $('#s113 option:selected').val();
+
+
+        var m = 0;
+        if(s1!=3){
+            $('#s101').css("background-color","red");
+            setTimeout(function() {
+                $('#s101').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=2){
+            $('#s102').css("background-color","red");
+            setTimeout(function() {
+                $('#s102').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s103').css("background-color","red");
+            setTimeout(function() {
+                $('#s103').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=2){
+            $('#s111').css("background-color","red");
+            setTimeout(function() {
+                $('#s111').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=3){
+            $('#s112').css("background-color","red");
+            setTimeout(function() {
+                $('#s112').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=2){
+            $('#s113').css("background-color","red");
+            setTimeout(function() {
+                $('#s113').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable3();
+        }
+
+    }
+    function loadTable3() {
+        var options = {
+            id:"bootstrap-table4",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[  {name: '仓储吞吐量（托）', before: 32351245, after: 39344543},
+                {name: '仓储处理订单量（个）', before: 264212, after: 357243},
+                {name: '仓储总人数（个）', before: 121, after: 81}],
+            columns: [
+                {
+                    field: 'name',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table5",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[   { name: '人均处理物流量', before: 267365.66, after: 485735.10, rate: "81.67%" },
+                { name: '人均处理订单量', before: 2183.57, after: 4410.41, rate: "101.98%" },
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'rate',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var myChart = echarts.init(document.getElementById("chart2"));
+        var data = [
+            { name: '人均处理物流量', value: 82 },
+            { name: '人均处理订单量', value: 102 }
+        ];
+
+        myChart.setOption({
+            title: {
+                text: '指标优化率'
+            },
+            xAxis: {
+                type: 'category',
+                data: data.map(function(item) {
+                    return item.name;
+                })
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.map(function(item) {
+                    return item.value;
+                })
+            }]
+        });
+    }
+
+    function submit4(){
+        var s1 = $('#s121 option:selected').val();
+        var s2 = $('#s122 option:selected').val();
+        var s3 = $('#s123 option:selected').val();
+        var s11 = $('#s131 option:selected').val();
+        var s12 = $('#s132 option:selected').val();
+        var s13 = $('#s133 option:selected').val();
+        var s21 = $('#s141 option:selected').val();
+        var s22 = $('#s142 option:selected').val();
+        var s23 = $('#s143 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s121').css("background-color","red");
+            setTimeout(function() {
+                $('#s121').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s122').css("background-color","red");
+            setTimeout(function() {
+                $('#s122').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s123').css("background-color","red");
+            setTimeout(function() {
+                $('#s123').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=1){
+            $('#s131').css("background-color","red");
+            setTimeout(function() {
+                $('#s131').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=3){
+            $('#s132').css("background-color","red");
+            setTimeout(function() {
+                $('#s132').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=2){
+            $('#s133').css("background-color","red");
+            setTimeout(function() {
+                $('#s133').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s21!=4){
+            $('#s141').css("background-color","red");
+            setTimeout(function() {
+                $('#s141').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=2){
+            $('#s142').css("background-color","red");
+            setTimeout(function() {
+                $('#s142').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=3){
+            $('#s143').css("background-color","red");
+            setTimeout(function() {
+                $('#s143').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable4();
+        }
+
+    }
+    function loadTable4() {
+        var options = {
+            id:"bootstrap-table6",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[ {
+                "各指标计算内容项目": "仓储总吞吐量（托）",
+                "优化前数值": 32351245,
+                "优化后数值": 39344543
+            },
+                {
+                    "各指标计算内容项目": "周期内仓储总吞吐量（托）",
+                    "优化前数值": 5318013,
+                    "优化后数值": 8782143
+                },
+                {
+                    "各指标计算内容项目": "周期内库存总物流数量（箱）",
+                    "优化前数值": 10368988,
+                    "优化后数值": 16334548
+                },
+                {
+                    "各指标计算内容项目": "总设施面积（平方米）",
+                    "优化前数值": 12000,
+                    "优化后数值": 12000
+                },
+                {
+                    "各指标计算内容项目": "周期天数（天）",
+                    "优化前数值": 60,
+                    "优化后数值": 60
+                }],
+            columns: [
+                {
+                    field: '各指标计算内容项目',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table7",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[ {
+                "name": "单位面积产量",
+                "before": 2695.94,
+                "after": 3278.71,
+                "rate":" 21.62%"
+            },
+                {
+                    "name": "周期内日均吞吐量",
+                    "before": 88633.55,
+                    "after": 146369.05,
+                    "rate": "65.14%"
+                },
+                {
+                    "name": "周期内日均库存物流量",
+                    "before": 172816.47,
+                    "after": 88633.55,
+                    "rate": "-48.71%"
+                }
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'rate',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var myChart = echarts.init(document.getElementById("chart3"));
+        var data = [
+            { name: "单位面积产量", value: 21.62 },
+            { name: "周期内日均吞吐量", value: 65.14 },
+            { name: "周期内日均库存物流量", value: -48.71 },
+        ];
+
+
+        myChart.setOption({
+            title: {
+                text: '指标优化率'
+            },
+            xAxis: {
+                type: 'category',
+                data: data.map(function(item) {
+                    return item.name;
+                })
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data.map(function(item) {
+                    return item.value;
+                })
+            }]
+        });
+    }
+
+
+    function submit5(){
+        var s1 = $('#s161 option:selected').val();
+        var s2 = $('#s162 option:selected').val();
+        var s3 = $('#s163 option:selected').val();
+        var s11 = $('#s171 option:selected').val();
+        var s12 = $('#s172 option:selected').val();
+        var s13 = $('#s173 option:selected').val();
+        var s21 = $('#s181 option:selected').val();
+        var s22 = $('#s182 option:selected').val();
+        var s23 = $('#s183 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s161').css("background-color","red");
+            setTimeout(function() {
+                $('#s161').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s162').css("background-color","red");
+            setTimeout(function() {
+                $('#s162').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s163').css("background-color","red");
+            setTimeout(function() {
+                $('#s163').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(s11!=2){
+            $('#s171').css("background-color","red");
+            setTimeout(function() {
+                $('#s171').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=1){
+            $('#s172').css("background-color","red");
+            setTimeout(function() {
+                $('#s172').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=3){
+            $('#s173').css("background-color","red");
+            setTimeout(function() {
+                $('#s173').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s21!=1){
+            $('#s181').css("background-color","red");
+            setTimeout(function() {
+                $('#s181').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s22!=4){
+            $('#s182').css("background-color","red");
+            setTimeout(function() {
+                $('#s182').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s23!=2){
+            $('#s183').css("background-color","red");
+            setTimeout(function() {
+                $('#s183').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable5();
+        }
+
+    }
+    function loadTable5() {
+        var options = {
+            id:"bootstrap-table8",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[
+                {name: '存储区面积（平方米）', 优化前数值: 8200, 优化后数值: 8200},
+                {name: '缓存区面积 （平方米）', 优化前数值: 2600, 优化后数值: 2600},
+                {name: '仓储通道总面积 （平方米）', 优化前数值: 1000, 优化后数值: 1000},
+                {name: '仓库总面积（平方米）', 优化前数值: 12000, 优化后数值: 12000},
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table9",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[
+                {
+                    "指标": "库内存储区面积占比",
+                    "优化前数值": 68.33,
+                    "优化后数值": 68.33,
+                    "提升幅度": 0.00
+                },
+                {
+                    "指标": "库内缓存区面积占比",
+                    "优化前数值": 21.67,
+                    "优化后数值": 21.67,
+                    "提升幅度": 0.00
+                },
+                {
+                    "指标": "库内通道面积占比",
+                    "优化前数值": 8.33,
+                    "优化后数值": 8.33,
+                    "提升幅度": 0.00
+                }
+            ],
+            columns: [
+                {
+                    field: '指标',
+                    title: '指标'
+                },
+                {
+                    field: '优化前数值',
+                    title: '优化前数值'
+                },
+                {
+                    field: '优化后数值',
+                    title: '优化后数值'
+                },
+                {
+                    field: '提升幅度',
+                    title: '提升幅度'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var myChart = echarts.init(document.getElementById("chart4"));
+        var chartData = [  {    name: "库内存储区面积占比",    value: 68.33  },  {    name: "库内缓存区面积占比",    value: 21.67  },  {    name: "库内通道面积占比",    value: 8.33  }];
+
+        var option = {
+            title: {
+                text: "面积占比",
+                left: "center"
+            },
+            series: [
+                {
+                    name: "面积占比",
+                    type: "pie",
+                    radius: "55%",
+                    data: chartData,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: "rgba(0, 0, 0, 0.5)"
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+
+
+    function submit6(){
+        var s1 = $('#s191 option:selected').val();
+        var s2 = $('#s192 option:selected').val();
+        var s3 = $('#s193 option:selected').val();
+
+
+
+        var m = 0;
+        if(s1!=3){
+            $('#s191').css("background-color","red");
+            setTimeout(function() {
+                $('#s191').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s192').css("background-color","red");
+            setTimeout(function() {
+                $('#s192').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=4){
+            $('#s193').css("background-color","red");
+            setTimeout(function() {
+                $('#s193').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+
+        if(m==0){
+            loadTable6();
+        }
+
+    }
+    function loadTable6() {
+        var options = {
+            id:"bootstrap-table10",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data: [
+                {
+                    item: "一天中装卸作业总时间",
+                    before: 10,
+                    after: 28
+                },
+                {
+                    item: "装卸位数量",
+                    before: 20,
+                    after: 20
+                },
+                {
+                    item: "规定装卸位可工作时间",
+                    before: 8,
+                    after: 8
+                }
+            ],
+            columns: [
+                {
+                    field: 'item',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table11",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[   { name: '人均处理物流量', before: 267365.66, after: 485735.10, rate: "81.67%" },
+                { name: '人均处理订单量', before: 2183.57, after: 4410.41, rate: "101.98%" },
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'rate',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+
+        var data1 = [    {value: 6.25, name: "装卸位利用率优化前"},    {value: 93.75, name: "装卸位闲置率优化前"}];
+
+        var data2 = [    {value: 17.5, name: "装卸位利用率优化后"},    {value: 82.5, name: "装卸位闲置率优化后"}];
+
+        var option1 = {
+            title: {
+                text: '装卸位利用率优化前',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            series: [
+                {
+                    name: '占比',
+                    type: 'pie',
+                    radius: '55%',
+                    data: data1,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var option2 = {
+            title: {
+                text: '装卸位利用率优化后',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            series: [
+                {
+                    name: '占比',
+                    type: 'pie',
+                    radius: '55%',
+                    data: data2,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var myChart1 = echarts.init(document.getElementById('chart51'));
+        var myChart2 = echarts.init(document.getElementById('chart52'));
+
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+    }
+
+
+    function submit7(){
+        var s1 = $('#s201 option:selected').val();
+        var s2 = $('#s202 option:selected').val();
+        var s3 = $('#s203 option:selected').val();
+        var s4 = $('#s204 option:selected').val();
+        var s11 = $('#s211 option:selected').val();
+        var s12 = $('#s212 option:selected').val();
+        var s13 = $('#s213 option:selected').val();
+        var s14 = $('#s214 option:selected').val();
+
+        var m = 0;
+        if(s1!=4){
+            $('#s201').css("background-color","red");
+            setTimeout(function() {
+                $('#s201').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s202').css("background-color","red");
+            setTimeout(function() {
+                $('#s202').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=3){
+            $('#s203').css("background-color","red");
+            setTimeout(function() {
+                $('#s203').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=2){
+            $('#s204').css("background-color","red");
+            setTimeout(function() {
+                $('#s204').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s11!=2){
+            $('#s211').css("background-color","red");
+            setTimeout(function() {
+                $('#s211').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=4){
+            $('#s212').css("background-color","red");
+            setTimeout(function() {
+                $('#s212').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=2){
+            $('#s213').css("background-color","red");
+            setTimeout(function() {
+                $('#s213').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s14!=3){
+            $('#s214').css("background-color","red");
+            setTimeout(function() {
+                $('#s214').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable7();
+        }
+
+    }
+    function loadTable7() {
+        var options = {
+            id:"bootstrap-table12",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data: [
+                {
+                    name: "进向工作人员数量",
+                    before: 4,
+                    after: 2
+                },
+                {
+                    name: "出向工作人员数量",
+                    before: 4,
+                    after: 3
+                },
+                {
+                    name: "一天中人员在进向作业总时间",
+                    before: 20,
+                    after: 13
+                },
+                {
+                    name: "一天中人员在出向作业总时间",
+                    before: 30,
+                    after: 20
+                },
+                {
+                    name: "一天中规定人员可工作时间",
+                    before: 8,
+                    after: 8
+                }
+            ],
+            columns: [
+                {
+                    field: 'name',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table13",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[  {
+                index: "一天中进向人员利用率",
+                before: 62.50,
+                after: 81.25,
+                increase: 18.75
+            },
+                {
+                    index: "一天中进向人员空闲率",
+                    before: 37.50,
+                    after: 18.75,
+                    increase: -18.75
+                },
+                {
+                    index: "一天中出向人员利用率",
+                    before: 93.75,
+                    after: 83.33,
+                    increase: -10.42
+                },
+                {
+                    index: "一天中出向人员空闲率",
+                    before: 6.25,
+                    after: 16.67,
+                    increase: 10.42
+                }
+            ],
+            columns: [
+                {
+                    field: 'index',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'increase',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var data1 = [    { value: 62.50, name: "优化前数值" },    { value: 37.50, name: "优化前空闲率" }];
+        var data2 = [    { value: 81.25, name: "优化后数值" },    { value: 18.75, name: "优化后空闲率" }];
+
+        var myChart1 = echarts.init(document.getElementById("chart61"));
+        var option1 = {
+            title: {
+                text: "一天中进向人员利用率",
+                left: "center"
+            },
+            series: [
+                {
+                    name: "利用率",
+                    type: "pie",
+                    data: data1
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+
+        var myChart2 = echarts.init(document.getElementById("chart62"));
+        var option2 = {
+            title: {
+                text: "一天中进向人员空闲率",
+                left: "center"
+            },
+            series: [
+                {
+                    name: "空闲率",
+                    type: "pie",
+                    data: data2
+                }
+            ]
+        };
+        myChart2.setOption(option2);
+        var myChart = echarts.init(document.getElementById('chart63'));
+
+        var option = {
+            series: [
+                {
+                    name: '出向人员利用率',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 83.33, name: '优化后数值'},
+                        {value: 16.67, name: '优化前数值'},
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        var myChart = echarts.init(document.getElementById('chart64'));
+
+        var option = {
+            series: [
+                {
+                    name: '出向人员空闲率',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 16.67, name: '优化后数值'},
+                        {value: 83.33, name: '优化前数值'},
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+    }
+
+    function submit8(){
+        var s1 = $('#s221 option:selected').val();
+        var s2 = $('#s222 option:selected').val();
+        var s3 = $('#s223 option:selected').val();
+        var s4 = $('#s224 option:selected').val();
+        var s11 = $('#s231 option:selected').val();
+        var s12 = $('#s232 option:selected').val();
+        var s13 = $('#s233 option:selected').val();
+        var s14 = $('#s234 option:selected').val();
+
+        var m = 0;
+        if(s1!=3){
+            $('#s221').css("background-color","red");
+            setTimeout(function() {
+                $('#s221').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s2!=1){
+            $('#s222').css("background-color","red");
+            setTimeout(function() {
+                $('#s222').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s3!=2){
+            $('#s223').css("background-color","red");
+            setTimeout(function() {
+                $('#s223').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s4!=3){
+            $('#s224').css("background-color","red");
+            setTimeout(function() {
+                $('#s224').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s11!=3){
+            $('#s231').css("background-color","red");
+            setTimeout(function() {
+                $('#s231').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s12!=2){
+            $('#s232').css("background-color","red");
+            setTimeout(function() {
+                $('#s232').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s13!=1){
+            $('#s233').css("background-color","red");
+            setTimeout(function() {
+                $('#s233').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(s14!=2){
+            $('#s234').css("background-color","red");
+            setTimeout(function() {
+                $('#s234').css("background-color","white");
+            },3000); //一秒内不能重复点击
+            m++;
+        }
+        if(m==0){
+            loadTable8();
+        }
+
+    }
+    function loadTable8() {
+        var options = {
+            id:"bootstrap-table14",
+            toolbar:"toolbar",
+            modalName: "【请填写功能名称】",
+            data:[  {
+                indicator: '搬运设备数量（个）',
+                before: 6,
+                after: 9,
+            },
+                {
+                    indicator: '分拣设备数量（个）',
+                    before: 8,
+                    after: 10,
+                },
+                {
+                    indicator: '一天中搬运设备作业总时间 （小时）',
+                    before: 20,
+                    after: 52,
+                },
+                {
+                    indicator: '一天中分拣设备作业总时间 （小时）',
+                    before: 30,
+                    after: 60,
+                },
+                {
+                    indicator: '一天中规定搬运活动可工作时间（小时）',
+                    before: 8,
+                    after: 8,
+                },
+                {
+                    indicator: '一天中规定分拣活动可工作时间（小时）',
+                    before: 8,
+                    after: 8,
+                }],
+            columns: [
+                {
+                    field: 'indicator',
+                    title: '各指标计算内容项目'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                }]
+        };
+        $.table.init(options);
+        var options1 = {
+            id:"bootstrap-table15",
+            toolbar:"toolbar4",
+            modalName: "【请填写功能名称】",
+            data:[   {
+                indicator: '一天中装卸设备利用率',
+                before: 41.67,
+                after: 72.22,
+                improvement: 30.56,
+            },
+                {
+                    indicator: '一天中装卸设备闲置率',
+                    before: 58.33,
+                    after: 27.78,
+                    improvement: -30.56,
+                },
+                {
+                    indicator: '一天中分拣设备利用率',
+                    before: 62.50,
+                    after: 83.33,
+                    improvement: 20.83,
+                },
+                {
+                    indicator: '一天中分拣设备闲置率',
+                    before: 37.50,
+                    after: 16.67,
+                    improvement: -20.83,
+                }
+            ],
+            columns: [
+                {
+                    field: 'indicator',
+                    title: '指标'
+                },
+                {
+                    field: 'before',
+                    title: '优化前数值'
+                },
+                {
+                    field: 'after',
+                    title: '优化后数值'
+                },
+                {
+                    field: 'improvement',
+                    title: '优化率'
+                }]
+        };
+        $.table.init(options1);
+
+
+        var chart1 = echarts.init(document.getElementById('chart71'));
+        var chart2 = echarts.init(document.getElementById('chart72'));
+        var chart3 = echarts.init(document.getElementById('chart73'));
+        var chart4 = echarts.init(document.getElementById('chart74'));
+
+        var option1 = {
+            title : {
+                text: '装卸设备利用率',
+                x:'center'
+            },
+            series : [
+                {
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:41.67, name:'优化前'},
+                        {value:72.22, name:'优化后'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        chart1.setOption(option1);
+        var option2 = {
+            title : {
+                text: '装卸设备闲置率',
+                x:'center'
+            },
+            series : [
+                {
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:58.33, name:'优化前'},
+                        {value:27.78, name:'优化后'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        chart2.setOption(option2);
+        chart3.setOption({
+            title: {
+                text: '一天中分拣设备利用率'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}%'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['优化前数值', '优化后数值']
+            },
+            series: [
+                {
+                    name: '利用率',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 62.50, name: '优化前数值'},
+                        {value: 83.33, name: '优化后数值'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        });
+        chart4.setOption({
+            title: {
+                text: '一天中分拣设备闲置率'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}%'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['优化前数值', '优化后数值']
+            },
+            series: [
+                {
+                    name: '闲置率',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 37.50, name: '优化前数值'},
+                        {value: 16.67, name: '优化后数值'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        });
+    }
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+
+</body>
+</html>
