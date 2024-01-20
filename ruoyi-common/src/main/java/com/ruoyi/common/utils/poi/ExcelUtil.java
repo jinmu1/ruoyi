@@ -331,7 +331,12 @@ public class ExcelUtil<T>
         }
         // 获取最后一个非空行的行下标，比如总行数为n，则返回的为n-1
         int rows = sheet.getLastRowNum();
-
+        if (rows > 5000){
+            throw new IOException("数据行数不能大于5000行！");
+        }
+        if (rows == 0){
+            throw new IOException("数据行数不能小于2行！");
+        }
         if (rows > 0)
         {
             // 定义一个map用于存放excel列的序号和field.
@@ -471,7 +476,12 @@ public class ExcelUtil<T>
                                 val = FileUtils.writeImportBytes(data);
                             }
                         }
-                        ReflectUtils.invokeSetter(entity, propertyName, val);
+                        try {
+                            ReflectUtils.invokeSetter(entity, propertyName, val);
+                        }catch (Exception e){
+                            throw new IOException("第"+i+"行数据格式不正确！请按照模板修改");
+                        }
+
                     }
                 }
                 list.add(entity);

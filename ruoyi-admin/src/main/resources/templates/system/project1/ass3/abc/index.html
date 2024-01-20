@@ -1217,7 +1217,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [
                 {
                     field: '出库日期',
@@ -1434,7 +1434,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [
                 {
                     field: '出库日期',
@@ -1661,7 +1661,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [
                 {
                     field: '物料编码',
@@ -1716,7 +1716,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [{
                 checkbox: true
             },
@@ -1765,7 +1765,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [
                 {
                     field: '物料编码',
@@ -1817,7 +1817,7 @@
             showColumns: true,
             showRefresh: false,
             showExport: true,
-            exportTypes: ['csv','txt','xml'],
+            exportTypes: ['excel','txt','xml'],
             columns: [
                 {
                     field: '物料编码',
@@ -2119,7 +2119,7 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    $.modal.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
                     return false;
                 }
                 var index = top.layer.load(2, {shade: false});
