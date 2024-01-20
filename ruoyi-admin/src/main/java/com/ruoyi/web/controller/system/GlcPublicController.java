@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/system/public")
 public class GlcPublicController extends BaseController
 {
-    private String prefix = "system/public";
+    private final String prefix = "system/public";
 
     @Autowired
     private IGlcPublicService glcPublicService;
