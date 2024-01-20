@@ -1,0 +1,6 @@
+newmtl -256
+	Kd 1 1 0
+	illum 0
+	d 1
+	map_Kd ./static/obj/maps/t0.png
+

@@ -1,0 +1,112 @@
+newmtl 12632256
+	Kd 0.7529412 0.7529412 0.7529412
+	illum 0
+	d 1
+
+newmtl 8421504
+	Kd 0.5019608 0.5019608 0.5019608
+	illum 0
+	d 1
+
+newmtl 8421529
+	Kd 0.5019608 0.5019608 0.5019608
+	illum 0
+	d 1
+
+newmtl 16711685
+	Kd 1 0 0
+	illum 0
+	d 1
+
+newmtl -16777216
+	Kd 0 0 0
+	illum 0
+	d 0
+
+newmtl -1
+	Kd 1 1 1
+	illum 0
+	d 1
+	map_Kd ./static/obj/shelf/maps/t0.png
+
+newmtl 3100495
+	Kd 0.1843137 0.3098039 0.3098039
+	illum 0
+	d 1
+
+newmtl 11119017
+	Kd 0.6627451 0.6627451 0.6627451
+	illum 0
+	d 1
+
+newmtl 16753920
+	Kd 1 0.6470588 0
+	illum 0
+	d 1
+
+newmtl 922779648
+	Kd 0 0.5019608 0
+	illum 0
+	d 0.7843137
+
+newmtl 11393254
+	Kd 0.6784314 0.8470588 0.9019608
+	illum 0
+	d 1
+
+newmtl 13882323
+	Kd 0.827451 0.827451 0.827451
+	illum 0
+	d 1
+
+newmtl 4620980
+	Kd 0.2745098 0.509804 0.7058824
+	illum 0
+	d 1
+
+newmtl 12632307
+	Kd 0.7529412 0.7529412 0.7529412
+	illum 0
+	d 1
+
+newmtl 255
+	Kd 0 0 1
+	illum 0
+	d 1
+
+newmtl 6908265
+	Kd 0.4117647 0.4117647 0.4117647
+	illum 0
+	d 1
+
+newmtl 13789470
+	Kd 0.8235294 0.4117647 0.1176471
+	illum 0
+	d 1
+
+newmtl 4210752
+	Kd 0.2509804 0.2509804 0.2509804
+	illum 0
+	d 1
+
+newmtl 14474460
+	Kd 0.8627451 0.8627451 0.8627451
+	illum 0
+	d 1
+
+newmtl 1644912
+	Kd 0.09803922 0.09803922 0.4392157
+	illum 0
+	d 1
+
+newmtl 16729344
+	Kd 1 0.2705882 0
+	illum 0
+	d 1
+
+newmtl -16777217
+	Kd 1 1 1
+	illum 0
+	d 1
+	map_Kd ./static/obj/shelf/maps/t1.png
+

@@ -1,0 +1,30 @@
+newmtl 10066346
+	Kd 0.6 0.6 0.6
+	illum 0
+	d 1
+
+newmtl 5460832
+	Kd 0.3254902 0.3254902 0.3254902
+	illum 0
+	d 1
+
+newmtl 8421427
+	Kd 0.5019608 0.5019608 0
+	illum 0
+	d 1
+
+newmtl 12632307
+	Kd 0.7529412 0.7529412 0.7529412
+	illum 0
+	d 1
+
+newmtl 16777011
+	Kd 1 1 0
+	illum 0
+	d 1
+
+newmtl 16711731
+	Kd 1 0 0
+	illum 0
+	d 1
+

@@ -1,0 +1,12 @@
+newmtl Mars_Kitbash_-_Container
+Ka 0.502 0.502 0.502
+Ke 0 0 0
+Kd 0.95 0.95 0.95
+Ks 0.05 0.05 0.05
+Ns 500
+Tr 0
+d 1
+Ni 1.5
+Tf 1 1 1
+map_Kd ./static/obj/albedo.png
+

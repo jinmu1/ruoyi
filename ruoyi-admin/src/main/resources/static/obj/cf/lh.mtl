@@ -1,0 +1,41 @@
+# 
+# Wavefront material file
+# Converted by 3D Exploration 1.833
+# XDimension Software, LLC
+# http://www.xdsoft.com/explorer/
+# 
+newmtl _94d8144_bmp
+	 Ka 0.117647 0.117647 0.117647
+	 Kd 0.752941 0.752941 0.752941
+	 Ks 0.752941 0.752941 0.752941
+	 illum 2
+	 Ns 8
+	 map_Kd ./static/obj/cf/lh0.bmp
+newmtl _175768e_bmp
+	 Ka 0.117647 0.117647 0.117647
+	 Kd 0.752941 0.752941 0.752941
+	 Ks 0.752941 0.752941 0.752941
+	 illum 2
+	 Ns 8
+	 map_Kd ./static/obj/cf/lh1.bmp
+newmtl _ffa8673_bmp
+	 Ka 0.117647 0.117647 0.117647
+	 Kd 0.752941 0.752941 0.752941
+	 Ks 0.752941 0.752941 0.752941
+	 illum 2
+	 Ns 8
+	 map_Kd ./static/obj/cf/lh2.bmp
+newmtl _177a9eb_bmp
+	 Ka 0.117647 0.117647 0.117647
+	 Kd 0.752941 0.752941 0.752941
+	 Ks 0.752941 0.752941 0.752941
+	 illum 2
+	 Ns 8
+	 map_Kd ./static/obj/cf/lh3.bmp
+newmtl xia001_bmp
+	 Ka 0.117647 0.117647 0.117647
+	 Kd 0.752941 0.752941 0.752941
+	 Ks 0.752941 0.752941 0.752941
+	 illum 2
+	 Ns 8
+	 map_Kd ./static/obj/cf/lh4.bmp

@@ -1,0 +1,12 @@
+newmtl -337529
+	Kd 0.9803922 0.8509804 0.5294118
+	illum 0
+	d 1
+	map_Kd./static/obj/shelf/maps/t0.png
+
+newmtl -16777217
+	Kd 1 1 1
+	illum 0
+	d 1
+	map_Kd ./static/obj/shelf/maps/t1.jpg
+
