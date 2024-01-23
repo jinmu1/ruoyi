@@ -40,6 +40,11 @@
             <div class="ibox-title">
                 <h3>周期内物料出库数据基础表</h3>
             </div>
+            <div class="btn-group-sm" role="group">
+                <a class="btn btn-info" onclick="importData()" >
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+            </div>
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -3038,6 +3043,132 @@
                 }]
         };
         $.table.init(options);
+    }
+
+    function importData() {
+        var formId, width, height;
+        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
+        var _width = $.common.isEmpty(width) ? "400" : width;
+        var _height = $.common.isEmpty(height) ? "230" : height;
+        top.layer.open({
+            type: 1,
+            area: [_width + 'px', _height + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: '导入'  + '数据',
+            content: $('#' + currentId).html(),
+            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            btn1: function(index, layero){
+                var file = layero.find('#file').val();
+                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
+                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    return false;
+                }
+                var index = top.layer.load(2, {shade: false});
+                $.modal.disable();
+                var formData = new FormData(layero.find('form')[0]);
+                $.ajax({
+                    url: '/system/abc/importData',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.code == web_status.SUCCESS) {
+                            data1=JSON.parse(result.data.data1);
+                            data2=JSON.parse(result.data.data2);
+                            var table = $('#bootstrap-table');
+                            $('#bootstrap-table').bootstrapTable('refreshOptions', {
+                                columns: [
+                                    {
+                                        field: 'materialCode',
+                                        title: '物料编码'
+                                    },
+                                    {
+                                        field: 'averageInventory',
+                                        title: '平均库存（件/月）'
+                                    },
+                                    {
+                                        field: 'monthlyTotalOutbound',
+                                        title: '当月出库总量（件）'
+                                    },
+                                    {
+                                        field: 'inventoryTurnover',
+                                        title: '库存周转次数'
+                                    },
+                                    {
+                                        field: 'inventoryTurnoverDays',
+                                        title: '库存周转天数'
+                                    },
+                                    {
+                                        field: 'sellingPrice',
+                                        title: '销售单价（元/件）'
+                                    }
+                                ]
+                            });
+                            table.bootstrapTable('load',data1);
+                            var table1 = $('#bootstrap-table5');
+                            $('#bootstrap-table5').bootstrapTable('refreshOptions', {
+                                columns: [
+                                    {
+                                        field: 'materialCode',
+                                        title: '物料编码'
+                                    },
+                                    {
+                                        field: 'unitPrice',
+                                        title: '销售单价'
+                                    },
+                                    {
+                                        field: 'averageInventory',
+                                        title: '平均库存'
+                                    },
+                                    {
+                                        field: 'averageFundsOccupied',
+                                        title: '平均资金占用额'
+                                    },
+                                    {
+                                        field: 'cumulativeAverageFundsOccupied',
+                                        title: '平均资金占用额累计'
+                                    },
+                                    {
+                                        field: 'cumulativeAverageFundsOccupiedPercentage',
+                                        title: '平均资金占用额累计百分比'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumber',
+                                        title: '物料累计品目数'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumberPercentage',
+                                        title: '物料累计品目数百分比'
+                                    }]
+                            });
+                            table1.bootstrapTable('load',data2);
+                            $.modal.close(index);
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
+                            $.table.refresh();
+                        } else if (result.code == web_status.WARNING) {
+                            $.modal.close(index);
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
+                        } else {
+                            $.modal.close(index);
+                            $.modal.enable();
+                            $.modal.alertError(result.msg);
+                        }
+                    },
+                    complete: function () {
+                        layero.find('#file').val('');
+                    }
+                });
+            }
+        });
     }
 </script>
 <script id="importTpl" type="text/template">
