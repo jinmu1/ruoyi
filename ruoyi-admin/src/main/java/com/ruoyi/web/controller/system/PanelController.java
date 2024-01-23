@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import com.ruoyi.common.core.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/system")
-public class PanelController extends BaseController
-{
-
+public class PanelController {
     @GetMapping("/simu/index")
     public String simu1()
     {
