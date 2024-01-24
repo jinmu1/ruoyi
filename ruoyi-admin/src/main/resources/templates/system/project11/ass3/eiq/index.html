@@ -40,6 +40,11 @@
             <div class="ibox-title">
                 <h3>周期内物料出库数据基础表</h3>
             </div>
+            <div class="btn-group-sm" role="group">
+                <a class="btn btn-info" onclick="importData()" >
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+            </div>
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -3039,14 +3044,235 @@
         };
         $.table.init(options);
     }
+
+    function importData() {
+        var formId, width, height;
+        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
+        var _width = $.common.isEmpty(width) ? "400" : width;
+        var _height = $.common.isEmpty(height) ? "230" : height;
+        top.layer.open({
+            type: 1,
+            area: [_width + 'px', _height + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: '导入'  + '数据',
+            content: $('#' + currentId).html(),
+            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            btn1: function(index, layero){
+                var file = layero.find('#file').val();
+                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
+                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    return false;
+                }
+                var index = top.layer.load(2, {shade: false});
+                $.modal.disable();
+                var formData = new FormData(layero.find('form')[0]);
+                $.ajax({
+                    url: '/system/eiq/importData',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.code == web_status.SUCCESS) {
+                            data1=JSON.parse(result.data.data1);
+                            data2=JSON.parse(result.data.data2);
+                            data3=JSON.parse(result.data.data3);
+                            data4=JSON.parse(result.data.data4);
+                            data5=JSON.parse(result.data.data5);
+                            data6=JSON.parse(result.data.data6);
+                            var table = $('#bootstrap-table');
+                            $('#bootstrap-table').bootstrapTable('refreshOptions', {
+                                columns: [{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'deliveryDate',
+                                        title: '出库日期',
+                                        formatter: function(value, row, index) {
+                                            var date = new Date(value);
+
+                                            // 自定义日期格式，这里是 YYYY-MM-DD
+                                            var formattedDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+                                            return formattedDate;
+                                        }
+                                    },
+                                    {
+                                        field: 'orderNumber',
+                                        title: '订单编号'
+                                    },
+                                    {
+                                        field: 'materialNumber',
+                                        title: '物料编号'
+                                    },
+                                    {
+                                        field: 'materialName',
+                                        title: '物料名称'
+                                    },
+                                    {
+                                        field: 'deliveryQuantity',
+                                        title: '出货数量'
+                                    },
+                                    {
+                                        field: 'deliveryUnit',
+                                        title: '出货单位'
+                                    },
+                                    {
+                                        field: 'unitPrice',
+                                        title: '销售单价'
+                                    },
+                                    {
+                                        field: 'palletizedItems',
+                                        title: '托盘装件数'
+                                    },
+                                    {
+                                        field: 'conversionUnit',
+                                        title: '换算单位'
+                                    },
+                                    {
+                                        field: 'conversionUnit1',
+                                        title: '换算单位'
+                                    }]
+                            });
+                            table.bootstrapTable('load',data1);
+                            var table2 = $('#bootstrap-table2');
+                            $('#bootstrap-table2').bootstrapTable('refreshOptions', {
+                                columns:  [{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'date',
+                                        title: '日期'
+                                    },
+                                    {
+                                        field: 'eAnalysis',
+                                        title: 'E分析（每日订单数量统计数值）'
+                                    },
+                                    {
+                                        field: 'nAnalysis',
+                                        title: 'N分析（每日订单行数统计数值）'
+                                    },
+                                    {
+                                        field: 'qAnalysis',
+                                        title: 'Q分析（每日出库数量统计数值）'
+                                    }]
+                            });
+                            table2.bootstrapTable('load',data2);
+                            var table3 = $('#bootstrap-table3');
+                            $('#bootstrap-table3').bootstrapTable('refreshOptions', {
+                                columns:[{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'orderNumber',
+                                        title: '订单编号'
+                                    },
+                                    {
+                                        field: 'orderLineCount',
+                                        title: '订单对应行数'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumber',
+                                        title: '订单编号累计品目数'
+                                    }]
+                            });
+                            table3.bootstrapTable('load',data3);
+                            var table4 = $('#bootstrap-table4');
+                            $('#bootstrap-table4').bootstrapTable('refreshOptions', {
+                                columns:  [{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'orderNumber',
+                                        title: '订单编号'
+                                    },
+                                    {
+                                        field: 'totalDeliveredQuantity',
+                                        title: '订单对应出库总数量'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumber',
+                                        title: '订单编号累计品目数'
+                                    }]
+                            });
+                            table4.bootstrapTable('load',data4);
+                            var table5 = $('#bootstrap-table5');
+                            $('#bootstrap-table5').bootstrapTable('refreshOptions', {
+                                columns: [{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'orderNumber',
+                                        title: '订单编号'
+                                    },
+                                    {
+                                        field: 'materialVarietiesCount',
+                                        title: '订单对应物料品种数'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumber',
+                                        title: '订单编号累计品目数'
+                                    }]
+                            });
+                            table5.bootstrapTable('load',data5);
+                            var table6 = $('#bootstrap-table6');
+                            $('#bootstrap-table6').bootstrapTable('refreshOptions', {
+                                columns: [{
+                                    checkbox: true
+                                },
+                                    {
+                                        field: 'materialName',
+                                        title: '物料名称'
+                                    },
+                                    {
+                                        field: 'materialCode',
+                                        title: '物料编码'
+                                    },
+                                    {
+                                        field: 'occurrenceCount',
+                                        title: '出现次数'
+                                    },
+                                    {
+                                        field: 'cumulativeItemNumber',
+                                        title: '物料编号累计品目数'
+                                    }]
+                            });
+                            table6.bootstrapTable('load',data6);
+                            $.modal.close(index);
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
+                            $.table.refresh();
+                        } else if (result.code == web_status.WARNING) {
+                            $.modal.close(index);
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
+                        } else {
+                            $.modal.close(index);
+                            $.modal.enable();
+                            $.modal.alertError(result.msg);
+                        }
+                    },
+                    complete: function () {
+                        layero.find('#file').val('');
+                    }
+                });
+            }
+        });
+    }
 </script>
 <script id="importTpl" type="text/template">
     <form enctype="multipart/form-data" class="mt20 mb10">
         <div class="col-xs-offset-1">
             <input type="file" id="file" name="file"/>
             <div class="mt10 pt5">
-                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据
-                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+<!--                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据-->
+<!--                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
             </div>
             <font color="red" class="pull-left mt10">
                 提示：仅允许导入“xls”或“xlsx”格式文件！

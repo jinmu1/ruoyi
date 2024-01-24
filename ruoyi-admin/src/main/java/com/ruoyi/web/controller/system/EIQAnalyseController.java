@@ -1,26 +1,24 @@
 package com.ruoyi.web.controller.system;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.eiq.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/system/eiq")
 public class EIQAnalyseController {
+    private static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * ABC出库金额分析的导入数据
@@ -34,194 +32,106 @@ public class EIQAnalyseController {
          * todo:返回导入和转换的错误参数
          */
         ExcelUtil<Data1Item> util = new ExcelUtil<>(Data1Item.class);
-
         List<Data1Item> data1Entries = util.importExcel(file.getInputStream());
         // 将 "data1" 转换为数组
+        Map<Date, List<Data1Item>> categorizedMap = data1Entries.stream()
+                .collect(Collectors.groupingBy(Data1Item::getDeliveryDate));
+        List<Data2Item> data2Items = new ArrayList<>();
+        for(Date key : categorizedMap.keySet()){
+            Data2Item data2Item= new Data2Item();
+            data2Item.setDate(sdf.format(key));
+            List<Data1Item> data1Items = categorizedMap.get(key);
+            Map<String, List<Data1Item>> collect = data1Items.stream()
+                    .collect(Collectors.groupingBy(Data1Item::getOrderNumber));
+            data2Item.seteAnalysis(collect.size());//查看订单数量
+            data2Item.setnAnalysis(data1Items.size());
+            double sum = 0;
+            // 遍历列表，累加 amount 属性值
+            for (Data1Item dataItem : data1Items) {
+                sum += dataItem.getDeliveryQuantity();
+            }
+            data2Item.setqAnalysis(sum);
+            data2Items.add(data2Item);
+        }
+        Map<String, List<Data1Item>> categorizedMap1 = data1Entries.stream()
+                .collect(Collectors.groupingBy(Data1Item::getOrderNumber));
+        List<Data3Item> data3Items = new ArrayList<>();
+        int k = 0;
+        for(String key : categorizedMap1.keySet()){
+            k++;
+            Data3Item data3Item = new Data3Item();
+            data3Item.setCumulativeItemNumber(k);
+            data3Item.setOrderNumber(key);
+            data3Item.setOrderLineCount(categorizedMap1.get(key).size());
+            data3Items.add(data3Item);
+        }
+        List<Data4Item> data4Items = new ArrayList<>();
+        int k1 = 0;
+        for(String key : categorizedMap1.keySet()){
+            k1++;
+            Data4Item data4Item = new Data4Item();
+            data4Item.setOrderNumber(key);
+            data4Item.setTotalDeliveredQuantity(k1);
+            double sum = 0;
+            // 遍历列表，累加 amount 属性值
+            for (Data1Item dataItem : categorizedMap1.get(key)) {
+                sum += dataItem.getDeliveryQuantity();
+            }
+            data4Item.setTotalDeliveredQuantity(sum);
+            data4Items.add(data4Item);
+        }
+        List<Data5Item> data5Items = new ArrayList<>();
+        int k2 = 0;
+        for(String key : categorizedMap1.keySet()){
+            k2++;
+            Data5Item data5Item = new Data5Item();
+            data5Item.setOrderNumber(key);
+            data5Item.setCumulativeItemNumber(k2);
+            data5Item.setMaterialVarietiesCount(categorizedMap1.get(key).size());
+            data5Items.add(data5Item);
+        }
 
-        List<Data1Item> list = new ArrayList<>();
+        List<Data6Item> data6Items = new ArrayList<>();
+        Map<String, List<Data1Item>> categorizedMap2 = data1Entries.stream()
+                .collect(Collectors.groupingBy(Data1Item::getMaterialNumber));
+        int k3=0;
+        for(String key : categorizedMap2.keySet()){
+            k3++;
+            Data6Item data6Item = new Data6Item();
+            data6Item.setMaterialCode(key);
+            data6Item.setMaterialName(categorizedMap2.get(key).get(0).getMaterialName());
+            data6Item.setCumulativeItemNumber(k3);
+            data6Item.setOccurrenceCount(categorizedMap2.get(key).size());
+            data6Items.add(data6Item);
+        }
 
-
-
-        return AjaxResult.success(null);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(data1Entries);
+        ObjectMapper objectMapper2 = new ObjectMapper();
+        String jsonString2 = objectMapper2.writeValueAsString(data2Items);
+        ObjectMapper objectMapper3 = new ObjectMapper();
+        String jsonString3 = objectMapper3.writeValueAsString(data3Items);
+        ObjectMapper objectMapper4 = new ObjectMapper();
+        String jsonString4 = objectMapper4.writeValueAsString(data4Items);
+        ObjectMapper objectMapper5 = new ObjectMapper();
+        String jsonString5 = objectMapper5.writeValueAsString(data5Items);
+        ObjectMapper objectMapper6 = new ObjectMapper();
+        String jsonString6 = objectMapper6.writeValueAsString(data6Items);
+        JSONObject json = new JSONObject(); // 创建一个空的JSON对象
+        json.put("data1", jsonString); // 将导入的数据放到data1中
+        json.put("data2", jsonString2); // 将转换后的数据放到data2中
+        json.put("data3", jsonString3); // 将转换后的数据放到data2中
+        json.put("data4", jsonString4); // 将转换后的数据放到data2中
+        json.put("data5", jsonString5); // 将转换后的数据放到data2中
+        json.put("data6", jsonString6); // 将转换后的数据放到data2中
+        return AjaxResult.success(json);
     }
-    class Data1Item {
-        @Excel(name = "出库日期")
-        private String deliveryDate;
 
-        @Excel(name = "订单编号")
-        private int orderNumber;
 
-        @Excel(name = "物料编号")
-        private int materialNumber;
 
-        @Excel(name = "物料名称")
-        private String materialName;
 
-        @Excel(name = "出货数量")
-        private int deliveryQuantity;
 
-        @Excel(name = "出货单位")
-        private String deliveryUnit;
 
-        @Excel(name = "销售单价")
-        private int unitPrice;
 
-        @Excel(name = "托盘装件数")
-        private int palletizedItems;
 
-        @Excel(name = "换算单位")
-        private int conversionUnit;
-
-        @Excel(name = "换算单位1")
-        private int conversionUnit1;
-
-        // Getter and Setter methods
-
-        public String getDeliveryDate() {
-            return deliveryDate;
-        }
-
-        public void setDeliveryDate(String deliveryDate) {
-            this.deliveryDate = deliveryDate;
-        }
-
-        public int getOrderNumber() {
-            return orderNumber;
-        }
-
-        public void setOrderNumber(int orderNumber) {
-            this.orderNumber = orderNumber;
-        }
-
-        public int getMaterialNumber() {
-            return materialNumber;
-        }
-
-        public void setMaterialNumber(int materialNumber) {
-            this.materialNumber = materialNumber;
-        }
-
-        public String getMaterialName() {
-            return materialName;
-        }
-
-        public void setMaterialName(String materialName) {
-            this.materialName = materialName;
-        }
-
-        public int getDeliveryQuantity() {
-            return deliveryQuantity;
-        }
-
-        public void setDeliveryQuantity(int deliveryQuantity) {
-            this.deliveryQuantity = deliveryQuantity;
-        }
-
-        public String getDeliveryUnit() {
-            return deliveryUnit;
-        }
-
-        public void setDeliveryUnit(String deliveryUnit) {
-            this.deliveryUnit = deliveryUnit;
-        }
-
-        public int getUnitPrice() {
-            return unitPrice;
-        }
-
-        public void setUnitPrice(int unitPrice) {
-            this.unitPrice = unitPrice;
-        }
-
-        public int getPalletizedItems() {
-            return palletizedItems;
-        }
-
-        public void setPalletizedItems(int palletizedItems) {
-            this.palletizedItems = palletizedItems;
-        }
-
-        public int getConversionUnit() {
-            return conversionUnit;
-        }
-
-        public void setConversionUnit(int conversionUnit) {
-            this.conversionUnit = conversionUnit;
-        }
-
-        public int getConversionUnit1() {
-            return conversionUnit1;
-        }
-
-        public void setConversionUnit1(int conversionUnit1) {
-            this.conversionUnit1 = conversionUnit1;
-        }
-    }
-    class Data2Item {
-        @JsonProperty("日期")
-        private String date;
-
-        @JsonProperty("E分析")
-        private int eAnalysis;
-
-        @JsonProperty("N分析")
-        private int nAnalysis;
-
-        @JsonProperty("Q分析")
-        private int qAnalysis;
-
-        // Getter and Setter methods
-    }
-    class Data3Item {
-        @JsonProperty("订单编号")
-        private int orderNumber;
-
-        @JsonProperty("订单对应行数")
-        private int orderLineCount;
-
-        @JsonProperty("订单编号累计品目数")
-        private int cumulativeItemNumber;
-
-        // Getter and Setter methods
-    }
-    class Data4Item {
-        @JsonProperty("订单编号")
-        private int orderNumber;
-
-        @JsonProperty("订单对应出库总数量")
-        private double totalDeliveredQuantity;
-
-        @JsonProperty("订单编号累计品目数")
-        private int cumulativeItemNumber;
-
-        // Getter and Setter methods
-    }
-    class Data5Item {
-        @JsonProperty("订单编号")
-        private int orderNumber;
-
-        @JsonProperty("订单对应物料品种数")
-        private int materialVarietiesCount;
-
-        @JsonProperty("订单编号累计品目数")
-        private int cumulativeItemNumber;
-
-        // Getter and Setter methods
-    }
-    // Class for data6
-    class Data6Item {
-        @JsonProperty("物料名称")
-        private String materialName;
-
-        @JsonProperty("物料编码")
-        private int materialCode;
-
-        @JsonProperty("出现次数")
-        private int occurrenceCount;
-
-        @JsonProperty("物料编号累计品目数")
-        private int cumulativeItemNumber;
-
-        // Getter and Setter methods
-    }
 }
