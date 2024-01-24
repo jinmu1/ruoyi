@@ -25,7 +25,7 @@ public class EIQAnalyseController {
     private static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
     /**
-     * ABC出库金额分析的导入数据
+     * eiq分析的导入数据
      */
     @PostMapping("/importData")
     @ResponseBody
