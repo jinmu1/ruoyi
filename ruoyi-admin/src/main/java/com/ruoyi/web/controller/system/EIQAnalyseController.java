@@ -25,7 +25,7 @@ public class EIQAnalyseController {
     private static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
     /**
-     * eiq分析的导入数据
+     * eiq分析的导入数据,然后将基本的数据对订单数量、订单行数、物料数量、等数据做转换统计
      */
     @PostMapping("/importData")
     @ResponseBody
