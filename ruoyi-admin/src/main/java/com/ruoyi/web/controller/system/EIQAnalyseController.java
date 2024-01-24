@@ -15,6 +15,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/***
+ * @jinmu
+ * 该controller是将导入的excel表格转换为基本数据，然后在数据上分别得到EIQ的数据表格，订单分析、订单行分析
+ */
 @Controller
 @RequestMapping("/system/eiq")
 public class EIQAnalyseController {
@@ -53,6 +57,7 @@ public class EIQAnalyseController {
             data2Item.setqAnalysis(sum);
             data2Items.add(data2Item);
         }
+        Collections.sort(data2Items,(m1, m2) -> Double.compare(m2.geteAnalysis(),m1.geteAnalysis()));//按照出库频次降序排序
         Map<String, List<Data1Item>> categorizedMap1 = data1Entries.stream()
                 .collect(Collectors.groupingBy(Data1Item::getOrderNumber));
         List<Data3Item> data3Items = new ArrayList<>();
@@ -65,6 +70,7 @@ public class EIQAnalyseController {
             data3Item.setOrderLineCount(categorizedMap1.get(key).size());
             data3Items.add(data3Item);
         }
+        Collections.sort(data3Items,(m1, m2) -> Double.compare(m2.getOrderLineCount(),m1.getOrderLineCount()));//按照出库频次降序排序
         List<Data4Item> data4Items = new ArrayList<>();
         int k1 = 0;
         for(String key : categorizedMap1.keySet()){
@@ -80,6 +86,7 @@ public class EIQAnalyseController {
             data4Item.setTotalDeliveredQuantity(sum);
             data4Items.add(data4Item);
         }
+        Collections.sort(data4Items,(m1, m2) -> Double.compare(m2.getTotalDeliveredQuantity(),m1.getTotalDeliveredQuantity()));//按照出库频次降序排序
         List<Data5Item> data5Items = new ArrayList<>();
         int k2 = 0;
         for(String key : categorizedMap1.keySet()){
@@ -90,7 +97,7 @@ public class EIQAnalyseController {
             data5Item.setMaterialVarietiesCount(categorizedMap1.get(key).size());
             data5Items.add(data5Item);
         }
-
+        Collections.sort(data5Items,(m1, m2) -> Double.compare(m2.getMaterialVarietiesCount(),m1.getMaterialVarietiesCount()));//按照出库频次降序排序
         List<Data6Item> data6Items = new ArrayList<>();
         Map<String, List<Data1Item>> categorizedMap2 = data1Entries.stream()
                 .collect(Collectors.groupingBy(Data1Item::getMaterialNumber));
@@ -104,7 +111,7 @@ public class EIQAnalyseController {
             data6Item.setOccurrenceCount(categorizedMap2.get(key).size());
             data6Items.add(data6Item);
         }
-
+        Collections.sort(data6Items,(m1, m2) -> Double.compare(m2.getOccurrenceCount(),m1.getOccurrenceCount()));//按照出库频次降序排序
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(data1Entries);
         ObjectMapper objectMapper2 = new ObjectMapper();
