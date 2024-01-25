@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.system.domain.eiq.*;
 import org.junit.Test;
 
 import java.io.File;
@@ -154,7 +155,31 @@ public class UploadFile  {
 
 
     }
+    @Test
+    public void   UploadFile1()
+    {
+  String filePath = System.getProperty("user.dir")+"/src/main/resources/static/file/eiq1.json";;
+        // 创建ObjectMapper对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<BasicTable>  data1Entries = new ArrayList<>();
+        try {
+            /**
+             * 获取老师给的数据，将数据计算后转换位对象Data2Entry
+             */
+            // 读取整个JSON文件为JsonNode
+            JsonNode rootNode = objectMapper.readTree(new File(filePath));
+            // 获取 "data1" 部分
+            JsonNode data1Node = rootNode.get("data1");
+            // 将 "data1" 转换为数组
+            BasicTable[] data1Entrie = objectMapper.treeToValue(data1Node, BasicTable[].class);
+            data1Entries = Arrays.asList(data1Entrie.clone());
+            /***
+             * 将转换后的数据穿给Json对象
+             */
+        }catch (Exception e){
 
+        }
+System.out.println(data1Entries.size());    }
   static public class Data1Entry {
         @JsonProperty("物料编码")
         private String materialCode;

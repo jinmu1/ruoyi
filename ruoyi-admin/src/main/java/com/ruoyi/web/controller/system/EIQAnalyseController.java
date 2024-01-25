@@ -42,11 +42,8 @@ public class EIQAnalyseController {
          * data1Entries:用户导入的数据对象
          * data1Entries >data6Entries 转换后的数据
          */
-        String rootPath =
+        String filePath =
                getClass().getResource("/static/file/eiq1.json").getPath();;
-
-
-        String filePath =rootPath;
         // 创建ObjectMapper对象
         ObjectMapper objectMapper = new ObjectMapper();
         List<BasicTable>  data7Entries = new ArrayList<>();
@@ -147,17 +144,18 @@ public class EIQAnalyseController {
           List<EIQBasicTable> EIQBasicTables = categorizedMap.get(key);
           Map<String, List<EIQBasicTable>> collect = EIQBasicTables.stream()
                   .collect(Collectors.groupingBy(EIQBasicTable::getOrderNumber));
-          EIQAnalysisTable.seteAnalysis(collect.size());//查看订单数量
-          EIQAnalysisTable.setnAnalysis(EIQBasicTables.size());
+          EIQAnalysisTable.setEAnalysis(collect.size());//查看订单数量
+          EIQAnalysisTable.setNAnalysis(EIQBasicTables.size());
           double sum = 0;
           // 遍历列表，累加 amount 属性值
           for (EIQBasicTable dataItem : EIQBasicTables) {
               sum += dataItem.getDeliveryQuantity();
           }
-          EIQAnalysisTable.setqAnalysis(sum);
+          EIQAnalysisTable.setQAnalysis(sum);
           EIQAnalysisTables.add(EIQAnalysisTable);
       }
-      Collections.sort(EIQAnalysisTables,(m1, m2) -> Double.compare(m2.geteAnalysis(),m1.geteAnalysis()));//按照出库频次降序排序
+        Collections.sort(EIQAnalysisTables, Comparator.comparing(EIQAnalysisTable::getDate)); // 根据日期属性进行排序
+
         return EIQAnalysisTables;
     }
     /***

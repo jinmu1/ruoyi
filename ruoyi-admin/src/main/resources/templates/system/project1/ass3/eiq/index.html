@@ -1462,36 +1462,37 @@
     }
 
     var data1,data2,data3,data4,data5,data6;
-    $.getJSON("../../../file/eiq.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
-        data4=data.data4;
-        data5=data.data5;
-        data6=data.data6;
-        loadTable1();
-        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
-            var d = result.rows;
-            for(var i=0;i<result.total;i++){
-                $("#"+d[i].opId).val(d[i].opValue);
-            }
-            submit();
-            submit1();
-            submit2();
-            submit3();
-            submit4();
-            reloadE();
-            reloadN();
-            reloadQ();
-            reloadEN();
-            reloadEN1();
-            reloadEQ();
-            reloadEQ1();
-            reloadEI();
-            reloadEI1();
-            reloadIK();
-        });
-
+    $.post(ctx+"system/eiq/importStaticData", function (result) {
+        if (result.code == web_status.SUCCESS) {
+            data1 = JSON.parse(result.data.data1);
+            data2 = JSON.parse(result.data.data2);
+            data3 = JSON.parse(result.data.data3);
+            data4 = JSON.parse(result.data.data4);
+            data5 = JSON.parse(result.data.data5);
+            data6 = JSON.parse(result.data.data6);
+            loadTable1();
+            $.post(ctx + "system/op/list1?&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text(), function (result) {
+                var d = result.rows;
+                for (var i = 0; i < result.total; i++) {
+                    $("#" + d[i].opId).val(d[i].opValue);
+                }
+                submit();
+                submit1();
+                submit2();
+                submit3();
+                submit4();
+                reloadE();
+                reloadN();
+                reloadQ();
+                reloadEN();
+                reloadEN1();
+                reloadEQ();
+                reloadEQ1();
+                reloadEI();
+                reloadEI1();
+                reloadIK();
+            });
+        }
         // loadTable2();
         // load1();
         // load2();
@@ -1536,7 +1537,15 @@
             },
                 {
                     field: '出库日期',
-                    title: '出库日期'
+                    title: '出库日期' ,
+                    formatter: function(value, row, index) {
+                        var date = new Date(value);
+
+                        // 自定义日期格式，这里是 YYYY-MM-DD
+                        var formattedDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+                        return formattedDate;
+                    }
                 },
                 {
                     field: '订单编号',
@@ -1656,7 +1665,15 @@
             },
                 {
                     field: '日期',
-                    title: '日期'
+                    title: '日期',
+                    formatter: function(value, row, index) {
+                        var date = new Date(value);
+
+                        // 自定义日期格式，这里是 YYYY-MM-DD
+                        var formattedDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+                        return formattedDate;
+                    }
                 },
                 {
                     field: 'E分析',

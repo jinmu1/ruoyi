@@ -317,7 +317,21 @@ public class PanelController extends BaseController
     {
         return   "system/project4/ass4/index";
     }
-
+    @GetMapping("/project11/ass3/abc")
+    public String abc1()
+    {
+        return   "system/project11/ass3/abc/index";
+    }
+    @GetMapping("/project11/ass3/eiq")
+    public String eiq1()
+    {
+        return   "system/project11/ass3/eiq/index";
+    }
+    @GetMapping("/project11/ass3/pcb")
+    public String pcb1()
+    {
+        return   "system/project11/ass3/pcb/index";
+    }
     @GetMapping("/net")
     public String net()
     {

@@ -1,51 +1,32 @@
 package com.ruoyi.system.domain.eiq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 public class EIQAnalysisTable {
+
     @JsonProperty("日期")
+    @Getter
+    @Setter
     private String date;
 
+
     @JsonProperty("E分析")
-    private int eAnalysis;
+    @Getter
+    @Setter
+    private int EAnalysis;
+
 
     @JsonProperty("N分析")
-    private int nAnalysis;
+    @Getter
+    @Setter
+    private int NAnalysis;
 
+    @Getter
+    @Setter
     @JsonProperty("Q分析")
-    private double qAnalysis;
+    private double QAnalysis;
 
-    // Getter and Setter methods
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public int geteAnalysis() {
-        return eAnalysis;
-    }
-
-    public void seteAnalysis(int eAnalysis) {
-        this.eAnalysis = eAnalysis;
-    }
-
-    public int getnAnalysis() {
-        return nAnalysis;
-    }
-
-    public void setnAnalysis(int nAnalysis) {
-        this.nAnalysis = nAnalysis;
-    }
-
-    public double getqAnalysis() {
-        return qAnalysis;
-    }
-
-    public void setqAnalysis(double qAnalysis) {
-        this.qAnalysis = qAnalysis;
-    }
 }
