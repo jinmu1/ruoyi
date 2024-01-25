@@ -2,7 +2,7 @@ package com.ruoyi.system.domain.eiq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public     class Data4Item {
+public     class EQAnalysisTable {
     @JsonProperty("订单编号")
     private String orderNumber;
 

@@ -6,12 +6,12 @@ import com.ruoyi.common.annotation.Excel;
 import java.util.Date;
 
 
-public  class Data7Item {
+public  class EIQBasicTable {
 
 
     @Excel(name = "出库日期")
     @JsonProperty("出库日期")
-    private String deliveryDate;
+    private Date deliveryDate;
 
 
     @Excel(name = "订单编号")
@@ -61,11 +61,11 @@ public  class Data7Item {
     // Getter and Setter methods
 
 
-    public String getDeliveryDate() {
+    public Date getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(String deliveryDate) {
+    public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 

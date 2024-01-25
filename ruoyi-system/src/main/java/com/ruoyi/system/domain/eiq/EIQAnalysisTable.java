@@ -2,7 +2,7 @@ package com.ruoyi.system.domain.eiq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Data2Item {
+public class EIQAnalysisTable {
     @JsonProperty("日期")
     private String date;
 

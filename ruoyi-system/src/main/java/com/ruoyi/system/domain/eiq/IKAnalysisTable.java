@@ -2,7 +2,7 @@ package com.ruoyi.system.domain.eiq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public  class Data6Item {
+public  class IKAnalysisTable {
     @JsonProperty("物料名称")
     private String materialName;
 

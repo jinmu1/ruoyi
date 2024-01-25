@@ -2,12 +2,12 @@ package com.ruoyi.system.domain.eiq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public     class Data5Item {
+public  class ENAnalysisTable {
     @JsonProperty("订单编号")
     private String orderNumber;
 
-    @JsonProperty("订单对应物料品种数")
-    private int materialVarietiesCount;
+    @JsonProperty("订单对应行数")
+    private int orderLineCount;
 
     @JsonProperty("订单编号累计品目数")
     private int cumulativeItemNumber;
@@ -22,12 +22,12 @@ public     class Data5Item {
         this.orderNumber = orderNumber;
     }
 
-    public int getMaterialVarietiesCount() {
-        return materialVarietiesCount;
+    public int getOrderLineCount() {
+        return orderLineCount;
     }
 
-    public void setMaterialVarietiesCount(int materialVarietiesCount) {
-        this.materialVarietiesCount = materialVarietiesCount;
+    public void setOrderLineCount(int orderLineCount) {
+        this.orderLineCount = orderLineCount;
     }
 
     public int getCumulativeItemNumber() {
