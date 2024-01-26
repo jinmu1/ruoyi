@@ -316,9 +316,12 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/getDeliveryList", "anon,captchaValidate");
         filterChainDefinitionMap.put("/getDeliveryLine", "anon,captchaValidate");
         filterChainDefinitionMap.put("/getDeliveryLine1", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/abc/importStaticData", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData1", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData2", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/eiq/importData", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/eiq/importStaticData", "anon,captchaValidate");
         filterChainDefinitionMap.put("/warehouse", "anon,captchaValidate");
         filterChainDefinitionMap.put("//system/production/production", "anon,captchaValidate");
         filterChainDefinitionMap.put("/takeDown", "anon,captchaValidate");
@@ -355,8 +358,12 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/system/project1/ass2", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass2/index1", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass3/abc", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/project11/ass3/abc", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass3/eiq", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass3/pcb", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/project11/ass3/eiq", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/project11/ass3/pcb", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/project11/ass3/abc", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass4/customer", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass4/goods", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/project1/ass4/order", "anon,captchaValidate");

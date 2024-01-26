@@ -774,12 +774,14 @@
         n=(n)/(total);
         window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
     }
-    $.getJSON("../../../file/abc.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
-        data4=data.data4;
-        data5=data.data5;
+    $.post(ctx+"system/abc/importStaticData", function (result) {
+        if (result.code == web_status.SUCCESS) {
+            data1 = JSON.parse(result.data.data1);
+            data2 = JSON.parse(result.data.data2);
+            data3 = JSON.parse(result.data.data3);
+            data4 = JSON.parse(result.data.data4);
+            data5 = JSON.parse(result.data.data5);
+        }
         loadTable7();
         load5();
         load7();
