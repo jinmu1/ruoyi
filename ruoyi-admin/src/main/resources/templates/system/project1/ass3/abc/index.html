@@ -1620,6 +1620,7 @@
 
     }
     function loadTable6(){
+        $('#bootstrap-table5').bootstrapTable('load',data2);
         var options = {
             id:"bootstrap-table5",
             data:data2,
@@ -1675,6 +1676,7 @@
 
     }
     function loadTable8(){
+        $('#bootstrap-table7').bootstrapTable('load',data3);
         var options = {
             id:"bootstrap-table7",
             data:data3,
@@ -1724,6 +1726,7 @@
 
     }
     function loadTable9(){
+        $('#bootstrap-table8').bootstrapTable('load',data4);
         var options = {
             id:"bootstrap-table8",
             data:data4,
@@ -1860,6 +1863,7 @@
                             data1=JSON.parse(result.data.data1);
                             data2=JSON.parse(result.data.data2);
                             $('#bootstrap-table').bootstrapTable('load',data1);
+
                             reflash();
                             $.modal.close(index);
                             $.modal.closeAll();
