@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -228,20 +229,21 @@ public class ABCAnalyseController {
 
     static public class Data1Entry {
         @Excel(name = "物料编码")
+        @JsonProperty("物料编码")
         private String materialCode;
-
+        @JsonProperty("平均库存")
         @Excel(name = "平均库存（件/月）")
         private int averageInventory;
-
+        @JsonProperty("当月出库总量")
         @Excel(name = "当月出库总量（件）")
         private double monthlyTotalOutbound;
-
+        @JsonProperty("库存周转次数")
         @Excel(name = "库存周转次数")
         private int inventoryTurnover;
-
+        @JsonProperty("库存周转天数")
         @Excel(name = "库存周转天数")
         private int inventoryTurnoverDays;
-
+        @JsonProperty("销售单价")
         @Excel(name = "销售单价（元/件）")
         private double sellingPrice;
 
@@ -307,26 +309,27 @@ public class ABCAnalyseController {
     }
     static public class Data2Entry {
         @Excel(name = "物料编码")
+        @JsonProperty("物料编码")
         private String materialCode;
-
+        @JsonProperty("销售单价")
         @Excel(name = "销售单价")
         private double unitPrice;
-
+        @JsonProperty("平均库存")
         @Excel(name = "平均库存")
         private double averageInventory;
-
+        @JsonProperty("平均资金占用额")
         @Excel(name = "平均资金占用额")
         private double averageFundsOccupied;
-
+        @JsonProperty("平均资金占用额累计")
         @Excel(name = "平均资金占用额累计")
         private double cumulativeAverageFundsOccupied;
-
+        @JsonProperty("平均资金占用额累计百分比")
         @Excel(name = "平均资金占用额累计百分比")
         private String cumulativeAverageFundsOccupiedPercentage;
-
+        @JsonProperty("物料累计品目数")
         @Excel(name = "物料累计品目数")
         private int cumulativeItemNumber;
-
+        @JsonProperty("物料累计品目数百分比")
         @Excel(name = "物料累计品目数百分比")
         private String cumulativeItemNumberPercentage;
 
@@ -400,21 +403,22 @@ public class ABCAnalyseController {
         }
     }
     static public class Data3Entry{
+        @JsonProperty("物料编码")
         @Excel(name = "物料编码")
         private String materialCode;
-
+        @JsonProperty("出库频次")
         @Excel(name = "出库频次")
         private int outboundFrequency;
-
+        @JsonProperty("累计出库频次")
         @Excel(name = "累计出库频次")
         private int cumulativeOutboundFrequency;
-
+        @JsonProperty("累计出库频次百分比")
         @Excel(name = "累计出库频次百分比")
         private String cumulativeOutboundFrequencyPercentage;
-
+        @JsonProperty("物料累计品目数")
         @Excel(name = "物料累计品目数")
         private int cumulativeItemCount;
-
+        @JsonProperty("物料累计品目数百分比")
         @Excel(name = "物料累计品目数百分比")
         private String cumulativeItemCountPercentage;
 
@@ -470,24 +474,25 @@ public class ABCAnalyseController {
         }
     }
     static public class Data4Entry{
+        @JsonProperty("物料编码")
         @Excel(name = "物料编码")
         private String materialCode;
-
+        @JsonProperty("物料描述")
         @Excel(name = "物料描述")
         private String materialDescription;
-
+        @JsonProperty("出库量")
         @Excel(name = "出库量")
         private double outboundQuantity;
-
+        @JsonProperty("累计出库量")
         @Excel(name = "累计出库量")
         private double cumulativeOutboundQuantity;
-
+        @JsonProperty("累计出库量百分比")
         @Excel(name = "累计出库量百分比")
         private String cumulativeOutboundQuantityPercentage;
-
+        @JsonProperty("物料累计品目数")
         @Excel(name = "物料累计品目数")
         private int cumulativeItemCount;
-
+        @JsonProperty("物料累计品目数百分比")
         @Excel(name = "物料累计品目数百分比")
         private String cumulativeItemCountPercentage;
 
@@ -551,28 +556,29 @@ public class ABCAnalyseController {
         }
     }
     static public class Data5Entry{
+        @JsonProperty("出库日期")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
         @Excel(name = "出库日期")
         private Date deliveryDate;
-
+        @JsonProperty("订单编号")
         @Excel(name = "订单编号")
         private long orderNumber;
-
+        @JsonProperty("物料编号")
         @Excel(name = "物料编号")
         private String materialNumber;
-
+        @JsonProperty("物料名称")
         @Excel(name = "物料名称")
         private String materialName;
-
+        @JsonProperty("出货数量")
         @Excel(name = "出货数量")
         private double shippedQuantity;
-
+        @JsonProperty("出货单位")
         @Excel(name = "出货单位")
         private String shipmentUnit;
-
+        @JsonProperty("销售单价")
         @Excel(name = "销售单价（元/件）")
         private double unitPrice;
-
+        @JsonProperty("托盘装件数")
         @Excel(name = "托盘装件数")
         private double palletizedItemCount;
 

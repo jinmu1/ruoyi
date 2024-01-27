@@ -1859,73 +1859,7 @@
                         if (result.code == web_status.SUCCESS) {
                             data1=JSON.parse(result.data.data1);
                             data2=JSON.parse(result.data.data2);
-                            var table = $('#bootstrap-table');
-                            $('#bootstrap-table').bootstrapTable('refreshOptions', {
-                                columns: [
-                                    {
-                                        field: 'materialCode',
-                                        title: '物料编码'
-                                    },
-                                    {
-                                        field: 'averageInventory',
-                                        title: '平均库存（件/月）'
-                                    },
-                                    {
-                                        field: 'monthlyTotalOutbound',
-                                        title: '当月出库总量（件）'
-                                    },
-                                    {
-                                        field: 'inventoryTurnover',
-                                        title: '库存周转次数'
-                                    },
-                                    {
-                                        field: 'inventoryTurnoverDays',
-                                        title: '库存周转天数'
-                                    },
-                                    {
-                                        field: 'sellingPrice',
-                                        title: '销售单价（元/件）'
-                                    }
-                                ]
-                            });
-                            table.bootstrapTable('load',data1);
-                            var table1 = $('#bootstrap-table5');
-                            $('#bootstrap-table5').bootstrapTable('refreshOptions', {
-                                columns: [
-                                    {
-                                        field: 'materialCode',
-                                        title: '物料编码'
-                                    },
-                                    {
-                                        field: 'unitPrice',
-                                        title: '销售单价'
-                                    },
-                                    {
-                                        field: 'averageInventory',
-                                        title: '平均库存'
-                                    },
-                                    {
-                                        field: 'averageFundsOccupied',
-                                        title: '平均资金占用额'
-                                    },
-                                    {
-                                        field: 'cumulativeAverageFundsOccupied',
-                                        title: '平均资金占用额累计'
-                                    },
-                                    {
-                                        field: 'cumulativeAverageFundsOccupiedPercentage',
-                                        title: '平均资金占用额累计百分比'
-                                    },
-                                    {
-                                        field: 'cumulativeItemNumber',
-                                        title: '物料累计品目数'
-                                    },
-                                    {
-                                        field: 'cumulativeItemNumberPercentage',
-                                        title: '物料累计品目数百分比'
-                                    }]
-                            });
-                            table1.bootstrapTable('load',data2);
+                            $('#bootstrap-table').bootstrapTable('load',data1);
                             reflash();
                             $.modal.close(index);
                             $.modal.closeAll();
@@ -1985,74 +1919,7 @@
                         if (result.code == web_status.SUCCESS) {
                             data3=JSON.parse(result.data.data3);
                             data5=JSON.parse(result.data.data5);
-                            var table = $('#bootstrap-table3');
-                            $('#bootstrap-table3').bootstrapTable('refreshOptions', {
-                                columns: [
-                                    {
-                                        field: 'deliveryDate',
-                                        title: '出库日期'
-                                    },
-                                    {
-                                        field: 'orderNumber',
-                                        title: '订单编号'
-                                    },
-                                    {
-                                        field: 'materialNumber',
-                                        title: '物料编号'
-                                    },
-                                    {
-                                        field: 'materialName',
-                                        title: '物料名称'
-                                    },
-                                    {
-                                        field: 'shippedQuantity',
-                                        title: '出货数量'
-                                    },
-                                    {
-                                        field: 'shipmentUnit',
-                                        title: '出货单位'
-                                    },
-                                    {
-                                        field: 'unitPrice',
-                                        title: '销售单价（元/件）'
-                                    },
-                                    {
-                                        field: 'palletizedItemCount',
-                                        title: '托盘装件数'
-                                    }]
-                            });
-                            table.bootstrapTable('load',data5);
-                            var table1 = $('#bootstrap-table7');
-                            $('#bootstrap-table7').bootstrapTable('refreshOptions', {
-                                columns: [{
-                                    checkbox: true
-                                },
-                                    {
-                                        field: 'materialCode',
-                                        title: '物料编码'
-                                    },
-                                    {
-                                        field: 'outboundFrequency',
-                                        title: '出库频次'
-                                    },
-                                    {
-                                        field: 'cumulativeOutboundFrequency',
-                                        title: '累计出库频次'
-                                    },
-                                    {
-                                        field: 'cumulativeOutboundFrequencyPercentage',
-                                        title: '累计出库频次百分比'
-                                    },
-                                    {
-                                        field: 'cumulativeItemCount',
-                                        title: '物料累计品目数'
-                                    },
-                                    {
-                                        field: 'cumulativeItemCountPercentage',
-                                        title: '物料累计品目数百分比'
-                                    }]
-                            });
-                            table1.bootstrapTable('load',data3);
+                            $('#bootstrap-table3').bootstrapTable('load',data5);
                             reflash();
                             $.modal.close(index);
                             $.modal.closeAll();
@@ -2112,76 +1979,7 @@
                         if (result.code == web_status.SUCCESS) {
                             data5=JSON.parse(result.data.data5);
                             data4=JSON.parse(result.data.data4);
-                            var table = $('#bootstrap-table4');
-                            $('#bootstrap-table4').bootstrapTable('refreshOptions', {
-                                columns: [
-                                    {
-                                        field: 'deliveryDate',
-                                        title: '出库日期'
-                                    },
-                                    {
-                                        field: 'orderNumber',
-                                        title: '订单编号'
-                                    },
-                                    {
-                                        field: 'materialNumber',
-                                        title: '物料编号'
-                                    },
-                                    {
-                                        field: 'materialName',
-                                        title: '物料名称'
-                                    },
-                                    {
-                                        field: 'shippedQuantity',
-                                        title: '出货数量'
-                                    },
-                                    {
-                                        field: 'shipmentUnit',
-                                        title: '出货单位'
-                                    },
-                                    {
-                                        field: 'unitPrice',
-                                        title: '销售单价（元/件）'
-                                    },
-                                    {
-                                        field: 'palletizedItemCount',
-                                        title: '托盘装件数'
-                                    }]
-                            });
-                            table.bootstrapTable('load',data5);
-                            var table1 = $('#bootstrap-table8');
-                            $('#bootstrap-table8').bootstrapTable('refreshOptions', {
-                                columns: [
-                                    {
-                                        field: 'materialCode',
-                                        title: '物料编码'
-                                    },
-                                    {
-                                        field: 'materialDescription',
-                                        title: '物料描述'
-                                    },
-                                    {
-                                        field: 'outboundQuantity',
-                                        title: '出库量'
-                                    },
-                                    {
-                                        field: 'cumulativeOutboundQuantity',
-                                        title: '累计出库量'
-                                    },
-                                    {
-                                        field: 'cumulativeOutboundQuantityPercentage',
-                                        title: '累计出库量百分比'
-                                    },
-                                    {
-                                        field: 'cumulativeItemCount',
-                                        title: '物料累计品目数'
-                                    },
-                                    {
-                                        field: 'cumulativeItemCountPercentage',
-                                        title: '物料累计品目数百分比'
-                                    }]
-                            });
-                            table1.bootstrapTable('load',data4);
+                            $('#bootstrap-table4').bootstrapTable('load',data5);
                             reflash();
                             $.modal.close(index);
                             $.modal.closeAll();
