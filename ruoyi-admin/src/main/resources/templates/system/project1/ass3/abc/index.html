@@ -1811,7 +1811,7 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
-        top.layer.open({
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1826,10 +1826,10 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    top.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
-                var index = top.layer.load(2, {shade: false});
+                var index = window.layer.load(2, {shade: false});
                 $.modal.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
@@ -1848,18 +1848,18 @@
                             //data2重新赋值后，加载与data2相关的调用方法
                             submit();
                             reloadX();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                         } else {
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                         }
                     },
                     complete: function () {
@@ -1874,7 +1874,7 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
-        top.layer.open({
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1889,11 +1889,11 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
-                var index =  top.layer.load(2, {shade: false});
-                $.modal.disable();
+                var index =  window.layer.load(2, {shade: false});
+                window.layer.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
                     url: '/system/abc/importData1',
@@ -1911,18 +1911,18 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)
                         } else {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertError(result.msg);
                         }
                     },
                     complete: function () {
@@ -1938,7 +1938,7 @@
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
         //防止跨域，调用将top.layer改为window.layer 这样将本域名下的方法调用改为了全局调用
-        top.layer.open({
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1953,11 +1953,11 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
                     return false;
                 }
-                var index = top.layer.load(2, {shade: false});
-                $.modal.disable();
+                var index = window.layer.load(2, {shade: false});
+                window.layer.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
                     url: '/system/abc/importData2',
@@ -1975,18 +1975,18 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)
                         } else {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertError(result.msg);
                         }
                     },
                     complete: function () {
