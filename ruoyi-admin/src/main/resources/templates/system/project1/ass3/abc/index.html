@@ -793,15 +793,6 @@
         });
     });
 
-    function reflash(){
-
-        submit();
-        submit1();
-        submit2();
-        reloadX();
-        reloadX3();
-        reloadX4();
-    }
     function submit(){
         var s1 = $('#s1 option:selected').val();
         var s2 = $('#s2 option:selected').val();
@@ -1620,8 +1611,8 @@
 
     }
     function loadTable6(){
-        $('#bootstrap-table5').bootstrapTable('load',data2);
-        var options = {
+        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table5
+        $('#bootstrap-table5').bootstrapTable('destroy').bootstrapTable({
             id:"bootstrap-table5",
             data:data2,
             method: 'get',
@@ -1670,14 +1661,11 @@
                     field: '物料累计品目数百分比',
                     title: '物料累计品目数百分比'
                 }]
-        };
-        $.table.init(options);
-
-
+        });
     }
     function loadTable8(){
-        $('#bootstrap-table7').bootstrapTable('load',data3);
-        var options = {
+        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table7
+        $('#bootstrap-table7').bootstrapTable('destroy').bootstrapTable({
             id:"bootstrap-table7",
             data:data3,
             method: 'get',
@@ -1720,14 +1708,11 @@
                     field: '物料累计品目数百分比',
                     title: '物料累计品目数百分比'
                 }]
-        };
-        $.table.init(options);
-
-
+        });
     }
     function loadTable9(){
-        $('#bootstrap-table8').bootstrapTable('load',data4);
-        var options = {
+        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table8
+        $('#bootstrap-table8').bootstrapTable('destroy').bootstrapTable({
             id:"bootstrap-table8",
             data:data4,
             method: 'get',
@@ -1772,13 +1757,9 @@
                     field: '物料累计品目数百分比',
                     title: '物料累计品目数百分比'
                 }]
-        };
-        $.table.init(options);
-
-
+        });
     }
     function  loadTable7(){
-        // $.table.bootstrapTable('refresh');;
         var options = {
             id:"bootstrap-table",
             data:data1,
@@ -1845,7 +1826,7 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    top.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
                 var index = top.layer.load(2, {shade: false});
@@ -1862,21 +1843,23 @@
                         if (result.code == web_status.SUCCESS) {
                             data1=JSON.parse(result.data.data1);
                             data2=JSON.parse(result.data.data2);
+                            //重新加载data2
                             $('#bootstrap-table').bootstrapTable('load',data1);
-
-                            reflash();
+                            //data2重新赋值后，加载与data2相关的调用方法
+                            submit();
+                            reloadX();
                             $.modal.close(index);
                             $.modal.closeAll();
                             $.modal.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
                         } else {
                             $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
                         }
                     },
                     complete: function () {
@@ -1909,7 +1892,7 @@
                     $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
-                var index = top.layer.load(2, {shade: false});
+                var index =  top.layer.load(2, {shade: false});
                 $.modal.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
@@ -1923,8 +1906,11 @@
                         if (result.code == web_status.SUCCESS) {
                             data3=JSON.parse(result.data.data3);
                             data5=JSON.parse(result.data.data5);
+                            //重新加载bootstrap-table3使用的data5
                             $('#bootstrap-table3').bootstrapTable('load',data5);
-                            reflash();
+                            //data3重新赋值后，加载与data3相关的调用方法
+                            submit1();
+                            reloadX3();
                             $.modal.close(index);
                             $.modal.closeAll();
                             $.modal.alertSuccess(result.msg);
@@ -1951,6 +1937,7 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
+        //防止跨域，调用将top.layer改为window.layer 这样将本域名下的方法调用改为了全局调用
         top.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
@@ -1983,8 +1970,11 @@
                         if (result.code == web_status.SUCCESS) {
                             data5=JSON.parse(result.data.data5);
                             data4=JSON.parse(result.data.data4);
+                            //data5重新赋值后，只重新加载bootstrap-table4的数据
                             $('#bootstrap-table4').bootstrapTable('load',data5);
-                            reflash();
+                            //data3重新赋值后，加载与data3相关的调用方法
+                            submit2();
+                            reloadX4();
                             $.modal.close(index);
                             $.modal.closeAll();
                             $.modal.alertSuccess(result.msg);
