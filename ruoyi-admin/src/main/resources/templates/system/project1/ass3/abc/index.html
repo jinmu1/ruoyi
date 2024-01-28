@@ -1843,9 +1843,8 @@
                         if (result.code == web_status.SUCCESS) {
                             data1=JSON.parse(result.data.data1);
                             data2=JSON.parse(result.data.data2);
-                            //重新加载data2
+                            //data1重新赋值后，重新加载bootstrap-table 加载与data2 submit，reloadX相关的调用方法
                             $('#bootstrap-table').bootstrapTable('load',data1);
-                            //data2重新赋值后，加载与data2相关的调用方法
                             submit();
                             reloadX();
                             $.modal.close(index);
@@ -1906,9 +1905,8 @@
                         if (result.code == web_status.SUCCESS) {
                             data3=JSON.parse(result.data.data3);
                             data5=JSON.parse(result.data.data5);
-                            //重新加载bootstrap-table3使用的data5
+                            //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
                             $('#bootstrap-table3').bootstrapTable('load',data5);
-                            //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
                             $.modal.close(index);
@@ -1969,9 +1967,8 @@
                         if (result.code == web_status.SUCCESS) {
                             data5=JSON.parse(result.data.data5);
                             data4=JSON.parse(result.data.data4);
-                            //data5重新赋值后，只重新加载bootstrap-table4的数据
+                            //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
                             $('#bootstrap-table4').bootstrapTable('load',data5);
-                            //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
                             $.modal.close(index);
