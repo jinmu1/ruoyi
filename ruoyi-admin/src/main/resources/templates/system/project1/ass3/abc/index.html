@@ -1811,7 +1811,7 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
-        top.layer.open({
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1826,10 +1826,10 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
-                var index = top.layer.load(2, {shade: false});
+                var index = window.layer.load(2, {shade: false});
                 $.modal.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
@@ -1843,22 +1843,23 @@
                         if (result.code == web_status.SUCCESS) {
                             data1=JSON.parse(result.data.data1);
                             data2=JSON.parse(result.data.data2);
-                            //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
+                        //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
                             $('#bootstrap-table').bootstrapTable('load',data1);
                             submit();
                             reloadX();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
+
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                         } else {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
                         }
                     },
                     complete: function () {
@@ -1873,7 +1874,7 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
-        top.layer.open({
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1888,11 +1889,12 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
                     return false;
                 }
-                var index =  top.layer.load(2, {shade: false});
-                $.modal.disable();
+                var index =  window.layer.load(2, {shade: false});
+                window.layer.disable();
+
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
                     url: '/system/abc/importData1',
@@ -1907,20 +1909,22 @@
                             data5=JSON.parse(result.data.data5);
                             //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
                             $('#bootstrap-table3').bootstrapTable('load',data5);
+                            //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);
+
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)
                         } else {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertError(result.msg);
                         }
                     },
                     complete: function () {
@@ -1935,7 +1939,8 @@
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
         var _height = $.common.isEmpty(height) ? "230" : height;
-        top.layer.open({
+        //防止跨域，调用将top.layer改为window.layer 这样将本域名下的方法调用改为了全局调用
+        window.layer.open({
             type: 1,
             area: [_width + 'px', _height + 'px'],
             fix: false,
@@ -1950,11 +1955,11 @@
             btn1: function(index, layero){
                 var file = layero.find('#file').val();
                 if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    $.modal.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
+                    window.layer.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
                     return false;
                 }
-                var index = top.layer.load(2, {shade: false});
-                $.modal.disable();
+                var index = window.layer.load(2, {shade: false});
+                window.layer.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
                     url: '/system/abc/importData2',
@@ -1967,22 +1972,23 @@
                         if (result.code == web_status.SUCCESS) {
                             data5=JSON.parse(result.data.data5);
                             data4=JSON.parse(result.data.data4);
-                            //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
+                  //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
                             $('#bootstrap-table4').bootstrapTable('load',data5);
+                            //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
-                            $.modal.close(index);
-                            $.modal.closeAll();
-                            $.modal.alertSuccess(result.msg);
+                            window.layer.close(index);
+                            window.layer.closeAll();
+                            window.layer.alertSuccess(result.msg);     
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertWarning(result.msg)
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)
                         } else {
-                            $.modal.close(index);
-                            $.modal.enable();
-                            $.modal.alertError(result.msg);
+                            window.layer.close(index);
+                            window.layer.enable();
+                            window.layer.alertError(result.msg);
                         }
                     },
                     complete: function () {
