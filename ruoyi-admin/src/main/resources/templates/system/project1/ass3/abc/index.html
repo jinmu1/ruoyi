@@ -1830,10 +1830,9 @@
                     return false;
                 }
                 var index = window.layer.load(2, {shade: false});
-                $.modal.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
-                    url: '/system/abc/importData',
+                    url: ctx+ 'system/abc/importData', //加上ctx后，从百碟客户端可访问我们线上路径
                     data: formData,
                     cache: false,
                     contentType: false,
@@ -1850,16 +1849,15 @@
                             window.layer.close(index);
                             window.layer.closeAll();
                             window.layer.alertSuccess(result.msg);
-
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)//将失败信息返回，提示框为警告样式
                         } else {
                             window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            window.layer.enable();
+                            window.layer.alertWarning(result.msg)
                         }
                     },
                     complete: function () {
@@ -1893,11 +1891,9 @@
                     return false;
                 }
                 var index =  window.layer.load(2, {shade: false});
-                window.layer.disable();
-
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
-                    url: '/system/abc/importData1',
+                    url: ctx+'system/abc/importData1', //加上ctx后，从百碟客户端可访问我们线上路径
                     data: formData,
                     cache: false,
                     contentType: false,
@@ -1915,7 +1911,6 @@
                             window.layer.close(index);
                             window.layer.closeAll();
                             window.layer.alertSuccess(result.msg);
-
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             window.layer.close(index);
@@ -1959,10 +1954,9 @@
                     return false;
                 }
                 var index = window.layer.load(2, {shade: false});
-                window.layer.disable();
                 var formData = new FormData(layero.find('form')[0]);
                 $.ajax({
-                    url: '/system/abc/importData2',
+                    url: ctx+'system/abc/importData2', //加上ctx后，从百碟客户端可访问我们线上路径
                     data: formData,
                     cache: false,
                     contentType: false,
