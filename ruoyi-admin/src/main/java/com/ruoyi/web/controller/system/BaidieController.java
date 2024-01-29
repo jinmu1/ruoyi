@@ -82,8 +82,10 @@ public class BaidieController extends BaseController
             System.out.println("score获取成功！");
         }
         String token = request.getParameter("token");
-        if(token!=null){
+        if(token!=null&&token!=""){
             System.out.println("token获取成功！");
+        }else {
+            return "end1";
         }
         String trainingId = request.getParameter("trainingId");
         if(trainingId!=null){
@@ -245,7 +247,6 @@ public class BaidieController extends BaseController
     @GetMapping("/end1")
     public String assd(HttpServletRequest request)
     {
-
         return   "end";
     }
     @GetMapping("/33")
@@ -499,8 +500,6 @@ public class BaidieController extends BaseController
     }
     @GetMapping("/StartSimulator/QueryDrillData")
     public AjaxResult QueryDrillData(HttpServletRequest request){
-
-
         return success("成功");
     }
 }

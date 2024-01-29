@@ -81,8 +81,10 @@ public class BaidieOpController extends BaseController
     public TableDataInfo list1(HttpServletRequest request)
     {
         String token = request.getParameter("token");
-        if(token!=null){
+        if(token!=null&&token!=""){
             System.out.println("token获取成功！");
+        }else {
+            return new TableDataInfo();
         }
         String trainingId = request.getParameter("trainingId");
         if(trainingId!=null){
