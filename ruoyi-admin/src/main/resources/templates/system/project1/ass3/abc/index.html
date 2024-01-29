@@ -1847,17 +1847,17 @@
                             submit();
                             reloadX();
                             window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)//将失败信息返回，提示框为警告样式
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)//将失败信息返回，提示框为警告样式
                         } else {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
                         }
                     },
                     complete: function () {
@@ -1909,17 +1909,17 @@
                             submit1();
                             reloadX3();
                             window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
                         } else {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
+                            $.modal.enable();
+                            $.modal.alertError(result.msg);
                         }
                     },
                     complete: function () {
@@ -1972,17 +1972,17 @@
                             submit2();
                             reloadX4();
                             window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);     
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
                         } else {
                             window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
+                            $.modal.enable();
+                            $.modal.alertError(result.msg);
                         }
                     },
                     complete: function () {
