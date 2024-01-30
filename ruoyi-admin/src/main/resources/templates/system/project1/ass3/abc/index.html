@@ -1807,65 +1807,16 @@
 
     }
     function importData() {
-        var formId, width, height;
-        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
-        var _width = $.common.isEmpty(width) ? "400" : width;
-        var _height = $.common.isEmpty(height) ? "230" : height;
-        window.layer.open({
-            type: 1,
-            area: [_width + 'px', _height + 'px'],
-            fix: false,
-            //不固定
-            maxmin: true,
-            shade: 0.3,
-            title: '导入'  + '数据',
-            content: $('#' + currentId).html(),
-            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
-            // 弹层外区域关闭
-            shadeClose: true,
-            btn1: function(index, layero){
-                var file = layero.find('#file').val();
-                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
-                    return false;
-                }
-                var index = window.layer.load(2, {shade: false});
-                var formData = new FormData(layero.find('form')[0]);
-                $.ajax({
-                    url: ctx+ 'system/abc/importData', //加上ctx后，从百碟客户端可访问我们线上路径
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    success: function (result) {
-                        if (result.code == web_status.SUCCESS) {
-                            data1=JSON.parse(result.data.data1);
-                            data2=JSON.parse(result.data.data2);
-                        //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
-                            $('#bootstrap-table').bootstrapTable('load',data1);
-                            submit();
-                            reloadX();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
-                            $.table.refresh();
-                        } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)//将失败信息返回，提示框为警告样式
-                        } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
-                        }
-                    },
-                    complete: function () {
-                        layero.find('#file').val('');
-                    }
-                });
-            }
-        });
+        var result = upload("system/abc/importData");
+        while (isValueEmpty(result)){
+        console.log(result);
+        data1=JSON.parse(JSON.parse(result).data.data1);
+        data2=JSON.parse(JSON.parse(result).data.data2);
+        //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
+        $('#bootstrap-table').bootstrapTable('load',data1);
+        submit();
+        reloadX();
+        }
     }
     function importData1() {
         var formId, width, height;
