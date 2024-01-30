@@ -7,6 +7,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.web.controller.utils.BaidieUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/system/abc")
 public class ABCAnalyseController {
-
-
     /**
      * ABC出库金额分析的导入数据
      */
@@ -30,15 +29,10 @@ public class ABCAnalyseController {
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request) throws Exception
     {
-        /**
-         *将导入的EXCEL文件转换为List对象，
-         * todo:返回导入和转换的错误参数
-         */
-        ExcelUtil<Data1Entry> util = new ExcelUtil<>(Data1Entry.class);
+        // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+        List<Data1Entry> data1Entries = BaidieUtils.parseFromExcelFile(file, Data1Entry.class);
 
-        List<Data1Entry> data1Entries = util.importExcel(file.getInputStream());
         // 将 "data1" 转换为数组
-
         List<Data2Entry> list = new ArrayList<>();
         // 现在你可以使用data1Entries了
         //step1：首先计算总销售金额
@@ -47,31 +41,31 @@ public class ABCAnalyseController {
             data2Entry.setMaterialCode(entry.getMaterialCode());
             data2Entry.setUnitPrice(entry.getSellingPrice());
             data2Entry.setAverageInventory(entry.getAverageInventory());
-            data2Entry.setAverageFundsOccupied(entry.getSellingPrice()*entry.getAverageInventory());
+            data2Entry.setAverageFundsOccupied(entry.getSellingPrice() * entry.getAverageInventory());
             list.add(data2Entry);
         }
         //step2：对总销售金额进行降序排序
-        Collections.sort(list,(m1, m2) -> Double.compare(m2.getAverageFundsOccupied(),m1.getAverageFundsOccupied()));
+        Collections.sort(list, (m1, m2) -> Double.compare(m2.getAverageFundsOccupied(), m1.getAverageFundsOccupied()));
         //step3：对降序排序后的占比进行计算，下面都是计算过程
-        double occupied=0;
-        int next =0;
+        double occupied = 0;
+        int next = 0;
         double allInventory = 0d;
         int all = 0;
         /**
          * all：统计总数据条数
          * allInventory：统计数据总的库存金额
          */
-        for (Data2Entry data2Entry:list){
-            all = all+ 1;
-            allInventory = allInventory+ data2Entry.getAverageFundsOccupied();
+        for (Data2Entry data2Entry : list) {
+            all = all + 1;
+            allInventory = allInventory + data2Entry.getAverageFundsOccupied();
         }
-        for(Data2Entry data2Entry:list){
-            occupied =occupied + data2Entry.getAverageFundsOccupied();
+        for (Data2Entry data2Entry : list) {
+            occupied = occupied + data2Entry.getAverageFundsOccupied();
             data2Entry.setCumulativeAverageFundsOccupied(occupied);
-            data2Entry.setCumulativeAverageFundsOccupiedPercentage(new BigDecimal(occupied*100/allInventory).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
-            next=next+1;
+            data2Entry.setCumulativeAverageFundsOccupiedPercentage(new BigDecimal(occupied * 100 / allInventory).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
+            next = next + 1;
             data2Entry.setCumulativeItemNumber(next);
-            data2Entry.setCumulativeItemNumberPercentage(new BigDecimal(next*100/all).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
+            data2Entry.setCumulativeItemNumberPercentage(new BigDecimal(next * 100 / all).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(data1Entries);
@@ -92,27 +86,20 @@ public class ABCAnalyseController {
     @ResponseBody
     public AjaxResult importData1(MultipartFile file, boolean updateSupport, HttpServletRequest request) throws Exception
     {
-        /**
-         *将导入的EXCEL文件转换为List对象，
-         * todo:返回导入和转换的错误参数
-         */
-        ExcelUtil<Data5Entry> util = new ExcelUtil<>(Data5Entry.class);
-
-        List<Data5Entry> data5Entries = util.importExcel(file.getInputStream());
-        // 将 "data1" 转换为数组
-
+        // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+        List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
 
         // 使用流式操作和Collectors按照物料编码属性分类
         Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
                 .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
 
         // 输出分类结果
-        List<Data3Entry> data3Entries= new ArrayList<>();
-        List<Data4Entry> data4Entries =new ArrayList<>();
+        List<Data3Entry> data3Entries = new ArrayList<>();
+        List<Data4Entry> data4Entries = new ArrayList<>();
         int tatol = categorizedMap.size();//总物料数量
-        int AllOutboundFrequency =0;//总出库频次
+        int AllOutboundFrequency = 0;//总出库频次
         double AllShippedQuantity = 0.0;//总出库数量
-        for(String key : categorizedMap.keySet()){
+        for (String key : categorizedMap.keySet()) {
             List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
             Data3Entry data3Entry = new Data3Entry();
             Data4Entry data4Entry = new Data4Entry();
@@ -121,28 +108,28 @@ public class ABCAnalyseController {
             data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
             int count = 0;//出库频次统计
             double num = 0.0;//出库数量统计
-            for(Data5Entry data5Entry:data5EntryList1){
+            for (Data5Entry data5Entry : data5EntryList1) {
                 count++;
-                num = num+data5Entry.getShippedQuantity();
+                num = num + data5Entry.getShippedQuantity();
             }
-            AllOutboundFrequency+=count;
-            AllShippedQuantity+=num;
+            AllOutboundFrequency += count;
+            AllShippedQuantity += num;
             data3Entry.setOutboundFrequency(count);
             data4Entry.setOutboundQuantity(num);
             data3Entries.add(data3Entry);
             data4Entries.add(data4Entry);
         }
-        Collections.sort(data3Entries,(m1, m2) -> Double.compare(m2.getOutboundFrequency(),m1.getOutboundFrequency()));//按照出库频次降序排序
+        Collections.sort(data3Entries, (m1, m2) -> Double.compare(m2.getOutboundFrequency(), m1.getOutboundFrequency()));//按照出库频次降序排序
 
-        int frequency =0;//累计频次
-        int num1=0;
-        for(Data3Entry data3Entry:data3Entries){
-            num1 ++;
-            frequency +=data3Entry.getOutboundFrequency();
+        int frequency = 0;//累计频次
+        int num1 = 0;
+        for (Data3Entry data3Entry : data3Entries) {
+            num1++;
+            frequency += data3Entry.getOutboundFrequency();
             data3Entry.setCumulativeOutboundFrequency(frequency);
-            data3Entry.setCumulativeOutboundFrequencyPercentage(new BigDecimal(frequency*100/AllOutboundFrequency).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
+            data3Entry.setCumulativeOutboundFrequencyPercentage(new BigDecimal(frequency * 100 / AllOutboundFrequency).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             data3Entry.setCumulativeItemCount(num1);
-            data3Entry.setCumulativeItemCountPercentage(new BigDecimal(num1*100/tatol).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
+            data3Entry.setCumulativeItemCountPercentage(new BigDecimal(num1 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
         }
 
 
@@ -162,15 +149,8 @@ public class ABCAnalyseController {
     @ResponseBody
     public AjaxResult importData2(MultipartFile file, boolean updateSupport, HttpServletRequest request) throws Exception
     {
-        /**
-         *将导入的EXCEL文件转换为List对象，
-         * todo:返回导入和转换的错误参数
-         */
-        ExcelUtil<Data5Entry> util = new ExcelUtil<>(Data5Entry.class);
-
-        List<Data5Entry> data5Entries = util.importExcel(file.getInputStream());
-        // 将 "data1" 转换为数组
-
+        // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+        List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
 
         // 使用流式操作和Collectors按照物料编码属性分类
         Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
@@ -178,11 +158,11 @@ public class ABCAnalyseController {
 
         // 输出分类结果
 
-        List<Data4Entry> data4Entries =new ArrayList<>();
+        List<Data4Entry> data4Entries = new ArrayList<>();
         int tatol = categorizedMap.size();//总物料数量
-        int AllOutboundFrequency =0;//总出库频次
+        int AllOutboundFrequency = 0;//总出库频次
         double AllShippedQuantity = 0.0;//总出库数量
-        for(String key : categorizedMap.keySet()){
+        for (String key : categorizedMap.keySet()) {
             List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
             Data3Entry data3Entry = new Data3Entry();
             Data4Entry data4Entry = new Data4Entry();
@@ -191,28 +171,28 @@ public class ABCAnalyseController {
             data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
             int count = 0;//出库频次统计
             double num = 0.0;//出库数量统计
-            for(Data5Entry data5Entry:data5EntryList1){
+            for (Data5Entry data5Entry : data5EntryList1) {
                 count++;
-                num = num+data5Entry.getShippedQuantity();
+                num = num + data5Entry.getShippedQuantity();
             }
-            AllOutboundFrequency+=count;
-            AllShippedQuantity+=num;
+            AllOutboundFrequency += count;
+            AllShippedQuantity += num;
             data4Entry.setOutboundQuantity(num);
             data4Entries.add(data4Entry);
         }
 
-        Collections.sort(data4Entries,(m1, m2) -> Double.compare(m2.getOutboundQuantity(),m1.getOutboundQuantity()));//按照出库数量降序排序
+        Collections.sort(data4Entries, (m1, m2) -> Double.compare(m2.getOutboundQuantity(), m1.getOutboundQuantity()));//按照出库数量降序排序
 
 
-        int num2=0;//排行
+        int num2 = 0;//排行
         double quantity = 0.0;//累计数量
-        for (Data4Entry data4Entry:data4Entries){
-            num2 ++;
-            quantity +=data4Entry.getOutboundQuantity();
+        for (Data4Entry data4Entry : data4Entries) {
+            num2++;
+            quantity += data4Entry.getOutboundQuantity();
             data4Entry.setCumulativeOutboundQuantity(quantity);
-            data4Entry.setCumulativeOutboundQuantityPercentage(new BigDecimal(quantity*100/AllShippedQuantity).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
+            data4Entry.setCumulativeOutboundQuantityPercentage(new BigDecimal(quantity * 100 / AllShippedQuantity).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             data4Entry.setCumulativeItemCount(num2);
-            data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2*100/tatol).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString()+"%");
+            data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
         }
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(data5Entries);
