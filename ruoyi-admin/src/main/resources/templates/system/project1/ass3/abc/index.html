@@ -1846,10 +1846,10 @@
                             $('#bootstrap-table').bootstrapTable('load',data1);
                             submit();
                             reloadX();
-                            importAlert("success",result.msg);
+                            popUpWindow("success",result.msg);
                             $.table.refresh();
-                        }else {
-                            importAlert("warning",result.msg);
+                        } else {
+                            popUpWindow("warning",result.msg);
                         }
                     },
                     complete: function () {
@@ -1900,10 +1900,10 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
-                            importAlert("success",result.msg);
+                            popUpWindow("success",result.msg);
                             $.table.refresh();
                         } else {
-                            importAlert("warning",result.msg);
+                            popUpWindow("warning",result.msg);
                         }
                     },
                     complete: function () {
@@ -1955,10 +1955,10 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
-                            importAlert("success",result.msg);
+                            popUpWindow("success",result.msg);
                             $.table.refresh();
                         } else {
-                            importAlert("warning",result.msg);
+                            popUpWindow("warning",result.msg);
                         }
                     },
                     complete: function () {
@@ -1970,7 +1970,7 @@
     }
 
     //根据参数status设置返回的信息窗口标识和弹出后台返回的信息msg
-    function importAlert(status,msg){
+    function popUpWindow(status,msg){
         window.layer.closeAll();
         window.layer.alert(msg, {
             icon: $.modal.icon(status),
