@@ -1846,18 +1846,30 @@
                             $('#bootstrap-table').bootstrapTable('load',data1);
                             submit();
                             reloadX();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            window.layer.closeAll(); //从百碟调用layer方法
+                            window.layer.alert(result.msg, {//将弹出框改为window.layer
+                                icon: $.modal.icon("success"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)//将失败信息返回，提示框为警告样式
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         }
                     },
                     complete: function () {
@@ -1908,18 +1920,30 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
+                            window.layer.closeAll(); //从百碟调用layer方法
+                            window.layer.alert(result.msg, {//将弹出框改为window.layer
+                                icon: $.modal.icon("success"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         }
                     },
                     complete: function () {
@@ -1971,18 +1995,30 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);     
+                            window.layer.closeAll(); //从百碟调用layer方法
+                            window.layer.alert(result.msg, {//将弹出框改为window.layer
+                                icon: $.modal.icon("success"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                             $.table.refresh();
                         } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
+                            window.layer.closeAll();
+                            window.layer.alert(result.msg, {
+                                icon: $.modal.icon("warning"),
+                                title: "系统提示",
+                                btn: ['确认'],
+                                btnclass: ['btn btn-primary'],
+                            });
                         }
                     },
                     complete: function () {
