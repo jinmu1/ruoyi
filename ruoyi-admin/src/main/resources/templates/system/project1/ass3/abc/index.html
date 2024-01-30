@@ -1846,10 +1846,10 @@
                             $('#bootstrap-table').bootstrapTable('load',data1);
                             submit();
                             reloadX();
-                            popUpWindow("success",result.msg);
+                            popUpWindow($.modal.icon("success"),result.msg);
                             $.table.refresh();
                         } else {
-                            popUpWindow("warning",result.msg);
+                            popUpWindow($.modal.icon("warning"),result.msg);
                         }
                     },
                     complete: function () {
@@ -1900,10 +1900,10 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit1();
                             reloadX3();
-                            popUpWindow("success",result.msg);
+                            popUpWindow($.modal.icon("success"),result.msg);
                             $.table.refresh();
                         } else {
-                            popUpWindow("warning",result.msg);
+                            popUpWindow($.modal.icon("warning"),result.msg);
                         }
                     },
                     complete: function () {
@@ -1955,10 +1955,10 @@
                             //data3重新赋值后，加载与data3相关的调用方法
                             submit2();
                             reloadX4();
-                            popUpWindow("success",result.msg);
+                            popUpWindow($.modal.icon("success"),result.msg);
                             $.table.refresh();
                         } else {
-                            popUpWindow("warning",result.msg);
+                            popUpWindow($.modal.icon("warning"),result.msg);
                         }
                     },
                     complete: function () {
@@ -1969,11 +1969,11 @@
         });
     }
 
-    //根据参数status设置返回的信息窗口标识和弹出后台返回的信息msg
-    function popUpWindow(status,msg){
+    //根据参数icon设置返回的信息窗口标识和弹出后台返回的信息msg
+    function popUpWindow(icon,msg){
         window.layer.closeAll();
         window.layer.alert(msg, {
-            icon: $.modal.icon(status),
+            icon:icon,
             title: "系统提示",
             btn: ['确认'],
             btnclass: ['btn btn-primary'],
