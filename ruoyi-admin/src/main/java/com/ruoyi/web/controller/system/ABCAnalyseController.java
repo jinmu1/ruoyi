@@ -7,6 +7,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.web.controller.utils.ImportExcelUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +35,7 @@ public class ABCAnalyseController {
          *将导入的EXCEL文件转换为List对象，
          * todo:返回导入和转换的错误参数
          */
-        ExcelUtil<Data1Entry> util = new ExcelUtil<>(Data1Entry.class);
-
-        List<Data1Entry> data1Entries = util.importExcel(file.getInputStream());
+        List<Data1Entry> data1Entries = ImportExcelUtils.importExcel(file.getInputStream(), Data1Entry.class);
         // 将 "data1" 转换为数组
 
         List<Data2Entry> list = new ArrayList<>();
@@ -96,9 +95,7 @@ public class ABCAnalyseController {
          *将导入的EXCEL文件转换为List对象，
          * todo:返回导入和转换的错误参数
          */
-        ExcelUtil<Data5Entry> util = new ExcelUtil<>(Data5Entry.class);
-
-        List<Data5Entry> data5Entries = util.importExcel(file.getInputStream());
+        List<Data5Entry> data5Entries = ImportExcelUtils.importExcel(file.getInputStream(), Data5Entry.class);
         // 将 "data1" 转换为数组
 
 
@@ -166,12 +163,8 @@ public class ABCAnalyseController {
          *将导入的EXCEL文件转换为List对象，
          * todo:返回导入和转换的错误参数
          */
-        ExcelUtil<Data5Entry> util = new ExcelUtil<>(Data5Entry.class);
-
-        List<Data5Entry> data5Entries = util.importExcel(file.getInputStream());
+        List<Data5Entry> data5Entries = ImportExcelUtils.importExcel(file.getInputStream(), Data5Entry.class);
         // 将 "data1" 转换为数组
-
-
         // 使用流式操作和Collectors按照物料编码属性分类
         Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
                 .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
