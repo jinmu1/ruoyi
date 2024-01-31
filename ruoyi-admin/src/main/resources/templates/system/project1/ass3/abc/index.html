@@ -38,7 +38,7 @@
             <div class="btn-group-sm" role="group">
             </div>
             <div class="btn-group-sm" role="group">
-                <a class="btn btn-info" onclick="importData()" >
+                <a class="btn btn-info" onclick="importData('system/abc/importData')">
                     <i class="fa fa-upload"></i> 导入
                 </a>
             </div>
@@ -275,7 +275,7 @@
                 </div>
 
                 <div class="ibox-content" style="height:700px">
-                    <a class="btn btn-info" onclick="importData1()" >
+                    <a class="btn btn-info" onclick="importData('system/abc/importData1')" >
                         <i class="fa fa-upload"></i> 导入
                     </a>
                     <table class="col-sm-12 select-table table-striped"
@@ -511,7 +511,7 @@
                 </div>
                 <div class="ibox-content" style="height:700px">
                     <div class="btn-group-sm" role="group">
-                        <a class="btn btn-info" onclick="importData2()" >
+                        <a class="btn btn-info" onclick="importData('system/abc/importData2')" >
                             <i class="fa fa-upload"></i> 导入
                         </a>
                     </div>
@@ -1806,142 +1806,37 @@
         $.table.init(options);
 
     }
-    function importData() {
-        var result = upload("system/abc/importData");
-        while (isValueEmpty(result)){
-        console.log(result);
-        data1=JSON.parse(JSON.parse(result).data.data1);
-        data2=JSON.parse(JSON.parse(result).data.data2);
-        //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
-        $('#bootstrap-table').bootstrapTable('load',data1);
-        submit();
-        reloadX();
+
+    /***
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function handleImportResult(url, result) {
+        if ( "system/abc/importData" ==url) {
+             data1 = JSON.parse(result.data.data1);
+             data2 = JSON.parse(result.data.data2);
+            $('#bootstrap-table').bootstrapTable('load', data1);
+            submit();
+            reloadX();
+        } else if ("system/abc/importData1" ==url){
+            data3=JSON.parse(result.data.data3);
+            data5=JSON.parse(result.data.data5);
+            //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
+            $('#bootstrap-table3').bootstrapTable('load',data5);
+            //data3重新赋值后，加载与data3相关的调用方法
+            submit1();
+            reloadX3();
+        } else if ("system/abc/importData2" ==url){
+            data5=JSON.parse(result.data.data5);
+            data4=JSON.parse(result.data.data4);
+            //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
+            $('#bootstrap-table4').bootstrapTable('load',data5);
+            //data3重新赋值后，加载与data3相关的调用方法
+            submit2();
+            reloadX4();
         }
-    }
-    function importData1() {
-        var formId, width, height;
-        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
-        var _width = $.common.isEmpty(width) ? "400" : width;
-        var _height = $.common.isEmpty(height) ? "230" : height;
-        window.layer.open({
-            type: 1,
-            area: [_width + 'px', _height + 'px'],
-            fix: false,
-            //不固定
-            maxmin: true,
-            shade: 0.3,
-            title: '导入'  + '数据',
-            content: $('#' + currentId).html(),
-            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
-            // 弹层外区域关闭
-            shadeClose: true,
-            btn1: function(index, layero){
-                var file = layero.find('#file').val();
-                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    window.layer.msgWarning("请选择后缀为 “xls”、“csv”或“xlsx”的文件。");
-                    return false;
-                }
-                var index =  window.layer.load(2, {shade: false});
-                var formData = new FormData(layero.find('form')[0]);
-                $.ajax({
-                    url: ctx+'system/abc/importData1', //加上ctx后，从百碟客户端可访问我们线上路径
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    success: function (result) {
-                        if (result.code == web_status.SUCCESS) {
-                            data3=JSON.parse(result.data.data3);
-                            data5=JSON.parse(result.data.data5);
-                            //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
-                            $('#bootstrap-table3').bootstrapTable('load',data5);
-                            //data3重新赋值后，加载与data3相关的调用方法
-                            submit1();
-                            reloadX3();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);
-                            $.table.refresh();
-                        } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
-                        } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
-                        }
-                    },
-                    complete: function () {
-                        layero.find('#file').val('');
-                    }
-                });
-            }
-        });
-    }
-    function importData2() {
-        var formId, width, height;
-        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
-        var _width = $.common.isEmpty(width) ? "400" : width;
-        var _height = $.common.isEmpty(height) ? "230" : height;
-        //防止跨域，调用将top.layer改为window.layer 这样将本域名下的方法调用改为了全局调用
-        window.layer.open({
-            type: 1,
-            area: [_width + 'px', _height + 'px'],
-            fix: false,
-            //不固定
-            maxmin: true,
-            shade: 0.3,
-            title: '导入'  + '数据',
-            content: $('#' + currentId).html(),
-            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
-            // 弹层外区域关闭
-            shadeClose: true,
-            btn1: function(index, layero){
-                var file = layero.find('#file').val();
-                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx')&& !$.common.endWith(file, '.csv'))){
-                    window.layer.msgWarning("请选择后缀为 “xls”、“xlsx”的文件。");
-                    return false;
-                }
-                var index = window.layer.load(2, {shade: false});
-                var formData = new FormData(layero.find('form')[0]);
-                $.ajax({
-                    url: ctx+'system/abc/importData2', //加上ctx后，从百碟客户端可访问我们线上路径
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    success: function (result) {
-                        if (result.code == web_status.SUCCESS) {
-                            data5=JSON.parse(result.data.data5);
-                            data4=JSON.parse(result.data.data4);
-                  //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
-                            $('#bootstrap-table4').bootstrapTable('load',data5);
-                            //data3重新赋值后，加载与data3相关的调用方法
-                            submit2();
-                            reloadX4();
-                            window.layer.close(index);
-                            window.layer.closeAll();
-                            window.layer.alertSuccess(result.msg);     
-                            $.table.refresh();
-                        } else if (result.code == web_status.WARNING) {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertWarning(result.msg)
-                        } else {
-                            window.layer.close(index);
-                            window.layer.enable();
-                            window.layer.alertError(result.msg);
-                        }
-                    },
-                    complete: function () {
-                        layero.find('#file').val('');
-                    }
-                });
-            }
-        });
+
     }
 </script>
 <script id="importTpl" type="text/template">
