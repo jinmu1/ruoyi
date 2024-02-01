@@ -38,7 +38,7 @@
             <div class="btn-group-sm" role="group">
             </div>
             <div class="btn-group-sm" role="group">
-                <a class="btn btn-info" onclick="importData('system/abc/importData')">
+                <a class="btn btn-info" onclick="importData('system/abc/importData',updateFirstGroup)">
                     <i class="fa fa-upload"></i> 导入
                 </a>
             </div>
@@ -275,7 +275,7 @@
                 </div>
 
                 <div class="ibox-content" style="height:700px">
-                    <a class="btn btn-info" onclick="importData('system/abc/importData1')" >
+                    <a class="btn btn-info" onclick="importData('system/abc/importData1',updateSecondGroup)" >
                         <i class="fa fa-upload"></i> 导入
                     </a>
                     <table class="col-sm-12 select-table table-striped"
@@ -511,7 +511,7 @@
                 </div>
                 <div class="ibox-content" style="height:700px">
                     <div class="btn-group-sm" role="group">
-                        <a class="btn btn-info" onclick="importData('system/abc/importData2')" >
+                        <a class="btn btn-info" onclick="importData('system/abc/importData2',updateThirdGroup)" >
                             <i class="fa fa-upload"></i> 导入
                         </a>
                     </div>
@@ -1808,18 +1808,25 @@
     }
 
     /***
+     * 第一个表单的导入后返回的数据处理方法
      * 返回后端传回来的数据，将对应的变化调用
      * @param url
      * @param result
      */
-    function handleImportResult(url, result) {
-        if ( "system/abc/importData" ==url) {
+    function updateFirstGroup(result) {
              data1 = JSON.parse(result.data.data1);
              data2 = JSON.parse(result.data.data2);
             $('#bootstrap-table').bootstrapTable('load', data1);
             submit();
             reloadX();
-        } else if ("system/abc/importData1" ==url){
+    }
+    /***
+     * 第二个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function updateSecondGroup(result) {
             data3=JSON.parse(result.data.data3);
             data5=JSON.parse(result.data.data5);
             //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
@@ -1827,7 +1834,14 @@
             //data3重新赋值后，加载与data3相关的调用方法
             submit1();
             reloadX3();
-        } else if ("system/abc/importData2" ==url){
+    }
+    /***
+     * 第三个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function updateThirdGroup(result) {
             data5=JSON.parse(result.data.data5);
             data4=JSON.parse(result.data.data4);
             //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
@@ -1835,33 +1849,7 @@
             //data3重新赋值后，加载与data3相关的调用方法
             submit2();
             reloadX4();
-        }
-
     }
 </script>
-<script id="importTpl" type="text/template">
-    <form enctype="multipart/form-data" class="mt20 mb10">
-        <div class="col-xs-offset-1">
-            <input type="file" id="file" name="file"/>
-            <div class="mt10 pt5">
-<!--                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的数据。"> 是否更新已经存在的出库数据-->
-<!--                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
-            </div>
-            <font color="red" class="pull-left mt10">
-                提示：仅允许导入“xls”或“xlsx”格式文件！
-            </font>
-        </div>
-    </form>
-</script>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?0db08d5fd7bd34e99daaee5a7e9c65de";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
 </body>
 </html>
