@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/system/abc")
 public class ABCAnalyseController {
     // Error message for import file error.
-    private final String IMPORT_FAILURE_MSG = "导入文件不是xlsx格式";
+    private final String IMPORT_FAILURE_MSG = "导入文件失败，请检查格式或者模版是否正确";
 
     /**
      * ABC出库金额分析的导入数据
