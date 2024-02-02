@@ -1807,6 +1807,7 @@
 
     }
     function importData() {
+<<<<<<< HEAD
         var formId, width, height;
         var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
         var _width = $.common.isEmpty(width) ? "400" : width;
@@ -1858,6 +1859,18 @@
                 });
             }
         });
+=======
+        var result = upload("system/abc/importData");
+        while (isValueEmpty(result)){
+        console.log(result);
+        data1=JSON.parse(JSON.parse(result).data.data1);
+        data2=JSON.parse(JSON.parse(result).data.data2);
+        //data1重新赋值后，重新加载bootstrap-table 加载与data1相关的调用方法submit，reloadX
+        $('#bootstrap-table').bootstrapTable('load',data1);
+        submit();
+        reloadX();
+        }
+>>>>>>> 4f38b9ee (增加了js文件)
     }
     function importData1() {
         var formId, width, height;
