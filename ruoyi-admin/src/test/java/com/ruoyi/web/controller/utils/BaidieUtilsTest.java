@@ -62,12 +62,10 @@ public class BaidieUtilsTest {
     public void testGenerateResponseJson() throws JsonProcessingException {
         // 准备测试数据
         HashMap<String, List<?>> jsonKeyToValue = new HashMap<>();
-        List<Integer> list1 = new ArrayList<>();
-        list1.add(1);
-        list1.add(2);
-        List<String> list2 = new ArrayList<>();
-        list2.add("a");
-        list2.add("b");
+        List<ABCAnalyseController.Data1Entry> list1 = new ArrayList<>();
+        list1.add(new ABCAnalyseController.Data1Entry());
+        List<ABCAnalyseController.Data5Entry> list2 = new ArrayList<>();
+        list2.add(new ABCAnalyseController.Data5Entry());
         jsonKeyToValue.put("key1", list1);
         jsonKeyToValue.put("key2", list2);
 
@@ -75,6 +73,8 @@ public class BaidieUtilsTest {
         JSONObject jsonObject = BaidieUtils.generateResponseJson(jsonKeyToValue);
 
         // 验证生成的 JSON 是否符合预期
-        assertEquals("{\"key1\":\"[1,2]\",\"key2\":\"[a,b]\"}", jsonObject.toString());
+        assertEquals("{\"key1\":\"[{\\\"物料编码\\\":null,\\\"平均库存\\\":0,\\\"当月出库总量\\\":0.0,\\\"库存周转次数\\\":0,\\\"库存周转天数\\\":0,\\\"销售单价\\\":0.0}]\"," +
+                "\"key2\":\"[{\\\"出库日期\\\":null,\\\"订单编号\\\":0,\\\"物料编号\\\":null,\\\"物料名称\\\":null,\\\"出货数量\\\":0.0,\\\"出货单位\\\":null,\\\"销售单价\\\":0.0,\\\"托盘装件数\\\":0.0}]\"}"
+                , jsonObject.toString());
     }
 }
