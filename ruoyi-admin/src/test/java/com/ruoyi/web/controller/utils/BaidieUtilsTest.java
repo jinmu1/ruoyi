@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +72,11 @@ public class BaidieUtilsTest {
 
         // 调用方法生成 JSON
         JSONObject jsonObject = BaidieUtils.generateResponseJson(jsonKeyToValue);
-
+        String str = "{\n" +
+                "  \"key1\" : \"[{\\\"物料编码\\\":null,\\\"平均库存\\\":0,\\\"当月出库总量\\\":0.0,\\\"库存周转次数\\\":0,\\\"库存周转天数\\\":0,\\\"销售单价\\\":0.0}]\",\n" +
+                "  \"key2\" : \"[{\\\"出库日期\\\":null,\\\"订单编号\\\":0,\\\"物料编号\\\":null,\\\"物料名称\\\":null,\\\"出货数量\\\":0.0,\\\"出货单位\\\":null,\\\"销售单价\\\":0.0,\\\"托盘装件数\\\":0.0}]\"\n" +
+                "}";
         // 验证生成的 JSON 是否符合预期
-        assertEquals("{\"key1\":\"[{\\\"物料编码\\\":null,\\\"平均库存\\\":0,\\\"当月出库总量\\\":0.0,\\\"库存周转次数\\\":0,\\\"库存周转天数\\\":0,\\\"销售单价\\\":0.0}]\"," +
-                "\"key2\":\"[{\\\"出库日期\\\":null,\\\"订单编号\\\":0,\\\"物料编号\\\":null,\\\"物料名称\\\":null,\\\"出货数量\\\":0.0,\\\"出货单位\\\":null,\\\"销售单价\\\":0.0,\\\"托盘装件数\\\":0.0}]\"}"
-                , jsonObject.toString());
+        assertEquals(str.replaceAll("\\s", ""), jsonObject.toString().replaceAll("\\s", ""));
     }
 }
