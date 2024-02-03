@@ -23,4 +23,36 @@ public class EIQAnalysisTable {
     @Setter
     @JsonProperty("Q分析")
     private double QAnalysis;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getEAnalysis() {
+        return EAnalysis;
+    }
+
+    public void setEAnalysis(int EAnalysis) {
+        this.EAnalysis = EAnalysis;
+    }
+
+    public int getNAnalysis() {
+        return NAnalysis;
+    }
+
+    public void setNAnalysis(int NAnalysis) {
+        this.NAnalysis = NAnalysis;
+    }
+
+    public double getQAnalysis() {
+        return QAnalysis;
+    }
+
+    public void setQAnalysis(double QAnalysis) {
+        this.QAnalysis = QAnalysis;
+    }
 }
