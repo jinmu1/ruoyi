@@ -70,14 +70,10 @@ public class ABCAnalyseController {
                 data2Entry.setCumulativeItemNumber(next);
                 data2Entry.setCumulativeItemNumberPercentage(new BigDecimal(next * 100 / all).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(data1Entries);
-            ObjectMapper objectMapper1 = new ObjectMapper();
-            String jsonString1 = objectMapper1.writeValueAsString(list);
-            JSONObject json = new JSONObject(); // 创建一个空的JSON对象
-
-            json.put("data1", jsonString); // 将导入的数据放到data1中
-            json.put("data2", jsonString1); // 将转换后的数据放到data2中
+            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
+                put("data1", data1Entries);
+                put("data2", list);
+            }});
 
             return AjaxResult.success(json);
         } catch (Exception e) {
@@ -139,14 +135,10 @@ public class ABCAnalyseController {
                 data3Entry.setCumulativeItemCountPercentage(new BigDecimal(num1 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
 
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(data5Entries);
-            ObjectMapper objectMapper2 = new ObjectMapper();
-            String jsonString2 = objectMapper2.writeValueAsString(data3Entries);
-            JSONObject json = new JSONObject(); // 创建一个空的JSON对象
-            json.put("data3", jsonString2); // 将导入的数据放到data1中
-            json.put("data5", jsonString); // 将转换后的数据放到data2中
+            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
+                put("data3", data3Entries);
+                put("data5", data5Entries);
+            }});
             return AjaxResult.success(json);
         } catch (Exception e) {
             return AjaxResult.error(IMPORT_FAILURE_MSG);
@@ -204,15 +196,10 @@ public class ABCAnalyseController {
                 data4Entry.setCumulativeItemCount(num2);
                 data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(data5Entries);
-            ObjectMapper objectMapper2 = new ObjectMapper();
-            String jsonString2 = objectMapper2.writeValueAsString(data4Entries);
-
-            JSONObject json = new JSONObject(); // 创建一个空的JSON对象
-
-            json.put("data4", jsonString2); // 将转换后的数据放到data2中
-            json.put("data5", jsonString); // 将转换后的数据放到data2中
+            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
+                put("data3", data4Entries);
+                put("data5", data5Entries);
+            }});
             return AjaxResult.success(json);
         } catch (Exception e) {
             return AjaxResult.error(IMPORT_FAILURE_MSG);
