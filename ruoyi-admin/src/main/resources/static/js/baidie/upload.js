@@ -72,7 +72,7 @@ function uploadFileToBackend(index, layero, url, refresh_data_callback) {
         return false;
     }
     var formData = new FormData(layero.find('form')[0]);
-    var loadingIndex = window.layer.load(2, {shade: false});
+    var loadingIndex = window.layer.load(2, {shade: false});// 创建一个加载动画，loadingIndex用于保存加载动画的索引 0: 默认的加载动画样式，即圆圈旋转。1: 简单的加载动画样式，即水平方向的滚动条。2: 进度条加载动画样式，显示一个进度条。
     $.ajax({
         url: ctx+url,
         data: formData,
@@ -81,7 +81,6 @@ function uploadFileToBackend(index, layero, url, refresh_data_callback) {
         processData: false,
         type: 'POST',
         success: function(result) {
-
             if (result.code == web_status.SUCCESS) {
                 popUpWindow($.modal.icon("success"), result.msg);
                 $.table.refresh();
