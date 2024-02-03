@@ -21,9 +21,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/system/abc")
 public class ABCAnalyseController {
-    // Error message for import file error.
-    private final String IMPORT_FAILURE_MSG = "导入文件失败，请检查格式或者模版是否正确";
-
     /**
      * ABC出库金额分析的导入数据
      */
@@ -37,7 +34,7 @@ public class ABCAnalyseController {
 
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
 
@@ -101,7 +98,7 @@ public class ABCAnalyseController {
             }});
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
     /**
@@ -162,7 +159,7 @@ public class ABCAnalyseController {
             }});
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
 

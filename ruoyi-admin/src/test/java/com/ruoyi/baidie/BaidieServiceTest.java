@@ -28,11 +28,11 @@ public class BaidieServiceTest {
             } catch (IOException e) {
                 assertEquals(
                         e.getMessage(),
-                        "Your InputStream was neither an OLE2 stream, nor an OOXML stream");
+                        BaidieService.IMPORT_FAILURE_MSG);
                 throw e;
             }
     }
-    
+
     @Test
     public void importFileForGroupOne() throws Exception {
         final String path = "src/test/resources/abc_first_upload_table.xls";

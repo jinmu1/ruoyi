@@ -14,6 +14,8 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class BaidieService {
+    // Error message for import file error.
+    public static final String IMPORT_FAILURE_MSG = "导入文件失败，请检查格式或者模版是否正确";
 
     /** Import and parse data from an uploaded file, and transforms the input data into
      *  multiple array of data.
@@ -71,7 +73,7 @@ public class BaidieService {
                     entry("data1", data1Entries),
                     entry("data2", list));
         } catch (Exception e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(IMPORT_FAILURE_MSG);
         }
     }
 }
