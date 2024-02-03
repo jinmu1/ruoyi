@@ -1,7 +1,11 @@
 package com.ruoyi.web.controller.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.baidie.EIQCalculation;
 import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.data.eiq.EIQBasicTable;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -10,7 +14,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,5 +85,56 @@ public class BaidieUtilsTest {
                 "}";
         // 验证生成的 JSON 是否符合预期
         assertEquals(str.replaceAll("\\s", ""), jsonObject.toString().replaceAll("\\s", ""));
+    }
+
+    /***
+     * 对EIQ的方法测试
+     * @throws JsonProcessingException
+     */
+    @Test
+    public void testGetDate1() throws JsonProcessingException {
+        // 创建一个空的 EIQBasicTable 对象列表
+        List<EIQBasicTable> list1 = new ArrayList<>();
+        // 使用循环创建和赋值对象，并将它们添加到列表中
+        for (int i = 0; i < 10; i++) {
+            // 创建一个新的 EIQBasicTable 对象
+            EIQBasicTable object = new EIQBasicTable();
+            //生成一个确定的日期
+            LocalDate specificDate = LocalDate.of(2024, 2, 10);
+            // 设置出库日期为当前日期
+            object.setDeliveryDate(Date.from(specificDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            // 设置订单编号，使用循环索引加1作为订单编号的一部分
+            object.setOrderNumber("Order" + (i + 1));
+            // 设置物料编号，使用循环索引加1作为物料编号的一部分
+            object.setMaterialNumber("M" + (i + 1));
+            // 设置物料名称，使用循环索引加1作为物料名称的一部分
+            object.setMaterialName("Material " + (i + 1));
+            // 设置出货数量，使用循环索引加1乘以100作为出货数量
+            object.setDeliveryQuantity(100.0 * (i + 1));
+            // 设置出货单位为"kg"
+            object.setDeliveryUnit("kg");
+            // 设置销售单价，使用循环索引加1乘以10作为销售单价
+            object.setUnitPrice(10.0 * (i + 1));
+            // 设置托盘装件数，使用循环索引加1乘以50作为托盘装件数
+            object.setPalletizedItems(50.0 * (i + 1));
+            // 设置换算单位，使用循环索引加1乘以2作为换算单位
+            object.setConversionUnit(2.0 * (i + 1));
+            // 设置换算单位1，使用循环索引加1乘以3作为换算单位1
+            object.setConversionUnit1(3.0 * (i + 1));
+            // 将对象添加到列表中
+            list1.add(object);
+        }
+        // 创建 EIQCalculation 实例
+        EIQCalculation eiqCalculation = new EIQCalculation();
+        // 调用 getDate1 方法获取 JSONObject 对象
+        JSONObject jsonObject = eiqCalculation.getDate1(list1);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        assertEquals(jsonObject.get("data1").toString(), "[{\"出库日期\":1707494400000,\"订单编号\":\"Order1\",\"物料编号\":\"M1\",\"物料名称\":\"Material 1\",\"出货数量\":100.0,\"出货单位\":\"kg\",\"销售单价\":10.0,\"托盘装件数\":50.0,\"换算单位\":2.0,\"换算单位1\":3.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order2\",\"物料编号\":\"M2\",\"物料名称\":\"Material 2\",\"出货数量\":200.0,\"出货单位\":\"kg\",\"销售单价\":20.0,\"托盘装件数\":100.0,\"换算单位\":4.0,\"换算单位1\":6.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order3\",\"物料编号\":\"M3\",\"物料名称\":\"Material 3\",\"出货数量\":300.0,\"出货单位\":\"kg\",\"销售单价\":30.0,\"托盘装件数\":150.0,\"换算单位\":6.0,\"换算单位1\":9.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order4\",\"物料编号\":\"M4\",\"物料名称\":\"Material 4\",\"出货数量\":400.0,\"出货单位\":\"kg\",\"销售单价\":40.0,\"托盘装件数\":200.0,\"换算单位\":8.0,\"换算单位1\":12.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order5\",\"物料编号\":\"M5\",\"物料名称\":\"Material 5\",\"出货数量\":500.0,\"出货单位\":\"kg\",\"销售单价\":50.0,\"托盘装件数\":250.0,\"换算单位\":10.0,\"换算单位1\":15.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order6\",\"物料编号\":\"M6\",\"物料名称\":\"Material 6\",\"出货数量\":600.0,\"出货单位\":\"kg\",\"销售单价\":60.0,\"托盘装件数\":300.0,\"换算单位\":12.0,\"换算单位1\":18.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order7\",\"物料编号\":\"M7\",\"物料名称\":\"Material 7\",\"出货数量\":700.0,\"出货单位\":\"kg\",\"销售单价\":70.0,\"托盘装件数\":350.0,\"换算单位\":14.0,\"换算单位1\":21.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order8\",\"物料编号\":\"M8\",\"物料名称\":\"Material 8\",\"出货数量\":800.0,\"出货单位\":\"kg\",\"销售单价\":80.0,\"托盘装件数\":400.0,\"换算单位\":16.0,\"换算单位1\":24.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order9\",\"物料编号\":\"M9\",\"物料名称\":\"Material 9\",\"出货数量\":900.0,\"出货单位\":\"kg\",\"销售单价\":90.0,\"托盘装件数\":450.0,\"换算单位\":18.0,\"换算单位1\":27.0},{\"出库日期\":1707494400000,\"订单编号\":\"Order10\",\"物料编号\":\"M10\",\"物料名称\":\"Material 10\",\"出货数量\":1000.0,\"出货单位\":\"kg\",\"销售单价\":100.0,\"托盘装件数\":500.0,\"换算单位\":20.0,\"换算单位1\":30.0}]");
+        assertTrue(objectMapper.readTree(jsonObject.get("data2").toString()).equals(objectMapper.readTree("[{\"qanalysis\":5500.0,\"eanalysis\":10,\"nanalysis\":10,\"日期\":\"2024-02-10\",\"E分析\":10,\"N分析\":10,\"Q分析\":5500.0}]")));
+        assertEquals(jsonObject.get("data3").toString(),"[{\"订单编号\":\"Order2\",\"订单对应行数\":1,\"订单编号累计品目数\":1},{\"订单编号\":\"Order3\",\"订单对应行数\":1,\"订单编号累计品目数\":2},{\"订单编号\":\"Order4\",\"订单对应行数\":1,\"订单编号累计品目数\":3},{\"订单编号\":\"Order5\",\"订单对应行数\":1,\"订单编号累计品目数\":4},{\"订单编号\":\"Order1\",\"订单对应行数\":1,\"订单编号累计品目数\":5},{\"订单编号\":\"Order10\",\"订单对应行数\":1,\"订单编号累计品目数\":6},{\"订单编号\":\"Order6\",\"订单对应行数\":1,\"订单编号累计品目数\":7},{\"订单编号\":\"Order7\",\"订单对应行数\":1,\"订单编号累计品目数\":8},{\"订单编号\":\"Order8\",\"订单对应行数\":1,\"订单编号累计品目数\":9},{\"订单编号\":\"Order9\",\"订单对应行数\":1,\"订单编号累计品目数\":10}]");
+        assertEquals(jsonObject.get("data4").toString(),"[{\"订单编号\":\"Order10\",\"订单对应出库总数量\":1000.0,\"订单编号累计品目数\":1},{\"订单编号\":\"Order9\",\"订单对应出库总数量\":900.0,\"订单编号累计品目数\":2},{\"订单编号\":\"Order8\",\"订单对应出库总数量\":800.0,\"订单编号累计品目数\":3},{\"订单编号\":\"Order7\",\"订单对应出库总数量\":700.0,\"订单编号累计品目数\":4},{\"订单编号\":\"Order6\",\"订单对应出库总数量\":600.0,\"订单编号累计品目数\":5},{\"订单编号\":\"Order5\",\"订单对应出库总数量\":500.0,\"订单编号累计品目数\":6},{\"订单编号\":\"Order4\",\"订单对应出库总数量\":400.0,\"订单编号累计品目数\":7},{\"订单编号\":\"Order3\",\"订单对应出库总数量\":300.0,\"订单编号累计品目数\":8},{\"订单编号\":\"Order2\",\"订单对应出库总数量\":200.0,\"订单编号累计品目数\":9},{\"订单编号\":\"Order1\",\"订单对应出库总数量\":100.0,\"订单编号累计品目数\":10}]");
+        assertEquals(jsonObject.get("data5").toString(),"[{\"订单编号\":\"Order2\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":1},{\"订单编号\":\"Order3\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":2},{\"订单编号\":\"Order4\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":3},{\"订单编号\":\"Order5\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":4},{\"订单编号\":\"Order1\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":5},{\"订单编号\":\"Order10\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":6},{\"订单编号\":\"Order6\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":7},{\"订单编号\":\"Order7\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":8},{\"订单编号\":\"Order8\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":9},{\"订单编号\":\"Order9\",\"订单对应物料品种数\":1,\"订单编号累计品目数\":10}]");
+        assertEquals(jsonObject.get("data6").toString(),"[{\"物料名称\":\"Material 1\",\"物料编码\":\"M1\",\"出现次数\":1,\"物料编号累计品目数\":1},{\"物料名称\":\"Material 2\",\"物料编码\":\"M2\",\"出现次数\":1,\"物料编号累计品目数\":2},{\"物料名称\":\"Material 3\",\"物料编码\":\"M3\",\"出现次数\":1,\"物料编号累计品目数\":3},{\"物料名称\":\"Material 4\",\"物料编码\":\"M4\",\"出现次数\":1,\"物料编号累计品目数\":4},{\"物料名称\":\"Material 5\",\"物料编码\":\"M5\",\"出现次数\":1,\"物料编号累计品目数\":5},{\"物料名称\":\"Material 6\",\"物料编码\":\"M6\",\"出现次数\":1,\"物料编号累计品目数\":6},{\"物料名称\":\"Material 7\",\"物料编码\":\"M7\",\"出现次数\":1,\"物料编号累计品目数\":7},{\"物料名称\":\"Material 8\",\"物料编码\":\"M8\",\"出现次数\":1,\"物料编号累计品目数\":8},{\"物料名称\":\"Material 9\",\"物料编码\":\"M9\",\"出现次数\":1,\"物料编号累计品目数\":9},{\"物料名称\":\"Material 10\",\"物料编码\":\"M10\",\"出现次数\":1,\"物料编号累计品目数\":10}]");
     }
 }
