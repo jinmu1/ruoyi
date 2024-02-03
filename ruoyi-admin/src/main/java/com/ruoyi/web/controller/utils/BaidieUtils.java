@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,28 +27,27 @@ public class BaidieUtils {
     }
 
     /***
-     * 该方法为Json 转换方法，将List对象转换为json的一个对象
-     * @param list List对象
-     * @return  String字符串
-     * @throws JsonProcessingException 返回的转换异常，
+     * 将Map转寒为JSONObject
+     * @param keyToArray   a Map from json key to its corresponding data array.
+     * @return JSONObject with all the keys and values.
      */
-    private static String convertListObjectsToJsonString(List<?> list) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(list);
-    }
-
-    /***
-     * 将HashMap换行为JSONObject
-     * @param jsonKeyToValue
-     * @return
-     */
-    public static JSONObject generateResponseJson(HashMap<String, List<?>> jsonKeyToValue) throws JsonProcessingException {
+    public static JSONObject generateResponseJson(Map<String, List<?>> keyToArray) throws JsonProcessingException {
         JSONObject jsonObject = new JSONObject();
         // 将 HashMap 中的键值对添加到 JsonObject 中
-        for (Map.Entry<String, List<?>> entry : jsonKeyToValue.entrySet()) {
+        for (Map.Entry<String, List<?>> entry : keyToArray.entrySet()) {
             jsonObject.put(entry.getKey(), convertListObjectsToJsonString(entry.getValue()));
         }
         return jsonObject;
     }
 
+    /***
+     * 该方法为Json 转换方法，将List对象转换为json的一个对象
+     * @param object value 对象
+     * @return  object的json字符串
+     * @throws JsonProcessingException 返回的转换异常，
+     */
+    private static String convertListObjectsToJsonString(Object object) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(object);
+    }
 }
