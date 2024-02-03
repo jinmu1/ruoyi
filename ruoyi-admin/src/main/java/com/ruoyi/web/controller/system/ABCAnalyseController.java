@@ -2,7 +2,6 @@ package com.ruoyi.web.controller.system;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
@@ -197,7 +196,7 @@ public class ABCAnalyseController {
                 data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
             JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
-                put("data3", data4Entries);
+                put("data4", data4Entries);
                 put("data5", data5Entries);
             }});
             return AjaxResult.success(json);
