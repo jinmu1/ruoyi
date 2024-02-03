@@ -4,9 +4,9 @@
  * Excel导入方法
  * @param url：导入的后端请求路径
  */
-function importData(url,updateGroup) {
-    var _width =  "400";
-    var _height = "230";
+function importData(url, refresh_data_callback) {
+    const  _width =  "400";
+    const _height = "230";
     //这里调用的是layer.js : https://layui.itze.cn/doc/modules/layer.html
     window.layer.open({
         type: 1, // 弹出层类型，这里是普通的页面层
@@ -19,15 +19,15 @@ function importData(url,updateGroup) {
         btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'], // 弹出层的按钮组
         shadeClose: true, // 是否点击遮罩层关闭弹出层
         btn1: function(index, layero) {
-            uploadFileToBackend(index, layero, url, updateGroup);//调用ajax方法和处理返回的数据
+            uploadFileToBackend(index, layero, url, refresh_data_callback);//调用ajax方法和处理返回的数据
         }
     });
 }
 
 /***
  * 弹出返回的结果提示信息
- * @param icon
- * @param msg
+ * @param icon 提示符号
+ * @param msg  返回的提示信息
  */
 function popUpWindow(icon, msg) {
     window.layer.closeAll();
@@ -60,15 +60,15 @@ function generateImportFormTemplate() {
 
 /***
  * 导入数据和处理导出的数据
- * @param index
- * @param layero
- * @param updateGroup
+ * @param index 导入文件ID
+ * @param layero 弹出框
+ * @param refresh_data_callback  返回值参数
  * @returns {boolean}
  */
-function uploadFileToBackend(index, layero, url, updateGroup) {
+function uploadFileToBackend(index, layero, url, refresh_data_callback) {
     var file = layero.find('#file').val();
-    if (file == '' || (!file.endsWith('.xlsx'))) {
-        window.layer.msgWarning("请选择后缀为“xlsx”的文件。");
+    if (file == '' || !file.endsWith('.xlsx')) {
+        popUpWindow($.modal.icon("warning"),"请选择后缀为“xlsx”的文件。");
         return false;
     }
     var formData = new FormData(layero.find('form')[0]);
@@ -85,7 +85,7 @@ function uploadFileToBackend(index, layero, url, updateGroup) {
             if (result.code == web_status.SUCCESS) {
                 popUpWindow($.modal.icon("success"), result.msg);
                 $.table.refresh();
-                updateGroup(result);//页面的对返回数据的处理方法
+                refresh_data_callback(result);//页面的对返回数据的处理方法
             } else {
                 popUpWindow($.modal.icon("warning"), result.msg);
             }

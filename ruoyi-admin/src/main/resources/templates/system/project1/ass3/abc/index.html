@@ -38,7 +38,7 @@
             <div class="btn-group-sm" role="group">
             </div>
             <div class="btn-group-sm" role="group">
-                <a class="btn btn-info" onclick="importData('system/abc/importData',updateFirstGroup)">
+                <a class="btn btn-info" onclick="importData('system/abc/importData', updateFirstGroup)">
                     <i class="fa fa-upload"></i> 导入
                 </a>
             </div>
@@ -275,7 +275,7 @@
                 </div>
 
                 <div class="ibox-content" style="height:700px">
-                    <a class="btn btn-info" onclick="importData('system/abc/importData1',updateSecondGroup)" >
+                    <a class="btn btn-info" onclick="importData('system/abc/importData1', updateSecondGroup)" >
                         <i class="fa fa-upload"></i> 导入
                     </a>
                     <table class="col-sm-12 select-table table-striped"
@@ -511,7 +511,7 @@
                 </div>
                 <div class="ibox-content" style="height:700px">
                     <div class="btn-group-sm" role="group">
-                        <a class="btn btn-info" onclick="importData('system/abc/importData2',updateThirdGroup)" >
+                        <a class="btn btn-info" onclick="importData('system/abc/importData2', updateThirdGroup)" >
                             <i class="fa fa-upload"></i> 导入
                         </a>
                     </div>
@@ -1814,11 +1814,11 @@
      * @param result
      */
     function updateFirstGroup(result) {
-             data1 = JSON.parse(result.data.data1);
-             data2 = JSON.parse(result.data.data2);
-            $('#bootstrap-table').bootstrapTable('load', data1);
-            submit();
-            reloadX();
+             data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
+             data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
+            $('#bootstrap-table').bootstrapTable('load', data1); //刷新第一个表bootstrap-table
+            submit(); //重新提交第一个表对应的表
+            reloadX(); //重新提交第一个表对应的图
     }
     /***
      * 第二个表单的导入后返回的数据处理方法
@@ -1827,13 +1827,13 @@
      * @param result
      */
     function updateSecondGroup(result) {
-            data3=JSON.parse(result.data.data3);
-            data5=JSON.parse(result.data.data5);
+            data3=JSON.parse(result.data.data3); //对返回的result中json字符串中的值data3赋值data3
+            data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
             //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
-            $('#bootstrap-table3').bootstrapTable('load',data5);
+            $('#bootstrap-table3').bootstrapTable('load', data5); //刷新第二个表bootstrap-table3
             //data3重新赋值后，加载与data3相关的调用方法
-            submit1();
-            reloadX3();
+            submit1(); //重新提交第二个表对应的表
+            reloadX3(); //重新提交第二个表对应的图
     }
     /***
      * 第三个表单的导入后返回的数据处理方法
@@ -1842,13 +1842,13 @@
      * @param result
      */
     function updateThirdGroup(result) {
-            data5=JSON.parse(result.data.data5);
-            data4=JSON.parse(result.data.data4);
+            data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
+            data4=JSON.parse(result.data.data4); //对返回的result中json字符串中的值data4赋值data4
             //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
-            $('#bootstrap-table4').bootstrapTable('load',data5);
+            $('#bootstrap-table4').bootstrapTable('load', data5); //刷新第三个表bootstrap-table3
             //data3重新赋值后，加载与data3相关的调用方法
-            submit2();
-            reloadX4();
+            submit2(); //重新提交第三个表对应的表
+            reloadX4(); //重新提交第三个表对应的表
     }
 </script>
 </body>
