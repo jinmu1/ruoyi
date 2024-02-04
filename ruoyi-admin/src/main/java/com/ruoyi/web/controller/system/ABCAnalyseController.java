@@ -2,7 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ruoyi.baidie.BaidieService;
+import com.ruoyi.baidie.BaidieProcessor;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
@@ -29,7 +29,7 @@ public class ABCAnalyseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request)
     {
         try {
-            final Map<String, List<?>> resultKeyToDataArrays = BaidieService.importFileForGroupOne(file);
+            final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importFileForGroupOne(file);
             final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
 
             return AjaxResult.success(json);

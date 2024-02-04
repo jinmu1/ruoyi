@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class BaidieServiceTest {
+public class BaidieProcessorTest {
 
     @Test(expected = IOException.class)
     public void importFileForGroupOne_ParseFailure() throws IOException {
@@ -24,11 +24,11 @@ public class BaidieServiceTest {
                     "text/plain",
                     "some kml".getBytes());
             try {
-                BaidieService.importFileForGroupOne(mockFile);
+                BaidieProcessor.importFileForGroupOne(mockFile);
             } catch (IOException e) {
                 assertEquals(
                         e.getMessage(),
-                        BaidieService.IMPORT_FAILURE_MSG);
+                        BaidieProcessor.IMPORT_FAILURE_MSG);
                 throw e;
             }
     }
@@ -43,7 +43,7 @@ public class BaidieServiceTest {
                 "abc_first_upload_table.xls",
                 MediaType.APPLICATION_XML_VALUE,
                 Files.newInputStream(Paths.get(path)));
-        Map<String, List<?>> resultMap = BaidieService.importFileForGroupOne(mockMultipartFile);
+        Map<String, List<?>> resultMap = BaidieProcessor.importFileForGroupOne(mockMultipartFile);
 
         // Test that the result keyset is data1 and data2.
         assertEquals(resultMap.keySet(), ImmutableSet.of("data1", "data2"));
