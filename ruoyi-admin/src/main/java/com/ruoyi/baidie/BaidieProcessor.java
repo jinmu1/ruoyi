@@ -31,7 +31,7 @@ public class BaidieProcessor {
             List<ABCAnalyseController.Data1Entry> inventoryInfo =
                     BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data1Entry.class);
 
-            List<ABCAnalyseController.Data2Entry> accumulativeValueSorted =
+            List<?> accumulativeValueSorted =
                     ABCClassifier.sortByAccumulativeValue(inventoryInfo);
 
             return Map.ofEntries(

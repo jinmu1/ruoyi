@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.ruoyi.web.controller.utils.BaidieUtils.toPercentageOfString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -77,5 +78,13 @@ public class BaidieUtilsTest {
                 "}";
         // 验证生成的 JSON 是否符合预期
         assertEquals(str.replaceAll("\\s", ""), jsonObject.toString().replaceAll("\\s", ""));
+    }
+
+    @Test
+    public void testToPercentageOfString() {
+        assertEquals("0.00%", toPercentageOfString(0, 90));
+        assertEquals("1.00%", toPercentageOfString(1, 100));
+        assertEquals("33.46%", toPercentageOfString(33.4567, 100));
+        assertEquals("33.45%", toPercentageOfString(33.4512, 100));
     }
 }

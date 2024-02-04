@@ -55,9 +55,15 @@ public class BaidieUtils {
         return objectMapper.writeValueAsString(object);
     }
 
+    /**
+     * 返回value占total的百分比的string，小数点后两位精确度。
+     * @param value
+     * @param total
+     * @return
+     */
     public static String toPercentageOfString(double value, double total) {
-        return BigDecimal.valueOf(value)
+        return BigDecimal.valueOf(value).multiply(ONE_HUNDRED)
                 .divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_DOWN)
-                .multiply(ONE_HUNDRED) + "%";
+                + "%";
     }
 }
