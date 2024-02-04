@@ -6,6 +6,8 @@ import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,8 @@ import java.util.Map;
  * Utility class with public static methods shared by Baidie's codebase.
  */
 public class BaidieUtils {
+    private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
+
     /**
      * Parses content from file into a List of data, where data is of class T
      * @param file - given file
@@ -49,5 +53,17 @@ public class BaidieUtils {
     private static String convertListObjectsToJsonString(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);
+    }
+
+    /**
+     * 返回value占total的百分比的string，小数点后两位精确度。
+     * @param value
+     * @param total
+     * @return
+     */
+    public static String toPercentageOfString(double value, double total) {
+        return BigDecimal.valueOf(value).multiply(ONE_HUNDRED)
+                .divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_DOWN)
+                + "%";
     }
 }
