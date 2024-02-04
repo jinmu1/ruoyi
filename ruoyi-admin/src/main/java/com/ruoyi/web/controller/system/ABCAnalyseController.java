@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ruoyi.baidie.BaidieService;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.json.JSONObject;
@@ -20,9 +21,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/system/abc")
 public class ABCAnalyseController {
-    // Error message for import file error.
-    private final String IMPORT_FAILURE_MSG = "导入文件失败，请检查格式或者模版是否正确";
-
     /**
      * ABC出库金额分析的导入数据
      */
@@ -31,52 +29,12 @@ public class ABCAnalyseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request)
     {
         try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            List<Data1Entry> data1Entries = BaidieUtils.parseFromExcelFile(file, Data1Entry.class);
-
-            // 将 "data1" 转换为数组
-            List<Data2Entry> list = new ArrayList<>();
-            // 现在你可以使用data1Entries了
-            //step1：首先计算总销售金额
-            for (Data1Entry entry : data1Entries) {
-                Data2Entry data2Entry = new Data2Entry();
-                data2Entry.setMaterialCode(entry.getMaterialCode());
-                data2Entry.setUnitPrice(entry.getSellingPrice());
-                data2Entry.setAverageInventory(entry.getAverageInventory());
-                data2Entry.setAverageFundsOccupied(entry.getSellingPrice() * entry.getAverageInventory());
-                list.add(data2Entry);
-            }
-            //step2：对总销售金额进行降序排序
-            Collections.sort(list, (m1, m2) -> Double.compare(m2.getAverageFundsOccupied(), m1.getAverageFundsOccupied()));
-            //step3：对降序排序后的占比进行计算，下面都是计算过程
-            double occupied = 0;
-            int next = 0;
-            double allInventory = 0d;
-            int all = 0;
-            /**
-             * all：统计总数据条数
-             * allInventory：统计数据总的库存金额
-             */
-            for (Data2Entry data2Entry : list) {
-                all = all + 1;
-                allInventory = allInventory + data2Entry.getAverageFundsOccupied();
-            }
-            for (Data2Entry data2Entry : list) {
-                occupied = occupied + data2Entry.getAverageFundsOccupied();
-                data2Entry.setCumulativeAverageFundsOccupied(occupied);
-                data2Entry.setCumulativeAverageFundsOccupiedPercentage(new BigDecimal(occupied * 100 / allInventory).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-                next = next + 1;
-                data2Entry.setCumulativeItemNumber(next);
-                data2Entry.setCumulativeItemNumberPercentage(new BigDecimal(next * 100 / all).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-            }
-            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
-                put("data1", data1Entries);
-                put("data2", list);
-            }});
+            final Map<String, List<?>> resultKeyToDataArrays = BaidieService.importFileForGroupOne(file);
+            final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
 
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
 
@@ -134,13 +92,13 @@ public class ABCAnalyseController {
                 data3Entry.setCumulativeItemCountPercentage(new BigDecimal(num1 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
 
-            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
+            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
                 put("data3", data3Entries);
                 put("data5", data5Entries);
             }});
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
     /**
@@ -195,13 +153,13 @@ public class ABCAnalyseController {
                 data4Entry.setCumulativeItemCount(num2);
                 data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
             }
-            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<String, List<?>>(){{
+            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
                 put("data4", data4Entries);
                 put("data5", data5Entries);
             }});
             return AjaxResult.success(json);
         } catch (Exception e) {
-            return AjaxResult.error(IMPORT_FAILURE_MSG);
+            return AjaxResult.error(e.getMessage());
         }
     }
 
