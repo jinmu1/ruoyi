@@ -14,9 +14,9 @@ public  class ENAnalysisTable {
     @Getter
     @Setter
     @JsonProperty("订单对应行数")
-    private int orderLineCount;
+    private Integer orderLineCount;
     @Getter
     @Setter
     @JsonProperty("订单编号累计品目数")
-    private int cumulativeItemNumber;
+    private Integer cumulativeItemNumber;
 }
