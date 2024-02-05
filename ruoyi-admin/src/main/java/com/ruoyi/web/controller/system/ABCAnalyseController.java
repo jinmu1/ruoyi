@@ -49,61 +49,14 @@ public class ABCAnalyseController {
     public AjaxResult importData1(MultipartFile file, boolean updateSupport, HttpServletRequest request)
     {
         try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
-
-            // 使用流式操作和Collectors按照物料编码属性分类
-            Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
-                    .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
-
-            // 输出分类结果
-            List<Data3Entry> data3Entries = new ArrayList<>();
-            List<Data4Entry> data4Entries = new ArrayList<>();
-            int tatol = categorizedMap.size();//总物料数量
-            int AllOutboundFrequency = 0;//总出库频次
-            double AllShippedQuantity = 0.0;//总出库数量
-            for (String key : categorizedMap.keySet()) {
-                List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
-                Data3Entry data3Entry = new Data3Entry();
-                Data4Entry data4Entry = new Data4Entry();
-                data3Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-                data4Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-                data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
-                int count = 0;//出库频次统计
-                double num = 0.0;//出库数量统计
-                for (Data5Entry data5Entry : data5EntryList1) {
-                    count++;
-                    num = num + data5Entry.getShippedQuantity();
-                }
-                AllOutboundFrequency += count;
-                AllShippedQuantity += num;
-                data3Entry.setOutboundFrequency(count);
-                data4Entry.setOutboundQuantity(num);
-                data3Entries.add(data3Entry);
-                data4Entries.add(data4Entry);
-            }
-            Collections.sort(data3Entries, (m1, m2) -> Double.compare(m2.getOutboundFrequency(), m1.getOutboundFrequency()));//按照出库频次降序排序
-
-            int frequency = 0;//累计频次
-            int num1 = 0;
-            for (Data3Entry data3Entry : data3Entries) {
-                num1++;
-                frequency += data3Entry.getOutboundFrequency();
-                data3Entry.setCumulativeOutboundFrequency(frequency);
-                data3Entry.setCumulativeOutboundFrequencyPercentage(new BigDecimal(frequency * 100 / AllOutboundFrequency).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-                data3Entry.setCumulativeItemCount(num1);
-                data3Entry.setCumulativeItemCountPercentage(new BigDecimal(num1 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-            }
-
-            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
-                put("data3", data3Entries);
-                put("data5", data5Entries);
-            }});
+            final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importABCGroupTwo(file);
+            final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
             return AjaxResult.success(json);
         } catch (Exception e) {
             return AjaxResult.error(e.getMessage());
         }
     }
+
     /**
      * ABC频次和数量分析的导入数据
      */
@@ -274,76 +227,27 @@ public class ABCAnalyseController {
         @NotNull
         private String cumulativeItemNumberPercentage;
     }
+    @Getter
+    @Setter
     static public class Data3Entry{
         @JsonProperty("物料编码")
-        @Excel(name = "物料编码")
+        @NotNull
         private String materialCode;
         @JsonProperty("出库频次")
-        @Excel(name = "出库频次")
+        @NotNull
         private int outboundFrequency;
         @JsonProperty("累计出库频次")
-        @Excel(name = "累计出库频次")
-        private int cumulativeOutboundFrequency;
+        @NotNull
+        private Integer cumulativeOutboundFrequency;
         @JsonProperty("累计出库频次百分比")
-        @Excel(name = "累计出库频次百分比")
+        @NotNull
         private String cumulativeOutboundFrequencyPercentage;
         @JsonProperty("物料累计品目数")
-        @Excel(name = "物料累计品目数")
-        private int cumulativeItemCount;
+        @NotNull
+        private Integer cumulativeItemCount;
         @JsonProperty("物料累计品目数百分比")
-        @Excel(name = "物料累计品目数百分比")
+        @NotNull
         private String cumulativeItemCountPercentage;
-
-        // 添加构造函数、getter和setter方法...
-
-
-        public String getMaterialCode() {
-            return materialCode;
-        }
-
-        public void setMaterialCode(String materialCode) {
-            this.materialCode = materialCode;
-        }
-
-        public int getOutboundFrequency() {
-            return outboundFrequency;
-        }
-
-        public void setOutboundFrequency(int outboundFrequency) {
-            this.outboundFrequency = outboundFrequency;
-        }
-
-        public int getCumulativeOutboundFrequency() {
-            return cumulativeOutboundFrequency;
-        }
-
-        public void setCumulativeOutboundFrequency(int cumulativeOutboundFrequency) {
-            this.cumulativeOutboundFrequency = cumulativeOutboundFrequency;
-        }
-
-        public String getCumulativeOutboundFrequencyPercentage() {
-            return cumulativeOutboundFrequencyPercentage;
-        }
-
-        public void setCumulativeOutboundFrequencyPercentage(String cumulativeOutboundFrequencyPercentage) {
-            this.cumulativeOutboundFrequencyPercentage = cumulativeOutboundFrequencyPercentage;
-        }
-
-        public int getCumulativeItemCount() {
-            return cumulativeItemCount;
-        }
-
-        public void setCumulativeItemCount(int cumulativeItemCount) {
-            this.cumulativeItemCount = cumulativeItemCount;
-        }
-
-        public String getCumulativeItemCountPercentage() {
-            return cumulativeItemCountPercentage;
-        }
-
-        public void setCumulativeItemCountPercentage(String cumulativeItemCountPercentage) {
-            this.cumulativeItemCountPercentage = cumulativeItemCountPercentage;
-        }
     }
     static public class Data4Entry{
         @JsonProperty("物料编码")

@@ -41,4 +41,20 @@ public class BaidieProcessor {
             throw new IOException(IMPORT_FAILURE_MSG);
         }
     }
+
+    public static Map<String, List<?>> importABCGroupTwo(MultipartFile importFile) throws IOException {
+        try {
+            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+            final List<ABCAnalyseController.Data5Entry> data5Entries =
+                    BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data5Entry.class);
+
+            final List<ABCAnalyseController.Data3Entry> data3Entries = ABCClassifier.sortByOutboundFrequency(data5Entries);
+
+            return Map.ofEntries(
+                    entry("data3", data3Entries),
+                    entry("data5", data5Entries));
+        } catch (Exception e) {
+            throw new IOException(IMPORT_FAILURE_MSG);
+        }
+    }
 }

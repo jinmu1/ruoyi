@@ -18,19 +18,19 @@ public class BaidieProcessorTest {
 
     @Test(expected = IOException.class)
     public void importFileForGroupOne_ParseFailure() throws IOException {
-            MockMultipartFile mockFile = new MockMultipartFile(
-                    "wrong extension",
-                    "filename.kml",
-                    "text/plain",
-                    "some kml".getBytes());
-            try {
-                BaidieProcessor.importFileForGroupOne(mockFile);
-            } catch (IOException e) {
-                assertEquals(
-                        e.getMessage(),
-                        BaidieProcessor.IMPORT_FAILURE_MSG);
-                throw e;
-            }
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "wrong extension",
+                "filename.kml",
+                "text/plain",
+                "some kml".getBytes());
+        try {
+            BaidieProcessor.importFileForGroupOne(mockFile);
+        } catch (IOException e) {
+            assertEquals(
+                    e.getMessage(),
+                    BaidieProcessor.IMPORT_FAILURE_MSG);
+            throw e;
+        }
     }
 
     @Test
@@ -75,5 +75,79 @@ public class BaidieProcessorTest {
         assertEquals(Double.valueOf(103),
                 Double.valueOf(data2Entries.get(4).getAverageInventory()));
         assertEquals("4000966", data2Entries.get(4).getMaterialCode());
+    }
+
+
+    @Test(expected = Exception.class)
+    public void testImportABCGroupTwo_ParseFileFailure() throws IOException {
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "wrong extension",
+                "filename.kml",
+                "text/plain",
+                "some kml".getBytes());
+        try {
+            BaidieProcessor.importABCGroupTwo(mockFile);
+        } catch (IOException e) {
+            assertEquals(
+                    e.getMessage(),
+                    BaidieProcessor.IMPORT_FAILURE_MSG);
+            throw e;
+        }
+    }
+
+    @Test
+    public void testImportABCGroupTwo() throws IOException {
+        final String path = "src/test/resources/abc_second_upload_table.xlsx";
+
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile(
+                "xlsFile",
+                "abc_second_upload_table.xlsx",
+                MediaType.APPLICATION_XML_VALUE,
+                Files.newInputStream(Paths.get(path)));
+        Map<String, List<?>> resultMap = BaidieProcessor.importABCGroupTwo(mockMultipartFile);
+
+        // Test that the result keyset is data1 and data2.
+        assertEquals(resultMap.keySet(), ImmutableSet.of("data3", "data5"));
+
+        // Make sure data from 'data3' key is correct.
+        final List<ABCAnalyseController.Data3Entry> data3Entries =
+                (List<ABCAnalyseController.Data3Entry>) resultMap.get("data3");
+        assertEquals(5, data3Entries.size());
+        assertEquals("4703710", data3Entries.get(0).getMaterialCode());
+        assertEquals(223, data3Entries.get(0).getOutboundFrequency());
+
+        assertEquals("4704404", data3Entries.get(3).getMaterialCode());
+        assertEquals(18, data3Entries.get(3).getOutboundFrequency());
+
+        // Make sure data from 'data5' key is correct.
+        final List<ABCAnalyseController.Data5Entry> data5Entries =
+                (List<ABCAnalyseController.Data5Entry>) resultMap.get("data5");
+        assertEquals(340, data5Entries.size());
+
+        // Pick some random entry to verify
+        // index 100
+        //出库日期:"2018/03/04"
+        //出货单位:"308克/包"
+        //出货数量:4
+        //托盘装件数:60
+        //物料名称:"香脆椒（黄飞红，308G*10包/件）"
+        //物料编号:"4703710"
+        //订单编号:11930498
+        //销售单价:135
+        assertEquals(11930498, data5Entries.get(100).getOrderNumber());
+        assertEquals(4.0, data5Entries.get(100).getShippedQuantity(), 0.1);
+
+        // index 167.
+        //出库日期:"2018/03/12"
+        //出货单位:"308克/包"
+        //出货数量:5
+        //托盘装件数:60
+        //物料名称:"香脆椒（黄飞红，308G*10包/件）"
+        //物料编号:"4703710"
+        //订单编号:11962202
+        //销售单价:135
+        assertEquals("308克/包", data5Entries.get(167).getShipmentUnit());
+        assertEquals("4703710", data5Entries.get(167).getMaterialNumber());
     }
 }

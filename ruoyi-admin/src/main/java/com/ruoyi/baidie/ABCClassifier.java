@@ -4,6 +4,7 @@ import com.ruoyi.web.controller.system.ABCAnalyseController;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +63,54 @@ public class ABCClassifier {
         return entryWithTotalValueSorted;
     }
 
+    /**
+     * 以出库频次为主要分类依据的物料ABC分类
+     * @param data5Entries 输入的表单
+     * @return 基于出库频次做的ABC分析表单结果List。该List是根据物料的出库频次的由大到小的顺序排序过的。
+     */
+    public static List<ABCAnalyseController.Data3Entry> sortByOutboundFrequency(
+            List<ABCAnalyseController.Data5Entry> data5Entries) {
+        // 首先将数据按物料编码重组。
+        final Map<String, List<ABCAnalyseController.Data5Entry>> dataGroupByMaterialNumber =
+                data5Entries.stream().collect(
+                        Collectors.groupingBy(ABCAnalyseController.Data5Entry::getMaterialNumber));
+
+        // 统计每种物料的出库频次然后降序排序
+        final List<ABCAnalyseController.Data3Entry> data3EntriesSortedByOutboundFrequency =
+                dataGroupByMaterialNumber.entrySet().stream()
+                        .map(entry -> calculateOutboundFrequency(entry.getKey(), entry.getValue()))
+                        .sorted((m1, m2) -> Double.compare(m2.getOutboundFrequency(), m1.getOutboundFrequency()))
+                        .collect(Collectors.toList());
+
+        // 计算累计出库频次。
+        final int totalNumMaterial = data3EntriesSortedByOutboundFrequency.size();  //总物料数量
+        // 总出库频次
+        final int totalOutboundFrequency = data3EntriesSortedByOutboundFrequency
+                .stream()
+                .map(ABCAnalyseController.Data3Entry::getOutboundFrequency)
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        int currentAccumulatedFrequency = 0;//累计频次
+        int currentIndex = 0;
+        for (ABCAnalyseController.Data3Entry data3Entry : data3EntriesSortedByOutboundFrequency) {
+            currentAccumulatedFrequency += data3Entry.getOutboundFrequency();
+            data3Entry.setCumulativeOutboundFrequency(currentAccumulatedFrequency);
+            data3Entry.setCumulativeOutboundFrequencyPercentage(
+                    BaidieUtils.toPercentageOfString(currentAccumulatedFrequency, totalOutboundFrequency));
+
+            // 计算当前的物料累计品目数， 和物料累计品目数占总物料种类数的百分比。
+            final int oneBasedIndex = currentIndex + 1;
+            data3Entry.setCumulativeItemCount(oneBasedIndex);
+            data3Entry.setCumulativeItemCountPercentage(
+                    BaidieUtils.toPercentageOfString(oneBasedIndex, totalNumMaterial));
+            currentIndex++;
+        }
+
+        return data3EntriesSortedByOutboundFrequency;
+    }
+
+
     // 由原始数据计算总库存的价值
     // 库存 * 单价
     // 其余信息复制。
@@ -75,5 +124,13 @@ public class ABCClassifier {
                 inventoryInfo.getSellingPrice() * inventoryInfo.getAverageInventory());
 
         return entryWithTotalValue;
+    }
+
+    private static ABCAnalyseController.Data3Entry calculateOutboundFrequency(
+            String materialCode, List<ABCAnalyseController.Data5Entry> data5Entries) {
+        ABCAnalyseController.Data3Entry data3Entry = new ABCAnalyseController.Data3Entry();
+        data3Entry.setMaterialCode(materialCode);
+        data3Entry.setOutboundFrequency(data5Entries.size());
+        return data3Entry;
     }
 }
