@@ -50,8 +50,8 @@ import java.util.stream.Collectors;
 @Controller
 public class BaidieController extends BaseController
 {
-//    private static final String url1="http://121.41.20.3:7098/StartSimulator/CheckToken";//百碟
-//    private static final String url2="http://121.41.20.3:7098/StartSimulator/GetTrainingDTO?trainingId=";
+    private static final String url1="http://121.41.20.3:7098/StartSimulator/CheckToken";//百碟
+    private static final String url2="http://121.41.20.3:7098/StartSimulator/GetTrainingDTO?trainingId=";
 //    private static final String url1="http://172.18.227.201:9065/StartSimulator/CheckToken";//厦门学院
 //    private static final String url2="http://172.18.227.201:9065/StartSimulator/GetTrainingDTO?trainingId=";
 //    private static final String url1="http://192.168.1.58:9065/StartSimulator/CheckToken";//青海
@@ -60,8 +60,8 @@ public class BaidieController extends BaseController
       private static final String url2="http://192.168.120.100:9065/StartSimulator/GetTrainingDTO?trainingId=";*/
 //    private static final String url1="http://10.18.15.188:9065/StartSimulator/CheckToken";//青海
 //    private static final String url2="http://10.18.15.188:9065/StartSimulator/GetTrainingDTO?trainingId=";
-    private static final String url1="http://10.8.48.200:9065/StartSimulator/CheckToken";//周口
-    private static final String url2="http://10.8.48.200:9065/StartSimulator/GetTrainingDTO?trainingId=";
+//    private static final String url1="http://10.8.48.200:9065/StartSimulator/CheckToken";//周口
+//    private static final String url2="http://10.8.48.200:9065/StartSimulator/GetTrainingDTO?trainingId=";
     @Autowired
     private IGlcPublicService glcPublicService;
 
