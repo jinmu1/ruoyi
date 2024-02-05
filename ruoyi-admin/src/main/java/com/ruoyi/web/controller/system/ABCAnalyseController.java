@@ -227,76 +227,27 @@ public class ABCAnalyseController {
         @NotNull
         private String cumulativeItemNumberPercentage;
     }
+    @Getter
+    @Setter
     static public class Data3Entry{
         @JsonProperty("物料编码")
-        @Excel(name = "物料编码")
+        @NotNull
         private String materialCode;
         @JsonProperty("出库频次")
-        @Excel(name = "出库频次")
+        @NotNull
         private int outboundFrequency;
         @JsonProperty("累计出库频次")
-        @Excel(name = "累计出库频次")
-        private int cumulativeOutboundFrequency;
+        @NotNull
+        private Integer cumulativeOutboundFrequency;
         @JsonProperty("累计出库频次百分比")
-        @Excel(name = "累计出库频次百分比")
+        @NotNull
         private String cumulativeOutboundFrequencyPercentage;
         @JsonProperty("物料累计品目数")
-        @Excel(name = "物料累计品目数")
-        private int cumulativeItemCount;
+        @NotNull
+        private Integer cumulativeItemCount;
         @JsonProperty("物料累计品目数百分比")
-        @Excel(name = "物料累计品目数百分比")
+        @NotNull
         private String cumulativeItemCountPercentage;
-
-        // 添加构造函数、getter和setter方法...
-
-
-        public String getMaterialCode() {
-            return materialCode;
-        }
-
-        public void setMaterialCode(String materialCode) {
-            this.materialCode = materialCode;
-        }
-
-        public int getOutboundFrequency() {
-            return outboundFrequency;
-        }
-
-        public void setOutboundFrequency(int outboundFrequency) {
-            this.outboundFrequency = outboundFrequency;
-        }
-
-        public int getCumulativeOutboundFrequency() {
-            return cumulativeOutboundFrequency;
-        }
-
-        public void setCumulativeOutboundFrequency(int cumulativeOutboundFrequency) {
-            this.cumulativeOutboundFrequency = cumulativeOutboundFrequency;
-        }
-
-        public String getCumulativeOutboundFrequencyPercentage() {
-            return cumulativeOutboundFrequencyPercentage;
-        }
-
-        public void setCumulativeOutboundFrequencyPercentage(String cumulativeOutboundFrequencyPercentage) {
-            this.cumulativeOutboundFrequencyPercentage = cumulativeOutboundFrequencyPercentage;
-        }
-
-        public int getCumulativeItemCount() {
-            return cumulativeItemCount;
-        }
-
-        public void setCumulativeItemCount(int cumulativeItemCount) {
-            this.cumulativeItemCount = cumulativeItemCount;
-        }
-
-        public String getCumulativeItemCountPercentage() {
-            return cumulativeItemCountPercentage;
-        }
-
-        public void setCumulativeItemCountPercentage(String cumulativeItemCountPercentage) {
-            this.cumulativeItemCountPercentage = cumulativeItemCountPercentage;
-        }
     }
     static public class Data4Entry{
         @JsonProperty("物料编码")
