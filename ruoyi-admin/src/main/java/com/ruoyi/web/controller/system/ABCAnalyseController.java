@@ -66,56 +66,6 @@ public class ABCAnalyseController {
         try {
             final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importABCGroupThree(file);
             final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
-
-//            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-//            List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
-//
-//            // 使用流式操作和Collectors按照物料编码属性分类
-//            Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
-//                    .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
-//
-//            // 输出分类结果
-//
-//            List<Data4Entry> data4Entries = new ArrayList<>();
-//            int tatol = categorizedMap.size();//总物料数量
-//            int AllOutboundFrequency = 0;//总出库频次
-//            double AllShippedQuantity = 0.0;//总出库数量
-//            for (String key : categorizedMap.keySet()) {
-//                List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
-//                Data3Entry data3Entry = new Data3Entry();
-//                Data4Entry data4Entry = new Data4Entry();
-//                data3Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-//                data4Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-//                data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
-//                int count = 0;//出库频次统计
-//                double num = 0.0;//出库数量统计
-//                for (Data5Entry data5Entry : data5EntryList1) {
-//                    count++;
-//                    num = num + data5Entry.getShippedQuantity();
-//                }
-//                AllOutboundFrequency += count;
-//                AllShippedQuantity += num;
-//                data4Entry.setOutboundQuantity(num);
-//                data4Entries.add(data4Entry);
-//            }
-//
-//            Collections.sort(data4Entries, (m1, m2) -> Double.compare(m2.getOutboundQuantity(), m1.getOutboundQuantity()));//按照出库数量降序排序
-//
-//
-//            int num2 = 0;//排行
-//            double quantity = 0.0;//累计数量
-//            for (Data4Entry data4Entry : data4Entries) {
-//                num2++;
-//                quantity += data4Entry.getOutboundQuantity();
-//                data4Entry.setCumulativeOutboundQuantity(quantity);
-//                data4Entry.setCumulativeOutboundQuantityPercentage(new BigDecimal(quantity * 100 / AllShippedQuantity).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-//                data4Entry.setCumulativeItemCount(num2);
-//                data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-//            }
-//            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
-//                put("data4", data4Entries);
-//                put("data5", data5Entries);
-//            }});
             return AjaxResult.success(json);
         } catch (Exception e) {
             return AjaxResult.error(e.getMessage());
