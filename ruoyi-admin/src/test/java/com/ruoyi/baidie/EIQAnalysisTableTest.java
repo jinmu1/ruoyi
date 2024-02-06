@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class EIQClassifierTest {
+public class EIQAnalysisTableTest {
     private List<EIQBasicTable> testEIQBasicTable;
     private List<Date> testSortByDates;
     private List<Integer> testEAnalysis;
@@ -36,7 +36,7 @@ public class EIQClassifierTest {
         testEIQBasicTable =
                 Arrays.asList(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9);
         testSortByDates =
-                Arrays.asList(createDate(2024, 2, 2), createDate(2024, 2, 3),createDate(2024, 2, 4), createDate(2024, 2, 5));
+                Arrays.asList(createDate(2024, 2, 2), createDate(2024, 2, 3), createDate(2024, 2, 4), createDate(2024, 2, 5));
         testEAnalysis = Arrays.asList(1, 1, 2, 4);
         testNAnalysis = Arrays.asList(1, 2, 2, 4);
         testQAnalysis = Arrays.asList(550.0, 900.0, 650.0, 700.0);
@@ -46,8 +46,8 @@ public class EIQClassifierTest {
      * 测试EIQ分析的处理结果
      */
     @Test
-    public void getEIQAnalysisTableTest(){
-        List<EIQAnalysisTable> result =  EIQClassifier.getEIQAnalysisTable(testEIQBasicTable);
+    public void getEIQAnalysisTableTest() {
+        List<EIQAnalysisTable> result = EIQClassifier.getEIQAnalysisTable(testEIQBasicTable);
 
         // 保证结果行数跟输入一样
         assertEquals(testSortByDates.size(), result.size());
@@ -84,7 +84,7 @@ public class EIQClassifierTest {
 
         // 检查所有的属性都不是空
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        for(EIQAnalysisTable entry : result) {
+        for (EIQAnalysisTable entry : result) {
             final Set<ConstraintViolation<EIQAnalysisTable>> violations =
                     validator.validate(entry);
             assertTrue(violations.isEmpty());
@@ -93,9 +93,16 @@ public class EIQClassifierTest {
     }
 
     //创建EIQ对象
-    private EIQBasicTable   createBasicTableInfoWithDate(Date deliveryDate, String orderNumber, String materialNumber, String materialName,
-                                                         double deliveryQuantity, String deliveryUnit, double unitPrice,
-                                                         double palletizedItems, double conversionUnit, double conversionUnit1) {
+    private EIQBasicTable createBasicTableInfoWithDate(Date deliveryDate,
+                                                       String orderNumber,
+                                                       String materialNumber,
+                                                       String materialName,
+                                                       double deliveryQuantity,
+                                                       String deliveryUnit,
+                                                       double unitPrice,
+                                                       double palletizedItems,
+                                                       double conversionUnit,
+                                                       double conversionUnit1) {
         EIQBasicTable eiqBasicTable = new EIQBasicTable();
         eiqBasicTable.setDeliveryDate(deliveryDate);
         eiqBasicTable.setOrderNumber(orderNumber);
@@ -109,10 +116,13 @@ public class EIQClassifierTest {
         eiqBasicTable.setConversionUnit1(conversionUnit1);
         return eiqBasicTable;
     }
-    private Date createDate(int year,int month,int day){
+
+    private Date createDate(int year,
+                            int month,
+                            int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month-1); // Calendar.FEBRUARY 是 1 月
+        calendar.set(Calendar.MONTH, month - 1); // Calendar.FEBRUARY 是 1 月
         calendar.set(Calendar.DAY_OF_MONTH, day);
         // 将时间部分设置为 00:00:00
         calendar.set(Calendar.HOUR_OF_DAY, 0);

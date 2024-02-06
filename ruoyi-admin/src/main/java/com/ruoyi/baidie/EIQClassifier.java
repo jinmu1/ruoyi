@@ -26,6 +26,16 @@ public class EIQClassifier {
                 .map(basicTable -> {
                     EIQBasicTable newBasicTable = new EIQBasicTable();
                     newBasicTable.setDeliveryDate(normalizeDate(basicTable.getDeliveryDate()));
+                    newBasicTable.setMaterialNumber(basicTable.getMaterialNumber());
+                    newBasicTable.setDeliveryDate(basicTable.getDeliveryDate());
+                    newBasicTable.setOrderNumber(basicTable.getOrderNumber());
+                    newBasicTable.setMaterialName(basicTable.getMaterialName());
+                    newBasicTable.setDeliveryQuantity(basicTable.getDeliveryQuantity());
+                    newBasicTable.setDeliveryUnit(basicTable.getDeliveryUnit());
+                    newBasicTable.setUnitPrice(basicTable.getUnitPrice());
+                    newBasicTable.setPalletizedItems(basicTable.getPalletizedItems());
+                    newBasicTable.setConversionUnit(basicTable.getConversionUnit());
+                    newBasicTable.setConversionUnit1(basicTable.getConversionUnit1());
                     return newBasicTable;
                 })
                 .collect(Collectors.toList());
@@ -39,6 +49,7 @@ public class EIQClassifier {
                         .map(entry -> calculateOutboundInfo(entry.getKey(), entry.getValue()))
                         .sorted(Comparator.comparing(EIQAnalysisTable::getDate))
                         .collect(Collectors.toList());
+
         return eIQAnalysisTableSortedByDeliveryDate;
 
     }
@@ -48,7 +59,8 @@ public class EIQClassifier {
      * @param eiqBasicTablesGroupByDate 导入的基本数据类
      * @return 返回处理过的EIQ分析的值
      */
-    private static EIQAnalysisTable calculateOutboundInfo(Date key, List<EIQBasicTable> eiqBasicTablesGroupByDate) {
+    private static EIQAnalysisTable calculateOutboundInfo(Date key,
+                                                          List<EIQBasicTable> eiqBasicTablesGroupByDate) {
         EIQAnalysisTable eiqAnalysisTable = new EIQAnalysisTable();
         Map<String, List<EIQBasicTable>> collect = eiqBasicTablesGroupByDate.stream()
                 .collect(Collectors.groupingBy(EIQBasicTable::getOrderNumber));
