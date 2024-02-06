@@ -15,9 +15,9 @@ public  class EIAnalysisTable {
     @Getter
     @Setter
     @JsonProperty("订单对应物料品种数")
-    private int materialVarietiesCount;
+    private Integer materialVarietiesCount;
     @Getter
     @Setter
     @JsonProperty("订单编号累计品目数")
-    private int cumulativeItemNumber;
+    private Integer cumulativeItemNumber;
 }
