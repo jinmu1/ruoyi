@@ -15,7 +15,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 public class BaidieProcessorTest {
-
     @Test(expected = IOException.class)
     public void importFileForGroupOne_ParseFailure() throws IOException {
         MockMultipartFile mockFile = new MockMultipartFile(
@@ -107,7 +106,7 @@ public class BaidieProcessorTest {
                 Files.newInputStream(Paths.get(path)));
         Map<String, List<?>> resultMap = BaidieProcessor.importABCGroupTwo(mockMultipartFile);
 
-        // Test that the result keyset is data1 and data2.
+        // Test that the result keyset is data3 and data5.
         assertEquals(resultMap.keySet(), ImmutableSet.of("data3", "data5"));
 
         // Make sure data from 'data3' key is correct.
@@ -149,5 +148,66 @@ public class BaidieProcessorTest {
         //销售单价:135
         assertEquals("308克/包", data5Entries.get(167).getShipmentUnit());
         assertEquals("4703710", data5Entries.get(167).getMaterialNumber());
+    }
+
+    @Test(expected = IOException.class)
+    public void testImportABCGroupThree_ParseFailure() throws IOException {
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "wrong extension",
+                "filename.kml",
+                "text/plain",
+                "some kml".getBytes());
+        try {
+            BaidieProcessor.importABCGroupThree(mockFile);
+        } catch (IOException e) {
+            assertEquals(
+                    e.getMessage(),
+                    BaidieProcessor.IMPORT_FAILURE_MSG);
+            throw e;
+        }
+    }
+
+    @Test
+    public void testImportABCGroupThree() throws IOException {
+        final String path = "src/test/resources/abc_second_upload_table.xlsx";
+
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile(
+                "xlsFile",
+                "abc_second_upload_table.xlsx",
+                MediaType.APPLICATION_XML_VALUE,
+                Files.newInputStream(Paths.get(path)));
+        Map<String, List<?>> resultMap = BaidieProcessor.importABCGroupThree(mockMultipartFile);
+
+        // Test that the result keyset is data4 and data5.
+        assertEquals(ImmutableSet.of("data4", "data5"), resultMap.keySet());
+
+        // Make sure data from 'data4' key is correct.
+        final List<ABCAnalyseController.Data4Entry> data4Entries =
+                (List<ABCAnalyseController.Data4Entry>) resultMap.get("data4");
+        assertEquals(5, data4Entries.size());
+
+        //出库量:764
+        //物料描述/:"香脆椒（黄飞红，308G*10包/件）"
+        //物料累计品目数:1
+        //物料累计品目数百分比:"20.00%"
+        //物料编码:"4703710"
+        //累计出库量:764
+        //累计出库量百分比:67.55%"
+        assertEquals("4703710", data4Entries.get(0).getMaterialCode());
+        assertEquals(764, data4Entries.get(0).getOutboundQuantity(),0.1);
+        assertEquals("67.55%", data4Entries.get(0).getCumulativeOutboundQuantityPercentage());
+
+
+        //出库量:14
+        //物料描述:"咖啡伴侣（雀巢，10ML*50个*6包/件）"
+        //物料累计品目数:5
+        //物料累计品目数百分比:"100.00%"
+        //物料编码/:"4705461"
+        //累计出库量:1131
+        //累计出库量百分比:"100.00%"
+        assertEquals("4705461", data4Entries.get(4).getMaterialCode());
+        assertEquals(14, data4Entries.get(4).getOutboundQuantity(), 0.1);
+        assertEquals(1131, data4Entries.get(4).getCumulativeOutboundQuantity(), 0.1);
     }
 }

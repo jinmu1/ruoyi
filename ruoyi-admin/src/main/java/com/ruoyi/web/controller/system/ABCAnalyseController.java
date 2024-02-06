@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/system/abc")
@@ -64,55 +64,58 @@ public class ABCAnalyseController {
     @ResponseBody
     public AjaxResult importData2(MultipartFile file, boolean updateSupport, HttpServletRequest request) {
         try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
+            final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importABCGroupThree(file);
+            final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
 
-            // 使用流式操作和Collectors按照物料编码属性分类
-            Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
-                    .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
-
-            // 输出分类结果
-
-            List<Data4Entry> data4Entries = new ArrayList<>();
-            int tatol = categorizedMap.size();//总物料数量
-            int AllOutboundFrequency = 0;//总出库频次
-            double AllShippedQuantity = 0.0;//总出库数量
-            for (String key : categorizedMap.keySet()) {
-                List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
-                Data3Entry data3Entry = new Data3Entry();
-                Data4Entry data4Entry = new Data4Entry();
-                data3Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-                data4Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
-                data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
-                int count = 0;//出库频次统计
-                double num = 0.0;//出库数量统计
-                for (Data5Entry data5Entry : data5EntryList1) {
-                    count++;
-                    num = num + data5Entry.getShippedQuantity();
-                }
-                AllOutboundFrequency += count;
-                AllShippedQuantity += num;
-                data4Entry.setOutboundQuantity(num);
-                data4Entries.add(data4Entry);
-            }
-
-            Collections.sort(data4Entries, (m1, m2) -> Double.compare(m2.getOutboundQuantity(), m1.getOutboundQuantity()));//按照出库数量降序排序
-
-
-            int num2 = 0;//排行
-            double quantity = 0.0;//累计数量
-            for (Data4Entry data4Entry : data4Entries) {
-                num2++;
-                quantity += data4Entry.getOutboundQuantity();
-                data4Entry.setCumulativeOutboundQuantity(quantity);
-                data4Entry.setCumulativeOutboundQuantityPercentage(new BigDecimal(quantity * 100 / AllShippedQuantity).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-                data4Entry.setCumulativeItemCount(num2);
-                data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
-            }
-            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
-                put("data4", data4Entries);
-                put("data5", data5Entries);
-            }});
+//            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+//            List<Data5Entry> data5Entries = BaidieUtils.parseFromExcelFile(file, Data5Entry.class);
+//
+//            // 使用流式操作和Collectors按照物料编码属性分类
+//            Map<String, List<Data5Entry>> categorizedMap = data5Entries.stream()
+//                    .collect(Collectors.groupingBy(Data5Entry::getMaterialNumber));
+//
+//            // 输出分类结果
+//
+//            List<Data4Entry> data4Entries = new ArrayList<>();
+//            int tatol = categorizedMap.size();//总物料数量
+//            int AllOutboundFrequency = 0;//总出库频次
+//            double AllShippedQuantity = 0.0;//总出库数量
+//            for (String key : categorizedMap.keySet()) {
+//                List<Data5Entry> data5EntryList1 = categorizedMap.get(key);
+//                Data3Entry data3Entry = new Data3Entry();
+//                Data4Entry data4Entry = new Data4Entry();
+//                data3Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
+//                data4Entry.setMaterialCode(data5EntryList1.get(0).getMaterialNumber());
+//                data4Entry.setMaterialDescription(data5EntryList1.get(0).getMaterialName());
+//                int count = 0;//出库频次统计
+//                double num = 0.0;//出库数量统计
+//                for (Data5Entry data5Entry : data5EntryList1) {
+//                    count++;
+//                    num = num + data5Entry.getShippedQuantity();
+//                }
+//                AllOutboundFrequency += count;
+//                AllShippedQuantity += num;
+//                data4Entry.setOutboundQuantity(num);
+//                data4Entries.add(data4Entry);
+//            }
+//
+//            Collections.sort(data4Entries, (m1, m2) -> Double.compare(m2.getOutboundQuantity(), m1.getOutboundQuantity()));//按照出库数量降序排序
+//
+//
+//            int num2 = 0;//排行
+//            double quantity = 0.0;//累计数量
+//            for (Data4Entry data4Entry : data4Entries) {
+//                num2++;
+//                quantity += data4Entry.getOutboundQuantity();
+//                data4Entry.setCumulativeOutboundQuantity(quantity);
+//                data4Entry.setCumulativeOutboundQuantityPercentage(new BigDecimal(quantity * 100 / AllShippedQuantity).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
+//                data4Entry.setCumulativeItemCount(num2);
+//                data4Entry.setCumulativeItemCountPercentage(new BigDecimal(num2 * 100 / tatol).setScale(2, BigDecimal.ROUND_HALF_DOWN).toString() + "%");
+//            }
+//            JSONObject json = BaidieUtils.generateResponseJson(new HashMap<>(){{
+//                put("data4", data4Entries);
+//                put("data5", data5Entries);
+//            }});
             return AjaxResult.success(json);
         } catch (Exception e) {
             return AjaxResult.error(e.getMessage());
@@ -249,87 +252,30 @@ public class ABCAnalyseController {
         @NotNull
         private String cumulativeItemCountPercentage;
     }
+    @Getter
+    @Setter
     static public class Data4Entry{
         @JsonProperty("物料编码")
-        @Excel(name = "物料编码")
+        @NotNull
         private String materialCode;
         @JsonProperty("物料描述")
-        @Excel(name = "物料描述")
+        @NotNull
         private String materialDescription;
         @JsonProperty("出库量")
-        @Excel(name = "出库量")
-        private double outboundQuantity;
+        @NotNull
+        private Double outboundQuantity;
         @JsonProperty("累计出库量")
-        @Excel(name = "累计出库量")
-        private double cumulativeOutboundQuantity;
+        @NotNull
+        private Double cumulativeOutboundQuantity;
         @JsonProperty("累计出库量百分比")
-        @Excel(name = "累计出库量百分比")
+        @NotNull
         private String cumulativeOutboundQuantityPercentage;
         @JsonProperty("物料累计品目数")
-        @Excel(name = "物料累计品目数")
-        private int cumulativeItemCount;
+        @NotNull
+        private Integer cumulativeItemCount;
         @JsonProperty("物料累计品目数百分比")
-        @Excel(name = "物料累计品目数百分比")
+        @NotNull
         private String cumulativeItemCountPercentage;
-
-        // 添加构造函数、getter和setter方法...
-
-
-        public String getMaterialCode() {
-            return materialCode;
-        }
-
-        public void setMaterialCode(String materialCode) {
-            this.materialCode = materialCode;
-        }
-
-        public String getMaterialDescription() {
-            return materialDescription;
-        }
-
-        public void setMaterialDescription(String materialDescription) {
-            this.materialDescription = materialDescription;
-        }
-
-        public double getOutboundQuantity() {
-            return outboundQuantity;
-        }
-
-        public void setOutboundQuantity(double outboundQuantity) {
-            this.outboundQuantity = outboundQuantity;
-        }
-
-        public double getCumulativeOutboundQuantity() {
-            return cumulativeOutboundQuantity;
-        }
-
-        public void setCumulativeOutboundQuantity(double cumulativeOutboundQuantity) {
-            this.cumulativeOutboundQuantity = cumulativeOutboundQuantity;
-        }
-
-        public String getCumulativeOutboundQuantityPercentage() {
-            return cumulativeOutboundQuantityPercentage;
-        }
-
-        public void setCumulativeOutboundQuantityPercentage(String cumulativeOutboundQuantityPercentage) {
-            this.cumulativeOutboundQuantityPercentage = cumulativeOutboundQuantityPercentage;
-        }
-
-        public int getCumulativeItemCount() {
-            return cumulativeItemCount;
-        }
-
-        public void setCumulativeItemCount(int cumulativeItemCount) {
-            this.cumulativeItemCount = cumulativeItemCount;
-        }
-
-        public String getCumulativeItemCountPercentage() {
-            return cumulativeItemCountPercentage;
-        }
-
-        public void setCumulativeItemCountPercentage(String cumulativeItemCountPercentage) {
-            this.cumulativeItemCountPercentage = cumulativeItemCountPercentage;
-        }
     }
     static public class Data5Entry{
         @JsonProperty("出库日期")

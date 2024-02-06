@@ -49,26 +49,26 @@ public class ABCClassifierTest {
         // 0005 x 3
         testOutboundInfoEntries =
                 Arrays.asList(
-                        // 0001 x 2
-                        createOutboundInfoEntry("0001"),
-                        createOutboundInfoEntry("0001"),
-                        // 0002 x 1
-                        createOutboundInfoEntry("0002"),
-                        // 0003 x 5
-                        createOutboundInfoEntry("0003"),
-                        createOutboundInfoEntry("0003"),
-                        createOutboundInfoEntry("0003"),
-                        createOutboundInfoEntry("0003"),
-                        createOutboundInfoEntry("0003"),
-                        // 0004 x 4
-                        createOutboundInfoEntry("0004"),
-                        createOutboundInfoEntry("0004"),
-                        createOutboundInfoEntry("0004"),
-                        createOutboundInfoEntry("0004"),
-                        // 0005 x 3
-                        createOutboundInfoEntry("0005"),
-                        createOutboundInfoEntry("0005"),
-                        createOutboundInfoEntry("0005"));
+                        // 0001 x 2  total quantity 52
+                        createOutboundInfoEntry("0001", 2.0),
+                        createOutboundInfoEntry("0001", 50.0),
+                        // 0002 x 1 total quantity 200
+                        createOutboundInfoEntry("0002", 200.0),
+                        // 0003 x 5 total quantity 1033
+                        createOutboundInfoEntry("0003", 20.0),
+                        createOutboundInfoEntry("0003", 10.0),
+                        createOutboundInfoEntry("0003", 1000.0),
+                        createOutboundInfoEntry("0003", 2.0),
+                        createOutboundInfoEntry("0003", 1.0),
+                        // 0004 x 4 total quantity 10
+                        createOutboundInfoEntry("0004", 1.0),
+                        createOutboundInfoEntry("0004", 2.0),
+                        createOutboundInfoEntry("0004", 3.0),
+                        createOutboundInfoEntry("0004", 4.0),
+                        // 0005 x 3 total quantity 60
+                        createOutboundInfoEntry("0005", 20.0),
+                        createOutboundInfoEntry("0005", 20.0),
+                        createOutboundInfoEntry("0005", 20.0));
     }
     @Test
     public void sortByAccumulativeValue() {
@@ -150,6 +150,33 @@ public class ABCClassifierTest {
         }
     }
 
+    @Test
+    public void testSortByMaterialOutboundQuantity() {
+        List<ABCAnalyseController.Data4Entry> result =
+                ABCClassifier.sortByMaterialOutboundQuantity(testOutboundInfoEntries);
+        // total 5 types of materials.
+        assertEquals(5, result.size());
+        // 保证结果是按出库量降序排列
+        assertEquals(
+                Arrays.asList(1033.0, 200.0, 60.0, 52.0, 10.0),  // 参考Setup函数里的数据注释
+                result.stream()
+                        .map(ABCAnalyseController.Data4Entry::getOutboundQuantity)
+                        .collect(Collectors.toList()));
+        assertEquals(
+                Arrays.asList("0003", "0002", "0005", "0001", "0004"),
+                result.stream()
+                        .map(ABCAnalyseController.Data4Entry::getMaterialCode)
+                        .collect(Collectors.toList()));
+
+        // 检查所有的属性都不是空
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        for(ABCAnalyseController.Data4Entry entry : result) {
+            final Set<ConstraintViolation<ABCAnalyseController.Data4Entry>> violations =
+                    validator.validate(entry);
+            assertTrue(violations.isEmpty());
+        }
+    }
+
     private ABCAnalyseController.Data1Entry createInventoryInfoWithPriceAndInventory(
             double price, int inventory) {
         ABCAnalyseController.Data1Entry entry = new ABCAnalyseController.Data1Entry();
@@ -160,9 +187,12 @@ public class ABCClassifierTest {
         return entry;
     }
 
-    private ABCAnalyseController.Data5Entry createOutboundInfoEntry(String materialCode) {
+    private ABCAnalyseController.Data5Entry createOutboundInfoEntry(
+            String materialCode, double outboundQuantity) {
         ABCAnalyseController.Data5Entry data5Entry = new ABCAnalyseController.Data5Entry();
         data5Entry.setMaterialNumber(materialCode);
+        data5Entry.setMaterialName("material name");
+        data5Entry.setShippedQuantity(outboundQuantity);
         return data5Entry;
     }
 }
