@@ -22,7 +22,7 @@ public class EIQClassifier {
      */
     public static List<EIQAnalysisTable> getEIQAnalysisTable(List<EIQBasicTable> eiqBasicTableList){
         //step1: 将日期标准化，防止同一天出现两个值
-        List<EIQBasicTable> standardizedList = eiqBasicTableList.stream()
+        final List<EIQBasicTable> standardizedList = eiqBasicTableList.stream()
                 .map(basicTable -> {
                     EIQBasicTable newBasicTable = new EIQBasicTable();
                     newBasicTable.setDeliveryDate(normalizeDate(basicTable.getDeliveryDate()));
@@ -46,7 +46,7 @@ public class EIQClassifier {
         //step3: 统计每个出库日期的数据，然后升序排序
         final List<EIQAnalysisTable> eIQAnalysisTableSortedByDeliveryDate =
                 dataGroupByDeliveryDate.entrySet().stream()
-                        .map(entry -> calculateOutboundInfo(entry.getKey(), entry.getValue()))
+                        .map(entry -> calculateENQ(entry.getKey(), entry.getValue()))
                         .sorted(Comparator.comparing(EIQAnalysisTable::getDate))
                         .collect(Collectors.toList());
 
@@ -59,13 +59,14 @@ public class EIQClassifier {
      * @param eiqBasicTablesGroupByDate 导入的基本数据类
      * @return 返回处理过的EIQ分析的值
      */
-    private static EIQAnalysisTable calculateOutboundInfo(Date key,
+    private static EIQAnalysisTable calculateENQ(Date key,
                                                           List<EIQBasicTable> eiqBasicTablesGroupByDate) {
         EIQAnalysisTable eiqAnalysisTable = new EIQAnalysisTable();
-        Map<String, List<EIQBasicTable>> collect = eiqBasicTablesGroupByDate.stream()
-                .collect(Collectors.groupingBy(EIQBasicTable::getOrderNumber));
+        final int numOrders =
+                eiqBasicTablesGroupByDate.stream().collect(
+                        Collectors.groupingBy(EIQBasicTable::getOrderNumber)).size();
         eiqAnalysisTable.setDate(key);
-        eiqAnalysisTable.setEAnalysis(collect.size());
+        eiqAnalysisTable.setEAnalysis(numOrders);
         eiqAnalysisTable.setNAnalysis(eiqBasicTablesGroupByDate.size());
         double sum = 0;
         // 遍历当前日期的 EIQBasicTables 列表，累加出库量
