@@ -3,6 +3,7 @@ package com.ruoyi.baidie;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,19 +66,19 @@ public class ABCClassifier {
 
     /**
      * 以出库频次为主要分类依据的物料ABC分类
-     * @param data5Entries 输入的表单
+     * @param orderInfoEntries 输入的表单
      * @return 基于出库频次做的ABC分析表单结果List。该List是根据物料的出库频次的由大到小的顺序排序过的。
      */
     public static List<ABCAnalyseController.Data3Entry> sortByOutboundFrequency(
-            List<ABCAnalyseController.Data5Entry> data5Entries) {
+            List<ABCAnalyseController.Data5Entry> orderInfoEntries) {
         // 首先将数据按物料编码重组。
-        final Map<String, List<ABCAnalyseController.Data5Entry>> dataGroupByMaterialNumber =
-                data5Entries.stream().collect(
+        final Map<String, List<ABCAnalyseController.Data5Entry>> orderInfoGroupByMaterialNumber =
+                orderInfoEntries.stream().collect(
                         Collectors.groupingBy(ABCAnalyseController.Data5Entry::getMaterialNumber));
 
         // 统计每种物料的出库频次然后降序排序
         final List<ABCAnalyseController.Data3Entry> data3EntriesSortedByOutboundFrequency =
-                dataGroupByMaterialNumber.entrySet().stream()
+                orderInfoGroupByMaterialNumber.entrySet().stream()
                         .map(entry -> calculateOutboundFrequency(entry.getKey(), entry.getValue()))
                         .sorted((m1, m2) -> Double.compare(m2.getOutboundFrequency(), m1.getOutboundFrequency()))
                         .collect(Collectors.toList());
@@ -110,6 +111,50 @@ public class ABCClassifier {
         return data3EntriesSortedByOutboundFrequency;
     }
 
+    /**
+     * 以出库量为主要分类依据的物料ABC分类
+     * @param orderInfoEntries 输入的表单
+     * @return 基于出库量做的ABC分析表单结果List。该List是根据物料的出库量的由大到小的顺序排序过的。
+     */
+    public static List<ABCAnalyseController.Data4Entry> sortByMaterialOutboundQuantity(
+            List<ABCAnalyseController.Data5Entry> orderInfoEntries) {
+        // 将订单行按照物料编码属性分类
+        Map<String, List<ABCAnalyseController.Data5Entry>> orderInfoGroupByMaterialNumber =
+                orderInfoEntries.stream()
+                        .collect(Collectors.groupingBy(ABCAnalyseController.Data5Entry::getMaterialNumber));
+
+        // 统计每种物料的出库量然后降序排序
+        final List<ABCAnalyseController.Data4Entry> outboundQuantityEntriesSorted =
+                orderInfoGroupByMaterialNumber.entrySet().stream()
+                        .map(entry -> getMaterialOutboundQuantityEntry(entry.getValue()))
+                        .sorted(Comparator.comparingDouble(ABCAnalyseController.Data4Entry::getOutboundQuantity)
+                                .reversed())
+                        .collect(Collectors.toList());
+
+        // 计算
+        // 累计出库量 和 累计出库量百分比
+        // 物料累计品目数 和 物料累计品目数百分比
+        final int numOfMaterials = outboundQuantityEntriesSorted.size();//总物料数量
+        final double totalOutboundQuantity = outboundQuantityEntriesSorted.stream()
+                .mapToDouble(ABCAnalyseController.Data4Entry::getOutboundQuantity)
+                .sum();
+
+        double cumulativeOutboundQuantity = 0.0;
+        int oneBasedIndex = 1;
+        for (ABCAnalyseController.Data4Entry outboundInfoEntry : outboundQuantityEntriesSorted) {
+            cumulativeOutboundQuantity += outboundInfoEntry.getOutboundQuantity();
+            outboundInfoEntry.setCumulativeOutboundQuantity(cumulativeOutboundQuantity);
+            outboundInfoEntry.setCumulativeOutboundQuantityPercentage(BaidieUtils.toPercentageOfString(
+                    cumulativeOutboundQuantity, totalOutboundQuantity));
+
+            outboundInfoEntry.setCumulativeItemCount(oneBasedIndex);
+            outboundInfoEntry.setCumulativeItemCountPercentage(BaidieUtils.toPercentageOfString(
+                    oneBasedIndex, numOfMaterials));
+            oneBasedIndex++;
+        }
+
+        return outboundQuantityEntriesSorted;
+    }
 
     // 由原始数据计算总库存的价值
     // 库存 * 单价
@@ -132,5 +177,21 @@ public class ABCClassifier {
         data3Entry.setMaterialCode(materialCode);
         data3Entry.setOutboundFrequency(data5Entries.size());
         return data3Entry;
+    }
+
+    private static ABCAnalyseController.Data4Entry getMaterialOutboundQuantityEntry(
+            List<ABCAnalyseController.Data5Entry> orderInfoEntries) {
+        final ABCAnalyseController.Data5Entry firstOrderInfoEntry = orderInfoEntries.get(0);
+        ABCAnalyseController.Data4Entry materialOutboundQuantityEntry = new ABCAnalyseController.Data4Entry();
+        materialOutboundQuantityEntry.setMaterialCode(firstOrderInfoEntry.getMaterialNumber());
+        materialOutboundQuantityEntry.setMaterialDescription(firstOrderInfoEntry.getMaterialName());
+        // 计算总出库量
+        materialOutboundQuantityEntry.setOutboundQuantity(
+                orderInfoEntries.stream()
+                        .mapToDouble(ABCAnalyseController.Data5Entry::getShippedQuantity)
+                        .sum()
+        );
+
+        return materialOutboundQuantityEntry;
     }
 }

@@ -42,6 +42,17 @@ public class BaidieProcessor {
         }
     }
 
+    /** Import and parse data from an uploaded file, and transforms the input data into
+     *  multiple array of data.
+     *
+     * @param importFile The uploaded file
+     * @return a map from json key to its corresponding data arrays. This method will return
+     *         a map with two keys:
+     *         {
+     *             "data3":  [...],
+     *             "data5":  [...]
+     *         }
+     */
     public static Map<String, List<?>> importABCGroupTwo(MultipartFile importFile) throws IOException {
         try {
             // 将导入的EXCEL文件转换为List对象，可能会throw exception.
@@ -52,6 +63,32 @@ public class BaidieProcessor {
 
             return Map.ofEntries(
                     entry("data3", data3Entries),
+                    entry("data5", data5Entries));
+        } catch (Exception e) {
+            throw new IOException(IMPORT_FAILURE_MSG);
+        }
+    }
+
+    /** Import and parse data from an uploaded file, and transforms the input data into
+     *  multiple array of data.
+     *
+     * @param importFile The uploaded file
+     * @return a map from json key to its corresponding data arrays. This method will return
+     *         a map with two keys:
+     *         {
+     *             "data4":  [...],
+     *             "data5":  [...]
+     *         }
+     */
+    public static Map<String, List<?>> importABCGroupThree(MultipartFile importFile) throws IOException {
+        try {
+            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
+            final List<ABCAnalyseController.Data5Entry> data5Entries =
+                    BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data5Entry.class);
+            final List<ABCAnalyseController.Data4Entry> data4Entries =
+                    ABCClassifier.sortByMaterialOutboundQuantity(data5Entries);
+            return Map.ofEntries(
+                    entry("data4", data4Entries),
                     entry("data5", data5Entries));
         } catch (Exception e) {
             throw new IOException(IMPORT_FAILURE_MSG);

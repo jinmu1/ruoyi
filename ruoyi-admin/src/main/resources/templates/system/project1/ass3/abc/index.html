@@ -1077,7 +1077,6 @@
                     interval: 0,
                     fontSize: 12,
                     formatter: function (value) {
-                        debugger
                         var ret = "";//拼接加\n返回的类目项
                         var maxLength = 4;//每项显示文字个数
                         value = parseInt(value.substring(0, 3));
@@ -1295,7 +1294,6 @@
                         interval: 0,
                         fontSize: 12,
                         formatter: function (value) {
-                            debugger
                             var ret = "";//拼接加\n返回的类目项
                             var maxLength = 2;//每项显示文字个数
                             value = parseInt(value.substring(0, 3));
@@ -1513,7 +1511,6 @@
                         interval: 0,
                         fontSize:12,
                         formatter: function (value) {
-                            debugger
                             var ret = "";//拼接加\n返回的类目项
                             var maxLength = 2;//每项显示文字个数
                             value = parseInt(value.substring(0, 3));
@@ -1681,9 +1678,7 @@
             showRefresh: false,
             showExport: true,
             exportTypes: ['excel','txt','xml'],
-            columns: [{
-                checkbox: true
-            },
+            columns: [
                 {
                     field: '物料编码',
                     title: '物料编码'
