@@ -3,22 +3,17 @@ package com.ruoyi.baidie;
 import com.ruoyi.data.eiq.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 
 public class EIQClassifierTest {
     private List<EIQBasicTable> testEIQBasicTable;
     private List<Integer> testCumulativeItemNumber;
     private List<String> testOrderNumber;
     private List<Integer> testOrderLineCount;
-    private int testSortByOrderNumer;
+    private int testSortByOrderNumber;
 
     @Before
     public void setUp() {
@@ -35,33 +30,33 @@ public class EIQClassifierTest {
 
         testEIQBasicTable =
                 Arrays.asList(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9);
-        testSortByOrderNumer = 8;
+        testSortByOrderNumber = 8;
         testCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
         testOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
         testOrderLineCount = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
     }
 
     @Test
-    public void getENAnalysisTableTest(){
-        List<ENAnalysisTable> result =  EIQClassifier.getENAnalysisTable(testEIQBasicTable);
-        // 保证结果行数跟输入一样
-        assertEquals(testSortByOrderNumer, result.size());
+    public void getENAnalysisTableTest() {
+        List<ENAnalysisTable> result = EIQClassifier.getENAnalysisTable(testEIQBasicTable);
+        // Ensure the result size matches the input
+        assertEquals(testSortByOrderNumber, result.size());
 
-        // 检查EN-序列号是对的
+        // Check if EN cumulative item numbers are correct
         assertEquals(
                 testCumulativeItemNumber,
                 result.stream()
                         .map(ENAnalysisTable::getCumulativeItemNumber)
                         .collect(Collectors.toList())
         );
-        // 检查EN-订单号是对的
+        // Check if EN order numbers are correct
         assertEquals(
                 testOrderNumber,
                 result.stream()
                         .map(ENAnalysisTable::getOrderNumber)
                         .collect(Collectors.toList())
         );
-        // 检查EN-订单行数是对的
+        // Check if EN order line counts are correct
         assertEquals(
                 testOrderLineCount,
                 result.stream()
@@ -71,10 +66,18 @@ public class EIQClassifierTest {
 
     }
 
-    //创建EIQ对象
-    private EIQBasicTable   createBasicTableInfoWithDate(Date deliveryDate, String orderNumber, String materialNumber, String materialName,
-                                                         double deliveryQuantity, String deliveryUnit, double unitPrice,
-                                                         double palletizedItems, double conversionUnit, double conversionUnit1) {
+    // Create EIQ objects
+    private EIQBasicTable createBasicTableInfoWithDate(Date deliveryDate,
+                                                       String orderNumber,
+                                                       String materialNumber,
+                                                       String materialName,
+                                                       double deliveryQuantity,
+                                                       String deliveryUnit,
+                                                       double unitPrice,
+                                                       double palletizedItems,
+                                                       double conversionUnit,
+                                                       double conversionUnit1) {
+
         EIQBasicTable eiqBasicTable = new EIQBasicTable();
         eiqBasicTable.setDeliveryDate(deliveryDate);
         eiqBasicTable.setOrderNumber(orderNumber);
@@ -88,17 +91,17 @@ public class EIQClassifierTest {
         eiqBasicTable.setConversionUnit1(conversionUnit1);
         return eiqBasicTable;
     }
-    private Date createDate(int year,int month,int day){
+
+    private Date createDate(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month-1); // Calendar.FEBRUARY 是 1 月
+        calendar.set(Calendar.MONTH, month - 1); // Calendar.FEBRUARY is 1 month
         calendar.set(Calendar.DAY_OF_MONTH, day);
-        // 将时间部分设置为 00:00:00
+        // Set the time part to 00:00:00
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        Date date1 = calendar.getTime();
-        return date1;
+        return calendar.getTime();
     }
 }
