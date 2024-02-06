@@ -18,9 +18,9 @@ public  class IKAnalysisTable {
     @Getter
     @Setter
     @JsonProperty("出现次数")
-    private int occurrenceCount;
+    private Integer occurrenceCount;
     @Getter
     @Setter
     @JsonProperty("物料编号累计品目数")
-    private int cumulativeItemNumber;
+    private Integer cumulativeItemNumber;
 }
