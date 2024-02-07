@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -29,7 +30,7 @@ public class BaidieUtilsTest {
                 "some kml".getBytes());
         try {
             BaidieUtils.parseFromExcelFile(
-                    mockFile, ABCAnalyseController.Data1Entry.class);
+                    mockFile, MaterialBasicInfo.class);
         } catch (Exception e) {
             assertEquals(
                     e.getMessage(),
@@ -51,8 +52,8 @@ public class BaidieUtilsTest {
                 "abc_first_upload_table.xls",
                 MediaType.APPLICATION_XML_VALUE,
                 new FileInputStream(file));
-        List<ABCAnalyseController.Data1Entry> result =
-                BaidieUtils.parseFromExcelFile(mockMultipartFile, ABCAnalyseController.Data1Entry.class);
+        List<MaterialBasicInfo> result =
+                BaidieUtils.parseFromExcelFile(mockMultipartFile, MaterialBasicInfo.class);
 
         assertEquals(result.size(), 11);
     }
@@ -63,8 +64,8 @@ public class BaidieUtilsTest {
     public void testGenerateResponseJson() throws JsonProcessingException {
         // 准备测试数据
         HashMap<String, List<?>> jsonKeyToValue = new HashMap<>();
-        List<ABCAnalyseController.Data1Entry> list1 = new ArrayList<>();
-        list1.add(new ABCAnalyseController.Data1Entry());
+        List<MaterialBasicInfo> list1 = new ArrayList<>();
+        list1.add(new MaterialBasicInfo());
         List<ABCAnalyseController.Data5Entry> list2 = new ArrayList<>();
         list2.add(new ABCAnalyseController.Data5Entry());
         jsonKeyToValue.put("key1", list1);

@@ -1,6 +1,7 @@
 package com.ruoyi.baidie;
 
 import com.google.common.collect.ImmutableSet;
+import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -54,8 +55,8 @@ public class BaidieProcessorTest {
         assertEquals(resultMap.keySet(), ImmutableSet.of("data1", "data2"));
 
         // Make sure data from 'data1' key is correct.
-        final List<ABCAnalyseController.Data1Entry> data1Entries =
-                (List<ABCAnalyseController.Data1Entry>) resultMap.get("data1");
+        final List<MaterialBasicInfo> data1Entries =
+                (List<MaterialBasicInfo>) resultMap.get("data1");
         assertEquals(11, data1Entries.size());
         assertEquals("4001543", data1Entries.get(0).getMaterialCode());
         assertEquals(Double.valueOf(100), Double.valueOf(data1Entries.get(0).getSellingPrice()));
@@ -241,13 +242,13 @@ public class BaidieProcessorTest {
         importTemplateMethod.setAccessible(true);
 
         // 构造一个keyToCalculator Map来做任意基于List<Data5Entry>的计算。
-        Map<String, Function<List<ABCAnalyseController.Data1Entry>, List<?>>> keyToCalculator =
+        Map<String, Function<List<MaterialBasicInfo>, List<?>>> keyToCalculator =
                 Map.ofEntries(
                         entry("inputSizeCalculator", // 返回一个大小为1的List，里面是输入的List的大小
                                 data1Entries ->  List.of(data1Entries.size())),
                         entry("materialCodeCalculator",  // 返回一个跟输入大小一样的List，里面是输入的物料编码。
                                 data1Entries -> data1Entries.stream()
-                                        .map(ABCAnalyseController.Data1Entry::getMaterialCode)
+                                        .map(MaterialBasicInfo::getMaterialCode)
                                         .collect(Collectors.toList())),
                         entry("firstAndLastCalculator",  // 返回第一个List,里面由输入的第一个和最后一个数据。
                                 data1Entries ->
@@ -258,7 +259,7 @@ public class BaidieProcessorTest {
         Map<String, List<?>> result = (Map<String, List<?>>) importTemplateMethod.invoke(
                 null,
                 mockMultipartFile,
-                ABCAnalyseController.Data1Entry.class,
+                MaterialBasicInfo.class,
                 "inputKey",
                 keyToCalculator
                 );
