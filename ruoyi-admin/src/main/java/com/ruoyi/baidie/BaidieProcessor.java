@@ -1,5 +1,6 @@
 package com.ruoyi.baidie;
 
+import com.google.common.collect.ImmutableMap;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 
@@ -25,21 +28,12 @@ public class BaidieProcessor {
      *             "data2":  [...]
      *         }
      */
-    public static Map<String, List<?>> importFileForGroupOne(MultipartFile importFile) throws IOException {
-        try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            List<ABCAnalyseController.Data1Entry> inventoryInfo =
-                    BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data1Entry.class);
-
-            List<?> accumulativeValueSorted =
-                    ABCClassifier.sortByAccumulativeValue(inventoryInfo);
-
-            return Map.ofEntries(
-                    entry("data1", inventoryInfo),
-                    entry("data2", accumulativeValueSorted));
-        } catch (Exception e) {
-            throw new IOException(IMPORT_FAILURE_MSG);
-        }
+    public static Map<String, List<?>> importABCGroupOne(MultipartFile importFile) throws IOException {
+        return importFromFileAndProcess(
+                importFile,
+                ABCAnalyseController.Data1Entry.class,
+                "data1",
+                Map.of("data2", ABCClassifier::sortByAccumulativeValue));
     }
 
     /** Import and parse data from an uploaded file, and transforms the input data into
@@ -54,19 +48,11 @@ public class BaidieProcessor {
      *         }
      */
     public static Map<String, List<?>> importABCGroupTwo(MultipartFile importFile) throws IOException {
-        try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            final List<ABCAnalyseController.Data5Entry> data5Entries =
-                    BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data5Entry.class);
-
-            final List<ABCAnalyseController.Data3Entry> data3Entries = ABCClassifier.sortByOutboundFrequency(data5Entries);
-
-            return Map.ofEntries(
-                    entry("data3", data3Entries),
-                    entry("data5", data5Entries));
-        } catch (Exception e) {
-            throw new IOException(IMPORT_FAILURE_MSG);
-        }
+        return importFromFileAndProcess(
+                importFile,
+                ABCAnalyseController.Data5Entry.class,
+                "data5",
+                Map.of("data3", ABCClassifier::sortByOutboundFrequency));
     }
 
     /** Import and parse data from an uploaded file, and transforms the input data into
@@ -81,15 +67,55 @@ public class BaidieProcessor {
      *         }
      */
     public static Map<String, List<?>> importABCGroupThree(MultipartFile importFile) throws IOException {
+        return importFromFileAndProcess(
+                importFile,
+                ABCAnalyseController.Data5Entry.class,
+                "data5",
+                Map.of("data4", ABCClassifier::sortByMaterialOutboundQuantity));
+    }
+
+
+    /**
+     * 核心方法。用于所有基于一下逻辑的上传功能实现。
+     *    上传-》阅读数据 -》N 个计算转换 -》 返回原始数据加上计算数据（总共1 + N条）
+     *
+     * @param inputFile - 上传文件， 直接从Controller传进来
+     * @param inputClazz - inputFile里面数据的类型。 例如： EIBasicTable.class
+     * @param inputDataKey - 上传文件的数据在返回值里的key   'data1'
+     * @param keyToCalculator - 传入一个存储计算函数的Map。  {'data2': ABCClassifier::sortByMaterialOutboundQuantity }
+     * @return 将输入的原始数据以及根据原始数据计算出来的数据都以Map<String, List<?>>的形式返回。
+     *         原始数据的key是inputDataKey，每一个计算出来的数据的key是对应keyToProcessor里的每个函数自己的key。
+     * @throws IOException 上传文件读入失败。
+     *
+     * 例子：
+     * importTmpl(
+     *            importFile,
+     *            ABCAnalyseController.Data5Entry.class,
+     *            "data5",
+     *            Map.of("data4", ABCClassifier::sortByMaterialOutboundQuantity));
+     * 返回值
+     * {
+     *     "data1": [EIBasicTable]，   // 从inputFile里读出来的数据
+     *     “data2": [...],            //  keyToCalculator['data2'].apply(input)的结果。
+     * }
+     */
+    private static <InputType> Map<String, List<?>> importFromFileAndProcess(
+            MultipartFile inputFile,
+            Class<InputType> inputClazz,
+            String inputDataKey,
+            Map<String, Function<List<InputType>, List<?>>> keyToCalculator) throws IOException {
         try {
-            // 将导入的EXCEL文件转换为List对象，可能会throw exception.
-            final List<ABCAnalyseController.Data5Entry> data5Entries =
-                    BaidieUtils.parseFromExcelFile(importFile, ABCAnalyseController.Data5Entry.class);
-            final List<ABCAnalyseController.Data4Entry> data4Entries =
-                    ABCClassifier.sortByMaterialOutboundQuantity(data5Entries);
-            return Map.ofEntries(
-                    entry("data4", data4Entries),
-                    entry("data5", data5Entries));
+            final List<InputType> input =
+                    BaidieUtils.parseFromExcelFile(inputFile, inputClazz);
+            final Map<String, List<?>> derivedDataMap =
+                    keyToCalculator.entrySet().stream().collect(
+                            Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().apply(input)));
+            final Map<String, List<?>> inputDataMap = Map.ofEntries(entry(inputDataKey, input));
+
+            return ImmutableMap.<String, List<?>>builder()
+                    .putAll(inputDataMap)
+                    .putAll(derivedDataMap)
+                    .build();
         } catch (Exception e) {
             throw new IOException(IMPORT_FAILURE_MSG);
         }

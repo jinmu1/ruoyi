@@ -32,7 +32,7 @@ public class ABCAnalyseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request)
     {
         try {
-            final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importFileForGroupOne(file);
+            final Map<String, List<?>> resultKeyToDataArrays = BaidieProcessor.importABCGroupOne(file);
             final JSONObject json = BaidieUtils.generateResponseJson(resultKeyToDataArrays);
 
             return AjaxResult.success(json);
