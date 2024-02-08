@@ -72,86 +72,6 @@ public class ABCAnalyseController {
         }
     }
 
-    static public class Data1Entry {
-        @Excel(name = "物料编码")
-        @JsonProperty("物料编码")
-        private String materialCode;
-        @JsonProperty("平均库存")
-        @Excel(name = "平均库存（件/月）")
-        private int averageInventory;
-        @JsonProperty("当月出库总量")
-        @Excel(name = "当月出库总量（件）")
-        private double monthlyTotalOutbound;
-        @JsonProperty("库存周转次数")
-        @Excel(name = "库存周转次数")
-        private int inventoryTurnover;
-        @JsonProperty("库存周转天数")
-        @Excel(name = "库存周转天数")
-        private int inventoryTurnoverDays;
-        @JsonProperty("销售单价")
-        @Excel(name = "销售单价（元/件）")
-        private double sellingPrice;
-
-        public String getMaterialCode() {
-            return materialCode;
-        }
-
-        public void setMaterialCode(String materialCode) {
-            this.materialCode = materialCode;
-        }
-
-        public int getAverageInventory() {
-            return averageInventory;
-        }
-
-        public void setAverageInventory(int averageInventory) {
-            this.averageInventory = averageInventory;
-        }
-
-        public double getMonthlyTotalOutbound() {
-            return monthlyTotalOutbound;
-        }
-
-        public void setMonthlyTotalOutbound(double monthlyTotalOutbound) {
-            this.monthlyTotalOutbound = monthlyTotalOutbound;
-        }
-
-        public int getInventoryTurnover() {
-            return inventoryTurnover;
-        }
-
-        public void setInventoryTurnover(int inventoryTurnover) {
-            this.inventoryTurnover = inventoryTurnover;
-        }
-
-        public int getInventoryTurnoverDays() {
-            return inventoryTurnoverDays;
-        }
-
-        public void setInventoryTurnoverDays(int inventoryTurnoverDays) {
-            this.inventoryTurnoverDays = inventoryTurnoverDays;
-        }
-
-        public double getSellingPrice() {
-            return sellingPrice;
-        }
-
-        public void setSellingPrice(double sellingPrice) {
-            this.sellingPrice = sellingPrice;
-        }
-
-        @Override
-        public String toString() {
-            return "Data1Entry{" +
-                    "materialCode=" + materialCode +
-                    ", averageInventory=" + averageInventory +
-                    ", monthlyTotalOutbound=" + monthlyTotalOutbound +
-                    ", inventoryTurnover=" + inventoryTurnover +
-                    ", inventoryTurnoverDays=" + inventoryTurnoverDays +
-                    ", sellingPrice=" + sellingPrice +
-                    '}';
-        }
-    }
     @Getter
     @Setter
     static public class Data2Entry {
@@ -227,6 +147,8 @@ public class ABCAnalyseController {
         @NotNull
         private String cumulativeItemCountPercentage;
     }
+    @Getter
+    @Setter
     static public class Data5Entry{
         @JsonProperty("出库日期")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
@@ -253,72 +175,5 @@ public class ABCAnalyseController {
         @JsonProperty("托盘装件数")
         @Excel(name = "托盘装件数")
         private double palletizedItemCount;
-
-        // 添加构造函数、getter和setter方法...
-
-
-        public Date getDeliveryDate() {
-            return deliveryDate;
-        }
-
-        public void setDeliveryDate(Date deliveryDate) {
-            this.deliveryDate = deliveryDate;
-        }
-
-        public long getOrderNumber() {
-            return orderNumber;
-        }
-
-        public void setOrderNumber(long orderNumber) {
-            this.orderNumber = orderNumber;
-        }
-
-        public String getMaterialNumber() {
-            return materialNumber;
-        }
-
-        public void setMaterialNumber(String materialNumber) {
-            this.materialNumber = materialNumber;
-        }
-
-        public String getMaterialName() {
-            return materialName;
-        }
-
-        public void setMaterialName(String materialName) {
-            this.materialName = materialName;
-        }
-
-        public double getShippedQuantity() {
-            return shippedQuantity;
-        }
-
-        public void setShippedQuantity(double shippedQuantity) {
-            this.shippedQuantity = shippedQuantity;
-        }
-
-        public String getShipmentUnit() {
-            return shipmentUnit;
-        }
-
-        public void setShipmentUnit(String shipmentUnit) {
-            this.shipmentUnit = shipmentUnit;
-        }
-
-        public double getUnitPrice() {
-            return unitPrice;
-        }
-
-        public void setUnitPrice(double unitPrice) {
-            this.unitPrice = unitPrice;
-        }
-
-        public double getPalletizedItemCount() {
-            return palletizedItemCount;
-        }
-
-        public void setPalletizedItemCount(double palletizedItemCount) {
-            this.palletizedItemCount = palletizedItemCount;
-        }
     }
 }

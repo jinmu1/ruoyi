@@ -1,5 +1,6 @@
 package com.ruoyi.baidie;
 
+import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ABCClassifierTest {
-    private List<ABCAnalyseController.Data1Entry> testInventoryInfoEntries;
+    private List<MaterialBasicInfo> testInventoryInfoEntries;
     private List<String> accumulativeValuePercentages;
 
     private List<ABCAnalyseController.Data5Entry> testOutboundInfoEntries;
@@ -24,16 +25,16 @@ public class ABCClassifierTest {
     @Before
     public void setUp() {
         // Set up some test data
-        ABCAnalyseController.Data1Entry inventoryEntry1 =
+        MaterialBasicInfo inventoryEntry1 =
                 createInventoryInfoWithPriceAndInventory(5, 100);
 
-        ABCAnalyseController.Data1Entry inventoryEntry2 =
+        MaterialBasicInfo inventoryEntry2 =
                 createInventoryInfoWithPriceAndInventory(3.6, 1000);
 
-        ABCAnalyseController.Data1Entry inventoryEntry3 =
+        MaterialBasicInfo inventoryEntry3 =
                 createInventoryInfoWithPriceAndInventory(4001, 1);
 
-        ABCAnalyseController.Data1Entry inventoryEntry4 =
+        MaterialBasicInfo inventoryEntry4 =
                 createInventoryInfoWithPriceAndInventory(65, 100);
 
         testInventoryInfoEntries =
@@ -177,9 +178,9 @@ public class ABCClassifierTest {
         }
     }
 
-    private ABCAnalyseController.Data1Entry createInventoryInfoWithPriceAndInventory(
+    private MaterialBasicInfo createInventoryInfoWithPriceAndInventory(
             double price, int inventory) {
-        ABCAnalyseController.Data1Entry entry = new ABCAnalyseController.Data1Entry();
+        MaterialBasicInfo entry = new MaterialBasicInfo();
         entry.setAverageInventory(inventory);
         entry.setSellingPrice(price);
 

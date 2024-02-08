@@ -1,5 +1,6 @@
 package com.ruoyi.baidie;
 
+import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 
@@ -14,14 +15,14 @@ import java.util.stream.Collectors;
 public class ABCClassifier {
     /**
      * 以平均库存占用资金为主要分类依据的物料ABC分类
-     * @param inventoryInfo 输入的表单
+     * @param materialBasicInfo 输入的表单
      * @return 基于占用资金做的ABC分析表单结果List。该List是根据物料的平均资金占用额的由大到小的顺序排序过的。
      */
     public static List<ABCAnalyseController.Data2Entry> sortByAccumulativeValue(
-            List<ABCAnalyseController.Data1Entry> inventoryInfo) {
+            List<MaterialBasicInfo> materialBasicInfo) {
         // step1：首先计算总销售金额
         final List<ABCAnalyseController.Data2Entry> entryWithTotalValue =
-                inventoryInfo
+                materialBasicInfo
                         .stream()
                         .map(ABCClassifier::calculateTotalValue)
                         .collect(Collectors.toList());
@@ -160,13 +161,13 @@ public class ABCClassifier {
     // 库存 * 单价
     // 其余信息复制。
     private static ABCAnalyseController.Data2Entry calculateTotalValue(
-            ABCAnalyseController.Data1Entry inventoryInfo) {
+            MaterialBasicInfo materialBasicInfo) {
         ABCAnalyseController.Data2Entry entryWithTotalValue = new ABCAnalyseController.Data2Entry();
-        entryWithTotalValue.setMaterialCode(inventoryInfo.getMaterialCode());
-        entryWithTotalValue.setUnitPrice(inventoryInfo.getSellingPrice());
-        entryWithTotalValue.setAverageInventory(inventoryInfo.getAverageInventory());
+        entryWithTotalValue.setMaterialCode(materialBasicInfo.getMaterialCode());
+        entryWithTotalValue.setUnitPrice(materialBasicInfo.getSellingPrice());
+        entryWithTotalValue.setAverageInventory(materialBasicInfo.getAverageInventory());
         entryWithTotalValue.setAverageFundsOccupied(
-                inventoryInfo.getSellingPrice() * inventoryInfo.getAverageInventory());
+                materialBasicInfo.getSellingPrice() * materialBasicInfo.getAverageInventory());
 
         return entryWithTotalValue;
     }

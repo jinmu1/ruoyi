@@ -1,6 +1,7 @@
 package com.ruoyi.baidie;
 
 import com.google.common.collect.ImmutableMap;
+import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.web.controller.system.ABCAnalyseController;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class BaidieProcessor {
     public static Map<String, List<?>> importABCGroupOne(MultipartFile importFile) throws IOException {
         return importFromFileAndProcess(
                 importFile,
-                ABCAnalyseController.Data1Entry.class,
+                MaterialBasicInfo.class,
                 "data1",
                 Map.of("data2", ABCClassifier::sortByAccumulativeValue));
     }
