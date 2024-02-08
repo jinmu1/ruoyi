@@ -22,7 +22,7 @@ public class EIQAnalysisTableTest {
     private List<Integer> testCumulativeItemNumber;
     private List<String> testOrderNumber;
     private List<Integer> testOrderLineCount;
-    private int testSortByOrderNumber;
+    private int expectedTotalNumOrders;
     @Before
     public void setUp() {
         // Set up some test data
@@ -43,7 +43,7 @@ public class EIQAnalysisTableTest {
         testEAnalysis = Arrays.asList(1, 1, 2, 4);
         testNAnalysis = Arrays.asList(1, 2, 2, 4);
         testQAnalysis = Arrays.asList(550.0, 900.0, 650.0, 700.0);
-        testSortByOrderNumber = 8;
+        expectedTotalNumOrders = 8;
         testCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
         testOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
         testOrderLineCount = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
@@ -102,7 +102,7 @@ public class EIQAnalysisTableTest {
     public void getENAnalysisTableTest() {
         List<ENAnalysisTable> result = EIQClassifier.getENAnalysisTable(testEIQBasicTable);
         // Ensure the result size matches the input
-        assertEquals(testSortByOrderNumber, result.size());
+        assertEquals(expectedTotalNumOrders, result.size());
 
         // Check if EN cumulative item numbers are correct
         assertEquals(

@@ -100,17 +100,17 @@ public class EIQClassifier {
                 eiqBasicTableList.stream().collect(Collectors.groupingBy(EIQBasicTable::getOrderNumber));
 
         // Step 2: 统计每个订单编码的行数，然后降序排序
-        final List<ENAnalysisTable> eNAnalysisTableSortedByOrderNumber =
+        final List<ENAnalysisTable> enAnalysisTableSortedByOrderLineCount =
                 dataGroupByOrderNumber.entrySet().stream()
                         .map(entry -> calculateOrderInfo(entry.getKey(), entry.getValue()))
                         .sorted(Comparator.comparing(ENAnalysisTable::getOrderLineCount, Comparator.reverseOrder()))
                         .collect(Collectors.toList());
 
         // Step 3: 设置一个自增的序号
-        IntStream.range(0, eNAnalysisTableSortedByOrderNumber.size())
-                .forEach(i -> eNAnalysisTableSortedByOrderNumber.get(i).setCumulativeItemNumber(i + 1));
+        IntStream.range(0, enAnalysisTableSortedByOrderLineCount.size())
+                .forEach(i -> enAnalysisTableSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
 
-        return eNAnalysisTableSortedByOrderNumber;
+        return enAnalysisTableSortedByOrderLineCount;
     }
 
     /**
