@@ -2,7 +2,7 @@ package com.ruoyi.baidie;
 
 import com.google.common.collect.ImmutableMap;
 import com.ruoyi.data.abc.MaterialBasicInfo;
-import com.ruoyi.web.controller.system.ABCAnalyseController;
+import com.ruoyi.data.abc.OrderMaterialInfo;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,7 +51,7 @@ public class BaidieProcessor {
     public static Map<String, List<?>> importABCGroupTwo(MultipartFile importFile) throws IOException {
         return importFromFileAndProcess(
                 importFile,
-                ABCAnalyseController.Data5Entry.class,
+                OrderMaterialInfo.class,
                 "data5",
                 Map.of("data3", ABCClassifier::sortByOutboundFrequency));
     }
@@ -70,7 +70,7 @@ public class BaidieProcessor {
     public static Map<String, List<?>> importABCGroupThree(MultipartFile importFile) throws IOException {
         return importFromFileAndProcess(
                 importFile,
-                ABCAnalyseController.Data5Entry.class,
+                OrderMaterialInfo.class,
                 "data5",
                 Map.of("data4", ABCClassifier::sortByMaterialOutboundQuantity));
     }

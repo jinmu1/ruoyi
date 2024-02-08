@@ -3,7 +3,7 @@ package com.ruoyi.web.controller.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.data.abc.MaterialBasicInfo;
-import com.ruoyi.web.controller.system.ABCAnalyseController;
+import com.ruoyi.data.abc.OrderMaterialInfo;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -66,8 +66,8 @@ public class BaidieUtilsTest {
         HashMap<String, List<?>> jsonKeyToValue = new HashMap<>();
         List<MaterialBasicInfo> list1 = new ArrayList<>();
         list1.add(new MaterialBasicInfo());
-        List<ABCAnalyseController.Data5Entry> list2 = new ArrayList<>();
-        list2.add(new ABCAnalyseController.Data5Entry());
+        List<OrderMaterialInfo> list2 = new ArrayList<>();
+        list2.add(new OrderMaterialInfo());
         jsonKeyToValue.put("key1", list1);
         jsonKeyToValue.put("key2", list2);
 

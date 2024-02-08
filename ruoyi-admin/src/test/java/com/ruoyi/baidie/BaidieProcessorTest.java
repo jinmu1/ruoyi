@@ -1,8 +1,7 @@
 package com.ruoyi.baidie;
 
 import com.google.common.collect.ImmutableSet;
-import com.ruoyi.data.abc.MaterialBasicInfo;
-import com.ruoyi.web.controller.system.ABCAnalyseController;
+import com.ruoyi.data.abc.*;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -65,8 +64,8 @@ public class BaidieProcessorTest {
         assertEquals(Double.valueOf(60), Double.valueOf(data1Entries.get(10).getSellingPrice()));
 
         // Make sure data from 'data2' key is correct.
-        final List<ABCAnalyseController.Data2Entry> data2Entries =
-                (List<ABCAnalyseController.Data2Entry>) resultMap.get("data2");
+        final List<MaterialValueInfo> data2Entries =
+                (List<MaterialValueInfo>) resultMap.get("data2");
         assertEquals(data2Entries.size(), 11);
 
         // Pick some random entry to verify
@@ -117,8 +116,8 @@ public class BaidieProcessorTest {
         assertEquals(resultMap.keySet(), ImmutableSet.of("data3", "data5"));
 
         // Make sure data from 'data3' key is correct.
-        final List<ABCAnalyseController.Data3Entry> data3Entries =
-                (List<ABCAnalyseController.Data3Entry>) resultMap.get("data3");
+        final List<MaterialOutboundFrequencyInfo> data3Entries =
+                (List<MaterialOutboundFrequencyInfo>) resultMap.get("data3");
         assertEquals(5, data3Entries.size());
         assertEquals("4703710", data3Entries.get(0).getMaterialCode());
         assertEquals(223, data3Entries.get(0).getOutboundFrequency());
@@ -127,8 +126,8 @@ public class BaidieProcessorTest {
         assertEquals(18, data3Entries.get(3).getOutboundFrequency());
 
         // Make sure data from 'data5' key is correct.
-        final List<ABCAnalyseController.Data5Entry> data5Entries =
-                (List<ABCAnalyseController.Data5Entry>) resultMap.get("data5");
+        final List<OrderMaterialInfo> data5Entries =
+                (List<OrderMaterialInfo>) resultMap.get("data5");
         assertEquals(340, data5Entries.size());
 
         // Pick some random entry to verify
@@ -190,8 +189,8 @@ public class BaidieProcessorTest {
         assertEquals(ImmutableSet.of("data4", "data5"), resultMap.keySet());
 
         // Make sure data from 'data4' key is correct.
-        final List<ABCAnalyseController.Data4Entry> data4Entries =
-                (List<ABCAnalyseController.Data4Entry>) resultMap.get("data4");
+        final List<MaterialOutboundQuantityInfo> data4Entries =
+                (List<MaterialOutboundQuantityInfo>) resultMap.get("data4");
         assertEquals(5, data4Entries.size());
 
         //出库量:764
