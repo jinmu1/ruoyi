@@ -137,23 +137,23 @@ public class EIQClassifier {
      * @param eiqBasicTableList 导入的基础数据
      * @return 处理后的数据
      */
-    public static List<EQAnalysisTable> getEQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
+    public static List<EQAnalysisInfo> getEQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
         //step1: 首先将数据按订单编码重组
         final Map<String, List<EIQBasicTable>> dataGroupByOrderNumber =
                 eiqBasicTableList.stream().collect(
                         Collectors.groupingBy(EIQBasicTable::getOrderNumber));
 
         //step2: 统计每个订单编码的数据，然后降序序排序
-        final List<EQAnalysisTable> eqAnalysisTableSortedByOrderLineCount =
+        final List<EQAnalysisInfo> eqAnalysisInfoSortedByOrderLineCount =
                 dataGroupByOrderNumber.entrySet().stream()
                         .map(entry -> calculateOrderQuantityInfo(entry.getKey(), entry.getValue()))
-                        .sorted(Comparator.comparing(EQAnalysisTable::getTotalDeliveredQuantity, Comparator.reverseOrder()))
+                        .sorted(Comparator.comparing(EQAnalysisInfo::getTotalDeliveredQuantity, Comparator.reverseOrder()))
                         .collect(Collectors.toList());
 
         //step3:设置一个自增的序号
-        IntStream.range(0, eqAnalysisTableSortedByOrderLineCount.size())
-                .forEach(i -> eqAnalysisTableSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
-        return eqAnalysisTableSortedByOrderLineCount;
+        IntStream.range(0, eqAnalysisInfoSortedByOrderLineCount.size())
+                .forEach(i -> eqAnalysisInfoSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
+        return eqAnalysisInfoSortedByOrderLineCount;
     }
 
     /***
@@ -162,14 +162,14 @@ public class EIQClassifier {
      * @param eiqBasicTables
      * @return
      */
-    private static EQAnalysisTable calculateOrderQuantityInfo(String key,
-                                                              List<EIQBasicTable> eiqBasicTables) {
-        EQAnalysisTable eqAnalysisTable = new EQAnalysisTable();
-        eqAnalysisTable.setOrderNumber(key);
-        eqAnalysisTable.setTotalDeliveredQuantity(eiqBasicTables.stream()
+    private static EQAnalysisInfo calculateOrderQuantityInfo(String key,
+                                                             List<EIQBasicTable> eiqBasicTables) {
+        EQAnalysisInfo eqAnalysisInfo = new EQAnalysisInfo();
+        eqAnalysisInfo.setOrderNumber(key);
+        eqAnalysisInfo.setTotalDeliveredQuantity(eiqBasicTables.stream()
                 .mapToDouble(EIQBasicTable::getDeliveryQuantity)
                 .sum());
-        return eqAnalysisTable;
+        return eqAnalysisInfo;
     }
 
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 /****
  * EQ分类---对订单-物料数量统计
  */
-public  class EQAnalysisTable {
+public  class EQAnalysisInfo {
     @Getter
     @Setter
     @JsonProperty("订单编号")
