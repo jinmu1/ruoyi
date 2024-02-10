@@ -1,3 +1,4 @@
+// 第一组下拉菜单的id和对应的正确选项值。
 const ABC_SELECT_GROUP_ONE_ANSWERS = new Map([
     ["s1", 1],
     ["s2", 2],
@@ -14,6 +15,8 @@ const ABC_SELECT_GROUP_ONE_ANSWERS = new Map([
  * @param numSubmitCounter 总共提交按钮的次数
  * @param numDropdownCorrectOp  总共下拉菜单正确选择的次数。
  * @param refreshCallback  如果所有选择都符合对应的答案，调用这个函数。
+ *
+ * 返回更新后的 【提交次数， 选择正确次数】
  */
 function submitSelectGroupAndRefresh(
     selectGroupAnswerMap,
