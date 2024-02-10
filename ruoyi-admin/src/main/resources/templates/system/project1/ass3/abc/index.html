@@ -768,8 +768,9 @@
     var ctx = [[@{/}]];
     var prefix = ctx + "system/abc";
     var data,data1,data2,data3,data4,data5;
-    var total =0;
-    var n=0;
+    // TODO: 计算分数的方式？？
+    var total =0;  // 总共提交测试按钮的次数（每组下拉菜单的一次提交算一次）
+    var n=0; // 下拉菜单操作次数，每次下拉菜单选错，算一次。
     function end(){
         n=(n)/(total);
         window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
@@ -793,76 +794,18 @@
         });
     });
 
-    function submit(){
-        var s1 = $('#s1 option:selected').val();
-        var s2 = $('#s2 option:selected').val();
-        var s3 = $('#s3 option:selected').val();
-        var s4 = $('#s4 option:selected').val();
-        var s5 = $('#s5 option:selected').val();
-        var s6 = $('#s6 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=1){
-            $('#s1').css("background-color","red");
-            setTimeout(function() {
-                $('#s1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#s2').css("background-color","red");
-            setTimeout(function() {
-                $('#s2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
+    function submit() {
+        const resultCounters = submitSelectGroupAndRefresh(
+            ABC_SELECT_GROUP_ONE_ANSWERS,
+            total,
+            n,
+            loadTable6);
 
-        }
-        if(s3!=4){
-            $('#s3').css("background-color","red");
-            setTimeout(function() {
-                $('#s3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#s4').css("background-color","red");
-            setTimeout(function() {
-                $('#s4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=2){
-            $('#s5').css("background-color","red");
-            setTimeout(function() {
-                $('#s5').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(s6!=1){
-            $('#s6').css("background-color","red");
-            setTimeout(function() {
-                $('#s6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(m==0){
-            addResutl("s1",s1);
-            addResutl("s2",s2);
-            addResutl("s3",s3);
-            addResutl("s4",s4);
-            addResutl("s5",s5);
-            addResutl("s6",s6);
-            n++;
-            loadTable6();
-        }
-
+        // TODO: simplify this.
+        total = resultCounters[0];
+        n = resultCounters[1];
     }
-    function addResutl(opId,opValue) {
-        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
-        });
-    }
+
     function submit1(){
         var s1 = $('#s11 option:selected').val();
         var s2 = $('#s12 option:selected').val();
@@ -1844,6 +1787,9 @@
             //data3重新赋值后，加载与data3相关的调用方法
             submit2(); //重新提交第三个表对应的表
             reloadX4(); //重新提交第三个表对应的表
+    }
+
+    function submitDropDownMenu() {
     }
 </script>
 </body>
