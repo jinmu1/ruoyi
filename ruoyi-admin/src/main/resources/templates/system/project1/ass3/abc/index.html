@@ -140,7 +140,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="submitTableGroup1()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -380,7 +380,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="submitTableGroup2()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -618,7 +618,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="submitTableGroup3()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -768,12 +768,10 @@
     var ctx = [[@{/}]];
     var prefix = ctx + "system/abc";
     var data,data1,data2,data3,data4,data5;
-    // TODO: 计算分数的方式？？
-    var total =0;  // 总共提交测试按钮的次数（每组下拉菜单的一次提交算一次）
-    var n=0; // 下拉菜单操作次数，每次下拉菜单选错，算一次。
+    var baidieScore = new BaidieScore();
     function end(){
-        n=(n)/(total);
-        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+        const score = baidieScore.getScore();
+        window.location.href=ctx+"end?score="+score+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
     }
     $.getJSON("../../../file/abc.json", function (data) {
         data1=data.data1;
@@ -794,149 +792,31 @@
         });
     });
 
-    function submit() {
-        const resultCounters = submitSelectGroupAndRefresh(
+    function submitTableGroup1() {
+        submitSelectGroupAndRefresh(
             ABC_SELECT_GROUP_ONE_ANSWERS,
-            total,
-            n,
+            baidieScore,
             loadTable6);
-
-        // TODO: simplify this.
-        total = resultCounters[0];
-        n = resultCounters[1];
     }
 
-    function submit1(){
-        var s1 = $('#s11 option:selected').val();
-        var s2 = $('#s12 option:selected').val();
-        var s3 = $('#s13 option:selected').val();
-        var s4 = $('#s14 option:selected').val();
-        var s5 = $('#s15 option:selected').val();
-        var s6 = $('#s16 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=4){
-            $('#s11').css("background-color","red");
-            setTimeout(function() {
-                $('#s11').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=3){
-            $('#s12').css("background-color","red");
-            setTimeout(function() {
-                $('#s12').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#s13').css("background-color","red");
-            setTimeout(function() {
-                $('#s13').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s14').css("background-color","red");
-            setTimeout(function() {
-                $('#s14').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=4){
-            $('#s15').css("background-color","red");
-            setTimeout(function() {
-                $('#s15').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=3){
-            $('#s16').css("background-color","red");
-            setTimeout(function() {
-                $('#s16').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("s11",s1);
-            addResutl("s12",s2);
-            addResutl("s13",s3);
-            addResutl("s14",s4);
-            addResutl("s15",s5);
-            addResutl("s16",s6);
-            n++;
-            loadTable8();
-        }
-
+    function submitTableGroup2(){
+        submitSelectGroupAndRefresh(
+            ABC_SELECT_GROUP_TWO_ANSWERS,
+            baidieScore,
+            loadTable8);
     }
-    function submit2(){
-        var s1 = $('#s21 option:selected').val();
-        var s2 = $('#s22 option:selected').val();
-        var s3 = $('#s23 option:selected').val();
-        var s4 = $('#s24 option:selected').val();
-        var s5 = $('#s25 option:selected').val();
-        var s6 = $('#s26 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=3){
-            $('#s21').css("background-color","red");
-            setTimeout(function() {
-                $('#s21').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#s22').css("background-color","red");
-            setTimeout(function() {
-                $('#s22').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=1){
-            $('#s23').css("background-color","red");
-            setTimeout(function() {
-                $('#s23').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s24').css("background-color","red");
-            setTimeout(function() {
-                $('#s24').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=3){
-            $('#s25').css("background-color","red");
-            setTimeout(function() {
-                $('#s25').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=3){
-            $('#s26').css("background-color","red");
-            setTimeout(function() {
-                $('#s26').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        n=n+m;
-        if(m==0){
-            addResutl("s21",s1);
-            addResutl("s22",s2);
-            addResutl("s23",s3);
-            addResutl("s24",s4);
-            addResutl("s25",s5);
-            addResutl("s26",s6);
-            n++;
-            loadTable9();
-        }
 
+    function submitTableGroup3(){
+        submitSelectGroupAndRefresh(
+            ABC_SELECT_GROUP_THREE_ANSWERS,
+            baidieScore,
+            loadTable9);
     }
+
     function reloadX() {
         var x=$("#x option:selected").val();
         var y=$("#y option:selected").val();
-        total++;
+        baidieScore.incNumSubmit();
         var m=0;
         if(x!="物料累计品目数百分比"){
             $('#x').css("background-color","red");
@@ -957,7 +837,7 @@
         if (m==0){
             addResutl("x",x);
             addResutl("y",y);
-            n++;
+            baidieScore.incNumDropDownCorrectOpBy(1);
             load3();
         }
     }
@@ -1164,7 +1044,7 @@
     function reloadX3() {
         var x=$("#x1 option:selected").val();
         var y=$("#y1 option:selected").val();
-        total++;
+        baidieScore.incNumSubmit();
         var m=0;
         if(x!="物料累计品目数百分比"){
             $('#x1').css("background-color","red");
@@ -1180,7 +1060,7 @@
                 $('#y1').css("background-color","white");
             },3000); //一秒内不能重复点击
         }
-        n=n+m;
+        baidieScore.incNumDropDownCorrectOpBy(m);
         if (m==0){
             addResutl("x1",x);
             addResutl("y1",y);
@@ -1380,7 +1260,7 @@
     function reloadX4() {
         var x=$("#x2 option:selected").val();
         var y=$("#y2 option:selected").val();
-        total++;
+        baidieScore.incNumSubmit();
         var m=0;
         if(x!="物料累计品目数百分比"){
             $('#x2').css("background-color","red");
@@ -1388,7 +1268,6 @@
                 $('#x2').css("background-color","white");
             },3000); //一秒内不能重复点击
             m++;
-
         }
         if(y!="累计出库量百分比"){
             m++;
@@ -1397,11 +1276,11 @@
                 $('#y2').css("background-color","white");
             },3000); //一秒内不能重复点击
         }
-        n=n+m;
+        baidieScore.incNumDropDownCorrectOpBy(m);
         if (m==0){
             addResutl("x2",x);
             addResutl("y2",y);
-            n++;
+            baidieScore.incNumDropDownCorrectOpBy(1);
             load8();
         }
     }
@@ -1755,7 +1634,7 @@
              data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
              data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
             $('#bootstrap-table').bootstrapTable('load', data1); //刷新第一个表bootstrap-table
-            submit(); //重新提交第一个表对应的表
+            submitTableGroup1(); //重新提交第一个表对应的表
             reloadX(); //重新提交第一个表对应的图
     }
     /***
@@ -1770,7 +1649,7 @@
             //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
             $('#bootstrap-table3').bootstrapTable('load', data5); //刷新第二个表bootstrap-table3
             //data3重新赋值后，加载与data3相关的调用方法
-            submit1(); //重新提交第二个表对应的表
+            submitTableGroup2(); //重新提交第二个表对应的表
             reloadX3(); //重新提交第二个表对应的图
     }
     /***
@@ -1785,7 +1664,7 @@
             //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
             $('#bootstrap-table4').bootstrapTable('load', data5); //刷新第三个表bootstrap-table3
             //data3重新赋值后，加载与data3相关的调用方法
-            submit2(); //重新提交第三个表对应的表
+            submitTableGroup3(); //重新提交第三个表对应的表
             reloadX4(); //重新提交第三个表对应的表
     }
 
