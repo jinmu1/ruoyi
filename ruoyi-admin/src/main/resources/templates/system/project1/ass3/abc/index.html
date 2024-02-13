@@ -38,7 +38,7 @@
             <div class="btn-group-sm" role="group">
             </div>
             <div class="btn-group-sm" role="group">
-                <a class="btn btn-info" onclick="importData('system/abc/importData', updateFirstGroup)">
+                <a class="btn btn-info" onclick="importData('system/abc/importData', firstGroupPostImport)">
                     <i class="fa fa-upload"></i> 导入
                 </a>
             </div>
@@ -275,7 +275,7 @@
                 </div>
 
                 <div class="ibox-content" style="height:700px">
-                    <a class="btn btn-info" onclick="importData('system/abc/importData1', updateSecondGroup)" >
+                    <a class="btn btn-info" onclick="importData('system/abc/importData1', secondGroupPostImport)" >
                         <i class="fa fa-upload"></i> 导入
                     </a>
                     <table class="col-sm-12 select-table table-striped"
@@ -511,7 +511,7 @@
                 </div>
                 <div class="ibox-content" style="height:700px">
                     <div class="btn-group-sm" role="group">
-                        <a class="btn btn-info" onclick="importData('system/abc/importData2', updateThirdGroup)" >
+                        <a class="btn btn-info" onclick="importData('system/abc/importData2', thirdGroupPostImport)" >
                             <i class="fa fa-upload"></i> 导入
                         </a>
                     </div>
@@ -779,38 +779,243 @@
         data3=data.data3;
         data4=data.data4;
         data5=data.data5;
-        loadTable7();
-        load5();
-        load7();
+        // 初始化所有的表
+        initAllTables();
+        // 首先显示每一组的主表。
+        refreshGroupOneOriginalTable(data1);
+        refreshGroupTwoOriginalTable(data5);
+        refreshGroupThreeOriginalTable(data5);
 
         $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
             var d = result.rows;
             for(var i=0;i<result.total;i++){
                 $("#"+d[i].opId).val(d[i].opValue);
             }
-
         });
     });
+
+    function initAllTables() {
+        initGroupOneTables();
+        initGroupTwoTables();
+        initGroupThreeTables();
+    }
+
+    function initGroupOneTables() {
+        const inventoryTableColumns = [
+            {
+                field: '物料编码',
+                title: '物料编码'
+            },
+            {
+                field: '平均库存',
+                title: '平均库存（件/月）'
+            },
+            {
+                field: '当月出库总量',
+                title: '当月出库总量（件）'
+            },
+            {
+                field: '库存周转次数',
+                title: '库存周转次数'
+            },
+            {
+                field: '库存周转天数',
+                title: '库存周转天数'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
+            }
+        ];
+        initBaidieTable("bootstrap-table", inventoryTableColumns);
+
+        const valueBasedABCTableColumns = [
+            {
+                field: '物料编码',
+                title: '物料编码'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价'
+            },
+            {
+                field: '平均库存',
+                title: '平均库存'
+            },
+            {
+                field: '平均资金占用额',
+                title: '平均资金占用额'
+            },
+            {
+                field: '平均资金占用额累计',
+                title: '平均资金占用额累计'
+            },
+            {
+                field: '平均资金占用额累计百分比',
+                title: '平均资金占用额累计百分比'
+            },
+            {
+                field: '物料累计品目数',
+                title: '物料累计品目数'
+            },
+            {
+                field: '物料累计品目数百分比',
+                title: '物料累计品目数百分比'
+            }];
+        initBaidieTable("bootstrap-table5", valueBasedABCTableColumns);
+    }
+
+    function initGroupTwoTables() {
+        const outboundTableColumns = [
+            {
+                field: '出库日期',
+                title: '出库日期'
+            },
+            {
+                field: '订单编号',
+                title: '订单编号'
+            },
+            {
+                field: '物料编号',
+                title: '物料编号'
+            },
+            {
+                field: '物料名称',
+                title: '物料名称'
+            },
+            {
+                field: '出货数量',
+                title: '出货数量'
+            },
+            {
+                field: '出货单位',
+                title: '出货单位'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
+            },
+            {
+                field: '托盘装件数',
+                title: '托盘装件数'
+            }];
+        initBaidieTable("bootstrap-table3", outboundTableColumns);
+
+        const outboundFrequencyTableColumns = [
+            {
+                field: '物料编码',
+                title: '物料编码'
+            },
+            {
+                field: '出库频次',
+                title: '出库频次'
+            },
+            {
+                field: '累计出库频次',
+                title: '累计出库频次'
+            },
+            {
+                field: '累计出库频次百分比',
+                title: '累计出库频次百分比'
+            },
+            {
+                field: '物料累计品目数',
+                title: '物料累计品目数'
+            },
+            {
+                field: '物料累计品目数百分比',
+                title: '物料累计品目数百分比'
+            }];
+        initBaidieTable("bootstrap-table7", outboundFrequencyTableColumns);
+    }
+
+    function initGroupThreeTables() {
+        const groupThreeOriginalTable = [
+            {
+                field: '出库日期',
+                title: '出库日期'
+            },
+            {
+                field: '订单编号',
+                title: '订单编号'
+            },
+            {
+                field: '物料编号',
+                title: '物料编号'
+            },
+            {
+                field: '物料名称',
+                title: '物料名称'
+            },
+            {
+                field: '出货数量',
+                title: '出货数量'
+            },
+            {
+                field: '出货单位',
+                title: '出货单位'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
+            },
+            {
+                field: '托盘装件数',
+                title: '托盘装件数'
+            }];
+        initBaidieTable("bootstrap-table4", groupThreeOriginalTable);
+
+        const groupThreeDerivedTable = [
+            {
+                field: '物料编码',
+                title: '物料编码'
+            },
+            {
+                field: '物料描述',
+                title: '物料描述'
+            },
+            {
+                field: '出库量',
+                title: '出库量'
+            },
+            {
+                field: '累计出库量',
+                title: '累计出库量'
+            },
+            {
+                field: '累计出库量百分比',
+                title: '累计出库量百分比'
+            },
+            {
+                field: '物料累计品目数',
+                title: '物料累计品目数'
+            },
+            {
+                field: '物料累计品目数百分比',
+                title: '物料累计品目数百分比'
+            }];
+        initBaidieTable("bootstrap-table8", groupThreeDerivedTable);
+    }
 
     function submitTableGroup1() {
         submitSelectGroupAndRefresh(
             ABC_SELECT_GROUP_ONE_ANSWERS,
             baidieScore,
-            loadTable6);
+            refreshGroupOneDerivedTable);
     }
 
     function submitTableGroup2(){
         submitSelectGroupAndRefresh(
             ABC_SELECT_GROUP_TWO_ANSWERS,
             baidieScore,
-            loadTable8);
+            refreshGroupTwoDerivedTable);
     }
 
     function submitTableGroup3(){
         submitSelectGroupAndRefresh(
             ABC_SELECT_GROUP_THREE_ANSWERS,
             baidieScore,
-            loadTable9);
+            refreshGroupThreeDerivedTable);
     }
 
     function reloadX() {
@@ -988,59 +1193,6 @@
 
         myChart1.setOption(option);
     }
-    function load5() {
-        var options = {
-            id:"bootstrap-table3",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编号',
-                    title: '物料编号'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出货数量',
-                    title: '出货数量'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                },
-                {
-                    field: '托盘装件数',
-                    title: '托盘装件数'
-                }]
-        };
-        $.table.init(options);
-    }
     function reloadX3() {
         var x=$("#x1 option:selected").val();
         var y=$("#y1 option:selected").val();
@@ -1204,59 +1356,7 @@
             myChart1.setOption(option);
 
     }
-    function load7() {
-        var options = {
-            id:"bootstrap-table4",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编号',
-                    title: '物料编号'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出货数量',
-                    title: '出货数量'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                },
-                {
-                    field: '托盘装件数',
-                    title: '托盘装件数'
-                }]
-        };
-        $.table.init(options);
-    }
+
     function reloadX4() {
         var x=$("#x2 option:selected").val();
         var y=$("#y2 option:selected").val();
@@ -1429,199 +1529,26 @@
             myChart1.setOption(option);
 
     }
-    function loadTable6(){
-        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table5
-        $('#bootstrap-table5').bootstrapTable('destroy').bootstrapTable({
-            id:"bootstrap-table5",
-            data:data2,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价'
-                },
-                {
-                    field: '平均库存',
-                    title: '平均库存'
-                },
-                {
-                    field: '平均资金占用额',
-                    title: '平均资金占用额'
-                },
-                {
-                    field: '平均资金占用额累计',
-                    title: '平均资金占用额累计'
-                },
-                {
-                    field: '平均资金占用额累计百分比',
-                    title: '平均资金占用额累计百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        });
-    }
-    function loadTable8(){
-        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table7
-        $('#bootstrap-table7').bootstrapTable('destroy').bootstrapTable({
-            id:"bootstrap-table7",
-            data:data3,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '出库频次',
-                    title: '出库频次'
-                },
-                {
-                    field: '累计出库频次',
-                    title: '累计出库频次'
-                },
-                {
-                    field: '累计出库频次百分比',
-                    title: '累计出库频次百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        });
-    }
-    function loadTable9(){
-        //增加了bootstrapTable('destroy'),每次调用该方法时，会重新加载bootstrap-table8
-        $('#bootstrap-table8').bootstrapTable('destroy').bootstrapTable({
-            id:"bootstrap-table8",
-            data:data4,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '物料描述',
-                    title: '物料描述'
-                },
-                {
-                    field: '出库量',
-                    title: '出库量'
-                },
-                {
-                    field: '累计出库量',
-                    title: '累计出库量'
-                },
-                {
-                    field: '累计出库量百分比',
-                    title: '累计出库量百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        });
-    }
-    function  loadTable7(){
-        var options = {
-            id:"bootstrap-table",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '平均库存',
-                    title: '平均库存（件/月）'
-                },
-                {
-                    field: '当月出库总量',
-                    title: '当月出库总量（件）'
-                },
-                {
-                    field: '库存周转次数',
-                    title: '库存周转次数'
-                },
-                {
-                    field: '库存周转天数',
-                    title: '库存周转天数'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                }
-            ]
-        };
-        $.table.init(options);
 
+    function  refreshGroupOneOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table", data);
+    }
+    function refreshGroupOneDerivedTable(){
+        refreshBaidieTable("bootstrap-table5", data2);
+    }
+
+    function refreshGroupTwoOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table3", data);
+    }
+    function refreshGroupTwoDerivedTable(){
+        refreshBaidieTable("bootstrap-table7", data3);
+    }
+
+    function refreshGroupThreeOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table4", data);
+    }
+    function refreshGroupThreeDerivedTable(){
+        refreshBaidieTable("bootstrap-table8", data4);
     }
 
     /***
@@ -1630,12 +1557,12 @@
      * @param url
      * @param result
      */
-    function updateFirstGroup(result) {
-             data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
-             data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
-            $('#bootstrap-table').bootstrapTable('load', data1); //刷新第一个表bootstrap-table
-            submitTableGroup1(); //重新提交第一个表对应的表
-            reloadX(); //重新提交第一个表对应的图
+    function firstGroupPostImport(result) {
+        data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
+        data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
+        refreshGroupOneOriginalTable(data1); //刷新第一个表bootstrap-table
+        submitTableGroup1(); //重新提交第一个表对应的表
+        reloadX(); //重新提交第一个表对应的图
     }
     /***
      * 第二个表单的导入后返回的数据处理方法
@@ -1643,14 +1570,15 @@
      * @param url
      * @param result
      */
-    function updateSecondGroup(result) {
-            data3=JSON.parse(result.data.data3); //对返回的result中json字符串中的值data3赋值data3
-            data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
-            //data5重新赋值后，重新加载bootstrap-table3使用的data5 加载与data5相关的调用方法submit1，reloadX3
-            $('#bootstrap-table3').bootstrapTable('load', data5); //刷新第二个表bootstrap-table3
-            //data3重新赋值后，加载与data3相关的调用方法
-            submitTableGroup2(); //重新提交第二个表对应的表
-            reloadX3(); //重新提交第二个表对应的图
+    function secondGroupPostImport(result) {
+        data3=JSON.parse(result.data.data3); //对返回的result中json字符串中的值data3赋值data3
+        data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
+
+        // 刷新原始表的显示。
+        refreshGroupTwoOriginalTable(data5);
+        //data3重新赋值后，加载与data3相关的调用方法
+        submitTableGroup2(); //重新提交第二个表对应的表
+        reloadX3(); //重新提交第二个表对应的图
     }
     /***
      * 第三个表单的导入后返回的数据处理方法
@@ -1658,17 +1586,14 @@
      * @param url
      * @param result
      */
-    function updateThirdGroup(result) {
-            data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
-            data4=JSON.parse(result.data.data4); //对返回的result中json字符串中的值data4赋值data4
-            //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
-            $('#bootstrap-table4').bootstrapTable('load', data5); //刷新第三个表bootstrap-table3
-            //data3重新赋值后，加载与data3相关的调用方法
-            submitTableGroup3(); //重新提交第三个表对应的表
-            reloadX4(); //重新提交第三个表对应的表
-    }
-
-    function submitDropDownMenu() {
+    function thirdGroupPostImport(result) {
+        data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
+        data4=JSON.parse(result.data.data4); //对返回的result中json字符串中的值data4赋值data4
+        //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
+        refreshGroupThreeOriginalTable(data5);
+        //data3重新赋值后，加载与data3相关的调用方法
+        submitTableGroup3(); //重新提交第三个表对应的表
+        reloadX4(); //重新提交第三个表对应的表
     }
 </script>
 </body>
