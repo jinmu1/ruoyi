@@ -140,7 +140,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submitTableGroup1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup1TableSelection()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection()" type="button">提交</button>
                             </div>
                         </div>
 
@@ -380,7 +380,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submitTableGroup2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup2TableSelection()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -451,7 +451,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -618,7 +618,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submitTableGroup3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup3TableSelection()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -691,7 +691,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX4()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -766,7 +766,6 @@
 <th:block th:include="include :: echarts-js" />
 <script  th:inline="javascript">
     var ctx = [[@{/}]];
-    var prefix = ctx + "system/abc";
     var data,data1,data2,data3,data4,data5;
     var baidieScore = new BaidieScore();
     function end(){
@@ -997,130 +996,78 @@
         initBaidieTable("bootstrap-table8", groupThreeDerivedTable);
     }
 
-    function submitTableGroup1() {
-        submitSelectGroupAndRefresh(
+    function checkGroup1TableSelection() {
+        checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_ONE_ANSWERS,
             baidieScore,
-            refreshGroupOneDerivedTable);
+            function() {
+                return refreshBaidieTable("bootstrap-table5", data2);
+            }
+        )
     }
 
-    function submitTableGroup2(){
-        submitSelectGroupAndRefresh(
+    function checkGroup2TableSelection(){
+        checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_TWO_ANSWERS,
             baidieScore,
-            refreshGroupTwoDerivedTable);
+            function () {
+                return refreshBaidieTable("bootstrap-table7", data3);
+            }
+        )
     }
 
-    function submitTableGroup3(){
-        submitSelectGroupAndRefresh(
+    function checkGroup3TableSelection() {
+        checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_THREE_ANSWERS,
             baidieScore,
-            refreshGroupThreeDerivedTable);
+            function () {
+                return refreshBaidieTable("bootstrap-table8", data4);
+            }
+        )
     }
 
-    function reloadX() {
-        var x=$("#x option:selected").val();
-        var y=$("#y option:selected").val();
-        baidieScore.incNumSubmit();
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x').css("background-color","red");
-            setTimeout(function() {
-                $('#x').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="平均资金占用额累计百分比"){
-            m++;
-            $('#y').css("background-color","red");
-            setTimeout(function() {
-                $('#y').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-
-        if (m==0){
-            addResutl("x",x);
-            addResutl("y",y);
-            baidieScore.incNumDropDownCorrectOpBy(1);
-            refreshBaidieChart('abc1', data2, '物料累计品目数百分比', '平均资金占用额累计百分比');
-
-        }
+    function checkGroupOneChartSelection() {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_ONE_CHART_ANSWERS,
+            baidieScore,
+            function() {
+                return refreshBaidieChart(
+                    'abc1', data2, '物料累计品目数百分比', '平均资金占用额累计百分比');
+            }
+        )
     }
-    function reloadX3() {
-        var x=$("#x1 option:selected").val();
-        var y=$("#y1 option:selected").val();
-        baidieScore.incNumSubmit();
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x1').css("background-color","red");
-            setTimeout(function() {
-                $('#x1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(y!="累计出库频次百分比"){
-            m++;
-            $('#y1').css("background-color","red");
-            setTimeout(function() {
-                $('#y1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        baidieScore.incNumDropDownCorrectOpBy(m);
-        if (m==0){
-            addResutl("x1",x);
-            addResutl("y1",y);
-            refreshBaidieChart('abc2', data3, '物料累计品目数百分比', '累计出库频次百分比');
-        }
-
+    function checkGroupTwoChartSelection() {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_TWO_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieChart(
+                    'abc2', data3, '物料累计品目数百分比', '累计出库频次百分比');
+            }
+        )
     }
 
-    function reloadX4() {
-        var x=$("#x2 option:selected").val();
-        var y=$("#y2 option:selected").val();
-        baidieScore.incNumSubmit();
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x2').css("background-color","red");
-            setTimeout(function() {
-                $('#x2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(y!="累计出库量百分比"){
-            m++;
-            $('#y2').css("background-color","red");
-            setTimeout(function() {
-                $('#y2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        baidieScore.incNumDropDownCorrectOpBy(m);
-        if (m==0){
-            addResutl("x2",x);
-            addResutl("y2",y);
-            baidieScore.incNumDropDownCorrectOpBy(1);
-            refreshBaidieChart('abc3', data4, '物料累计品目数百分比', '累计出库量百分比');
-        }
+    function checkGroupThreeChartSelection() {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_THREE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieChart(
+                    'abc3', data4, '物料累计品目数百分比', '累计出库量百分比');
+            }
+        )
     }
+
     function  refreshGroupOneOriginalTable(data) {
         refreshBaidieTable("bootstrap-table", data);
-    }
-    function refreshGroupOneDerivedTable(){
-        refreshBaidieTable("bootstrap-table5", data2);
     }
 
     function refreshGroupTwoOriginalTable(data) {
         refreshBaidieTable("bootstrap-table3", data);
     }
-    function refreshGroupTwoDerivedTable(){
-        refreshBaidieTable("bootstrap-table7", data3);
-    }
 
     function refreshGroupThreeOriginalTable(data) {
         refreshBaidieTable("bootstrap-table4", data);
-    }
-    function refreshGroupThreeDerivedTable(){
-        refreshBaidieTable("bootstrap-table8", data4);
     }
 
     /***
@@ -1133,8 +1080,8 @@
         data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
         data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
         refreshGroupOneOriginalTable(data1); //刷新第一个表bootstrap-table
-        submitTableGroup1(); //重新提交第一个表对应的表
-        reloadX(); //重新提交第一个表对应的图
+        checkGroup1TableSelection(); //重新提交第一个表对应的表
+        checkGroupOneChartSelection(); //重新提交第一个表对应的图
     }
     /***
      * 第二个表单的导入后返回的数据处理方法
@@ -1149,8 +1096,8 @@
         // 刷新原始表的显示。
         refreshGroupTwoOriginalTable(data5);
         //data3重新赋值后，加载与data3相关的调用方法
-        submitTableGroup2(); //重新提交第二个表对应的表
-        reloadX3(); //重新提交第二个表对应的图
+        checkGroup2TableSelection(); //重新提交第二个表对应的表
+        checkGroupTwoChartSelection(); //重新提交第二个表对应的图
     }
     /***
      * 第三个表单的导入后返回的数据处理方法
@@ -1161,11 +1108,11 @@
     function thirdGroupPostImport(result) {
         data5=JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
         data4=JSON.parse(result.data.data4); //对返回的result中json字符串中的值data4赋值data4
-        //data5重新赋值后，只重新加载bootstrap-table4的数据，加载与data4相关的调用方法submit2，reloadX4
+        //data5重新赋值后，只重新加载第三组原始表单
         refreshGroupThreeOriginalTable(data5);
         //data3重新赋值后，加载与data3相关的调用方法
-        submitTableGroup3(); //重新提交第三个表对应的表
-        reloadX4(); //重新提交第三个表对应的表
+        checkGroup3TableSelection(); //重新提交第三个表对应的表
+        checkGroupThreeChartSelection(); //重新提交第三个表对应的表
     }
 </script>
 </body>
