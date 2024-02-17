@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIQTableSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                             <p>Y轴</p>
                             <select  name="y" id="y" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='统计周期内每日出库整箱数'  >统计周期内每日出库整箱数</option>
+                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
                                 <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
                                 <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
                                 <option  value='统计周期内每日物料数量'  >统计周期内每日物料数量</option>
@@ -192,7 +192,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadE()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEchartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -268,14 +268,14 @@
                             <select  name="y1" id="y1" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
                                 <option  value='统计周期内订单总行数'  >统计周期内订单总行数</option>
-                                <option  value='统计周期内每日出库整箱数'  >统计周期内每日出库整箱数</option>
+                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
                                 <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
                                 <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadN()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkNChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -350,7 +350,7 @@
                             <p>Y轴</p>
                             <select  name="y2" id="y2" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='统计周期内每日出库整箱数'  >统计周期内每日出库数量</option>
+                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
                                 <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
                                 <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
                                 <option  value='统计周期内订单总行数'  >统计周期内订单总行数</option>
@@ -358,7 +358,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadQ()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkQChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -488,7 +488,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENTableSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -555,7 +555,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEN()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -638,7 +638,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEN1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENPercentageChartAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -766,7 +766,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQAnalysisSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -814,30 +814,25 @@
                             <p>X轴</p>
                             <select  name="eqx" id="eqx" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='1'  >	订单对应订单行数	</option>
-                                <option  value='2'  >	订单编号	</option>
-                                <option  value='3'  >	物料编号	</option>
-                                <option  value='4'  >	订单编号累计品目数	</option>
-
-
-
+                                <option  value='订单对应订单行数'  >	订单对应订单行数	</option>
+                                <option  value='订单编号'  >	订单编号	</option>
+                                <option  value='物料编号'  >	物料编号	</option>
+                                <option  value='订单编号累计品目数'  >	订单编号累计品目数	</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
                             <select  name="eqy" id="eqy" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='1'  >	订单编号	</option>
-                                <option  value='2'  >	订单对应的出库总数量	</option>
-                                <option  value='3'  >	订单编号累计品目数	</option>
-                                <option  value='4'  >	物料编号	</option>
-
-
+                                <option  value='订单编号'  >	订单编号	</option>
+                                <option  value='订单对应的出库总数量'  >	订单对应的出库总数量	</option>
+                                <option  value='订单编号累计品目数'  >	订单编号累计品目数	</option>
+                                <option  value='物料编号'  >	物料编号	</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEQ()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -901,28 +896,26 @@
                             <p>X轴</p>
                             <select name="eqx1" id="eqx1" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='1'  >	订单编号	</option>
-                                <option  value='2'  >	物料编号	</option>
-                                <option  value='3'  >	订单出库总数量出现次数占比	</option>
-                                <option  value='4'  >	该订单对应的出库总数量分布区间	</option>
-
-
+                                <option  value='订单编号'  >	订单编号	</option>
+                                <option  value='物料编号'  >	物料编号	</option>
+                                <option  value='订单出库总数量出现次数占比'  >	订单出库总数量出现次数占比	</option>
+                                <option  value='该订单对应的出库总数量分布区间'  >	该订单对应的出库总数量分布区间	</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
                             <select  name="eqy1" id="eqy1" type="text"  class="form-control"    >
                                 <option  value='请选择'  >请选择</option>
-                                <option  value='1'  >	区间内订单出库总数量出现次数占比	</option>
-                                <option  value='2'  >	物料编号	</option>
-                                <option  value='3'  >	该订单对应的出库总数量	</option>
-                                <option  value='4'  >	订单编号	</option>
+                                <option  value='区间内订单出库总数量出现次数占比'  >	区间内订单出库总数量出现次数占比	</option>
+                                <option  value='物料编号'  >	物料编号	</option>
+                                <option  value='该订单对应的出库总数量'  >	该订单对应的出库总数量	</option>
+                                <option  value='订单编号'  >	订单编号	</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEQ1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQDistChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1053,7 +1046,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIAnalysisSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1120,7 +1113,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEI()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1203,7 +1196,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadEI1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIPercentageChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1312,7 +1305,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit4()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkIKAnalysisTableSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1379,7 +1372,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadIK()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkIKChartSelectionAndRefresh()" type="button">提交</button>
                             </div>
                         </div>
                     </div>
@@ -1454,11 +1447,10 @@
 <th:block th:include="include :: echarts-js" />
 <script  th:inline="javascript">
     var ctx = [[@{/}]];
-    var total =0;
-    var n=0;
+    var baidieScore = new BaidieScore();
     function end(){
-        n=(n)/(total);
-        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+        const score = baidieScore.getScore();
+        window.location.href=ctx+"end?score="+score+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
     }
 
     var data1,data2,data3,data4,data5,data6;
@@ -1469,1576 +1461,443 @@
         data4=data.data4;
         data5=data.data5;
         data6=data.data6;
-        loadTable1();
+
+        en_percentage_data = data.en_percentage_data;
+        // TODO: these two static data is exactly the same.
+        // looks suspicious to me.
+        eq_distribution_data = data.eq_distribution_data;
+        ei_percentage_data = data.ei_percentage_data;
+
+        loadEIQOrigTable();
+
+        // Initialize all the derived tables
+        initBaidieTable("bootstrap-table2", EIQ_ANALYSIS_TABLE_COLUMNS);
+        initBaidieTable("bootstrap-table3", EN_ANALYSIS_TABLE_COLUMNS);
+        initBaidieTable("bootstrap-table4", EQ_ANALYSIS_TABLE_COLUMNS);
+        initBaidieTable("bootstrap-table5", EI_ANALYSIS_TABLE_COLUMNS);
+        initBaidieTable("bootstrap-table6", IK_ANALYSIS_TABLE_COLUMNS);
+
         $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
             var d = result.rows;
             for(var i=0;i<result.total;i++){
                 $("#"+d[i].opId).val(d[i].opValue);
             }
-            submit();
-            submit1();
-            submit2();
-            submit3();
-            submit4();
-            reloadE();
-            reloadN();
-            reloadQ();
-            reloadEN();
-            reloadEN1();
-            reloadEQ();
-            reloadEQ1();
-            reloadEI();
-            reloadEI1();
-            reloadIK();
-        });
+            // EIQ计算结果表单和图表。
+            checkEIQTableSelectionAndRefresh();
+            checkEchartSelectionAndRefresh();
+            checkNChartSelectionAndRefresh();
+            checkQChartSelectionAndRefresh();
 
-        // loadTable2();
-        // load1();
-        // load2();
-        // load3();
-        // loadTable3();
-        // load4();
-        // load5();
-        // loadTable4();
-        // loadTable5();
-        // loadTable6();
-        // load6();
-        // load7();
-        // load8();
-        // load9();
-        // load10();
-        // load11();
+            // EN计算结果表单和图表。
+            checkENTableSelectionAndRefresh();
+            checkENChartSelectionAndRefresh();
+            checkENPercentageChartAndRefresh();
+
+            // EQ计算结果表单和图表。
+            checkEQAnalysisSelectionAndRefresh();
+            checkEQChartSelectionAndRefresh();
+            checkEQDistChartSelectionAndRefresh();
+
+            // EI计算结果表单和图表。
+            checkEIAnalysisSelectionAndRefresh();
+            checkEIChartSelectionAndRefresh();
+            checkEIPercentageChartSelectionAndRefresh();
+
+            // IK计算结果表单和图表。
+            checkIKAnalysisTableSelectionAndRefresh();
+            checkIKChartSelectionAndRefresh();
+        });
     });
     function addResutl(opId,opValue) {
       $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
         });
     }
 
-    function loadTable1() {
-        var options = {
-            id:"bootstrap-table",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编号',
-                    title: '物料编号'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出货数量',
-                    title: '出货数量'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价'
-                },
-                {
-                    field: '托盘装件数',
-                    title: '托盘装件数'
-                },
-                {
-                    field: '换算单位',
-                    title: '换算单位'
-                },
-                {
-                    field: '换算单位1',
-                    title: '换算单位'
-                }]
-        };
-        $.table.init(options);
+    function loadEIQOrigTable() {
+        initBaidieTable("bootstrap-table", EIQ_ORIG_TABLE_COLUMNS);
+        refreshBaidieTable("bootstrap-table", data1);
     }
-    function submit(){
-        var s1 = $('#s1 option:selected').val();
-        var s2 = $('#s2 option:selected').val();
-        var s3 = $('#s3 option:selected').val();
-        var s4 = $('#s4 option:selected').val();
-        var s5 = $('#s5 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=3){
-            $('#s1').css("background-color","red");
-            setTimeout(function() {
-                $('#s1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=4){
-            $('#s2').css("background-color","red");
-            setTimeout(function() {
-                $('#s2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#s3').css("background-color","red");
-            setTimeout(function() {
-                $('#s3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s4').css("background-color","red");
-            setTimeout(function() {
-                $('#s4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=4){
-            $('#s5').css("background-color","red");
-            setTimeout(function() {
-                $('#s5').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){
-            addResutl("s1",s1);
-            addResutl("s2",s2);
-            addResutl("s3",s3);
-            addResutl("s4",s4);
-            addResutl("s5",s5);
-            n++;
-
-            loadTable2();
-        }
-
-    }
-    function loadTable2() {
-        var options = {
-            id:"bootstrap-table2",
-            data:data2,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            modalName: "【请填写功能名称】",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '日期',
-                    title: '日期'
-                },
-                {
-                    field: 'E分析',
-                    title: 'E分析（每日订单数量统计数值）'
-                },
-                {
-                    field: 'N分析',
-                    title: 'N分析（每日订单行数统计数值）'
-                },
-                {
-                    field: 'Q分析',
-                    title: 'Q分析（每日出库数量统计数值）'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reloadE(){
-        var x=$("#x option:selected").val();
-        var y=$("#y option:selected").val();
-        var m=0;
-        total++;
-        if(x!="出库日期"){
-            $('#x').css("background-color","red");
-            setTimeout(function() {
-                $('#x').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="统计周期内每日订单数量"){
-            m++;
-            $('#y').css("background-color","red");
-            setTimeout(function() {
-                $('#y').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("x",x);
-            addResutl("y",y);
-             n++;
-            load1();
-        }
-    }
-    function load1(){
-        var myChart = echarts.init(document.getElementById('e'), 'macarons');
-        var d = data2;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].日期);
-            arr2.push(d[i].E分析);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function reloadN(){
-        var x=$("#x1 option:selected").val();
-        var y=$("#y1 option:selected").val();
-        var m=0;
-        total++;
-        if(x!="出库日期"){
-            $('#x1').css("background-color","red");
-            setTimeout(function() {
-                $('#x1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="统计周期内每日订单行数"){
-            m++;
-            $('#y1').css("background-color","red");
-            setTimeout(function() {
-                $('#y1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("x1",x);
-            addResutl("y1",y);
-            n++;
-            load2();
-        }
-    }
-    function load2(){
-        var myChart = echarts.init(document.getElementById('n'), 'macarons');
-
-        var d = data2;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].日期);
-            arr2.push(d[i].N分析);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function reloadQ(){
-        var x=$("#x2 option:selected").val();
-        var y=$("#y2 option:selected").val();
-        var m=0;
-        total++;
-        if(x!="出库日期"){
-            $('#x2').css("background-color","red");
-            setTimeout(function() {
-                $('#x2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="统计周期内每日出库整箱数"){
-            m++;
-            $('#y2').css("background-color","red");
-            setTimeout(function() {
-                $('#y2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("x2",x);
-            addResutl("y2",y);
-            n++;
-            load3();
-        }
-    }
-    function load3(){
-        var myChart = echarts.init(document.getElementById('q'), 'macarons');
-        var d = data2;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].日期);
-            arr2.push(d[i].Q分析);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function submit1(){
-        var s1 = $('#d1 option:selected').val();
-        var s2 = $('#d2 option:selected').val();
-        var s3 = $('#d3 option:selected').val();
-        var s4 = $('#d4 option:selected').val();
-        var s5 = $('#d5 option:selected').val();
-        var s6 = $('#d6 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=2){
-            $('#d1').css("background-color","red");
-            setTimeout(function() {
-                $('#d1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=1){
-            $('#d2').css("background-color","red");
-            setTimeout(function() {
-                $('#d2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#d3').css("background-color","red");
-            setTimeout(function() {
-                $('#d3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#d4').css("background-color","red");
-            setTimeout(function() {
-                $('#d4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=3){
-            $('#d5').css("background-color","red");
-            setTimeout(function() {
-                $('#d5').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=2){
-            $('#d6').css("background-color","red");
-            setTimeout(function() {
-                $('#d6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("d1",s1);
-            addResutl("d2",s2);
-            addResutl("d3",s3);
-            addResutl("d4",s4);
-            addResutl("d5",s5);
-            addResutl("d6",s6);
-            n++;
-            loadTable3();
-        }
-
-    }
-    function loadTable3() {
-        var options = {
-            id:"bootstrap-table3",
-            data:data3,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            modalName: "【请填写功能名称】",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '订单对应行数',
-                    title: '订单对应行数'
-                },
-                {
-                    field: '订单编号累计品目数',
-                    title: '订单编号累计品目数'
-                }]
-        };
-        $.table.init(options);
+    function checkEIQTableSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            EIQ_ANALYSIS_TABLE_ANSWERS,
+            baidieScore,
+            function() {
+                return refreshBaidieTable("bootstrap-table2", data2);
+            }
+        )
     }
 
-    function reloadEN(){
-        var x=$("#enx option:selected").val();
-        var y=$("#eny option:selected").val();
-        var m=0;
-        total++;
-        if(x!="订单编号累计品目数"){
-            $('#enx').css("background-color","red");
-            setTimeout(function() {
-                $('#enx').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="订单对应订单行数"){
-            m++;
-            $('#eny').css("background-color","red");
-            setTimeout(function() {
-                $('#eny').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("enx",x);
-            addResutl("eny",y);
-            n++;
-            load4();
-        }
-    }
-    function load4(){
-        var myChart = echarts.init(document.getElementById('en'), 'macarons');
-
-        var d = data3;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单编号累计品目数);
-            arr2.push(d[i].订单对应行数);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function reloadEN1(){
-        var x=$("#enx1 option:selected").val();
-        var y=$("#eny1 option:selected").val();
-        var m=0;
-        total++;
-        if(x!="订单行数"){
-            $('#enx1').css("background-color","red");
-            setTimeout(function() {
-                $('#enx1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="订单行数出现次数占比"){
-            m++;
-            $('#eny1').css("background-color","red");
-            setTimeout(function() {
-                $('#eny1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("enx1",x);
-            addResutl("eny1",y);
-            n++;
-            load5();
-        }
-    }
-    function load5(){
-        var myChart = echarts.init(document.getElementById('en1'), 'macarons');
-
-        var arr1=[1,2,3,4,5,6];
-        var arr2=[75,16.98,5.5,2.03,0.45,0.05];
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            xAxis: {
-                type: "category",
-                data: arr1
-            },
-            yAxis: {
-                type: "value",
-                axisLabel: {
-                    formatter: '{value}%'
-                },
-            },
-            series: [
-                {
-                    type: "bar",
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-                }
-            ]
-        };
-        myChart.setOption(option);
+    function checkEchartSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            E_CHART_ANSWERS,
+            baidieScore,
+            function() {
+                return refreshChartWithMaxMin('e', data2, "日期", "E分析");
+            }
+        )
     }
 
-
-    function reloadEQ(){
-        var x=$("#eqx option:selected").val();
-        var y=$("#eqy option:selected").val();
-        var m=0;
-        total++;
-        if(x!="4"){
-            $('#eqx').css("background-color","red");
-            setTimeout(function() {
-                $('#eqx').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="2"){
-            m++;
-            $('#eqy').css("background-color","red");
-            setTimeout(function() {
-                $('#eqy').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("eqx",x);
-            addResutl("eqy",y);
-            n++;
-            load6();
-        }
+    function checkNChartSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            N_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin('n', data2, "日期", "N分析");
+            }
+        )
     }
-    function load6(){
-        var myChart = echarts.init(document.getElementById('eq'), 'macarons');
-        var d =data4;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单编号累计品目数);
-            arr2.push(d[i].订单对应出库总数量);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function reloadEQ1(){
-        var x=$("#eqx1 option:selected").val();
-        var y=$("#eqy1 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="4"){
-            $('#eqx1').css("background-color","red");
-            setTimeout(function() {
-                $('#eqx1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="1"){
-            m++;
-            $('#eqy1').css("background-color","red");
-            setTimeout(function() {
-                $('#eqy1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("eqx1",x);
-            addResutl("eqy1",y);
-            n++;
-            load7();
-        }
+    function checkQChartSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            Q_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin('q', data2, "日期", "Q分析");
+            }
+        );
     }
 
-    function load7(){
-        var myChart = echarts.init(document.getElementById('eq1'), 'macarons');
-
-        var arr1=["[0,5]","(5,10]","(10,30]"];
-        var arr2=[76.47,10.61,1.19];
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            xAxis: {
-                type: "category",
-                data: arr1
-            },
-            yAxis: {
-                type: "value",
-                axisLabel: {
-                    formatter: '{value}%'
-                },
-            },
-            series: [
-                {
-                    type: "bar",
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    barCategoryGap:"0%"
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
+    function checkENTableSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EN_ANALYSIS_TABLE_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieTable("bootstrap-table3", data3);
+            }
+        )
     }
 
-    function reloadEI(){
-        var x=$("#eix option:selected").val();
-        var y=$("#eiy option:selected").val();
-        var m=0;
-        total++;
-        if(x!="订单编号累计品目数"){
-            $('#eix').css("background-color","red");
-            setTimeout(function() {
-                $('#eix').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="该订单对应的物料品种数"){
-            m++;
-            $('#eiy').css("background-color","red");
-            setTimeout(function() {
-                $('#eiy').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            n++;
-            addResutl("eix",x);
-            addResutl("eiy",y);
-            load8();
-        }
-    }
-    function load8(){
-        var myChart = echarts.init(document.getElementById('ei'), 'macarons');
-        var d = data5;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单编号累计品目数);
-            arr2.push(d[i].订单对应物料品种数);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-    }
-    function reloadEI1(){
-        var x=$("#eix1 option:selected").val();
-        var y=$("#eiy1 option:selected").val();
-        var m=0;
-        total++;
-        if(x!="订单对应的物料品种数"){
-            $('#eix1').css("background-color","red");
-            setTimeout(function() {
-                $('#eix1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="订单对应的物料品种数出现次数占比"){
-            m++;
-            $('#eiy1').css("background-color","red");
-            setTimeout(function() {
-                $('#eiy1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("eix1",x);
-            addResutl("eiy1",y);
-            n++;
-            load9();
-        }
-    }
-    function load9(){
-        var myChart = echarts.init(document.getElementById('ei1'), 'macarons');
-
-        var arr1=["[0,5]","(5,10]","(10,30]"];
-        var arr2=[76.47,10.61,1.19];
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            xAxis: {
-                type: "category",
-                data: arr1
-            },
-            yAxis: {
-                type: "value",
-                axisLabel: {
-                    formatter: '{value}%'
-                },
-            },
-            series: [
-                {
-                    type: "bar",
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    barCategoryGap:"0%"
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
+    function checkENChartSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EN_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin('en', data3, "订单编号累计品目数", "订单对应行数");
+            }
+        );
     }
 
-
-    function reloadIK(){
-        var x=$("#ikx option:selected").val();
-        var y=$("#iky option:selected").val();
-        var m=0;
-        total++;
-        if(x!="物料编号累计品目数"){
-            $('#ikx').css("background-color","red");
-            setTimeout(function() {
-                $('#ikx').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="物料编号周期内出现次数"){
-            m++;
-            $('#iky').css("background-color","red");
-            setTimeout(function() {
-                $('#iky').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("ikx",x);
-            addResutl("iky",y);
-            n++;
-            load10();
-        }
-    }
-    function load10(){
-        var myChart = echarts.init(document.getElementById('ik'), 'macarons');
-
-        var d = data6;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].物料编号累计品目数);
-            arr2.push(d[i].出现次数);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
+    function checkENPercentageChartAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EN_PERCENTAGE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieBarChart('en1', en_percentage_data, '订单行数', '订单行数出现次数占比');
+            }
+        );
     }
 
-    function submit2(){
-        var s1 = $('#d11 option:selected').val();
-        var s2 = $('#d12 option:selected').val();
-        var s3 = $('#d13 option:selected').val();
-        var s4 = $('#d14 option:selected').val();
-        var s5 = $('#d15 option:selected').val();
-        var s6 = $('#d16 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=4){
-            $('#d11').css("background-color","red");
-            setTimeout(function() {
-                $('#d11').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=1){
-            $('#d12').css("background-color","red");
-            setTimeout(function() {
-                $('#d12').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=2){
-            $('#d13').css("background-color","red");
-            setTimeout(function() {
-                $('#d13').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#d14').css("background-color","red");
-            setTimeout(function() {
-                $('#d14').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=1){
-            $('#d15').css("background-color","red");
-            setTimeout(function() {
-                $('#d15').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=4){
-            $('#d16').css("background-color","red");
-            setTimeout(function() {
-                $('#d16').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("d11",s1);
-            addResutl("d12",s2);
-            addResutl("d13",s3);
-            addResutl("d14",s4);
-            addResutl("d15",s5);
-            addResutl("d16",s6);
-            n++;
-            loadTable4();
-        }
-
+    function checkEQChartSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            EQ_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin('eq', data4, '订单编号累计品目数', '订单对应出库总数量');
+            }
+        );
     }
-    function loadTable4() {
-        var options = {
-            id:"bootstrap-table4",
-            data:data4,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            modalName: "【请填写功能名称】",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '订单对应出库总数量',
-                    title: '订单对应出库总数量'
-                },
-                {
-                    field: '订单编号累计品目数',
-                    title: '订单编号累计品目数'
-                }]
-        };
-        $.table.init(options);
+    function checkEQDistChartSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EQ_DISTRIBUTION_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieBarChart(
+                    'eq1',
+                    eq_distribution_data,
+                    "该订单对应的出库总数量分布区间",
+                    "区间内订单出库总数量出现次数占比");
+            }
+        );
     }
 
-    function submit3(){
-        var s1 = $('#d31 option:selected').val();
-        var s2 = $('#d32 option:selected').val();
-        var s3 = $('#d33 option:selected').val();
-        var s4 = $('#d34 option:selected').val();
-        var s5 = $('#d35 option:selected').val();
-        var s6 = $('#d36 option:selected').val();
-        var m = 0;
-        if(s1!=3){
-            $('#d31').css("background-color","red");
-            setTimeout(function() {
-                $('#d31').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#d32').css("background-color","red");
-            setTimeout(function() {
-                $('#d32').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#d33').css("background-color","red");
-            setTimeout(function() {
-                $('#d33').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#d34').css("background-color","red");
-            setTimeout(function() {
-                $('#d34').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=3){
-            $('#d35').css("background-color","red");
-            setTimeout(function() {
-                $('#d35').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=4){
-            $('#d36').css("background-color","red");
-            setTimeout(function() {
-                $('#d36').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("d31",s1);
-            addResutl("d32",s2);
-            addResutl("d33",s3);
-            addResutl("d34",s4);
-            addResutl("d35",s5);
-            addResutl("d36",s6);
-
-            loadTable5();
-        }
-
-    }
-    function loadTable5() {
-        var options = {
-            id:"bootstrap-table5",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            modalName: "【请填写功能名称】",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '订单对应物料品种数',
-                    title: '订单对应物料品种数'
-                },
-                {
-                    field: '订单编号累计品目数',
-                    title: '订单编号累计品目数'
-                }]
-        };
-        $.table.init(options);
+    function checkEIChartSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            EI_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin(
+                    'ei', data5, '订单编号累计品目数', '订单对应物料品种数');
+            }
+        )
     }
 
-    function submit4(){
-        var s1 = $('#d41 option:selected').val();
-        var s2 = $('#d42 option:selected').val();
-        var s3 = $('#d43 option:selected').val();
-        var s4 = $('#d44 option:selected').val();
-
-        var m = 0;
-        if(s1!=4){
-            $('#d41').css("background-color","red");
-            setTimeout(function() {
-                $('#d41').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#d42').css("background-color","red");
-            setTimeout(function() {
-                $('#d42').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=1){
-            $('#d43').css("background-color","red");
-            setTimeout(function() {
-                $('#d43').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=3){
-            $('#d44').css("background-color","red");
-            setTimeout(function() {
-                $('#d44').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){
-            addResutl("d41",s1);
-            addResutl("d42",s2);
-            addResutl("d43",s3);
-            addResutl("d44",s4);
-            loadTable6();
-        }
-
+    function checkEIPercentageChartSelectionAndRefresh(){
+        checkSelectionResultAndRefresh(
+            EI_PERCENTAGE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieBarChart(
+                    'ei1', ei_percentage_data, '订单对应的物料品种数', '订单对应的物料品种数出现次数占比');
+            }
+        )
     }
-    function loadTable6() {
-        var options = {
-            id:"bootstrap-table6",
-            data:data6,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            modalName: "【请填写功能名称】",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '出现次数',
-                    title: '出现次数'
-                },
-                {
-                    field: '物料编号累计品目数',
-                    title: '物料编号累计品目数'
-                }]
-        };
-        $.table.init(options);
+
+    function checkIKChartSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            IK_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin(
+                    'ik', data6, '物料编号累计品目数', '出现次数');
+            }
+        )
     }
+
+    function checkEQAnalysisSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EQ_ANALYSIS_TABLE_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieTable("bootstrap-table4", data4);
+            }
+        )
+    }
+
+    function checkEIAnalysisSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            EI_ANALYSIS_TABLE_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieTable("bootstrap-table5", data5);
+            }
+        )
+    }
+
+    function checkIKAnalysisTableSelectionAndRefresh() {
+        checkSelectionResultAndRefresh(
+            IK_ANALYSIS_TABLE_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieTable("bootstrap-table6", data6);
+            }
+        )
+    }
+
+    /************************************************************
+                    global constant for table schema
+     ***********************************************************/
+    const EIQ_ORIG_TABLE_COLUMNS = [
+        {
+            field: '出库日期',
+            title: '出库日期'
+        },
+        {
+            field: '订单编号',
+            title: '订单编号'
+        },
+        {
+            field: '物料编号',
+            title: '物料编号'
+        },
+        {
+            field: '物料名称',
+            title: '物料名称'
+        },
+        {
+            field: '出货数量',
+            title: '出货数量'
+        },
+        {
+            field: '出货单位',
+            title: '出货单位'
+        },
+        {
+            field: '销售单价',
+            title: '销售单价'
+        },
+        {
+            field: '托盘装件数',
+            title: '托盘装件数'
+        },
+        {
+            field: '换算单位',
+            title: '换算单位'
+        },
+        {
+            field: '换算单位1',
+            title: '换算单位'
+        }
+    ];
+
+    const EIQ_ANALYSIS_TABLE_COLUMNS = [
+        {
+            field: '日期',
+            title: '日期'
+        },
+        {
+            field: 'E分析',
+            title: 'E分析（每日订单数量统计数值）'
+        },
+        {
+            field: 'N分析',
+            title: 'N分析（每日订单行数统计数值）'
+        },
+        {
+            field: 'Q分析',
+            title: 'Q分析（每日出库数量统计数值）'
+        }
+    ];
+
+    const EN_ANALYSIS_TABLE_COLUMNS = [
+        {
+            field: '订单编号',
+            title: '订单编号'
+        },
+        {
+            field: '订单对应行数',
+            title: '订单对应行数'
+        },
+        {
+            field: '订单编号累计品目数',
+            title: '订单编号累计品目数'
+        }
+    ];
+
+    const EQ_ANALYSIS_TABLE_COLUMNS = [
+        {
+            field: '订单编号',
+            title: '订单编号'
+        },
+        {
+            field: '订单对应出库总数量',
+            title: '订单对应出库总数量'
+        },
+        {
+            field: '订单编号累计品目数',
+            title: '订单编号累计品目数'
+        }
+    ]
+
+    const EI_ANALYSIS_TABLE_COLUMNS = [
+        {
+            field: '订单编号',
+            title: '订单编号'
+        },
+        {
+            field: '订单对应物料品种数',
+            title: '订单对应物料品种数'
+        },
+        {
+            field: '订单编号累计品目数',
+            title: '订单编号累计品目数'
+        }
+    ]
+
+    const IK_ANALYSIS_TABLE_COLUMNS = [
+        {
+            field: '物料名称',
+            title: '物料名称'
+        },
+        {
+            field: '物料编码',
+            title: '物料编码'
+        },
+        {
+            field: '出现次数',
+            title: '出现次数'
+        },
+        {
+            field: '物料编号累计品目数',
+            title: '物料编号累计品目数'
+        }
+    ]
+
+    /************************************************************/
+    /**************EIQ PAGE SELECTION ANSWERS *******************/
+    /************************************************************/
+
+    /************************  EIQ ******************************/
+    const EIQ_ANALYSIS_TABLE_ANSWERS = new Map([
+        ["s1", "3"],
+        ["s2", "4"],
+        ["s3", "3"],
+        ["s4", "2"],
+        ["s5", "4"]
+    ]);
+
+    const E_CHART_ANSWERS = new Map([
+        ["x", "出库日期"],
+        ["y", "统计周期内每日订单数量"]
+    ]);
+
+    const N_CHART_ANSWERS = new Map([
+        ["x1", "出库日期"],
+        ["y1", "统计周期内每日订单行数"]
+    ]);
+
+    const Q_CHART_ANSWERS = new Map([
+        ["x2", "出库日期"],
+        ["y2", "统计周期内每日出库数量"]
+    ]);
+
+    /************************  EN ******************************/
+    const EN_ANALYSIS_TABLE_ANSWERS = new Map([
+        ["d1", "2"],
+        ["d2", "1"],
+        ["d3", "3"],
+        ["d4", "2"],
+        ["d5", "3"],
+        ["d6", "2"]
+    ]);
+
+    const EN_CHART_ANSWERS = new Map([
+        ["enx", "订单编号累计品目数"],
+        ["eny", "订单对应订单行数"]
+    ]);
+
+    const EN_PERCENTAGE_CHART_ANSWERS = new Map([
+        ["enx1", "订单行数"],
+        ["eny1", "订单行数出现次数占比"]
+    ]);
+
+    /************************  EQ ******************************/
+    const EQ_ANALYSIS_TABLE_ANSWERS = new Map([
+        ["d11", "4"],
+        ["d12", "1"],
+        ["d13", "2"],
+        ["d14", "2"],
+        ["d15", "1"],
+        ["d16", "4"]
+    ]);
+
+    const EQ_CHART_ANSWERS = new Map([
+        ["eqx", "订单编号累计品目数"],
+        ["eqy", "订单对应的出库总数量"]
+    ]);
+
+    const EQ_DISTRIBUTION_CHART_ANSWERS = new Map([
+        ["eqx1", "该订单对应的出库总数量分布区间"],
+        ["eqy1", "区间内订单出库总数量出现次数占比"]
+    ]);
+    /************************  EI ******************************/
+    const EI_ANALYSIS_TABLE_ANSWERS = new Map([
+        ["d31", "3"],
+        ["d32", "2"],
+        ["d33", "3"],
+        ["d34", "4"],
+        ["d35", "3"],
+        ["d36", "4"]
+    ]);
+
+    const EI_CHART_ANSWERS = new Map([
+        ["eix", "订单编号累计品目数"],
+        ["eiy", "该订单对应的物料品种数"]
+    ]);
+    const EI_PERCENTAGE_CHART_ANSWERS = new Map([
+        ["eix1", "订单对应的物料品种数"],
+        ["eiy1", "订单对应的物料品种数出现次数占比"]
+    ]);
+
+    /************************  IK ******************************/
+    const IK_ANALYSIS_TABLE_ANSWERS = new Map([
+        ["d41", "4"],
+        ["d42", "2"],
+        ["d43", "1"],
+        ["d44", "3"]
+    ]);
+    const IK_CHART_ANSWERS = new Map([
+        ["ikx", "物料编号累计品目数"],
+        ["iky", "物料编号周期内出现次数"]
+    ]);
 </script>
 <script id="importTpl" type="text/template">
     <form enctype="multipart/form-data" class="mt20 mb10">
