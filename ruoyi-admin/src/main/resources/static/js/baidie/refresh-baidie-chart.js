@@ -8,9 +8,6 @@ function refreshBaidieChart(chartElementId,
     const yAxisArray = data.map(entry => parseFloat(entry[yAttrName].replace("%", "")));
 
     var option = {
-        title: {
-            show: false
-        },
         tooltip: {
             trigger: 'axis',
         },
@@ -111,7 +108,6 @@ function refreshChartWithMaxMin(chartElementId,
     const xAxisArray = data.map(entry => entry[xAttrName]);
     const yAxisArray = data.map(entry => parseFloat(entry[yAttrName]));
     const option= {
-        backgroundColor:'rgba(255, 255, 255, 0)',
         tooltip: {
             trigger: 'axis'
         },
