@@ -1482,36 +1482,8 @@
             for(var i=0;i<result.total;i++){
                 $("#"+d[i].opId).val(d[i].opValue);
             }
-            // EIQ计算结果表单和图表。
-            checkEIQTableSelectionAndRefresh();
-            checkEchartSelectionAndRefresh();
-            checkNChartSelectionAndRefresh();
-            checkQChartSelectionAndRefresh();
-
-            // EN计算结果表单和图表。
-            checkENTableSelectionAndRefresh();
-            checkENChartSelectionAndRefresh();
-            checkENPercentageChartAndRefresh();
-
-            // EQ计算结果表单和图表。
-            checkEQAnalysisSelectionAndRefresh();
-            checkEQChartSelectionAndRefresh();
-            checkEQDistChartSelectionAndRefresh();
-
-            // EI计算结果表单和图表。
-            checkEIAnalysisSelectionAndRefresh();
-            checkEIChartSelectionAndRefresh();
-            checkEIPercentageChartSelectionAndRefresh();
-
-            // IK计算结果表单和图表。
-            checkIKAnalysisTableSelectionAndRefresh();
-            checkIKChartSelectionAndRefresh();
         });
     });
-    function addResutl(opId,opValue) {
-      $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
-        });
-    }
 
     function loadEIQOrigTable() {
         initBaidieTable("bootstrap-table", EIQ_ORIG_TABLE_COLUMNS);
