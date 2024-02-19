@@ -2,6 +2,7 @@ package com.ruoyi.baidie;
 
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.data.common.ObjectMap;
 import com.ruoyi.data.eiq.*;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 
@@ -19,14 +20,14 @@ public class EIQClassifier {
      * 将导入的数据转换为EIQ单项要素分析数据统计表(data2)
      * 1.首先对数据按照日期分组
      * 2.按照每天统计
-     * @param eiqBasicTableList 初始化的数据表
+     * @param eiqBasicInfoList 初始化的数据表
      * @return 返回的是包含EIQ单项要素分析的数据（data2）
      */
-    public static List<EIQAnalysisTable> getEIQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
+    public static List<EIQAnalysisInfo> getEIQAnalysisTable(List<EIQBasicInfo> eiqBasicInfoList) {
         //step1: 将日期标准化，防止同一天出现两个值
-        final List<EIQBasicTable> standardizedList = eiqBasicTableList.stream()
+        final List<EIQBasicInfo> standardizedList = eiqBasicInfoList.stream()
                 .map(basicTable -> {
-                    EIQBasicTable newBasicTable = new EIQBasicTable();
+                    EIQBasicInfo newBasicTable = new EIQBasicInfo();
                     newBasicTable.setDeliveryDate(normalizeDate(basicTable.getDeliveryDate()));
                     newBasicTable.setMaterialNumber(basicTable.getMaterialNumber());
                     newBasicTable.setDeliveryDate(basicTable.getDeliveryDate());
@@ -42,17 +43,17 @@ public class EIQClassifier {
                 })
                 .collect(Collectors.toList());
         //step2: 首先将数据按出库日期重组
-        final Map<Date, List<EIQBasicTable>> dataGroupByDeliveryDate =
+        final Map<Date, List<EIQBasicInfo>> dataGroupByDeliveryDate =
                 standardizedList.stream().collect(
-                        Collectors.groupingBy(EIQBasicTable::getDeliveryDate));
+                        Collectors.groupingBy(EIQBasicInfo::getDeliveryDate));
         //step3: 统计每个出库日期的数据，然后升序排序
-        final List<EIQAnalysisTable> eIQAnalysisTableSortedByDeliveryDate =
+        final List<EIQAnalysisInfo> eIQAnalysisInfoSortedByDeliveryDate =
                 dataGroupByDeliveryDate.entrySet().stream()
                         .map(entry -> calculateENQ(entry.getKey(), entry.getValue()))
-                        .sorted(Comparator.comparing(EIQAnalysisTable::getDate))
+                        .sorted(Comparator.comparing(EIQAnalysisInfo::getDate))
                         .collect(Collectors.toList());
 
-        return eIQAnalysisTableSortedByDeliveryDate;
+        return eIQAnalysisInfoSortedByDeliveryDate;
 
     }
 
@@ -62,22 +63,22 @@ public class EIQClassifier {
      * @param eiqBasicTablesGroupByDate 导入的基本数据类
      * @return 返回处理过的EIQ分析的值
      */
-    private static EIQAnalysisTable calculateENQ(Date key,
-                                                 List<EIQBasicTable> eiqBasicTablesGroupByDate) {
-        EIQAnalysisTable eiqAnalysisTable = new EIQAnalysisTable();
+    private static EIQAnalysisInfo calculateENQ(Date key,
+                                                List<EIQBasicInfo> eiqBasicTablesGroupByDate) {
+        EIQAnalysisInfo eiqAnalysisInfo = new EIQAnalysisInfo();
         final int numOrders =
                 eiqBasicTablesGroupByDate.stream().collect(
-                        Collectors.groupingBy(EIQBasicTable::getOrderNumber)).size();
-        eiqAnalysisTable.setDate(key);
-        eiqAnalysisTable.setEAnalysis(numOrders);
-        eiqAnalysisTable.setNAnalysis(eiqBasicTablesGroupByDate.size());
+                        Collectors.groupingBy(EIQBasicInfo::getOrderNumber)).size();
+        eiqAnalysisInfo.setDate(key);
+        eiqAnalysisInfo.setEAnalysis(numOrders);
+        eiqAnalysisInfo.setNAnalysis(eiqBasicTablesGroupByDate.size());
         double sum = 0;
         // 遍历当前日期的 EIQBasicTables 列表，累加出库量
-        for (EIQBasicTable dataItem : eiqBasicTablesGroupByDate) {
+        for (EIQBasicInfo dataItem : eiqBasicTablesGroupByDate) {
             sum += dataItem.getDeliveryQuantity();
         }
-        eiqAnalysisTable.setQAnalysis(sum);
-        return eiqAnalysisTable;
+        eiqAnalysisInfo.setQAnalysis(sum);
+        return eiqAnalysisInfo;
     }
 
     /**
@@ -95,54 +96,54 @@ public class EIQClassifier {
      * 1.首先按照订单编码分组
      * 2.按照订单行数统计赋值
      *
-     * @param eiqBasicTableList 导入的基本数据表
+     * @param eiqBasicInfoList 导入的基本数据表
      * @return EN综合分析数据统计表
      */
-    public static List<ENAnalysisTable> getENAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
+    public static List<ENAnalysisInfo> getENAnalysisTable(List<EIQBasicInfo> eiqBasicInfoList) {
         // Step 1: 首先将数据按订单编码重组
-        final Map<String, List<EIQBasicTable>> dataGroupByOrderNumber =
-                eiqBasicTableList.stream().collect(Collectors.groupingBy(EIQBasicTable::getOrderNumber));
+        final Map<String, List<EIQBasicInfo>> dataGroupByOrderNumber =
+                eiqBasicInfoList.stream().collect(Collectors.groupingBy(EIQBasicInfo::getOrderNumber));
 
         // Step 2: 统计每个订单编码的行数，然后降序排序
-        final List<ENAnalysisTable> enAnalysisTableSortedByOrderLineCount =
+        final List<ENAnalysisInfo> enAnalysisInfoSortedByOrderLineCount =
                 dataGroupByOrderNumber.entrySet().stream()
                         .map(entry -> calculateOrderInfo(entry.getKey(), entry.getValue()))
-                        .sorted(Comparator.comparing(ENAnalysisTable::getOrderLineCount, Comparator.reverseOrder()))
+                        .sorted(Comparator.comparing(ENAnalysisInfo::getOrderLineCount, Comparator.reverseOrder()))
                         .collect(Collectors.toList());
 
         // Step 3: 设置一个自增的序号
-        IntStream.range(0, enAnalysisTableSortedByOrderLineCount.size())
-                .forEach(i -> enAnalysisTableSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
+        IntStream.range(0, enAnalysisInfoSortedByOrderLineCount.size())
+                .forEach(i -> enAnalysisInfoSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
 
-        return enAnalysisTableSortedByOrderLineCount;
+        return enAnalysisInfoSortedByOrderLineCount;
     }
 
     /**
      * EN分析--以订单编码作为统计数据的分类
      *
      * @param key            订单编码
-     * @param eiqBasicTables 导入的基本数据类
+     * @param eiqBasicInfos 导入的基本数据类
      * @return 返回处理过的EN分析的值
      */
-    private static ENAnalysisTable calculateOrderInfo(String key, List<EIQBasicTable> eiqBasicTables) {
-        ENAnalysisTable enAnalysisTable = new ENAnalysisTable();
-        enAnalysisTable.setOrderNumber(key);
-        enAnalysisTable.setOrderLineCount(eiqBasicTables.size());
-        return enAnalysisTable;
+    private static ENAnalysisInfo calculateOrderInfo(String key, List<EIQBasicInfo> eiqBasicInfos) {
+        ENAnalysisInfo enAnalysisInfo = new ENAnalysisInfo();
+        enAnalysisInfo.setOrderNumber(key);
+        enAnalysisInfo.setOrderLineCount(eiqBasicInfos.size());
+        return enAnalysisInfo;
     }
 
     /***
      * 将导入的数据转换为EQ综合分析数据统计表(data4)
      * 1.按照订单编码分组
      * 2.按照订货量进行统计
-     * @param eiqBasicTableList 导入的基础数据
+     * @param eiqBasicInfoList 导入的基础数据
      * @return 处理后的数据
      */
-    public static List<EQAnalysisInfo> getEQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
+    public static List<EQAnalysisInfo> getEQAnalysisTable(List<EIQBasicInfo> eiqBasicInfoList) {
         //step1: 首先将数据按订单编码重组
-        final Map<String, List<EIQBasicTable>> dataGroupByOrderNumber =
-                eiqBasicTableList.stream().collect(
-                        Collectors.groupingBy(EIQBasicTable::getOrderNumber));
+        final Map<String, List<EIQBasicInfo>> dataGroupByOrderNumber =
+                eiqBasicInfoList.stream().collect(
+                        Collectors.groupingBy(EIQBasicInfo::getOrderNumber));
 
         //step2: 统计每个订单编码的数据，然后降序序排序
         final List<EQAnalysisInfo> eqAnalysisInfoSortedByOrderLineCount =
@@ -160,15 +161,15 @@ public class EIQClassifier {
     /***
      * 将导入的数据转换为EQ综合分析数据统计表(data5)
      *1.统计订单出库数量
-     * @param eiqBasicTables
+     * @param eiqBasicInfos
      * @return
      */
     private static EQAnalysisInfo calculateOrderQuantityInfo(String key,
-                                                             List<EIQBasicTable> eiqBasicTables) {
+                                                             List<EIQBasicInfo> eiqBasicInfos) {
         EQAnalysisInfo eqAnalysisInfo = new EQAnalysisInfo();
         eqAnalysisInfo.setOrderNumber(key);
-        eqAnalysisInfo.setTotalDeliveredQuantity(eiqBasicTables.stream()
-                .mapToDouble(EIQBasicTable::getDeliveryQuantity)
+        eqAnalysisInfo.setTotalDeliveredQuantity(eiqBasicInfos.stream()
+                .mapToDouble(EIQBasicInfo::getDeliveryQuantity)
                 .sum());
         return eqAnalysisInfo;
     }
@@ -177,14 +178,14 @@ public class EIQClassifier {
      * 将导入的数据转换为EI综合分析数据统计表
      * 1.将数据按照订单编码分组
      * 2.统计订单内物料的行数，然后降序排序
-     * @param eiqBasicTables 导入的基础数据
+     * @param eiqBasicInfos 导入的基础数据
      * @return 处理后的数据
      */
-    public static List<EIAnalysisInfo> getEIAnalysisTable(List<EIQBasicTable> eiqBasicTables) {
+    public static List<EIAnalysisInfo> getEIAnalysisTable(List<EIQBasicInfo> eiqBasicInfos) {
         //step1: 首先将数据按订单编码重组
-        final Map<String, List<EIQBasicTable>> dataGroupByOrderNumber =
-                eiqBasicTables.stream().collect(
-                        Collectors.groupingBy(EIQBasicTable::getOrderNumber));
+        final Map<String, List<EIQBasicInfo>> dataGroupByOrderNumber =
+                eiqBasicInfos.stream().collect(
+                        Collectors.groupingBy(EIQBasicInfo::getOrderNumber));
         //step2: 统计每个订单编码的物料行数的数据，然后降序序排序
         final List<EIAnalysisInfo> eiAnalysisInfoSortedByMaterialNumber =
                 dataGroupByOrderNumber.entrySet().stream()
@@ -201,15 +202,15 @@ public class EIQClassifier {
      * 将导入的数据转换为EI综合分析数据统计表
      *1.统计订单内物料的种类数
      * @param key 订单编码
-     * @param eiqBasicTables 分组后的数据表
+     * @param eiqBasicInfos 分组后的数据表
      * @return 处理过的数据
      */
     private static EIAnalysisInfo calculateEIAnalysisInfo(String key,
-                                                          List<EIQBasicTable> eiqBasicTables) {
+                                                          List<EIQBasicInfo> eiqBasicInfos) {
         EIAnalysisInfo eiAnalysisInfo = new EIAnalysisInfo();
         eiAnalysisInfo.setOrderNumber(key);
-        eiAnalysisInfo.setMaterialVarietiesCount(eiqBasicTables.stream()
-                .collect(Collectors.groupingBy(EIQBasicTable::getMaterialNumber)).size());
+        eiAnalysisInfo.setMaterialVarietiesCount(eiqBasicInfos.stream()
+                .collect(Collectors.groupingBy(EIQBasicInfo::getMaterialNumber)).size());
         return eiAnalysisInfo;
     }
 
@@ -217,14 +218,14 @@ public class EIQClassifier {
      * 将导入的数据转换为IK综合分析数据统计表(data6)
      * 1.将数据按照物料编码分组
      * 2.统计分组后物料编码出现的次数
-     * @param eiqBasicTables
+     * @param eiqBasicInfos
      * @return
      */
-    public static List<IKAnalysisInfo> getIKAnalysisInfoTest(List<EIQBasicTable> eiqBasicTables) {
+    public static List<IKAnalysisInfo> getIKAnalysisInfoTest(List<EIQBasicInfo> eiqBasicInfos) {
         //step1: 首先将数据按物料编码重组
-        final Map<String, List<EIQBasicTable>> dataGroupByMaterialNumber =
-                eiqBasicTables.stream().collect(
-                        Collectors.groupingBy(EIQBasicTable::getMaterialNumber));
+        final Map<String, List<EIQBasicInfo>> dataGroupByMaterialNumber =
+                eiqBasicInfos.stream().collect(
+                        Collectors.groupingBy(EIQBasicInfo::getMaterialNumber));
 
         //step2: 统计每个物料编码的物料行数的数据，然后降序序排序
         final List<IKAnalysisInfo> analysisTableSortedByMaterialNumber =
@@ -244,15 +245,15 @@ public class EIQClassifier {
      * 处理后的基本数据
      * 将按照物料编码处理过的数据，统计物料出现的次数---行数
      * @param key 物料编码
-     * @param eiqBasicTables 分组后的数据
+     * @param eiqBasicInfos 分组后的数据
      * @return 处理过的数据
      */
     private static IKAnalysisInfo calculateIKAnalysisInfo(String key,
-                                                          List<EIQBasicTable> eiqBasicTables) {
+                                                          List<EIQBasicInfo> eiqBasicInfos) {
         IKAnalysisInfo ikAnalysisEntry = new IKAnalysisInfo();
         ikAnalysisEntry.setMaterialCode(key);
-        ikAnalysisEntry.setMaterialName(eiqBasicTables.get(0).getMaterialName());
-        ikAnalysisEntry.setOccurrenceCount(eiqBasicTables.size());
+        ikAnalysisEntry.setMaterialName(eiqBasicInfos.get(0).getMaterialName());
+        ikAnalysisEntry.setOccurrenceCount(eiqBasicInfos.size());
         return ikAnalysisEntry;
     }
 
@@ -260,15 +261,14 @@ public class EIQClassifier {
      * EI分析的直方统计
      * 统计订单对应物料品种数的区间范围
      *
-     * @param eiqBasicTables EIQ基本数据
+     * @param eiqBasicInfos EIQ基本数据
      * @return EI分析的区间和区间对应的值的数量
      */
-    public static Map<String, Integer> getEIHistogram(List<EIQBasicTable> eiqBasicTables,
-                                                      int intervalNumber) {
+    public static List<ObjectMap> getEIHistogram(List<EIQBasicInfo> eiqBasicInfos) {
         final List<EIAnalysisInfo> eiAnalysisInfoList =
-                getEIAnalysisTable(eiqBasicTables);
+                getEIAnalysisTable(eiqBasicInfos);
         final double[] eiCount = getMaterialVarietiesCountArray(eiAnalysisInfoList);
-        return BaidieUtils.generateIntervalData(eiCount, intervalNumber);
+        return BaidieUtils.generateIntervalData(eiCount, 5);
     }
 
     /**
@@ -286,23 +286,24 @@ public class EIQClassifier {
 
         return materialVarietiesCountArray;
     }
+
     /**
      * IK分析的直方统计
      * 统计订单对应物料品种数的区间范围
      *
-     * @param eiqBasicTables EIQ基本数据
+     * @param eiqBasicInfos EIQ基本数据
      * @return EI分析的区间和区间对应的值的数量
      */
-    public static Map<String, Integer> getIKHistogram(List<EIQBasicTable> eiqBasicTables,
-                                                      int intervalNumber) {
+    public static List<ObjectMap> getIKHistogram(List<EIQBasicInfo> eiqBasicInfos) {
         final List<IKAnalysisInfo> ikAnalysisInfoList =
-                getIKAnalysisInfoTest(eiqBasicTables);
+                getIKAnalysisInfoTest(eiqBasicInfos);
         final double[] ikCount = getMaterialOccurrenceCount(ikAnalysisInfoList);
-        return BaidieUtils.generateIntervalData(ikCount, intervalNumber);
+        return BaidieUtils.generateIntervalData(ikCount, 5);
     }
 
     /**
      * 统计IK分析的出现的次数
+     *
      * @param ikAnalysisInfoList
      * @return
      */

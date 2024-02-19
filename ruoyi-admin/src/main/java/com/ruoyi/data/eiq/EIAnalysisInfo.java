@@ -7,6 +7,8 @@ import lombok.Setter;
 /****
  * EI分类---对订单-物料种类数统计
  */
+@Getter
+@Setter
 public class EIAnalysisInfo {
     @JsonProperty("订单编号")
     @Getter

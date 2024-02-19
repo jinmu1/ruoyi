@@ -7,6 +7,8 @@ import lombok.Setter;
 /**
  * IK基础导入的类-对物料--出库频次统计
  */
+@Getter
+@Setter
 public class IKAnalysisInfo {
     @Getter
     @Setter
