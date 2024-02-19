@@ -1,5 +1,23 @@
 package com.ruoyi.web.controller.system;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.BaidieOp;
+import com.ruoyi.system.service.IBaidieOpService;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,28 +27,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.BaidieOp;
-import com.ruoyi.system.service.IBaidieOpService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
-
-import javax.servlet.http.HttpServletRequest;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * 操作Controller
@@ -80,140 +78,28 @@ public class BaidieOpController extends BaseController
     @ResponseBody
     public TableDataInfo list1(HttpServletRequest request)
     {
-        String token = request.getParameter("token");
-        if(token!=null){
-            System.out.println("token获取成功！");
-        }
-        String trainingId = request.getParameter("trainingId");
-        if(trainingId!=null){
-            System.out.println("trainingId获取成功！");
-        }
-        HttpURLConnection connection = null;
-        InputStream is = null;
-        BufferedReader br = null;
+        final String token = request.getParameter("token");
+        final String trainingId = request.getParameter("trainingId");
 
-        String result = null;// 返回结果字符串
-        try {
-            // 创建远程url连接对象
-            URL url = new URL(url1);
-            // 通过远程url连接对象打开一个连接，强转成httpURLConnection类
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty(HttpHeaders.AUTHORIZATION,"Bearer "+token);
-            // 设置连接方式：get
-            connection.setRequestMethod("GET");
-            // 设置连接主机服务器的超时时间：15000毫秒
-            connection.setConnectTimeout(15000);
-            // 设置读取远程返回的数据时间：60000毫秒
-            connection.setReadTimeout(60000);
-            // 发送请求
-            connection.connect();
-            // 通过connection连接，获取输入流
-            if (connection.getResponseCode() == 200) {
-                is = connection.getInputStream();
-                // 封装输入流is，并指定字符集
-                br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                // 存放数据
-                StringBuffer sbf = new StringBuffer();
-                String temp = null;
-                while ((temp = br.readLine()) != null) {
-                    sbf.append(temp);
-                    sbf.append("\r\n");
-                }
-                result = sbf.toString();
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            // 关闭资源
-            if (null != br) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != is) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            connection.disconnect();// 关闭远程连接
-        }
-        if(result!=null) {
-            System.out.println(result);
-        }else {
-            System.out.println("获取失败");
-        }
-        JSONObject jsonObject= JSON.parseObject(result);
-        String result1 = null;// 返回结果字符串
-        try {
-            // 创建远程url连接对象
-            URL url = new URL(url2+trainingId+"&userId="+ jsonObject.getString("Id"));
-            // 通过远程url连接对象打开一个连接，强转成httpURLConnection类
-            connection = (HttpURLConnection) url.openConnection();
-            // 设置连接方式：get
-            connection.setRequestProperty(HttpHeaders.AUTHORIZATION,"Bearer "+token);
-            connection.setRequestMethod("GET");
-            // 设置连接主机服务器的超时时间：15000毫秒
-            connection.setConnectTimeout(15000);
-            // 设置读取远程返回的数据时间：60000毫秒
-            connection.setReadTimeout(60000);
-            // 发送请求
-            connection.connect();
-            // 通过connection连接，获取输入流
-            if (connection.getResponseCode() == 200) {
-                is = connection.getInputStream();
-                // 封装输入流is，并指定字符集
-                br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                // 存放数据
-                StringBuffer sbf = new StringBuffer();
-                String temp = null;
-                while ((temp = br.readLine()) != null) {
-                    sbf.append(temp);
-                    sbf.append("\r\n");
-                }
-                result1 = sbf.toString();
+        final String baidieUserId = getBaidieUserIdFromToken(token);
+        final String baidieDrillId = getBaidieDrillId(token, baidieUserId, trainingId);
 
+        if (isNull(baidieUserId) || baidieUserId.isEmpty()) {
+            return new TableDataInfo(List.of(), 0);
+        }
 
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            // 关闭资源
-            if (null != br) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != is) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            connection.disconnect();// 关闭远程连接
+        if (isNull(baidieDrillId) || baidieDrillId.isEmpty()) {
+            return new TableDataInfo(List.of(), 0);
         }
-        if(result!=null) {
-            System.out.println(result1);
-        }else {
-            System.out.println("获取失败");
-        }
-        JSONObject jsonObject1=JSON.parseObject(result1);
+
+        // Now do the db lookup.
         BaidieOp baidieOp = new BaidieOp();
-        baidieOp.setDrillID(jsonObject1.getString("DrillID"));
-        baidieOp.setUserId(jsonObject.getString("Id"));
-        List<BaidieOp> list = baidieOpService.selectBaidieOpList(baidieOp);
+        baidieOp.setDrillID(baidieDrillId);
+        baidieOp.setUserId(baidieUserId);
+        final List<BaidieOp> list = baidieOpService.selectBaidieOpList(baidieOp);
         return getDataTable(list);
     }
+
     @PostMapping("/list2")
     @ResponseBody
     public TableDataInfo list2(HttpServletRequest request)
@@ -588,5 +474,102 @@ public class BaidieOpController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(baidieOpService.deleteBaidieOpByIds(ids));
+    }
+
+    private String getBaidieUserIdFromToken(String token) {
+        if (token == null) {
+            return null;
+        }
+
+        if (token.isEmpty()) {
+            return null;
+        }
+
+        final String result = getResponseFromBaidie(token, url1);
+        final JSONObject jsonObject= JSON.parseObject(result);
+        return jsonObject.getString("Id");
+    }
+
+    private String getBaidieDrillId(String token, String userId, String trainingId) {
+        if (isNull(token) || isNull(userId) || isNull(trainingId)) {
+            return "";
+        }
+        if (token.isEmpty() || userId.isEmpty() || trainingId.isEmpty()) {
+            return "";
+        }
+
+        final String result = getResponseFromBaidie(
+                token, url2+ trainingId +"&userId="+ userId);
+
+        final JSONObject jsonObject = JSON.parseObject(result);
+        return jsonObject.getString("DrillID");
+    }
+
+    private static String getResponseFromBaidie(String token, String urlString) {
+        String result = null;// 返回结果字符串
+
+        HttpURLConnection connection = null;
+        InputStream inputStream = null;
+        BufferedReader bufferedReader = null;
+
+        try {
+            // 创建远程url连接对象
+            URL url = new URL(urlString);
+            // 通过远程url连接对象打开一个连接，强转成httpURLConnection类
+            connection = (HttpURLConnection) url.openConnection();
+            // 设置连接方式：get
+            connection.setRequestProperty(HttpHeaders.AUTHORIZATION,"Bearer "+ token);
+            connection.setRequestMethod("GET");
+            // 设置连接主机服务器的超时时间：15000毫秒
+            connection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            connection.setReadTimeout(60000);
+            // 发送请求
+            connection.connect();
+            // 通过connection连接，获取输入流
+            if (connection.getResponseCode() == 200) {
+                inputStream = connection.getInputStream();
+                // 封装输入流is，并指定字符集
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                // 存放数据
+                StringBuffer sbf = new StringBuffer();
+                String temp;
+                while ((temp = bufferedReader.readLine()) != null) {
+                    sbf.append(temp);
+                    sbf.append("\r\n");
+                }
+                result = sbf.toString();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (nonNull(bufferedReader)) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (nonNull(inputStream)) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (nonNull(connection)) {
+                connection.disconnect();// 关闭远程连接
+            }
+        }
+
+        if (isNull(result)) {
+            System.out.println("百蝶远程调用失败");
+            return Strings.EMPTY;
+        }
+        System.out.println("百蝶远程调用成功：" + result);
+        return result;
     }
 }
