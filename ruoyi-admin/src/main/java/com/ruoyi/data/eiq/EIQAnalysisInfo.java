@@ -10,7 +10,9 @@ import java.util.Date;
 /****
  * EIQ分类---对订单-物料种类数-出库数量统计
  */
-public class EIQAnalysisTable {
+@Getter
+@Setter
+public class EIQAnalysisInfo {
     @JsonProperty("日期")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
     @Getter

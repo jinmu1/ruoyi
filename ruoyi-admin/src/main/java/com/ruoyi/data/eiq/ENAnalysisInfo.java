@@ -3,10 +3,13 @@ package com.ruoyi.data.eiq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+
 /****
  * EN分类---对订单-订单行数统计
  */
-public  class ENAnalysisTable {
+@Getter
+@Setter
+public class ENAnalysisInfo {
     @Getter
     @Setter
     @JsonProperty("订单编号")

@@ -7,10 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
 /**
  * EIQ基础导入的类
  */
-public  class EIQBasicTable {
+@Getter
+@Setter
+public class EIQBasicInfo {
     @Getter
     @Setter
     @Excel(name = "出库日期")
