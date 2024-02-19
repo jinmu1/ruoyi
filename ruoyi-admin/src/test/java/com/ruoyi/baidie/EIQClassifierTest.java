@@ -28,6 +28,12 @@ public class EIQClassifierTest {
     private List<Integer> testEIAnalysis;
     private List<String> testEIOrderNumber;
     private int testSortByOrderNumer;
+    private List<String> testIKMaterialCode;
+    private List<String> testMaterialName;
+    private List<Integer> testOccurrenceCount;
+    private List<Integer> testMaterialNumerCumulativeItemNumber;
+    private int testSortByMaterialNumer;
+
     @Before
     public void setUp() {
         // Set up some test data
@@ -57,6 +63,11 @@ public class EIQClassifierTest {
         testEIAnalysis = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
         testEIOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
         testSortByOrderNumer = 8;
+        testIKMaterialCode = Arrays.asList("M1", "M2", "M3", "M4", "M5", "M6", "M7", "M9", "M10");
+        testMaterialName = Arrays.asList("Material 1", "Material 2", "Material 3", "Material 4", "Material 5", "Material 6", "Material 7", "Material 9", "Material 10");
+        testOccurrenceCount = Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1);
+        testSortByMaterialNumer = 9;
+        testMaterialNumerCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
     }
 
     /****
@@ -198,6 +209,45 @@ public class EIQClassifierTest {
         );
 
     }
+
+    @Test
+    public void getIKAnalysisTableTest() {
+        List<IKAnalysisInfo> result = EIQClassifier.getIKAnalysisInfoTest(testEIQBasicTable);
+        // 保证结果行数跟输入一样
+        assertEquals(testSortByMaterialNumer, result.size());
+
+        // 检查IK-序列号是对的
+        assertEquals(
+                testMaterialNumerCumulativeItemNumber,
+                result.stream()
+                        .map(IKAnalysisInfo::getCumulativeItemNumber)
+                        .collect(Collectors.toList())
+        );
+        // 检查IK-物料号是对的
+        assertEquals(
+                testIKMaterialCode,
+                result.stream()
+                        .map(IKAnalysisInfo::getMaterialCode)
+                        .collect(Collectors.toList())
+        );
+        // 检查IK-物料名称是对的
+        assertEquals(
+                testMaterialName,
+                result.stream()
+                        .map(IKAnalysisInfo::getMaterialName)
+                        .collect(Collectors.toList())
+        );
+
+        // 检查IK-物料出现次数是对的
+        assertEquals(
+                testOccurrenceCount,
+                result.stream()
+                        .map(IKAnalysisInfo::getOccurrenceCount)
+                        .collect(Collectors.toList())
+        );
+
+    }
+
     //创建EIQ对象
     private EIQBasicTable createBasicTableInfoWithDate(Date deliveryDate,
                                                        String orderNumber,

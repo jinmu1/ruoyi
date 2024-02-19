@@ -3,10 +3,11 @@ package com.ruoyi.data.eiq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+
 /**
- *IK基础导入的类-对物料--出库频次统计
+ * IK基础导入的类-对物料--出库频次统计
  */
-public  class IKAnalysisTable {
+public class IKAnalysisInfo {
     @Getter
     @Setter
     @JsonProperty("物料名称")
