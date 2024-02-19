@@ -21,7 +21,7 @@ public class EIQClassifier {
      * @param eiqBasicTableList 初始化的数据表
      * @return 返回的是包含EIQ单项要素分析的数据（data2）
      */
-    public static List<EIQAnalysisTable> getEIQAnalysisTable(List<EIQBasicTable> eiqBasicTableList){
+    public static List<EIQAnalysisTable> getEIQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
         //step1: 将日期标准化，防止同一天出现两个值
         final List<EIQBasicTable> standardizedList = eiqBasicTableList.stream()
                 .map(basicTable -> {
@@ -41,7 +41,7 @@ public class EIQClassifier {
                 })
                 .collect(Collectors.toList());
         //step2: 首先将数据按出库日期重组
-        final  Map<Date, List<EIQBasicTable>> dataGroupByDeliveryDate =
+        final Map<Date, List<EIQBasicTable>> dataGroupByDeliveryDate =
                 standardizedList.stream().collect(
                         Collectors.groupingBy(EIQBasicTable::getDeliveryDate));
         //step3: 统计每个出库日期的数据，然后升序排序
@@ -54,6 +54,7 @@ public class EIQClassifier {
         return eIQAnalysisTableSortedByDeliveryDate;
 
     }
+
     /***
      * EIQ分析--以日期作为统计数据的分类
      * @param key  日期
@@ -61,7 +62,7 @@ public class EIQClassifier {
      * @return 返回处理过的EIQ分析的值
      */
     private static EIQAnalysisTable calculateENQ(Date key,
-                                                          List<EIQBasicTable> eiqBasicTablesGroupByDate) {
+                                                 List<EIQBasicTable> eiqBasicTablesGroupByDate) {
         EIQAnalysisTable eiqAnalysisTable = new EIQAnalysisTable();
         final int numOrders =
                 eiqBasicTablesGroupByDate.stream().collect(
@@ -77,12 +78,14 @@ public class EIQClassifier {
         eiqAnalysisTable.setQAnalysis(sum);
         return eiqAnalysisTable;
     }
+
     /**
      * 将日期格式标准化 比如将2023-2-5 14:46:12 转换为 2023-2-5 00:00:00
+     *
      * @param deliveryDate
      * @return
      */
-    private static Date normalizeDate(Date deliveryDate){
+    private static Date normalizeDate(Date deliveryDate) {
         return DateUtils.truncate(deliveryDate, Calendar.DATE);
     }
 
@@ -116,7 +119,7 @@ public class EIQClassifier {
     /**
      * EN分析--以订单编码作为统计数据的分类
      *
-     * @param key 订单编码
+     * @param key            订单编码
      * @param eiqBasicTables 导入的基本数据类
      * @return 返回处理过的EN分析的值
      */
@@ -126,4 +129,47 @@ public class EIQClassifier {
         enAnalysisTable.setOrderLineCount(eiqBasicTables.size());
         return enAnalysisTable;
     }
+
+    /***
+     * 将导入的数据转换为EQ综合分析数据统计表(data4)
+     * 1.按照订单编码分组
+     * 2.按照订货量进行统计
+     * @param eiqBasicTableList 导入的基础数据
+     * @return 处理后的数据
+     */
+    public static List<EQAnalysisInfo> getEQAnalysisTable(List<EIQBasicTable> eiqBasicTableList) {
+        //step1: 首先将数据按订单编码重组
+        final Map<String, List<EIQBasicTable>> dataGroupByOrderNumber =
+                eiqBasicTableList.stream().collect(
+                        Collectors.groupingBy(EIQBasicTable::getOrderNumber));
+
+        //step2: 统计每个订单编码的数据，然后降序序排序
+        final List<EQAnalysisInfo> eqAnalysisInfoSortedByOrderLineCount =
+                dataGroupByOrderNumber.entrySet().stream()
+                        .map(entry -> calculateOrderQuantityInfo(entry.getKey(), entry.getValue()))
+                        .sorted(Comparator.comparing(EQAnalysisInfo::getTotalDeliveredQuantity, Comparator.reverseOrder()))
+                        .collect(Collectors.toList());
+
+        //step3:设置一个自增的序号
+        IntStream.range(0, eqAnalysisInfoSortedByOrderLineCount.size())
+                .forEach(i -> eqAnalysisInfoSortedByOrderLineCount.get(i).setCumulativeItemNumber(i + 1));
+        return eqAnalysisInfoSortedByOrderLineCount;
+    }
+
+    /***
+     * 将导入的数据转换为EQ综合分析数据统计表(data5)
+     *1.统计订单出库数量
+     * @param eiqBasicTables
+     * @return
+     */
+    private static EQAnalysisInfo calculateOrderQuantityInfo(String key,
+                                                             List<EIQBasicTable> eiqBasicTables) {
+        EQAnalysisInfo eqAnalysisInfo = new EQAnalysisInfo();
+        eqAnalysisInfo.setOrderNumber(key);
+        eqAnalysisInfo.setTotalDeliveredQuantity(eiqBasicTables.stream()
+                .mapToDouble(EIQBasicTable::getDeliveryQuantity)
+                .sum());
+        return eqAnalysisInfo;
+    }
+
 }
