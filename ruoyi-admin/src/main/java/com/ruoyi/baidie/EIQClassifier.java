@@ -173,7 +173,7 @@ public class EIQClassifier {
     }
 
     /***
-     * 将导入的数据转换为EI综合分析数据统计表(data5)
+     * 将导入的数据转换为EI综合分析数据统计表
      * 1.将数据按照订单编码分组
      * 2.统计订单内物料的行数，然后降序排序
      * @param eiqBasicTables 导入的基础数据
@@ -187,7 +187,7 @@ public class EIQClassifier {
         //step2: 统计每个订单编码的物料行数的数据，然后降序序排序
         final List<EIAnalysisInfo> eiAnalysisInfoSortedByMaterialNumber =
                 dataGroupByOrderNumber.entrySet().stream()
-                        .map(entry -> calculateMaterialInfo(entry.getKey(), entry.getValue()))
+                        .map(entry -> calculateEIAnalysisInfo(entry.getKey(), entry.getValue()))
                         .sorted(Comparator.comparing(EIAnalysisInfo::getMaterialVarietiesCount, Comparator.reverseOrder()))
                         .collect(Collectors.toList());
         //step3:设置一个自增的序号
@@ -203,7 +203,7 @@ public class EIQClassifier {
      * @param eiqBasicTables 分组后的数据表
      * @return 处理过的数据
      */
-    private static EIAnalysisInfo calculateMaterialInfo(String key,
+    private static EIAnalysisInfo calculateEIAnalysisInfo(String key,
                                                         List<EIQBasicTable> eiqBasicTables) {
         EIAnalysisInfo eiAnalysisInfo = new EIAnalysisInfo();
         eiAnalysisInfo.setOrderNumber(key);

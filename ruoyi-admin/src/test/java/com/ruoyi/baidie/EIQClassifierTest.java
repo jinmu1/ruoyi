@@ -189,7 +189,7 @@ public class EIQClassifierTest {
                         .map(EIAnalysisInfo::getOrderNumber)
                         .collect(Collectors.toList())
         );
-        // 检查EI-订货数量是对的
+        // 检查EI-物料种类数是对的
         assertEquals(
                 testEIAnalysis,
                 result.stream()
