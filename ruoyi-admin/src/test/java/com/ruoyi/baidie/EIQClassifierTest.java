@@ -27,12 +27,15 @@ public class EIQClassifierTest {
     private List<String> testEQOrderNumber;
     private List<Integer> testEIAnalysis;
     private List<String> testEIOrderNumber;
-    private int testSortByOrderNumer;
+    private int testSortByOrderNumber;
     private List<String> testIKMaterialCode;
     private List<String> testMaterialName;
     private List<Integer> testOccurrenceCount;
     private List<Integer> testMaterialNumerCumulativeItemNumber;
-    private int testSortByMaterialNumer;
+    private int testSortByMaterialNumber;
+    private int testIntervalNumber;
+    private List<String> testEIInterval;
+    private List<Integer> testEIIntervalNumber;
 
     @Before
     public void setUp() {
@@ -62,12 +65,15 @@ public class EIQClassifierTest {
         testEQOrderNumber = Arrays.asList("212223", "303132", "181920", "151617", "121314", "91011", "5678", "1234");
         testEIAnalysis = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
         testEIOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
-        testSortByOrderNumer = 8;
+        testSortByOrderNumber = 8;
         testIKMaterialCode = Arrays.asList("M2", "M4", "M1", "M3", "M5", "M7", "M10");
         testMaterialName = Arrays.asList("Material 2", "Material 4", "Material 1", "Material 3", "Material 5", "Material 7", "Material 10");
         testOccurrenceCount = Arrays.asList(2, 2, 1, 1, 1, 1, 1);
-        testSortByMaterialNumer = 7;
+        testSortByMaterialNumber = 7;
         testMaterialNumerCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+        testIntervalNumber = 5;
+        testEIInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
+        testEIIntervalNumber = Arrays.asList(7, 1, 0, 0, 0);
     }
 
     /****
@@ -184,7 +190,7 @@ public class EIQClassifierTest {
     public void getEIAnalysisInfoTest() {
         List<EIAnalysisInfo> result = EIQClassifier.getEIAnalysisTable(testEIQBasicTable);
         // 保证结果行数跟输入一样
-        assertEquals(testSortByOrderNumer, result.size());
+        assertEquals(testSortByOrderNumber, result.size());
 
         // 检查EI-序列号是对的
         assertEquals(
@@ -214,7 +220,7 @@ public class EIQClassifierTest {
     public void getIKAnalysisTableTest() {
         List<IKAnalysisInfo> result = EIQClassifier.getIKAnalysisInfoTest(testEIQBasicTable);
         // 保证结果行数跟输入一样
-        assertEquals(testSortByMaterialNumer, result.size());
+        assertEquals(testSortByMaterialNumber, result.size());
 
         // 检查IK-序列号是对的
         assertEquals(
@@ -246,6 +252,25 @@ public class EIQClassifierTest {
                         .collect(Collectors.toList())
         );
 
+    }
+
+    @Test
+    public void getEIHistogramTest() {
+        Map<String, Integer> result = EIQClassifier.getEIHistogram(testEIQBasicTable, testIntervalNumber);
+        // 保证结果行数跟输入一样
+        assertEquals(testIntervalNumber, result.size());
+        // 检查EI-直方图的区间是对的
+        assertEquals(
+                testEIInterval,
+                result.keySet().stream()
+                        .collect(Collectors.toList())
+        );
+        // 检查EI-直方图的值是对的
+        assertEquals(
+                testEIIntervalNumber,
+                result.values().stream()
+                        .collect(Collectors.toList())
+        );
     }
 
     //创建EIQ对象
