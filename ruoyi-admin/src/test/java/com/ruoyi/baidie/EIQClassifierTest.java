@@ -36,7 +36,9 @@ public class EIQClassifierTest {
     private int testIntervalNumber;
     private List<String> testEIInterval;
     private List<Integer> testEIIntervalNumber;
-
+    private int testIKNumber;
+    private List<String> testIKInterval;
+    private List<Integer> testIKIntervalNumber;
     @Before
     public void setUp() {
         // Set up some test data
@@ -74,6 +76,9 @@ public class EIQClassifierTest {
         testIntervalNumber = 5;
         testEIInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
         testEIIntervalNumber = Arrays.asList(7, 1, 0, 0, 0);
+        testIKNumber = 5;
+        testIKInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
+        testIKIntervalNumber = Arrays.asList(5, 2, 0, 0, 0);
     }
 
     /****
@@ -268,6 +273,24 @@ public class EIQClassifierTest {
         // 检查EI-直方图的值是对的
         assertEquals(
                 testEIIntervalNumber,
+                result.values().stream()
+                        .collect(Collectors.toList())
+        );
+    }
+    @Test
+    public void getIKHistogramTest() {
+        Map<String, Integer> result = EIQClassifier.getIKHistogram(testEIQBasicTable, testIKNumber);
+        // 保证结果行数跟输入一样
+        assertEquals(testIKNumber, result.size());
+        // 检查EI-直方图的区间是对的
+        assertEquals(
+                testIKInterval,
+                result.keySet().stream()
+                        .collect(Collectors.toList())
+        );
+        // 检查EI-直方图的值是对的
+        assertEquals(
+                testIKIntervalNumber,
                 result.values().stream()
                         .collect(Collectors.toList())
         );

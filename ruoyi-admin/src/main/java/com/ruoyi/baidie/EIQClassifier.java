@@ -286,4 +286,33 @@ public class EIQClassifier {
 
         return materialVarietiesCountArray;
     }
+    /**
+     * IK分析的直方统计
+     * 统计订单对应物料品种数的区间范围
+     *
+     * @param eiqBasicTables EIQ基本数据
+     * @return EI分析的区间和区间对应的值的数量
+     */
+    public static Map<String, Integer> getIKHistogram(List<EIQBasicTable> eiqBasicTables,
+                                                      int intervalNumber) {
+        final List<IKAnalysisInfo> ikAnalysisInfoList =
+                getIKAnalysisInfoTest(eiqBasicTables);
+        final double[] ikCount = getMaterialOccurrenceCount(ikAnalysisInfoList);
+        return BaidieUtils.generateIntervalData(ikCount, intervalNumber);
+    }
+
+    /**
+     * 统计IK分析的出现的次数
+     * @param ikAnalysisInfoList
+     * @return
+     */
+    private static double[] getMaterialOccurrenceCount(List<IKAnalysisInfo> ikAnalysisInfoList) {
+        // 使用 Java Stream 将 OccurrenceCount 提取到一个数组中
+        double[] materialVarietiesCountArray = ikAnalysisInfoList.stream()
+                .mapToInt(IKAnalysisInfo::getOccurrenceCount)
+                .asDoubleStream()
+                .toArray();
+
+        return materialVarietiesCountArray;
+    }
 }
