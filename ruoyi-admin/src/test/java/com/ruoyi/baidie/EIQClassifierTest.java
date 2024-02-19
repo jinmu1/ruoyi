@@ -28,6 +28,12 @@ public class EIQClassifierTest {
     private List<Integer> testEIAnalysis;
     private List<String> testEIOrderNumber;
     private int testSortByOrderNumer;
+    private List<String> testIKMaterialCode;
+    private List<String> testMaterialName;
+    private List<Integer> testOccurrenceCount;
+    private List<Integer> testMaterialNumerCumulativeItemNumber;
+    private int testSortByMaterialNumer;
+
     @Before
     public void setUp() {
         // Set up some test data
@@ -36,9 +42,9 @@ public class EIQClassifierTest {
         EIQBasicTable obj3 = createBasicTableInfoWithDate(createDate(2024, 2, 5, 3, 4, 22), "91011", "M3", "Material 3", 200.0, "tons", 20.0, 4.0, 2.0, 1.0);
         EIQBasicTable obj4 = createBasicTableInfoWithDate(createDate(2024, 2, 5, 3, 9, 23), "121314", "M4", "Material 4", 250.0, "grams", 25.0, 5.0, 2.5, 1.2);
         EIQBasicTable obj5 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 21), "151617", "M5", "Material 5", 300.0, "kg", 30.0, 6.0, 3.0, 1.5);
-        EIQBasicTable obj6 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 2), "181920", "M6", "Material 6", 350.0, "lbs", 35.0, 7.0, 3.5, 1.7);
+        EIQBasicTable obj6 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 2), "181920", "M4", "Material 4", 350.0, "lbs", 35.0, 7.0, 3.5, 1.7);
         EIQBasicTable obj7 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M7", "Material 7", 400.0, "tons", 40.0, 8.0, 4.0, 2.0);
-        EIQBasicTable obj8 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M9", "Material 9", 500.0, "kg", 50.0, 10.0, 5.0, 2.5);
+        EIQBasicTable obj8 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M2", "Material 2", 500.0, "kg", 50.0, 10.0, 5.0, 2.5);
         EIQBasicTable obj9 = createBasicTableInfoWithDate(createDate(2024, 2, 2, 3, 5, 2), "303132", "M10", "Material 10", 550.0, "lbs", 55.0, 11.0, 5.5, 2.7);
 
         testEIQBasicTable =
@@ -57,6 +63,11 @@ public class EIQClassifierTest {
         testEIAnalysis = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
         testEIOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
         testSortByOrderNumer = 8;
+        testIKMaterialCode = Arrays.asList("M2", "M4", "M1", "M3", "M5", "M7", "M10");
+        testMaterialName = Arrays.asList("Material 2", "Material 4", "Material 1", "Material 3", "Material 5", "Material 7", "Material 10");
+        testOccurrenceCount = Arrays.asList(2, 2, 1, 1, 1, 1, 1);
+        testSortByMaterialNumer = 7;
+        testMaterialNumerCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
     }
 
     /****
@@ -198,6 +209,45 @@ public class EIQClassifierTest {
         );
 
     }
+
+    @Test
+    public void getIKAnalysisTableTest() {
+        List<IKAnalysisInfo> result = EIQClassifier.getIKAnalysisInfoTest(testEIQBasicTable);
+        // 保证结果行数跟输入一样
+        assertEquals(testSortByMaterialNumer, result.size());
+
+        // 检查IK-序列号是对的
+        assertEquals(
+                testMaterialNumerCumulativeItemNumber,
+                result.stream()
+                        .map(IKAnalysisInfo::getCumulativeItemNumber)
+                        .collect(Collectors.toList())
+        );
+        // 检查IK-物料号是对的
+        assertEquals(
+                testIKMaterialCode,
+                result.stream()
+                        .map(IKAnalysisInfo::getMaterialCode)
+                        .collect(Collectors.toList())
+        );
+        // 检查IK-物料名称是对的
+        assertEquals(
+                testMaterialName,
+                result.stream()
+                        .map(IKAnalysisInfo::getMaterialName)
+                        .collect(Collectors.toList())
+        );
+
+        // 检查IK-物料出现次数是对的
+        assertEquals(
+                testOccurrenceCount,
+                result.stream()
+                        .map(IKAnalysisInfo::getOccurrenceCount)
+                        .collect(Collectors.toList())
+        );
+
+    }
+
     //创建EIQ对象
     private EIQBasicTable createBasicTableInfoWithDate(Date deliveryDate,
                                                        String orderNumber,

@@ -204,7 +204,7 @@ public class EIQClassifier {
      * @return 处理过的数据
      */
     private static EIAnalysisInfo calculateEIAnalysisInfo(String key,
-                                                        List<EIQBasicTable> eiqBasicTables) {
+                                                          List<EIQBasicTable> eiqBasicTables) {
         EIAnalysisInfo eiAnalysisInfo = new EIAnalysisInfo();
         eiAnalysisInfo.setOrderNumber(key);
         eiAnalysisInfo.setMaterialVarietiesCount(eiqBasicTables.stream()
@@ -212,4 +212,46 @@ public class EIQClassifier {
         return eiAnalysisInfo;
     }
 
+    /***
+     * 将导入的数据转换为IK综合分析数据统计表(data6)
+     * 1.将数据按照物料编码分组
+     * 2.统计分组后物料编码出现的次数
+     * @param eiqBasicTables
+     * @return
+     */
+    public static List<IKAnalysisInfo> getIKAnalysisInfoTest(List<EIQBasicTable> eiqBasicTables) {
+        //step1: 首先将数据按物料编码重组
+        final Map<String, List<EIQBasicTable>> dataGroupByMaterialNumber =
+                eiqBasicTables.stream().collect(
+                        Collectors.groupingBy(EIQBasicTable::getMaterialNumber));
+
+        //step2: 统计每个物料编码的物料行数的数据，然后降序序排序
+        final List<IKAnalysisInfo> analysisTableSortedByMaterialNumber =
+                dataGroupByMaterialNumber.entrySet().stream()
+                        .map(entry -> calculateIKAnalysisInfo(entry.getKey(), entry.getValue()))
+                        .sorted(Comparator.comparing(IKAnalysisInfo::getOccurrenceCount, Comparator.reverseOrder()))
+                        .collect(Collectors.toList());
+
+        //step3:设置一个自增的序号
+        IntStream.range(0, analysisTableSortedByMaterialNumber.size())
+                .forEach(i -> analysisTableSortedByMaterialNumber.get(i).setCumulativeItemNumber(i + 1));
+        // 返回生成的 IKAnalysisTables 列表
+        return analysisTableSortedByMaterialNumber;
+    }
+
+    /***
+     * 处理后的基本数据
+     * 将按照物料编码处理过的数据，统计物料出现的次数---行数
+     * @param key 物料编码
+     * @param eiqBasicTables 分组后的数据
+     * @return 处理过的数据
+     */
+    private static IKAnalysisInfo calculateIKAnalysisInfo(String key,
+                                                          List<EIQBasicTable> eiqBasicTables) {
+        IKAnalysisInfo ikAnalysisEntry = new IKAnalysisInfo();
+        ikAnalysisEntry.setMaterialCode(key);
+        ikAnalysisEntry.setMaterialName(eiqBasicTables.get(0).getMaterialName());
+        ikAnalysisEntry.setOccurrenceCount(eiqBasicTables.size());
+        return ikAnalysisEntry;
+    }
 }
