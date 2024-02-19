@@ -3,6 +3,7 @@ package com.ruoyi.baidie;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.data.eiq.*;
+import com.ruoyi.web.controller.utils.BaidieUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -212,4 +213,24 @@ public class EIQClassifier {
         return eiAnalysisInfo;
     }
 
+    /**
+     * EI分析的直方统计
+     * 统计订单对应物料品种数的区间范围
+     * @param eiqBasicTables EIQ基本数据
+     * @return EI分析的区间和区间对应的值的数量
+     */
+    public static Map<String, Integer> calculateEIAnalysisInfo1(List<EIQBasicTable> eiqBasicTables) {
+        List<EIAnalysisInfo> eiAnalysisInfoList = getEIAnalysisTable(eiqBasicTables);
+        double[] eiCount = getMaterialVarietiesCountArray(eiAnalysisInfoList);
+        return BaidieUtils.generateIntervalData(eiCount);
+    }
+    public static double[] getMaterialVarietiesCountArray(List<EIAnalysisInfo> eiAnalysisInfoList) {
+        // 使用 Java Stream 将 materialVarietiesCount 提取到一个数组中
+        double[] materialVarietiesCountArray = eiAnalysisInfoList.stream()
+                .mapToInt(EIAnalysisInfo::getMaterialVarietiesCount)
+                .asDoubleStream()
+                .toArray();
+
+        return materialVarietiesCountArray;
+    }
 }
