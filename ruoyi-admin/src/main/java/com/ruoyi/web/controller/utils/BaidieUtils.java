@@ -71,18 +71,17 @@ public class BaidieUtils {
      * @param data 需要统计的数组
      * @return 返回一个key是区间，value是该区间值的数量的一个map
      */
-    public static Map<String, Integer> generateIntervalData(double[] data) {
+    public static Map<String, Integer> generateIntervalData(double[] data, int intervalNumber) {
         // 找到数据中的最小值和最大值
         double minValue = Arrays.stream(data).min().orElse(0);
         double maxValue = Arrays.stream(data).max().orElse(0);
 
         // 确定区间范围
-        int intervalWidth = 10;
-        int numIntervals = (int) Math.ceil((maxValue - minValue) / intervalWidth);
+        int intervalWidth = (int) Math.ceil((maxValue - minValue) / intervalNumber);
 
         // 创建区间和值的统计Map，默认值为0
         Map<String, Integer> intervalData = new TreeMap<>();
-        for (int i = 0; i < numIntervals; i++) {
+        for (int i = 0; i < intervalNumber; i++) {
             int intervalStart = (int) (minValue + i * intervalWidth);
             int intervalEnd = intervalStart + intervalWidth;
             intervalData.put("[" + intervalStart + ", " + intervalEnd + ")", 0);

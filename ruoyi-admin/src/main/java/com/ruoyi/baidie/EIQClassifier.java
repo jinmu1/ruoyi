@@ -205,7 +205,7 @@ public class EIQClassifier {
      * @return 处理过的数据
      */
     private static EIAnalysisInfo calculateEIAnalysisInfo(String key,
-                                                        List<EIQBasicTable> eiqBasicTables) {
+                                                          List<EIQBasicTable> eiqBasicTables) {
         EIAnalysisInfo eiAnalysisInfo = new EIAnalysisInfo();
         eiAnalysisInfo.setOrderNumber(key);
         eiAnalysisInfo.setMaterialVarietiesCount(eiqBasicTables.stream()
@@ -216,14 +216,23 @@ public class EIQClassifier {
     /**
      * EI分析的直方统计
      * 统计订单对应物料品种数的区间范围
+     *
      * @param eiqBasicTables EIQ基本数据
      * @return EI分析的区间和区间对应的值的数量
      */
-    public static Map<String, Integer> calculateEIAnalysisInfo1(List<EIQBasicTable> eiqBasicTables) {
-        List<EIAnalysisInfo> eiAnalysisInfoList = getEIAnalysisTable(eiqBasicTables);
-        double[] eiCount = getMaterialVarietiesCountArray(eiAnalysisInfoList);
-        return BaidieUtils.generateIntervalData(eiCount);
+    public static Map<String, Integer> getEIHistogram(List<EIQBasicTable> eiqBasicTables,
+                                                      int intervalNumber) {
+        final List<EIAnalysisInfo> eiAnalysisInfoList =
+                getEIAnalysisTable(eiqBasicTables);
+        final double[] eiCount = getMaterialVarietiesCountArray(eiAnalysisInfoList);
+        return BaidieUtils.generateIntervalData(eiCount, intervalNumber);
     }
+
+    /**
+     * 将EI分析后的订单对应物料品种数放到double数组中
+     * @param eiAnalysisInfoList
+     * @return
+     */
     public static double[] getMaterialVarietiesCountArray(List<EIAnalysisInfo> eiAnalysisInfoList) {
         // 使用 Java Stream 将 materialVarietiesCount 提取到一个数组中
         double[] materialVarietiesCountArray = eiAnalysisInfoList.stream()
