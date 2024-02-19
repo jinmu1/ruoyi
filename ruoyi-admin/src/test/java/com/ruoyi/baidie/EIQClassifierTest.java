@@ -25,7 +25,9 @@ public class EIQClassifierTest {
     private int expectedTotalNumOrders;
     private List<Double> testEQAnalysis;
     private List<String> testEQOrderNumber;
-
+    private List<Integer> testEIAnalysis;
+    private List<String> testEIOrderNumber;
+    private int testSortByOrderNumer;
     @Before
     public void setUp() {
         // Set up some test data
@@ -52,6 +54,9 @@ public class EIQClassifierTest {
         testOrderLineCount = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
         testEQAnalysis = Arrays.asList(900.0, 550.0, 350.0, 300.0, 250.0, 200.0, 150.0, 100.0);
         testEQOrderNumber = Arrays.asList("212223", "303132", "181920", "151617", "121314", "91011", "5678", "1234");
+        testEIAnalysis = Arrays.asList(2, 1, 1, 1, 1, 1, 1, 1);
+        testEIOrderNumber = Arrays.asList("212223", "151617", "91011", "121314", "181920", "1234", "303132", "5678");
+        testSortByOrderNumer = 8;
     }
 
     /****
@@ -164,6 +169,35 @@ public class EIQClassifierTest {
 
     }
 
+    @Test
+    public void getEIAnalysisInfoTest() {
+        List<EIAnalysisInfo> result = EIQClassifier.getEIAnalysisTable(testEIQBasicTable);
+        // 保证结果行数跟输入一样
+        assertEquals(testSortByOrderNumer, result.size());
+
+        // 检查EI-序列号是对的
+        assertEquals(
+                testCumulativeItemNumber,
+                result.stream()
+                        .map(EIAnalysisInfo::getCumulativeItemNumber)
+                        .collect(Collectors.toList())
+        );
+        // 检查EI-订单号是对的
+        assertEquals(
+                testEIOrderNumber,
+                result.stream()
+                        .map(EIAnalysisInfo::getOrderNumber)
+                        .collect(Collectors.toList())
+        );
+        // 检查EI-订货数量是对的
+        assertEquals(
+                testEIAnalysis,
+                result.stream()
+                        .map(EIAnalysisInfo::getMaterialVarietiesCount)
+                        .collect(Collectors.toList())
+        );
+
+    }
     //创建EIQ对象
     private EIQBasicTable createBasicTableInfoWithDate(Date deliveryDate,
                                                        String orderNumber,
