@@ -42,9 +42,9 @@ public class EIQClassifierTest {
         EIQBasicTable obj3 = createBasicTableInfoWithDate(createDate(2024, 2, 5, 3, 4, 22), "91011", "M3", "Material 3", 200.0, "tons", 20.0, 4.0, 2.0, 1.0);
         EIQBasicTable obj4 = createBasicTableInfoWithDate(createDate(2024, 2, 5, 3, 9, 23), "121314", "M4", "Material 4", 250.0, "grams", 25.0, 5.0, 2.5, 1.2);
         EIQBasicTable obj5 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 21), "151617", "M5", "Material 5", 300.0, "kg", 30.0, 6.0, 3.0, 1.5);
-        EIQBasicTable obj6 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 2), "181920", "M4", "Material 6", 350.0, "lbs", 35.0, 7.0, 3.5, 1.7);
+        EIQBasicTable obj6 = createBasicTableInfoWithDate(createDate(2024, 2, 4, 3, 5, 2), "181920", "M4", "Material 4", 350.0, "lbs", 35.0, 7.0, 3.5, 1.7);
         EIQBasicTable obj7 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M7", "Material 7", 400.0, "tons", 40.0, 8.0, 4.0, 2.0);
-        EIQBasicTable obj8 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M2", "Material 9", 500.0, "kg", 50.0, 10.0, 5.0, 2.5);
+        EIQBasicTable obj8 = createBasicTableInfoWithDate(createDate(2024, 2, 3, 3, 5, 2), "212223", "M2", "Material 2", 500.0, "kg", 50.0, 10.0, 5.0, 2.5);
         EIQBasicTable obj9 = createBasicTableInfoWithDate(createDate(2024, 2, 2, 3, 5, 2), "303132", "M10", "Material 10", 550.0, "lbs", 55.0, 11.0, 5.5, 2.7);
 
         testEIQBasicTable =
