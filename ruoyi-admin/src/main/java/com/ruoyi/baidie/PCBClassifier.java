@@ -98,6 +98,11 @@ public class PCBClassifier {
         return entryWithTotalValue;
     }
 
+    /**
+     * pcb类型统计方式
+     * @param outboundBasicInfo 导入的出库数据
+     * @return 返回带有PCB类型的数据
+     */
     private static MaterialOutboundTypeInfo calculatePackagingType(OutboundBasicInfo outboundBasicInfo) {
         MaterialPackagingInfo packagingInfo = calculateTotalValue(outboundBasicInfo);
 
