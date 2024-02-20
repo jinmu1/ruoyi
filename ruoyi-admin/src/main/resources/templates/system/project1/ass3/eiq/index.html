@@ -40,6 +40,11 @@
             <div class="ibox-title">
                 <h3>周期内物料出库数据基础表</h3>
             </div>
+            <div class="btn-group-sm" role="group">
+                <a class="btn btn-info" onclick="importData('system/eiq/importData', firstGroupPostImport)">
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+            </div>
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -1643,7 +1648,39 @@
             }
         )
     }
-
+    function checkAll() {
+        checkEIQTableSelectionAndRefresh();
+        checkEchartSelectionAndRefresh();
+        checkNChartSelectionAndRefresh();
+        checkQChartSelectionAndRefresh();
+        checkENTableSelectionAndRefresh();
+        checkENChartSelectionAndRefresh()
+        checkENPercentageChartAndRefresh();
+        checkEIChartSelectionAndRefresh();
+        checkEIPercentageChartSelectionAndRefresh();
+        checkIKChartSelectionAndRefresh();
+        checkEQAnalysisSelectionAndRefresh();
+        checkEIAnalysisSelectionAndRefresh();
+        checkIKAnalysisTableSelectionAndRefresh();
+    }
+    /***
+     * 第一个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function firstGroupPostImport(result) {
+        data1 = JSON.parse(result.data.data1);
+        data2 = JSON.parse(result.data.data2);
+        data3 = JSON.parse(result.data.data3);
+        data4 = JSON.parse(result.data.data4);
+        data5 = JSON.parse(result.data.data5);
+        data6 = JSON.parse(result.data.data6);
+        en_percentage_data = JSON.parse(result.data.en_percentage_data);
+        eq_distribution_data = JSON.parse(result.data.eq_distribution_data);
+        ei_percentage_data = JSON.parse(result.data.ei_percentage_data);
+        checkAll();
+    }
     /************************************************************
                     global constant for table schema
      ***********************************************************/
@@ -1686,7 +1723,7 @@
         },
         {
             field: '换算单位1',
-            title: '换算单位'
+            title: '换算单位1'
         }
     ];
 
