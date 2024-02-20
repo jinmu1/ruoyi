@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.common.json.JSONObject;
 import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.data.abc.OrderMaterialInfo;
+import com.ruoyi.data.common.ObjectMap;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -11,8 +12,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ruoyi.web.controller.utils.BaidieUtils.toPercentageOfString;
 import static org.junit.Assert.assertEquals;
@@ -87,5 +90,25 @@ public class BaidieUtilsTest {
         assertEquals("1.00%", toPercentageOfString(1, 100));
         assertEquals("33.46%", toPercentageOfString(33.4567, 100));
         assertEquals("33.45%", toPercentageOfString(33.4512, 100));
+    }
+    // 测试将List对像转换为对应的Json对象.
+    @Test
+    public void testGenerateIntervalData() throws JsonProcessingException {
+        // 准备测试数据
+        double[] data = {1.2, 42.3, 43.5, 34.5, 5.6, 26.7, 7.8, 18.9, 19.0, 10.1, 50};
+
+        // 调用方法生成 JSON
+        List<ObjectMap> objectMaps = BaidieUtils.generateIntervalData(data, 5);
+        List<String> str = Arrays.asList("[1, 11)", "[11, 21)", "[21, 31)", "[31, 41)", "[41, 51)");
+        List<Integer> testIKIntervalNumber=Arrays.asList(4, 2, 1, 1, 3);;
+        // 验证生成的 JSON 是否符合预期
+        assertEquals(str,
+                objectMaps.stream()
+                        .map(ObjectMap::getKey)
+                        .collect(Collectors.toList()));
+        assertEquals(testIKIntervalNumber,
+                objectMaps.stream()
+                        .map(ObjectMap::getValue)
+                        .collect(Collectors.toList()));
     }
 }
