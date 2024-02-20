@@ -141,7 +141,7 @@ public class BaidieProcessor {
                         "data2", EIQClassifier::getEIQAnalysisTable,
                         "data3", EIQClassifier::getENAnalysisTable,
                         "data4", EIQClassifier::getEQAnalysisTable,
-                        "data5", EIQClassifier::getEIQAnalysisTable,
+                        "data5", EIQClassifier::getEIAnalysisTable,
                         "data6", EIQClassifier::getIKAnalysisInfoTest,
                         "en_percentage_data", EIQClassifier::getENHistogram,
                         "eq_distribution_data", EIQClassifier::getEQHistogram,

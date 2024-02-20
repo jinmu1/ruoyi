@@ -317,6 +317,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/getDeliveryLine", "anon,captchaValidate");
         filterChainDefinitionMap.put("/getDeliveryLine1", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/system/eiq/importData", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData1", "anon,captchaValidate");
         filterChainDefinitionMap.put("/system/abc/importData2", "anon,captchaValidate");
         filterChainDefinitionMap.put("/warehouse", "anon,captchaValidate");

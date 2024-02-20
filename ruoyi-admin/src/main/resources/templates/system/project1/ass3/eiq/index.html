@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('EIQ分析')" />
+    <th:block th:include="include :: header('EIQ分析')"/>
     <style>
-        *{
+        * {
             margin: 0;
-            margin: 0;font-size:20px;
+            margin: 0;
+            font-size: 20px;
         }
 
 
@@ -23,11 +24,14 @@
                 <div>
                     <div style="font-size:26px;text-align: center">EIQ</div>
                     <div style="height: 17px;"></div>
-                    <div style="line-height: 33px;">EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。</div>
-<!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
-<!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
-<!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
-<!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
+                    <div style="line-height: 33px;">
+                        EIQ分析从客户订单的品类、数量与订购次数等观点出发进行出货特征的分析并利用“E”、“I”、“Q”三个关键要素来进行出货特征的分析。其中,E——订单,order
+                        entry；I——品项，item；Q——数量，quantity。EIQ分析的主要内容是对订单数据的统计，并以图形的方式表现出来，从中得出订单的特征与物流活动的特征作为物流规划设计的依据。
+                    </div>
+                    <!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EN分析是针对每张订单对应的订单行数进行分析，也称为每张订单的订货品项数量分析， EN分析的结果可以帮助判断拣选点的拣货方式以及分拣设备。</div>-->
+                    <!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;EQ分析时针对每张订单的订货数量进行分析，通过EQ分析可以了解每张订单的订货量的分布情况，从而可以决定处理订单的原则、拣货系统的设计、发货方式和发货区的设计等。</div>-->
+                    <!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IQ分析针对每个物料的订货数量进行分析，通过对品种数量IQ分析，可以知道各种物料发货量的分布情况，有利于分析物料的重要性，从而决定仓储系统的规划选用、储位空间的估算、拣选方式及拣货区设计。</div>-->
+                    <!--                    <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▷&nbsp;&nbsp;&nbsp;&nbsp;IK分析主要对每种物料的出货次数进行分析，对于了解每种物料的出货频率有很大的帮助，主要功能可配合IQ分析决定仓储与拣货系统的选择。</div>-->
                 </div>
 
             </div>
@@ -130,7 +134,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkEIQTableSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIQTableSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -176,28 +182,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="x" id="x" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='出库量'  >出库量</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='出库日期'  >出库日期</option>
+                            <select name="x" id="x" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='出库量'>出库量</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='出库日期'>出库日期</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y" id="y" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
-                                <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
-                                <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
-                                <option  value='统计周期内每日物料数量'  >统计周期内每日物料数量</option>
+                            <select name="y" id="y" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='统计周期内每日出库数量'>统计周期内每日出库数量</option>
+                                <option value='统计周期内每日订单行数'>统计周期内每日订单行数</option>
+                                <option value='统计周期内每日订单数量'>统计周期内每日订单数量</option>
+                                <option value='统计周期内每日物料数量'>统计周期内每日物料数量</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkEchartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEchartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -259,28 +267,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="x1" id="x1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='出库量'  >出库量</option>
-                                <option  value='出库日期'  >出库日期</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号'  >物料编号</option>
+                            <select name="x1" id="x1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='出库量'>出库量</option>
+                                <option value='出库日期'>出库日期</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号'>物料编号</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y1" id="y1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='统计周期内订单总行数'  >统计周期内订单总行数</option>
-                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
-                                <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
-                                <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
+                            <select name="y1" id="y1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='统计周期内订单总行数'>统计周期内订单总行数</option>
+                                <option value='统计周期内每日出库数量'>统计周期内每日出库数量</option>
+                                <option value='统计周期内每日订单数量'>统计周期内每日订单数量</option>
+                                <option value='统计周期内每日订单行数'>统计周期内每日订单行数</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkNChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkNChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -342,28 +352,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="x2" id="x2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='出库量'  >出库量</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='出库日期'  >出库日期</option>
-                                <option  value='物料编号'  >物料编号</option>
+                            <select name="x2" id="x2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='出库量'>出库量</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='出库日期'>出库日期</option>
+                                <option value='物料编号'>物料编号</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y2" id="y2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='统计周期内每日出库数量'  >统计周期内每日出库数量</option>
-                                <option  value='统计周期内每日订单数量'  >统计周期内每日订单数量</option>
-                                <option  value='统计周期内每日订单行数'  >统计周期内每日订单行数</option>
-                                <option  value='统计周期内订单总行数'  >统计周期内订单总行数</option>
+                            <select name="y2" id="y2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='统计周期内每日出库数量'>统计周期内每日出库数量</option>
+                                <option value='统计周期内每日订单数量'>统计周期内每日订单数量</option>
+                                <option value='统计周期内每日订单行数'>统计周期内每日订单行数</option>
+                                <option value='统计周期内订单总行数'>统计周期内订单总行数</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkQChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkQChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -433,7 +445,7 @@
                             <label class="col-sm-1 control-label">选择正确步骤</label>
 
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="d1" data-first-title="请选择">
                                             <option value="">请选择</option>
@@ -493,7 +505,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkENTableSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENTableSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -539,28 +553,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select name="enx" id="enx" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='该订单对应订单行数'  >该订单对应订单行数</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='订单编号累计品目数'  >订单编号累计品目数</option>
+                            <select name="enx" id="enx" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='该订单对应订单行数'>该订单对应订单行数</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='订单编号累计品目数'>订单编号累计品目数</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="eny" id="eny" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单编号累计品目数'  >订单编号累计品目数</option>
-                                <option  value='物料编号累计品目数'  >物料编号累计品目数</option>
-                                <option  value='订单对应订单行数'  >订单对应订单行数</option>
-                                <option  value='订单编号'  >订单编号</option>
+                            <select name="eny" id="eny" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单编号累计品目数'>订单编号累计品目数</option>
+                                <option value='物料编号累计品目数'>物料编号累计品目数</option>
+                                <option value='订单对应订单行数'>订单对应订单行数</option>
+                                <option value='订单编号'>订单编号</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkENChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -622,28 +638,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="enx1" id="enx1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单行数出现次数占比'  >订单行数出现次数占比</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='订单行数'  >订单行数</option>
+                            <select name="enx1" id="enx1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单行数出现次数占比'>订单行数出现次数占比</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='订单行数'>订单行数</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="eny1" id="eny1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单行数'  >订单行数</option>
-                                <option  value='订单行数出现次数占比'  >订单行数出现次数占比</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='订单编号'  >订单编号</option>
+                            <select name="eny1" id="eny1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单行数'>订单行数</option>
+                                <option value='订单行数出现次数占比'>订单行数出现次数占比</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='订单编号'>订单编号</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkENPercentageChartAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkENPercentageChartAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -711,7 +729,7 @@
                             <label class="col-sm-1 control-label">选择正确步骤</label>
 
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="d11" data-first-title="请选择">
                                             <option value="">请选择</option>
@@ -771,7 +789,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkEQAnalysisSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQAnalysisSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -817,27 +837,29 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="eqx" id="eqx" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单对应订单行数'  >	订单对应订单行数	</option>
-                                <option  value='订单编号'  >	订单编号	</option>
-                                <option  value='物料编号'  >	物料编号	</option>
-                                <option  value='订单编号累计品目数'  >	订单编号累计品目数	</option>
+                            <select name="eqx" id="eqx" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单对应订单行数'> 订单对应订单行数</option>
+                                <option value='订单编号'> 订单编号</option>
+                                <option value='物料编号'> 物料编号</option>
+                                <option value='订单编号累计品目数'> 订单编号累计品目数</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="eqy" id="eqy" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单编号'  >	订单编号	</option>
-                                <option  value='订单对应的出库总数量'  >	订单对应的出库总数量	</option>
-                                <option  value='订单编号累计品目数'  >	订单编号累计品目数	</option>
-                                <option  value='物料编号'  >	物料编号	</option>
+                            <select name="eqy" id="eqy" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单编号'> 订单编号</option>
+                                <option value='订单对应的出库总数量'> 订单对应的出库总数量</option>
+                                <option value='订单编号累计品目数'> 订单编号累计品目数</option>
+                                <option value='物料编号'> 物料编号</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkEQChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -899,28 +921,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select name="eqx1" id="eqx1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单编号'  >	订单编号	</option>
-                                <option  value='物料编号'  >	物料编号	</option>
-                                <option  value='订单出库总数量出现次数占比'  >	订单出库总数量出现次数占比	</option>
-                                <option  value='该订单对应的出库总数量分布区间'  >	该订单对应的出库总数量分布区间	</option>
+                            <select name="eqx1" id="eqx1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单编号'> 订单编号</option>
+                                <option value='物料编号'> 物料编号</option>
+                                <option value='订单出库总数量出现次数占比'> 订单出库总数量出现次数占比</option>
+                                <option value='该订单对应的出库总数量分布区间'> 该订单对应的出库总数量分布区间</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="eqy1" id="eqy1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='区间内订单出库总数量出现次数占比'  >	区间内订单出库总数量出现次数占比	</option>
-                                <option  value='物料编号'  >	物料编号	</option>
-                                <option  value='该订单对应的出库总数量'  >	该订单对应的出库总数量	</option>
-                                <option  value='订单编号'  >	订单编号	</option>
+                            <select name="eqy1" id="eqy1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='区间内订单出库总数量出现次数占比'> 区间内订单出库总数量出现次数占比</option>
+                                <option value='物料编号'> 物料编号</option>
+                                <option value='该订单对应的出库总数量'> 该订单对应的出库总数量</option>
+                                <option value='订单编号'> 订单编号</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkEQDistChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEQDistChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -991,7 +1015,7 @@
                             <label class="col-sm-1 control-label">选择正确步骤</label>
 
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="d31" data-first-title="请选择">
                                             <option value="">请选择</option>
@@ -1051,7 +1075,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkEIAnalysisSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIAnalysisSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1097,28 +1123,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="eix" id="eix" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编码'  >物料编码</option>
-                                <option  value='订单编号累计品目数'  >订单编号累计品目数</option>
-                                <option  value='订单编码'  >订单编码</option>
-                                <option  value='该订单对应的物料品种数'  >该订单对应的物料品种数</option>
+                            <select name="eix" id="eix" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编码'>物料编码</option>
+                                <option value='订单编号累计品目数'>订单编号累计品目数</option>
+                                <option value='订单编码'>订单编码</option>
+                                <option value='该订单对应的物料品种数'>该订单对应的物料品种数</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select name="eiy" id="eiy" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单编码'  >订单编码</option>
-                                <option  value='订单编号累计品目数'  >订单编号累计品目数</option>
-                                <option  value='该订单对应的物料品种数'  >该订单对应的物料品种数</option>
-                                <option  value='物料编码'  >物料编码</option>
+                            <select name="eiy" id="eiy" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单编码'>订单编码</option>
+                                <option value='订单编号累计品目数'>订单编号累计品目数</option>
+                                <option value='该订单对应的物料品种数'>该订单对应的物料品种数</option>
+                                <option value='物料编码'>物料编码</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkEIChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1180,28 +1208,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select name="eix1" id="eix1" type="text"  class="form-control" >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='该订单对应的出库总数量'  >该订单对应的出库总数量</option>
-                                <option  value='订单对应的物料品种数'  >订单对应的物料品种数</option>
-                                <option  value='订单出库总数量出现次数占比'  >订单出库总数量出现次数占比</option>
-                                <option  value='订单对应的物料品种数出现次数占比'  >订单对应的物料品种数出现次数占比</option>
+                            <select name="eix1" id="eix1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='该订单对应的出库总数量'>该订单对应的出库总数量</option>
+                                <option value='订单对应的物料品种数'>订单对应的物料品种数</option>
+                                <option value='订单出库总数量出现次数占比'>订单出库总数量出现次数占比</option>
+                                <option value='订单对应的物料品种数出现次数占比'>订单对应的物料品种数出现次数占比</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select name="eiy1" id="eiy1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='订单对应的物料品种数出现次数占比'  >订单对应的物料品种数出现次数占比</option>
-                                <option  value='该订单对应的出库总数量'  >该订单对应的出库总数量</option>
-                                <option  value='订单对应的物料品种数'  >订单对应的物料品种数</option>
-                                <option  value='订单出库总数量出现次数占比'  >订单出库总数量出现次数占比</option>
+                            <select name="eiy1" id="eiy1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='订单对应的物料品种数出现次数占比'>订单对应的物料品种数出现次数占比</option>
+                                <option value='该订单对应的出库总数量'>该订单对应的出库总数量</option>
+                                <option value='订单对应的物料品种数'>订单对应的物料品种数</option>
+                                <option value='订单出库总数量出现次数占比'>订单出库总数量出现次数占比</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkEIPercentageChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkEIPercentageChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1267,7 +1297,7 @@
                             <label class="col-sm-1 control-label">选择正确步骤</label>
 
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="d41" data-first-title="请选择">
                                             <option value="">请选择</option>
@@ -1310,7 +1340,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkIKAnalysisTableSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkIKAnalysisTableSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1356,28 +1388,30 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select name="ikx" id="ikx" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编号周期内出现次数'  >物料编号周期内出现次数</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号累计品目数'  >物料编号累计品目数</option>
-                                <option  value='物料编号'  >物料编号</option>
+                            <select name="ikx" id="ikx" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编号周期内出现次数'>物料编号周期内出现次数</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号累计品目数'>物料编号累计品目数</option>
+                                <option value='物料编号'>物料编号</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="iky" id="iky" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='订单编号'  >订单编号</option>
-                                <option  value='物料编号累计品目数'  >物料编号累计品目数</option>
-                                <option  value='物料编号周期内出现次数'  >物料编号周期内出现次数</option>
+                            <select name="iky" id="iky" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='订单编号'>订单编号</option>
+                                <option value='物料编号累计品目数'>物料编号累计品目数</option>
+                                <option value='物料编号周期内出现次数'>物料编号周期内出现次数</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkIKChartSelectionAndRefresh()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkIKChartSelectionAndRefresh()"
+                                        type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1439,7 +1473,7 @@
                 <div class="ibox-content" style="height:300px">
                     <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
                         <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
-                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <p><span id="token" style="display: none" th:text="${token}"></span></p>
                         <button class="btn btn-primary" onclick="end()" type="button">提交</button>
                     </div>
                 </div>
@@ -1448,24 +1482,25 @@
 
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: echarts-js" />
-<script  th:inline="javascript">
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
     var ctx = [[@{/}]];
     var baidieScore = new BaidieScore();
-    function end(){
+
+    function end() {
         const score = baidieScore.getScore();
-        window.location.href=ctx+"end?score="+score+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+        window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
     }
 
-    var data1,data2,data3,data4,data5,data6;
+    var data1, data2, data3, data4, data5, data6;
     $.getJSON("../../../file/eiq.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
-        data4=data.data4;
-        data5=data.data5;
-        data6=data.data6;
+        data1 = data.data1;
+        data2 = data.data2;
+        data3 = data.data3;
+        data4 = data.data4;
+        data5 = data.data5;
+        data6 = data.data6;
 
         en_percentage_data = data.en_percentage_data;
         // TODO: these two static data is exactly the same.
@@ -1482,11 +1517,12 @@
         initBaidieTable("bootstrap-table5", EI_ANALYSIS_TABLE_COLUMNS);
         initBaidieTable("bootstrap-table6", IK_ANALYSIS_TABLE_COLUMNS);
 
-        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+        $.post(ctx + "system/op/list1?&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text(), function (result) {
             var d = result.rows;
-            for(var i=0;i<result.total;i++){
-                $("#"+d[i].opId).val(d[i].opValue);
+            for (var i = 0; i < result.total; i++) {
+                $("#" + d[i].opId).val(d[i].opValue);
             }
+            checkAll();
         });
     });
 
@@ -1494,21 +1530,22 @@
         initBaidieTable("bootstrap-table", EIQ_ORIG_TABLE_COLUMNS);
         refreshBaidieTable("bootstrap-table", data1);
     }
-    function checkEIQTableSelectionAndRefresh(){
+
+    function checkEIQTableSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             EIQ_ANALYSIS_TABLE_ANSWERS,
             baidieScore,
-            function() {
-                return refreshBaidieTable("bootstrap-table2", data2);
+            function () {
+                return createBaidieTable("bootstrap-table2", EIQ_ANALYSIS_TABLE_COLUMNS, data2);
             }
         )
     }
 
-    function checkEchartSelectionAndRefresh(){
+    function checkEchartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             E_CHART_ANSWERS,
             baidieScore,
-            function() {
+            function () {
                 return refreshChartWithMaxMin('e', data2, "日期", "E分析");
             }
         )
@@ -1523,7 +1560,8 @@
             }
         )
     }
-    function checkQChartSelectionAndRefresh(){
+
+    function checkQChartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             Q_CHART_ANSWERS,
             baidieScore,
@@ -1538,7 +1576,7 @@
             EN_ANALYSIS_TABLE_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieTable("bootstrap-table3", data3);
+                return createBaidieTable("bootstrap-table3", EN_ANALYSIS_TABLE_COLUMNS, data3);
             }
         )
     }
@@ -1563,7 +1601,7 @@
         );
     }
 
-    function checkEQChartSelectionAndRefresh(){
+    function checkEQChartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             EQ_CHART_ANSWERS,
             baidieScore,
@@ -1572,6 +1610,7 @@
             }
         );
     }
+
     function checkEQDistChartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             EQ_DISTRIBUTION_CHART_ANSWERS,
@@ -1586,7 +1625,7 @@
         );
     }
 
-    function checkEIChartSelectionAndRefresh(){
+    function checkEIChartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             EI_CHART_ANSWERS,
             baidieScore,
@@ -1597,7 +1636,7 @@
         )
     }
 
-    function checkEIPercentageChartSelectionAndRefresh(){
+    function checkEIPercentageChartSelectionAndRefresh() {
         checkSelectionResultAndRefresh(
             EI_PERCENTAGE_CHART_ANSWERS,
             baidieScore,
@@ -1624,7 +1663,7 @@
             EQ_ANALYSIS_TABLE_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieTable("bootstrap-table4", data4);
+                return createBaidieTable("bootstrap-table4", EQ_ANALYSIS_TABLE_COLUMNS, data4);
             }
         )
     }
@@ -1634,7 +1673,10 @@
             EI_ANALYSIS_TABLE_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieTable("bootstrap-table5", data5);
+                return createBaidieTable("bootstrap-table5",
+                    EI_ANALYSIS_TABLE_COLUMNS,
+                    data5
+                );
             }
         )
     }
@@ -1644,10 +1686,11 @@
             IK_ANALYSIS_TABLE_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieTable("bootstrap-table6", data6);
+                return createBaidieTable("bootstrap-table6", IK_ANALYSIS_TABLE_COLUMNS, data6);
             }
         )
     }
+
     function checkAll() {
         checkEIQTableSelectionAndRefresh();
         checkEchartSelectionAndRefresh();
@@ -1662,7 +1705,10 @@
         checkEQAnalysisSelectionAndRefresh();
         checkEIAnalysisSelectionAndRefresh();
         checkIKAnalysisTableSelectionAndRefresh();
+        checkEQChartSelectionAndRefresh();
+        checkEQDistChartSelectionAndRefresh();
     }
+
     /***
      * 第一个表单的导入后返回的数据处理方法
      * 返回后端传回来的数据，将对应的变化调用
@@ -1679,10 +1725,12 @@
         en_percentage_data = JSON.parse(result.data.en_percentage_data);
         eq_distribution_data = JSON.parse(result.data.eq_distribution_data);
         ei_percentage_data = JSON.parse(result.data.ei_percentage_data);
+        refreshBaidieTable("bootstrap-table", data1);
         checkAll();
     }
+
     /************************************************************
-                    global constant for table schema
+     global constant for table schema
      ***********************************************************/
     const EIQ_ORIG_TABLE_COLUMNS = [
         {
@@ -1914,7 +1962,8 @@
             <input type="file" id="file" name="file"/>
             <div class="mt10 pt5">
                 <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据
-                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+                &nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                    class="fa fa-file-excel-o"></i> 下载模板</a>
             </div>
             <font color="red" class="pull-left mt10">
                 提示：仅允许导入“xls”或“xlsx”格式文件！
