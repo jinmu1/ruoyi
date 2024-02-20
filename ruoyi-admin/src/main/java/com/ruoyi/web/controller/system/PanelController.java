@@ -117,7 +117,7 @@ public class PanelController {
     @GetMapping("/project1/ass3/pcb")
     public String pcb()
     {
-        return   "system/project11/ass3/pcb/index";
+        return   "system/project1/ass3/pcb/index";
     }
     @GetMapping("/project1/ass4/customer")
     public String customer()

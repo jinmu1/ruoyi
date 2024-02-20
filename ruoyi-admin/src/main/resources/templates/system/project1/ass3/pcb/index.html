@@ -170,7 +170,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroupOneSelection()" type="button">提交</button>
                         </div>
                     </div>
                 </div>
@@ -278,7 +278,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="submit8()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroupTwoTableSelection()" type="button">提交</button>
                         </div>
                     </div>
                 </div>
@@ -403,7 +403,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTHREETableSelection()" type="button">提交</button>
                             </div>
                         </div>
 
@@ -480,9 +480,11 @@
 <script  th:inline="javascript">
     var total =0;
     var n=0;
-    function end(){
-        n=(n)/(total);
-        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    var baidieScore = new BaidieScore();
+
+    function end() {
+        const score = baidieScore.getScore();
+        window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
     }
 
     var data1,data2,data3;
@@ -490,272 +492,126 @@
         data1=data.data1;
         data2=data.data2;
         data3=data.data3;
-        loadTable();
-        // load1();
-    });
-
-    $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
-        var d = result.rows;
-        for(var i=0;i<result.total;i++){
-            $("#"+d[i].opId).val(d[i].opValue);
-        }
-        // submit();
-        submit1();
-        submit8();
-
-    });
-    function addResutl(opId,opValue) {
-      $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
+        // 初始化所有的表
+        initAllTables();
+        refreshGroupOneOriginalTable(data3)
+        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+            var d = result.rows;
+            for(var i=0;i<result.total;i++){
+                $("#"+d[i].opId).val(d[i].opValue);
+            }
+           checkPCB();
         });
+    });
+    function checkPCB(){
+        checkGroupOneSelection();
+        checkGroupTwoTableSelection();
+        checkGroupTHREETableSelection();
     }
-
-    function submit(){
-        var s1 = $('#s201 option:selected').val();
-        var s2 = $('#s202 option:selected').val();
-        var s3 = $('#s203 option:selected').val();
-        var s4 = $('#s204 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=2){
-            $('#s201').css("background-color","red");
-            setTimeout(function() {
-                $('#s201').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=4){
-            $('#s202').css("background-color","red");
-            setTimeout(function() {
-                $('#s202').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#s203').css("background-color","red");
-            setTimeout(function() {
-                $('#s203').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s204').css("background-color","red");
-            setTimeout(function() {
-                $('#s204').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){
-            addResutl("s201",s1);
-            addResutl("s202",s2);
-            addResutl("s203",s3);
-            addResutl("s204",s4);
-            n++;
-            layer.confirm('选择正确！',function(index){
-                layer.msg('选择正确！');
-            });
-        }
-
+    function initAllTables(){
+        const outboundBasicTable = [
+            {
+                field: '出库日期',
+                title: '出库日期'
+            },
+            {
+                field: '订单编号',
+                title: '订单编号'
+            },
+            {
+                field: '物料编码',
+                title: '物料编码'
+            },
+            {
+                field: '物料名称',
+                title: '物料名称'
+            },
+            {
+                field: '出库数量（个）',
+                title: '出库数量（个）'
+            },
+            {
+                field: '出货单位',
+                title: '出货单位'
+            }];
+        initBaidieTable("bootstrap-table", outboundBasicTable);
     }
-    function submit8(){
-        var s1 = $('#s221 option:selected').val();
-        var s2 = $('#s222 option:selected').val();
-        var s3 = $('#s223 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=2){
-            $('#s221').css("background-color","red");
-            setTimeout(function() {
-                $('#s221').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#s222').css("background-color","red");
-            setTimeout(function() {
-                $('#s222').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=4){
-            $('#s223').css("background-color","red");
-            setTimeout(function() {
-                $('#s223').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){
-            addResutl("s221",s1);
-            addResutl("s222",s2);
-            addResutl("s223",s3);
-             n++;
-            loadTable8();
-        }
-
+    function checkGroupOneSelection() {
+        checkSelectionResultAndRefresh(
+            PCB_SELECT_GROUP_ONE_ANSWERS,
+            baidieScore,
+            function () {
+                return popUpWindow($.modal.icon("success"), "选择正确!");
+            }
+        )
     }
-    function loadTable8() {
-        var options = {
-            id:"bootstrap-table14",
-            toolbar:"toolbar",
-            modalName: "【请填写功能名称】",
-            data:data1,
-            height: 400,
-            showHeader: true,
-            columns: [
-                {field:"物料编码",title:"物料编码"},
-                {field:"出库数量（个）：N",title:"出库数量（个）：N"},
-                {field:"单品与箱的对应数量关系：A",title:"单品与箱的对应数量关系：A"},
-                {field:"箱与托盘的对应数量关系：B",title:"箱与托盘的对应数量关系：B"},
-                {field:"A*B",title:"A*B"},
-                {field:"N/(A*B)",title:"N/(A*B)"},
-                {field:"需求数量对应托盘数量（P）",title:"需求数量对应托盘数量（P）"},
-                {field:"N-M*A*B",title:"N-M*A*B"},
-                {field:"(N-M*A*B)/A",title:"(N-M*A*B)/A"},
-                {field:"需求数量对应对应箱装数量（C）",title:"需求数量对应对应箱装数量（C）"},
-                {field:"需求数量对应对应单品数量（B）",title:"需求数量对应对应单品数量（B）"}]
-        };
-        $.table.init(options);
-
+    function checkGroupTwoTableSelection() {
+        checkSelectionResultAndRefresh(
+            PCB_SELECT_GROUP_TWO_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table14", valueBasedPCBTableColumns, data1);
+            }
+        )
     }
-    function submit1(){
-        var s1 = $('#s1 option:selected').val();
-        var s2 = $('#s2 option:selected').val();
-        var s3 = $('#s3 option:selected').val();
-        var s4 = $('#s4 option:selected').val();
-        var s5 = $('#s5 option:selected').val();
-        var s6 = $('#s6 option:selected').val();
-        var s7 = $('#s7 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=2){
-            $('#s1').css("background-color","red");
-            setTimeout(function() {
-                $('#s1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=3){
-            $('#s2').css("background-color","red");
-            setTimeout(function() {
-                $('#s2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=1){
-            $('#s3').css("background-color","red");
-            setTimeout(function() {
-                $('#s3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#s4').css("background-color","red");
-            setTimeout(function() {
-                $('#s4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=2){
-            $('#s5').css("background-color","red");
-            setTimeout(function() {
-                $('#s5').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=1){
-            $('#s6').css("background-color","red");
-            setTimeout(function() {
-                $('#s6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s7!=3){
-            $('#s7').css("background-color","red");
-            setTimeout(function() {
-                $('#s7').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("s1",s1);
-            addResutl("s2",s2);
-            addResutl("s3",s3);
-            addResutl("s4",s4);
-            addResutl("s5",s5);
-            addResutl("s6",s6);
-            addResutl("s7",s7);
-            n++;
-            load1();
-        }
-
+    function checkGroupTHREETableSelection() {
+        checkSelectionResultAndRefresh(
+            PCB_SELECT_GROUP_THREE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table1", valuePackagePCBTableColumns, data2);
+            }
+        )
     }
-    function load1(){
-        var options = {
-            id:"bootstrap-table1",
-            toolbar:null,
-            data:data2,
-            height: 400,
-            showHeader: true,
-            modalName: "【请填写功能名称】",
-            columns: [ [
-                {field:"物料编码",title:"物料编码"},
-                {field:"出库数量对应托盘数量（P）",title:"出库数量对应托盘数量（P）"},
-                {field:"出库数量对应对应箱装数量（C）",title:"出库数量对应对应箱装数量（C）"},
-                {field:"出库数量对应对应单品数量（B）",title:"出库数量对应对应单品数量（B）"},
-                {field:"物料对应出库环节物流包装单元模式判断",title:"物料对应出库环节物流包装单元模式判断"},
-
-            ]]
-        };
-        $.table.init(options);
+    function refreshGroupOneOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table", data);
     }
-    function loadTable(){
-        var options = {
-            id:"bootstrap-table",
-            data:data3,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出库数量（个）',
-                    title: '出库数量（个）'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                }]
-        };
-        $.table.init(options);
-
-
-    }
+    /************************************************************/
+    /**************PCB PAGE SELECTION ANSWERS *******************/
+    /************************************************************/
+    const PCB_SELECT_GROUP_ONE_ANSWERS = new Map([
+        ["s201", "2"],
+        ["s202", "4"],
+        ["s203", "3"],
+        ["s204", "2"]
+    ]);
+    const PCB_SELECT_GROUP_TWO_ANSWERS = new Map([
+        ["s221", "2"],
+        ["s222", "2"],
+        ["s223", "4"]
+    ]);
+    const PCB_SELECT_GROUP_THREE_ANSWERS = new Map([
+        ["s1", "2"],
+        ["s2", "3"],
+        ["s3", "1"],
+        ["s4", "4"],
+        ["s5", "2"],
+        ["s6", "1"],
+        ["s7", "3"]
+    ]);
+    /************************************************************/
+    /**************PCB PAGE OPTION *******************/
+    /************************************************************/
+    const valueBasedPCBTableColumns = [
+        {field:"物料编码",title:"物料编码"},
+        {field:"出库数量（个）：N",title:"出库数量（个）：N"},
+        {field:"单品与箱的对应数量关系：A",title:"单品与箱的对应数量关系：A"},
+        {field:"箱与托盘的对应数量关系：B",title:"箱与托盘的对应数量关系：B"},
+        {field:"A*B",title:"A*B"},
+        {field:"N/(A*B)",title:"N/(A*B)"},
+        {field:"需求数量对应托盘数量（P）",title:"需求数量对应托盘数量（P）"},
+        {field:"N-M*A*B",title:"N-M*A*B"},
+        {field:"(N-M*A*B)/A",title:"(N-M*A*B)/A"},
+        {field:"需求数量对应对应箱装数量（C）",title:"需求数量对应对应箱装数量（C）"},
+        {field:"需求数量对应对应单品数量（B）",title:"需求数量对应对应单品数量（B）"}
+        ]
+    const valuePackagePCBTableColumns = [
+        {field:"物料编码",title:"物料编码"},
+        {field:"出库数量对应托盘数量（P）",title:"出库数量对应托盘数量（P）"},
+        {field:"出库数量对应对应箱装数量（C）",title:"出库数量对应对应箱装数量（C）"},
+        {field:"出库数量对应对应单品数量（B）",title:"出库数量对应对应单品数量（B）"},
+        {field:"物料对应出库环节物流包装单元模式判断",title:"物料对应出库环节物流包装单元模式判断"}
+    ]
 </script>
 
 </body>
