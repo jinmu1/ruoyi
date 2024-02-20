@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.ruoyi.data.abc.MaterialBasicInfo;
 import com.ruoyi.data.abc.OrderMaterialInfo;
 import com.ruoyi.data.eiq.EIQBasicInfo;
+import com.ruoyi.data.pcb.OutboundBasicInfo;
 import com.ruoyi.web.controller.utils.BaidieUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -128,6 +129,7 @@ public class BaidieProcessor {
 
     /**
      * 将EIQ的文件导入后转为对应的字段
+     *
      * @param importFile
      * @return
      * @throws IOException
@@ -146,6 +148,23 @@ public class BaidieProcessor {
                         "en_percentage_data", EIQClassifier::getENHistogram,
                         "eq_distribution_data", EIQClassifier::getEQHistogram,
                         "ei_percentage_data", EIQClassifier::getEIHistogram
+                ));
+    }
+
+    /**
+     * pcb的页面转换逻辑，将导入的文件转换为处理逻辑的结果
+     *
+     * @param importFile 导入的文件
+     * @return
+     */
+    public static Map<String, List<?>> importPCBQGroup(MultipartFile importFile) throws IOException {
+        return importFromFileAndProcess(
+                importFile,
+                OutboundBasicInfo.class,
+                "data3",
+                Map.of(
+                        "data1", PCBClassifier::transformPackaging,
+                        "data2", PCBClassifier::pickPackagingType
                 ));
     }
 }
