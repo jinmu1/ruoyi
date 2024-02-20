@@ -39,20 +39,20 @@ public class PCBClassifierTest {
 
     @Before
     public void setUp() {
-        outboundBasicInfos = Arrays.asList(
-                new OutboundBasicInfo("2018/3/1", "HBDD10916488", "4704404", "阿萨姆奶茶（统一，500ML*15瓶/件）", 544.0, "15瓶/件", "60件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916489", "4001842", "奥古特（500ML*12瓶/件）", 450.0, "12瓶/件", "90件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916492", "4003064", "百岁山纯净水（570ML*24瓶/件）", 1341.0, "24瓶/件", "30件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916494", "4003288", "桂花酸梅汤（信远斋，300ML*12瓶/件）", 1912.0, "12瓶/件", "72件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916495", "4000869", "哈尔滨冰纯（500ML*12瓶/件）", 1451.0, "12瓶/件", "90件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916496", "4002609", "哈尔滨小麦王啤酒（500ML*12瓶/件）", 1258.0, "12瓶/件", "80件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916501", "4000451", "牛栏山白酒42度（500ML*12瓶/件）", 521.0, "12瓶/件", "32件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916503", "4000966", "青岛纯生（500ML*12瓶/件）", 1588.0, "12瓶/件", "75件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916505", "4000710", "雪碧（1.25L*12瓶/件）", 1088.0, "12瓶/件", "40件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916506", "4001019", "雪花纯生（500ML*12瓶/件）", 1107.0, "12瓶/件", "75件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916507", "4001543", "雪花勇闯天涯（500ML*12瓶/件）", 2497.0, "12瓶/件", "68件/托"),
-                new OutboundBasicInfo("2018/3/1", "HBDD10916509", "4001548", "燕京鲜啤（500ML*12瓶/件）", 3124.0, "12瓶/件", "90件/托")
-        );
+        OutboundBasicInfo info1 = createOutboundBasicInfo("HBDD10916488", "4704404", "阿萨姆奶茶（统一，500ML*15瓶/件）", 544.0, "15瓶/件", "60件/托");
+        OutboundBasicInfo info2 = createOutboundBasicInfo("HBDD10916489", "4001842", "奥古特（500ML*12瓶/件）", 450.0, "12瓶/件", "90件/托");
+        OutboundBasicInfo info3 = createOutboundBasicInfo("HBDD10916492", "4003064", "百岁山纯净水（570ML*24瓶/件）", 1341.0, "24瓶/件", "30件/托");
+        OutboundBasicInfo info4 = createOutboundBasicInfo("HBDD10916494", "4003288", "桂花酸梅汤（信远斋，300ML*12瓶/件）", 1912.0, "12瓶/件", "72件/托");
+        OutboundBasicInfo info5 = createOutboundBasicInfo("HBDD10916495", "4000869", "哈尔滨冰纯（500ML*12瓶/件）", 1451.0, "12瓶/件", "90件/托");
+        OutboundBasicInfo info6 = createOutboundBasicInfo("HBDD10916496", "4002609", "哈尔滨小麦王啤酒（500ML*12瓶/件）", 1258.0, "12瓶/件", "80件/托");
+        OutboundBasicInfo info7 = createOutboundBasicInfo("HBDD10916501", "4000451", "牛栏山白酒42度（500ML*12瓶/件）", 521.0, "12瓶/件", "32件/托");
+        OutboundBasicInfo info8 = createOutboundBasicInfo("HBDD10916503", "4000966", "青岛纯生（500ML*12瓶/件）", 1588.0, "12瓶/件", "75件/托");
+        OutboundBasicInfo info9 = createOutboundBasicInfo("HBDD10916505", "4000710", "雪碧（1.25L*12瓶/件）", 1088.0, "12瓶/件", "40件/托");
+        OutboundBasicInfo info10 = createOutboundBasicInfo("HBDD10916506", "4001019", "雪花纯生（500ML*12瓶/件）", 1107.0, "12瓶/件", "75件/托");
+        OutboundBasicInfo info11 = createOutboundBasicInfo("HBDD10916507", "4001543", "雪花勇闯天涯（500ML*12瓶/件）", 2497.0, "12瓶/件", "68件/托");
+        OutboundBasicInfo info12 = createOutboundBasicInfo("HBDD10916509", "4001548", "燕京鲜啤（500ML*12瓶/件）", 3124.0, "12瓶/件", "90件/托");
+
+        outboundBasicInfos = Arrays.asList(info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11, info12);
         testMaterialCode = Arrays.asList("4704404", "4001842", "4003064", "4003288", "4000869", "4002609", "4000451", "4000966", "4000710", "4001019", "4001543", "4001548");
         testCorrespondenceA = Arrays.asList(15, 12, 24, 12, 12, 12, 12, 12, 12, 12, 12, 12);
         testOutQuantityN = Arrays.asList(544.0, 450.0, 1341.0, 1912.0, 1451.0, 1258.0, 521.0, 1588.0, 1088.0, 1107.0, 2497.0, 3124.0);
@@ -69,6 +69,7 @@ public class PCBClassifierTest {
         testProductQuantity = Arrays.asList(4.0, 6.0, 21.0, 4.0, 11.0, 10.0, 5.0, 4.0, 8.0, 3.0, 1.0, 4.0);
         testPackagingMode = Arrays.asList("C+B", "C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B");
     }
+
 
     @Test
     public void testTransformPackaging() {
@@ -222,5 +223,16 @@ public class PCBClassifierTest {
                     validator.validate(entry);
             assertTrue(violations.isEmpty());
         }
+    }
+
+    private OutboundBasicInfo createOutboundBasicInfo(String orderNumber, String materialCode, String materialName, Double outQuantity, String outUnit, String outPalletUnit) {
+        OutboundBasicInfo outboundBasicInfo = new OutboundBasicInfo();
+        outboundBasicInfo.setMaterialCode(materialCode);
+        outboundBasicInfo.setOrderNumber(orderNumber);
+        outboundBasicInfo.setOutUnit(outUnit);
+        outboundBasicInfo.setOutQuantity(outQuantity);
+        outboundBasicInfo.setOutPalletUnit(outPalletUnit);
+        outboundBasicInfo.setMaterialName(materialName);
+        return outboundBasicInfo;
     }
 }

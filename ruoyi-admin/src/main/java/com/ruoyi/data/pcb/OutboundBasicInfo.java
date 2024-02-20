@@ -6,7 +6,7 @@ import com.ruoyi.common.annotation.Excel;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,7 +16,7 @@ public class OutboundBasicInfo {
     @Excel(name = "出库日期")
     @JsonProperty("出库日期")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
-    private String outDate;
+    private Date outDate;
     @Getter
     @Setter
     @Excel(name = "订单编号")
@@ -47,14 +47,4 @@ public class OutboundBasicInfo {
     @Excel(name = "出货单位(托)")
     @JsonProperty("出货单位(托)")
     private String outPalletUnit;
-
-    public OutboundBasicInfo(String outDate, String orderNumber, String materialCode, String materialName, Double outQuantity, String outUnit, String outPalletUnit) {
-        this.outDate = outDate;
-        this.orderNumber = orderNumber;
-        this.materialCode = materialCode;
-        this.materialName = materialName;
-        this.outQuantity = outQuantity;
-        this.outUnit = outUnit;
-        this.outPalletUnit = outPalletUnit;
-    }
 }

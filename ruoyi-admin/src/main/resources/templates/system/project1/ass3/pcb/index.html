@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('EIQ分析')" />
+    <th:block th:include="include :: header('EIQ分析')"/>
 
     <style>
-        *{
+        * {
             margin: 0;
-            margin: 0;font-size:20px;
+            margin: 0;
+            font-size: 20px;
         }
 
     </style>
@@ -37,10 +38,15 @@
                     </div>
                 </div>
                 <div class="ibox-content" style="height:300px">
-                    <div style="font-size:26px;text-align: center;color: #76838f;" ><h3>PCB分析</h3></div>
+                    <div style="font-size:26px;text-align: center;color: #76838f;"><h3>PCB分析</h3></div>
                     <div class="content" style="color: #76838f;">
-                        <div style="line-height: 33px;text-align:left;text-indent:25px">储运单位分析（PCB分析）也称货态分析，即考察配送中心各作业环节的基本储运单位类型（P表示托盘单位、C表示件单位、B表示单品）。不同的储运单位所配备的储存和搬运设备是不同的。</div>
-                        <div style="line-height: 33px;text-align:left;text-indent:25px">配送中心储区是指一个可以独立进行储存或分拣作业的区域，储运模式是指该储区的进货储存单位和分拣出货单位的类型。配送中心的储运模式主要包括P- P、C→C、P→C、C→B和B→B等5种单储运模式以及P→(P、C)、C→(C、B)和P→(P、C、B)等三种复合储运模式，储运模式的选择取决于配送中心订单的订货单位和订货量。根据配送中心的储运模式和物料出货频率即可进行储区配置。</div>
+                        <div style="line-height: 33px;text-align:left;text-indent:25px">
+                            储运单位分析（PCB分析）也称货态分析，即考察配送中心各作业环节的基本储运单位类型（P表示托盘单位、C表示件单位、B表示单品）。不同的储运单位所配备的储存和搬运设备是不同的。
+                        </div>
+                        <div style="line-height: 33px;text-align:left;text-indent:25px">
+                            配送中心储区是指一个可以独立进行储存或分拣作业的区域，储运模式是指该储区的进货储存单位和分拣出货单位的类型。配送中心的储运模式主要包括P-
+                            P、C→C、P→C、C→B和B→B等5种单储运模式以及P→(P、C)、C→(C、B)和P→(P、C、B)等三种复合储运模式，储运模式的选择取决于配送中心订单的订货单位和订货量。根据配送中心的储运模式和物料出货频率即可进行储区配置。
+                        </div>
                     </div>
                 </div>
 
@@ -74,7 +80,12 @@
                 </div>
             </div>
             <div class="ibox-content" style="height:300px">
-            <table id="bootstrap-table"></table>
+                <div class="btn-group-sm" role="group">
+                    <a class="btn btn-info" onclick="importData('system/pcb/importData', firstGroupPostImport)">
+                        <i class="fa fa-upload"></i> 导入
+                    </a>
+                </div>
+                <table id="bootstrap-table"></table>
             </div>
         </div>
     </div>
@@ -126,10 +137,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s201" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	入库表	</option>
-                                    <option value="2">	出库表	</option>
-                                    <option value="3">	库存表	</option>
-                                    <option value="4">	资源数据表	</option>
+                                    <option value="1"> 入库表</option>
+                                    <option value="2"> 出库表</option>
+                                    <option value="3"> 库存表</option>
+                                    <option value="4"> 资源数据表</option>
 
 
                                 </select>
@@ -137,10 +148,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s202" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	订单编码	</option>
-                                    <option value="2">	物料数量	</option>
-                                    <option value="3">	订单数量	</option>
-                                    <option value="4">	物料编码	</option>
+                                    <option value="1"> 订单编码</option>
+                                    <option value="2"> 物料数量</option>
+                                    <option value="3"> 订单数量</option>
+                                    <option value="4"> 物料编码</option>
 
 
                                 </select>
@@ -148,10 +159,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s203" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	入库数量	</option>
-                                    <option value="2">	库存数量	</option>
-                                    <option value="3">	出库数量	</option>
-                                    <option value="4">	单价	</option>
+                                    <option value="1"> 入库数量</option>
+                                    <option value="2"> 库存数量</option>
+                                    <option value="3"> 出库数量</option>
+                                    <option value="4"> 单价</option>
 
 
                                 </select>
@@ -159,10 +170,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s204" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	统计周期内物料出库总数量	</option>
-                                    <option value="2">匹配出物料的单品与箱装、箱装与托盘之间的对应物流储运单位的关系	</option>
-                                    <option value="3">	统计周期内物料库存平均数量	</option>
-                                    <option value="4">	统计周期内物料出库平均数量	</option>
+                                    <option value="1"> 统计周期内物料出库总数量</option>
+                                    <option value="2">匹配出物料的单品与箱装、箱装与托盘之间的对应物流储运单位的关系</option>
+                                    <option value="3"> 统计周期内物料库存平均数量</option>
+                                    <option value="4"> 统计周期内物料出库平均数量</option>
 
                                 </select>
                             </div>
@@ -242,10 +253,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s221" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	对【N/(A*B)】的计算数值进行向上取整，取整数值记为M	</option>
-                                    <option value="2">	对【N/(A*B)】的计算数值进行向下取整，取整数值记为M	</option>
-                                    <option value="3">	对【(A*B)/N】的计算数值进行向上取整，取整数值记为M	</option>
-                                    <option value="4">	对【(A*B)/N】的计算数值进行向下取整，取整数值记为M	</option>
+                                    <option value="1"> 对【N/(A*B)】的计算数值进行向上取整，取整数值记为M</option>
+                                    <option value="2"> 对【N/(A*B)】的计算数值进行向下取整，取整数值记为M</option>
+                                    <option value="3"> 对【(A*B)/N】的计算数值进行向上取整，取整数值记为M</option>
+                                    <option value="4"> 对【(A*B)/N】的计算数值进行向下取整，取整数值记为M</option>
 
 
                                 </select>
@@ -253,11 +264,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s222" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	对【(N-M*A*B)/B】的计算数值进行向下取整,取整数值记为T	</option>
-                                    <option value="2">	对【(N-M*A*B)/A】的计算数值进行向下取整,取整数值记为T	</option>
-                                    <option value="3">	对【N-M*A*B】的计算数值进行向上取整,取整数值记为T	</option>
-                                    <option value="4">	对【N-M*A*B】的计算数值进行向下取整,取整数值记为T	</option>
-
+                                    <option value="1"> 对【(N-M*A*B)/B】的计算数值进行向下取整,取整数值记为T</option>
+                                    <option value="2"> 对【(N-M*A*B)/A】的计算数值进行向下取整,取整数值记为T</option>
+                                    <option value="3"> 对【N-M*A*B】的计算数值进行向上取整,取整数值记为T</option>
+                                    <option value="4"> 对【N-M*A*B】的计算数值进行向下取整,取整数值记为T</option>
 
 
                                 </select>
@@ -265,10 +275,10 @@
                             <div class="col-sm-2">
                                 <select class="type form-control m-b" id="s223" data-first-title="请选择">
                                     <option value="">请选择</option>
-                                    <option value="1">	计算【(N-M*A*B)/(T*B)】的数值，并向下取整	</option>
-                                    <option value="2">	计算【(N-M*A*B)/(T*B)】的数值	</option>
-                                    <option value="3">	计算【(N-M*A*B)/(T*B)】的数值，并向上取整	</option>
-                                    <option value="4">	计算【N-M*A*B-T*A】的数值	</option>
+                                    <option value="1"> 计算【(N-M*A*B)/(T*B)】的数值，并向下取整</option>
+                                    <option value="2"> 计算【(N-M*A*B)/(T*B)】的数值</option>
+                                    <option value="3"> 计算【(N-M*A*B)/(T*B)】的数值，并向上取整</option>
+                                    <option value="4"> 计算【N-M*A*B-T*A】的数值</option>
 
                                 </select>
                             </div>
@@ -278,7 +288,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="checkGroupTwoTableSelection()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroupTwoTableSelection()" type="button">提交
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -315,95 +326,96 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title" >
+                <div class="ibox-title">
                     <h5>单个出库示例表单下物料物流包装单元模式分析</h5>
                 </div>
                 <div class="ibox-content" style="height:700px">
                     <div class="panel panel-bordered">
                         <div>
                             <p>P模式</p>
-                            <select  name="z1" id="s1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应托盘数量数值计算非零，或对应箱装和单品数量为零	</option>
-                                <option value="2">	对应托盘数量数值计算非零，且对应箱装和单品数量为零	</option>
-                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
-                                <option value="4">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+                            <select name="z1" id="s1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应托盘数量数值计算非零，或对应箱装和单品数量为零</option>
+                                <option value="2"> 对应托盘数量数值计算非零，且对应箱装和单品数量为零</option>
+                                <option value="3"> 对应箱装数量数值计算非零，且对应托盘和单品数量为零</option>
+                                <option value="4"> 对应单品数量数值计算非零，且对应托盘箱装件数量为零</option>
 
                             </select>
                         </div>
                         <div>
                             <p>C模式</p>
-                            <select  name="y1" id="s2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应托盘数量数值计算非零，且对应箱装和单品数量为零	</option>
-                                <option value="2">	对应箱装数量数值计算非零，或对应托盘和单品数量为零	</option>
-                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
-                                <option value="4">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
-
+                            <select name="y1" id="s2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应托盘数量数值计算非零，且对应箱装和单品数量为零</option>
+                                <option value="2"> 对应箱装数量数值计算非零，或对应托盘和单品数量为零</option>
+                                <option value="3"> 对应箱装数量数值计算非零，且对应托盘和单品数量为零</option>
+                                <option value="4"> 对应箱装数量数值计算非零，且对应托盘和单品数量为零</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>B模式</p>
-                            <select  name="y1" id="s3" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
-                                <option value="2">	对应单品数量数值计算非零，或对应托盘箱装件数量为零	</option>
-                                <option value="3">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
-                                <option value="4">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
+                            <select name="y1" id="s3" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应单品数量数值计算非零，且对应托盘箱装件数量为零</option>
+                                <option value="2"> 对应单品数量数值计算非零，或对应托盘箱装件数量为零</option>
+                                <option value="3"> 对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零</option>
+                                <option value="4"> 对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>P+C模式</p>
-                            <select  name="y1" id="s4" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
-                                <option value="2">	对应托盘和箱装数量数值计算非零，或对应单品数量计算数值为零	</option>
-                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
-                                <option value="4">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+                            <select name="y1" id="s4" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应单品数量数值计算非零，且对应托盘箱装件数量为零</option>
+                                <option value="2"> 对应托盘和箱装数量数值计算非零，或对应单品数量计算数值为零</option>
+                                <option value="3"> 对应箱装数量数值计算非零，且对应托盘和单品数量为零</option>
+                                <option value="4"> 对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零</option>
 
                             </select>
                         </div>
                         <div>
                             <p>P+B模式</p>
-                            <select  name="y1" id="s5" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应托盘和单品数量数值计算非零，或对应箱装数量计算数值为零	</option>
-                                <option value="2">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
-                                <option value="3">	对应箱装数量数值计算非零，且对应托盘和单品数量为零	</option>
-                                <option value="4">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
+                            <select name="y1" id="s5" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应托盘和单品数量数值计算非零，或对应箱装数量计算数值为零</option>
+                                <option value="2"> 对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零</option>
+                                <option value="3"> 对应箱装数量数值计算非零，且对应托盘和单品数量为零</option>
+                                <option value="4"> 对应单品数量数值计算非零，且对应托盘箱装件数量为零</option>
 
                             </select>
                         </div>
                         <div>
                             <p>C+B模式</p>
-                            <select  name="y1" id="s6" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应箱装和单品数量数值计算非零，且对应托盘数量计算数值为零	</option>
-                                <option value="2">	对应箱装和单品数量数值计算非零，或对应托盘数量计算数值为零	</option>
-                                <option value="3">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
-                                <option value="4">	对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零	</option>
+                            <select name="y1" id="s6" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应箱装和单品数量数值计算非零，且对应托盘数量计算数值为零</option>
+                                <option value="2"> 对应箱装和单品数量数值计算非零，或对应托盘数量计算数值为零</option>
+                                <option value="3"> 对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零</option>
+                                <option value="4"> 对应托盘和单品数量数值计算非零，且对应箱装数量计算数值为零</option>
 
                             </select>
                         </div>
                         <div>
                             <p>P+C+B模式</p>
-                            <select  name="y1" id="s7" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对应单品数量数值计算非零，且对应托盘箱装件数量为零	</option>
-                                <option value="2">	对应托盘、箱装和单品数量数值计算都为零	</option>
-                                <option value="3">	对应托盘、箱装和单品数量数值计算都非零	</option>
-                                <option value="4">	对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零	</option>
+                            <select name="y1" id="s7" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对应单品数量数值计算非零，且对应托盘箱装件数量为零</option>
+                                <option value="2"> 对应托盘、箱装和单品数量数值计算都为零</option>
+                                <option value="3"> 对应托盘、箱装和单品数量数值计算都非零</option>
+                                <option value="4"> 对应托盘和箱装数量数值计算非零，且对应单品数量计算数值为零</option>
 
                             </select>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupTHREETableSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTHREETableSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
 
@@ -466,7 +478,7 @@
                 <div class="ibox-content" style="height:300px">
                     <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
                         <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
-                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <p><span id="token" style="display: none" th:text="${token}"></span></p>
                         <button class="btn btn-primary" onclick="end()" type="button">提交</button>
                     </div>
                 </div>
@@ -475,11 +487,11 @@
 
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: echarts-js" />
-<script  th:inline="javascript">
-    var total =0;
-    var n=0;
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
+    var total = 0;
+    var n = 0;
     var baidieScore = new BaidieScore();
 
     function end() {
@@ -487,28 +499,30 @@
         window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
     }
 
-    var data1,data2,data3;
+    var data1, data2, data3;
     $.getJSON("../../../file/pcb.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
+        data1 = data.data1;
+        data2 = data.data2;
+        data3 = data.data3;
         // 初始化所有的表
         initAllTables();
         refreshGroupOneOriginalTable(data3)
-        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+        $.post(ctx + "system/op/list1?&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text(), function (result) {
             var d = result.rows;
-            for(var i=0;i<result.total;i++){
-                $("#"+d[i].opId).val(d[i].opValue);
+            for (var i = 0; i < result.total; i++) {
+                $("#" + d[i].opId).val(d[i].opValue);
             }
-           checkPCB();
+            checkPCB();
         });
     });
-    function checkPCB(){
+
+    function checkPCB() {
         checkGroupOneSelection();
         checkGroupTwoTableSelection();
         checkGroupTHREETableSelection();
     }
-    function initAllTables(){
+
+    function initAllTables() {
         const outboundBasicTable = [
             {
                 field: '出库日期',
@@ -540,6 +554,7 @@
             }];
         initBaidieTable("bootstrap-table", outboundBasicTable);
     }
+
     function checkGroupOneSelection() {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_ONE_ANSWERS,
@@ -549,6 +564,7 @@
             }
         )
     }
+
     function checkGroupTwoTableSelection() {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_TWO_ANSWERS,
@@ -558,6 +574,7 @@
             }
         )
     }
+
     function checkGroupTHREETableSelection() {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_THREE_ANSWERS,
@@ -567,8 +584,23 @@
             }
         )
     }
+
     function refreshGroupOneOriginalTable(data) {
         refreshBaidieTable("bootstrap-table", data);
+    }
+
+    /***
+     * 第一个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function firstGroupPostImport(result) {
+        data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
+        data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
+        data3 = JSON.parse(result.data.data3); //对返回的result中json字符串中的值data3赋值data3
+        refreshGroupOneOriginalTable(data3); //刷新第一个表bootstrap-table
+        checkPCB();
     }
     /************************************************************/
     /**************PCB PAGE SELECTION ANSWERS *******************/
@@ -597,24 +629,24 @@
     /**************PCB PAGE OPTION *******************/
     /************************************************************/
     const valueBasedPCBTableColumns = [
-        {field:"物料编码",title:"物料编码"},
-        {field:"出库数量（个）：N",title:"出库数量（个）：N"},
-        {field:"单品与箱的对应数量关系：A",title:"单品与箱的对应数量关系：A"},
-        {field:"箱与托盘的对应数量关系：B",title:"箱与托盘的对应数量关系：B"},
-        {field:"A*B",title:"A*B"},
-        {field:"N/(A*B)",title:"N/(A*B)"},
-        {field:"需求数量对应托盘数量（P）",title:"需求数量对应托盘数量（P）"},
-        {field:"N-M*A*B",title:"N-M*A*B"},
-        {field:"(N-M*A*B)/A",title:"(N-M*A*B)/A"},
-        {field:"需求数量对应对应箱装数量（C）",title:"需求数量对应对应箱装数量（C）"},
-        {field:"需求数量对应对应单品数量（B）",title:"需求数量对应对应单品数量（B）"}
-        ]
+        {field: "物料编码", title: "物料编码"},
+        {field: "出库数量（个）：N", title: "出库数量（个）：N"},
+        {field: "单品与箱的对应数量关系：A", title: "单品与箱的对应数量关系：A"},
+        {field: "箱与托盘的对应数量关系：B", title: "箱与托盘的对应数量关系：B"},
+        {field: "A*B", title: "A*B"},
+        {field: "N/(A*B)", title: "N/(A*B)"},
+        {field: "需求数量对应托盘数量（P）", title: "需求数量对应托盘数量（P）"},
+        {field: "N-M*A*B", title: "N-M*A*B"},
+        {field: "(N-M*A*B)/A", title: "(N-M*A*B)/A"},
+        {field: "需求数量对应对应箱装数量（C）", title: "需求数量对应对应箱装数量（C）"},
+        {field: "需求数量对应对应单品数量（B）", title: "需求数量对应对应单品数量（B）"}
+    ]
     const valuePackagePCBTableColumns = [
-        {field:"物料编码",title:"物料编码"},
-        {field:"出库数量对应托盘数量（P）",title:"出库数量对应托盘数量（P）"},
-        {field:"出库数量对应对应箱装数量（C）",title:"出库数量对应对应箱装数量（C）"},
-        {field:"出库数量对应对应单品数量（B）",title:"出库数量对应对应单品数量（B）"},
-        {field:"物料对应出库环节物流包装单元模式判断",title:"物料对应出库环节物流包装单元模式判断"}
+        {field: "物料编码", title: "物料编码"},
+        {field: "出库数量对应托盘数量（P）", title: "出库数量对应托盘数量（P）"},
+        {field: "出库数量对应对应箱装数量（C）", title: "出库数量对应对应箱装数量（C）"},
+        {field: "出库数量对应对应单品数量（B）", title: "出库数量对应对应单品数量（B）"},
+        {field: "物料对应出库环节物流包装单元模式判断", title: "物料对应出库环节物流包装单元模式判断"}
     ]
 </script>
 
