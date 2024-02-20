@@ -1,6 +1,7 @@
 package com.ruoyi.baidie;
 
 
+import com.ruoyi.data.pcb.MaterialOutboundTypeInfo;
 import com.ruoyi.data.pcb.MaterialPackagingInfo;
 import com.ruoyi.data.pcb.OutboundBasicInfo;
 import org.junit.Before;
@@ -31,6 +32,11 @@ public class PCBClassifierTest {
     private List<Double> testDivisionByA;
     private List<Double> testDemandBoxQuantity;
     private List<Double> testDemandProductQuantity;
+    private List<Double> testPalletQuantity;
+    private List<Double> testBoxQuantity;
+    private List<Double> testProductQuantity;
+    private List<String> testPackagingMode;
+
     @Before
     public void setUp() {
         outboundBasicInfos = Arrays.asList(
@@ -58,10 +64,14 @@ public class PCBClassifierTest {
         testDivisionByA = Arrays.asList(36.27, 37.5, 25.88, 15.33, 30.92, 24.83, 11.42, 57.33, 10.67, 17.25, 4.08, 80.33);
         testDemandBoxQuantity = Arrays.asList(36.0, 37.0, 25.0, 15.0, 30.0, 24.0, 11.0, 57.0, 10.0, 17.0, 4.0, 80.0);
         testDemandProductQuantity = Arrays.asList(4.0, 6.0, 21.0, 4.0, 11.0, 10.0, 5.0, 4.0, 8.0, 3.0, 1.0, 4.0);
+        testPalletQuantity = Arrays.asList(0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0);
+        testBoxQuantity = Arrays.asList(36.0, 37.0, 25.0, 15.0, 30.0, 24.0, 11.0, 57.0, 10.0, 17.0, 4.0, 80.0);
+        testProductQuantity = Arrays.asList(4.0, 6.0, 21.0, 4.0, 11.0, 10.0, 5.0, 4.0, 8.0, 3.0, 1.0, 4.0);
+        testPackagingMode = Arrays.asList("C+B", "C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B", "P+C+B");
     }
 
     @Test
-    public void transformPackaging() {
+    public void testTransformPackaging() {
         List<MaterialPackagingInfo> result =
                 PCBClassifier.transformPackaging(outboundBasicInfos);
 
@@ -161,5 +171,56 @@ public class PCBClassifierTest {
         }
     }
 
+    @Test
+    public void testPickPackagingType() {
+        List<MaterialOutboundTypeInfo> result =
+                PCBClassifier.pickPackagingType(outboundBasicInfos);
 
+        // 保证结果行数跟输入一样
+        assertEquals(outboundBasicInfos.size(), result.size());
+
+        // 检查物料编码不会变化。
+        assertEquals(
+                testMaterialCode,
+                result.stream()
+                        .map(MaterialOutboundTypeInfo::getMaterialCode)
+                        .collect(Collectors.toList())
+        );
+        // 检查托盘数量是否一致
+        assertEquals(
+                testPalletQuantity,
+                result.stream()
+                        .map(MaterialOutboundTypeInfo::getPalletQuantity)
+                        .collect(Collectors.toList())
+        );
+        // 检查箱数是否一致。
+        assertEquals(
+                testBoxQuantity,
+                result.stream()
+                        .map(MaterialOutboundTypeInfo::getBoxQuantity)
+                        .collect(Collectors.toList())
+        );
+        // 检查单品数量是否一致。
+        assertEquals(
+                testProductQuantity,
+                result.stream()
+                        .map(MaterialOutboundTypeInfo::getProductQuantity)
+                        .collect(Collectors.toList())
+        );
+        // 检查最后计算的包装类型是否一致。
+        assertEquals(
+                testPackagingMode,
+                result.stream()
+                        .map(MaterialOutboundTypeInfo::getPackagingMode)
+                        .collect(Collectors.toList())
+        );
+
+        // 检查所有的属性都不是空
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        for (MaterialOutboundTypeInfo entry : result) {
+            final Set<ConstraintViolation<MaterialOutboundTypeInfo>> violations =
+                    validator.validate(entry);
+            assertTrue(violations.isEmpty());
+        }
+    }
 }
