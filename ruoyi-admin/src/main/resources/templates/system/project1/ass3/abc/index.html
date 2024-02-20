@@ -803,6 +803,7 @@
             for (var i = 0; i < result.total; i++) {
                 $("#" + d[i].opId).val(d[i].opValue);
             }
+            checkAll();
         });
     });
 
@@ -989,6 +990,15 @@
 
     function refreshGroupThreeOriginalTable(data) {
         refreshBaidieTable("bootstrap-table4", data);
+    }
+
+    function checkAll(){
+        checkGroup1TableSelection();
+        checkGroup2TableSelection();
+        checkGroup3TableSelection();
+        checkGroupOneChartSelection();
+        checkGroupTwoChartSelection();
+        checkGroupThreeChartSelection();
     }
 
     /***
