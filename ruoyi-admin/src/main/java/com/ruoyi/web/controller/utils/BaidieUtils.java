@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -84,26 +85,35 @@ public class BaidieUtils {
         // 确定区间范围
         int intervalWidth = (int) Math.ceil((maxValue - minValue) / intervalNumber);
 
-        // 创建区间和值的统计List
+        // 创建区间和值的统计 List
         List<ObjectMap> intervalDataList = new ArrayList<>();
         for (int i = 0; i < intervalNumber; i++) {
             int intervalStart = (int) (minValue + i * intervalWidth);
-            int intervalEnd = intervalStart + intervalWidth;
+            int intervalEnd = (int) (intervalStart + intervalWidth);
             String intervalKey = "[" + intervalStart + ", " + intervalEnd + ")";
-            intervalDataList.add(new ObjectMap(intervalKey, 0));
+            intervalDataList.add(new ObjectMap(intervalKey, 0.0));
         }
 
-        // 统计每个区间的值的数量
-        Arrays.stream(data)
-                .forEach(value -> {
-                    String intervalKey = findInterval(value, intervalWidth, minValue);
-                    for (ObjectMap intervalData : intervalDataList) {
-                        if (intervalData.getKey().equals(intervalKey)) {
-                            intervalData.setValue(intervalData.getValue() + 1);
-                            break;
-                        }
-                    }
-                });
+        // 统计每个区间的值的百分比
+        int totalValues = data.length;
+        for (double value : data) {
+            String intervalKey = findInterval(value, intervalWidth, minValue);
+            for (ObjectMap intervalData : intervalDataList) {
+                if (intervalData.getKey().equals(intervalKey)) {
+                    intervalData.setValue(intervalData.getValue() + 1);
+                    break;
+                }
+            }
+        }
+
+        // 将数量转换为百分比
+        DecimalFormat df = new DecimalFormat("#.##");
+        for (ObjectMap intervalData : intervalDataList) {
+            double percentage = (intervalData.getValue() / totalValues) * 100;
+            // 将百分比保留小数点后两位
+            String formattedPercentage = df.format(percentage);
+            intervalData.setValue(Double.parseDouble(formattedPercentage));
+        }
 
         return intervalDataList;
     }
@@ -117,7 +127,7 @@ public class BaidieUtils {
      * @return 一个区间
      */
     private static String findInterval(double value, int intervalWidth, double minValue) {
-        int intervalStart = (int) (Math.floor((value - minValue) / intervalWidth) * intervalWidth + minValue);
+        int intervalStart = ((int) ((value - minValue) / intervalWidth)) * intervalWidth + (int) minValue;
         int intervalEnd = intervalStart + intervalWidth;
         return "[" + intervalStart + ", " + intervalEnd + ")";
     }

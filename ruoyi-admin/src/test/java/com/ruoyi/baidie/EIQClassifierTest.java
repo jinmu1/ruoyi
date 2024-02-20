@@ -36,13 +36,13 @@ public class EIQClassifierTest {
     private int testSortByMaterialNumber;
     private int testIntervalNumber;
     private List<String> testEIInterval;
-    private List<Integer> testEIIntervalNumber;
-    private int testIKNumber;
-    private List<String> testIKInterval;
-    private List<Integer> testIKIntervalNumber;
+    private List<Double> testEIIntervalNumber;
+    private int testEQNumber;
+    private List<String> testEQInterval;
+    private List<Double> testEQIntervalNumber;
     private int testENNumber;
     private List<String> testENInterval;
-    private List<Integer> testENIntervalNumber;
+    private List<Double> testENIntervalNumber;
     @Before
     public void setUp() {
         // Set up some test data
@@ -79,13 +79,13 @@ public class EIQClassifierTest {
         testMaterialNumerCumulativeItemNumber = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
         testIntervalNumber = 5;
         testEIInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
-        testEIIntervalNumber = Arrays.asList(7, 1, 0, 0, 0);
-        testIKNumber = 5;
-        testIKInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
-        testIKIntervalNumber = Arrays.asList(5, 2, 0, 0, 0);
+        testEIIntervalNumber = Arrays.asList(87.5, 12.5, 0.0, 0.0, 0.0);
+        testEQNumber = 5;
+        testEQInterval = Arrays.asList("[100, 260)", "[260, 420)", "[420, 580)", "[580, 740)", "[740, 900)");
+        testEQIntervalNumber = Arrays.asList(50.0, 25.0, 12.5, 0.0, 0.0);
         testENNumber = 5;
         testENInterval = Arrays.asList("[1, 2)", "[2, 3)", "[3, 4)", "[4, 5)", "[5, 6)");
-        testENIntervalNumber = Arrays.asList(7, 1, 0, 0, 0);
+        testENIntervalNumber = Arrays.asList(87.5, 12.5, 0.0, 0.0, 0.0);
     }
 
     /****
@@ -306,20 +306,20 @@ public class EIQClassifierTest {
         );
     }
     @Test
-    public void getIKHistogramTest() {
-        List<ObjectMap> result = EIQClassifier.getIKHistogram(testEIQBasicInfo);
+    public void getEQHistogramTest() {
+        List<ObjectMap> result = EIQClassifier.getEQHistogram(testEIQBasicInfo);
         // 保证结果行数跟输入一样
-        assertEquals(testIKNumber, result.size());
+        assertEquals(testEQNumber, result.size());
         // 检查EI-直方图的区间是对的
         assertEquals(
-                testIKInterval,
+                testEQInterval,
                 result.stream()
                         .map(ObjectMap::getKey)
                         .collect(Collectors.toList())
         );
         // 检查EI-直方图的值是对的
         assertEquals(
-                testIKIntervalNumber,
+                testEQIntervalNumber,
                 result.stream()
                         .map(ObjectMap::getValue)
                         .collect(Collectors.toList())

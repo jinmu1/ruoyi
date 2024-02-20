@@ -100,7 +100,7 @@ public class BaidieUtilsTest {
         // 调用方法生成 JSON
         List<ObjectMap> objectMaps = BaidieUtils.generateIntervalData(data, 5);
         List<String> str = Arrays.asList("[1, 11)", "[11, 21)", "[21, 31)", "[31, 41)", "[41, 51)");
-        List<Integer> testIKIntervalNumber=Arrays.asList(4, 2, 1, 1, 3);;
+        List<Double> testIKIntervalNumber=Arrays.asList(36.36, 18.18, 9.09, 9.09, 27.27);;
         // 验证生成的 JSON 是否符合预期
         assertEquals(str,
                 objectMaps.stream()
