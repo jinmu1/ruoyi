@@ -26,7 +26,7 @@ public class OutboundBasicInfo {
     @Setter
     @Excel(name = "物料编码")
     @JsonProperty("物料编码")
-    private long materialCode;
+    private String materialCode;
     @Getter
     @Setter
     @Excel(name = "物料名称")
@@ -35,11 +35,26 @@ public class OutboundBasicInfo {
     @Getter
     @Setter
     @Excel(name = "出库数量（个）")
-    @JsonProperty("出库数量")
-    private int outQuantity;
+    @JsonProperty("出库数量（个）")
+    private Double outQuantity;
     @Getter
     @Setter
-    @Excel(name = "出货单位")
-    @JsonProperty("出货单位")
+    @Excel(name = "出货单位(箱)")
+    @JsonProperty("出货单位(箱)")
     private String outUnit;
+    @Getter
+    @Setter
+    @Excel(name = "出货单位(托)")
+    @JsonProperty("出货单位(托)")
+    private String outPalletUnit;
+
+    public OutboundBasicInfo(String outDate, String orderNumber, String materialCode, String materialName, Double outQuantity, String outUnit, String outPalletUnit) {
+        this.outDate = outDate;
+        this.orderNumber = orderNumber;
+        this.materialCode = materialCode;
+        this.materialName = materialName;
+        this.outQuantity = outQuantity;
+        this.outUnit = outUnit;
+        this.outPalletUnit = outPalletUnit;
+    }
 }

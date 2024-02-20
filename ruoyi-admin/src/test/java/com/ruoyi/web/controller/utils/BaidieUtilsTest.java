@@ -111,4 +111,14 @@ public class BaidieUtilsTest {
                         .map(ObjectMap::getValue)
                         .collect(Collectors.toList()));
     }
+    //测试将String中的数字拆分出来
+    @Test
+    public void tesTextractNumbers() throws JsonProcessingException {
+        // 准备测试数据
+        String input = "abc123def456ghi789jkl";
+        List<Integer> numbers = BaidieUtils.extractNumbers(input);
+        List<Integer> testNumber=Arrays.asList(123, 456, 789);;
+        // 验证生成的 JSON 是否符合预期
+        assertEquals(testNumber, numbers);
+    }
 }

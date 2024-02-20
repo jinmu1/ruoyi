@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class with public static methods shared by Baidie's codebase.
@@ -130,5 +132,21 @@ public class BaidieUtils {
         int intervalStart = ((int) ((value - minValue) / intervalWidth)) * intervalWidth + (int) minValue;
         int intervalEnd = intervalStart + intervalWidth;
         return "[" + intervalStart + ", " + intervalEnd + ")";
+    }
+
+    /**
+     * 截取字段中的数字
+     * @param input
+     * @return
+     */
+    public static List<Integer> extractNumbers(String input) {
+        List<Integer> numbers = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(input);
+
+        while (matcher.find()) {
+            numbers.add(Integer.parseInt(matcher.group()));
+        }
+        return numbers;
     }
 }
