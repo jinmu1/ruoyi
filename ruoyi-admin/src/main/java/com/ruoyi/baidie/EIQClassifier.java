@@ -300,6 +300,29 @@ public class EIQClassifier {
         final double[] ikCount = getMaterialOccurrenceCount(ikAnalysisInfoList);
         return BaidieUtils.generateIntervalData(ikCount, 5);
     }
+    /**
+     * EN分析的直方统计
+     * 统计订单对应物料品种数的区间范围
+     *
+     * @param eiqBasicInfos EIQ基本数据
+     * @return EN分析的区间和区间对应的值的数量
+     */
+    public static List<ObjectMap> getENHistogram(List<EIQBasicInfo> eiqBasicInfos) {
+        final List<ENAnalysisInfo> enAnalysisInfoList =
+                getENAnalysisTable(eiqBasicInfos);
+        final double[] enCount = getOrderOccurrenceCount(enAnalysisInfoList);
+        return BaidieUtils.generateIntervalData(enCount, 5);
+    }
+
+    private static double[] getOrderOccurrenceCount(List<ENAnalysisInfo> enAnalysisInfoList) {
+        // 使用 Java Stream 将 OccurrenceCount 提取到一个数组中
+        double[] materialVarietiesCountArray = enAnalysisInfoList.stream()
+                .mapToInt(ENAnalysisInfo::getOrderLineCount)
+                .asDoubleStream()
+                .toArray();
+
+        return materialVarietiesCountArray;
+    }
 
     /**
      * 统计IK分析的出现的次数
