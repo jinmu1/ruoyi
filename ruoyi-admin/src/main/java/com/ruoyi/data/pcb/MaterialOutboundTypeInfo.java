@@ -12,19 +12,19 @@ public class MaterialOutboundTypeInfo {
     @Getter
     @Setter
     @JsonProperty("物料编码")
-    private long materialCode;
+    private Long materialCode;
     @Getter
     @Setter
     @JsonProperty("出库数量对应托盘数量")
-    private int palletQuantity;
+    private Integer palletQuantity;
     @Getter
     @Setter
     @JsonProperty("出库数量对应对应箱装数量")
-    private int boxQuantity;
+    private Integer boxQuantity;
     @Getter
     @Setter
     @JsonProperty("出库数量对应对应单品数量")
-    private int productQuantity;
+    private Integer productQuantity;
     @Getter
     @Setter
     @JsonProperty("物料对应出库环节物流包装单元模式判断")
