@@ -25,7 +25,12 @@ public class PCBClassifierTest {
     private List<Double> testOutQuantityN;
     private List<Integer> testCorrespondenceB;
     private List<Integer> testProductBoxRelation;
-
+    private List<Double> testOutDivision;
+    private List<Double> testDemandPalletQuantity;
+    private List<Double> testRemainder;
+    private List<Double> testDivisionByA;
+    private List<Double> testDemandBoxQuantity;
+    private List<Double> testDemandProductQuantity;
     @Before
     public void setUp() {
         outboundBasicInfos = Arrays.asList(
@@ -47,7 +52,12 @@ public class PCBClassifierTest {
         testOutQuantityN = Arrays.asList(544.0, 450.0, 1341.0, 1912.0, 1451.0, 1258.0, 521.0, 1588.0, 1088.0, 1107.0, 2497.0, 3124.0);
         testCorrespondenceB = Arrays.asList(60, 90, 30, 72, 90, 80, 32, 75, 40, 75, 68, 90);
         testProductBoxRelation = Arrays.asList(900, 1080, 720, 864, 1080, 960, 384, 900, 480, 900, 816, 1080);
-
+        testOutDivision = Arrays.asList(0.6, 0.42, 1.86, 2.21, 1.34, 1.31, 1.36, 1.76, 2.27, 1.23, 3.06, 2.89);
+        testDemandPalletQuantity = Arrays.asList(0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 3.0, 2.0);
+        testRemainder = Arrays.asList(544.0, 450.0, 621.0, 184.0, 371.0, 298.0, 137.0, 688.0, 128.0, 207.0, 49.0, 964.0);
+        testDivisionByA = Arrays.asList(36.27, 37.5, 25.88, 15.33, 30.92, 24.83, 11.42, 57.33, 10.67, 17.25, 4.08, 80.33);
+        testDemandBoxQuantity = Arrays.asList(36.0, 37.0, 25.0, 15.0, 30.0, 24.0, 11.0, 57.0, 10.0, 17.0, 4.0, 80.0);
+        testDemandProductQuantity = Arrays.asList(4.0, 6.0, 21.0, 4.0, 11.0, 10.0, 5.0, 4.0, 8.0, 3.0, 1.0, 4.0);
     }
 
     @Test
@@ -91,6 +101,55 @@ public class PCBClassifierTest {
                 testProductBoxRelation,
                 result.stream()
                         .map(MaterialPackagingInfo::getProductBoxRelation)
+                        .collect(Collectors.toList())
+        );
+        // 检查箱数和件数相乘的结果是不是正确。
+        assertEquals(
+                testProductBoxRelation,
+                result.stream()
+                        .map(MaterialPackagingInfo::getProductBoxRelation)
+                        .collect(Collectors.toList())
+        );
+        // 检查按托换算后的剩下的物料数量。
+        assertEquals(
+                testOutDivision,
+                result.stream()
+                        .map(MaterialPackagingInfo::getOutDivision)
+                        .collect(Collectors.toList())
+        );
+        // 检查需求数量对应托盘数量不会变化。
+        assertEquals(
+                testDemandPalletQuantity,
+                result.stream()
+                        .map(MaterialPackagingInfo::getDemandPalletQuantity)
+                        .collect(Collectors.toList())
+        );
+        // 检查经过箱数转换后的箱数量。
+        assertEquals(
+                testRemainder,
+                result.stream()
+                        .map(MaterialPackagingInfo::getRemainder)
+                        .collect(Collectors.toList())
+        );
+        // 检查经过箱数转换后生下来的箱数量。
+        assertEquals(
+                testDivisionByA,
+                result.stream()
+                        .map(MaterialPackagingInfo::getDivisionByA)
+                        .collect(Collectors.toList())
+        );
+        // 检查最后按照单品计算的数量。
+        assertEquals(
+                testDemandBoxQuantity,
+                result.stream()
+                        .map(MaterialPackagingInfo::getDemandBoxQuantity)
+                        .collect(Collectors.toList())
+        );
+        // 检查最后按照单品计算的数量。
+        assertEquals(
+                testDemandProductQuantity,
+                result.stream()
+                        .map(MaterialPackagingInfo::getDemandProductQuantity)
                         .collect(Collectors.toList())
         );
         // 检查所有的属性都不是空

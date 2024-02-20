@@ -64,19 +64,18 @@ public class PCBClassifier {
                         )
                 )
         );
-        info.setDemandPalletQuantity(Math.floor(info.getOutDivision() * 100) / 100);
+        info.setDemandPalletQuantity(Math.floor(info.getOutDivision() * 100/ 100) );
         info.setRemainder(info.getOutQuantityN() - info.getDemandPalletQuantity() * info.getProductBoxRelation());
         info.setDivisionByA(Double.parseDouble(
                 df.format(
-                        (info.getOutQuantityN() - info.getRemainder()) / info.getCorrespondenceA()
+                        (info.getOutQuantityN() - info.getDemandPalletQuantity()*info.getProductBoxRelation()) / info.getCorrespondenceA()
                 ))
         );
-        info.setDemandBoxQuantity(Math.floor(info.getDivisionByA() * 100) / 100);
-        info.setDemandProductQuantity(
-                info.getOutQuantityN() -
-                        info.getDemandPalletQuantity() *
-                                info.getProductBoxRelation()-
-                        info.getDivisionByA()*info.getDemandBoxQuantity()
+        info.setDemandBoxQuantity(Math.floor(info.getDivisionByA() * 100/ 100) );
+        info.setDemandProductQuantity(Double.parseDouble(
+                df.format(
+                        (info.getOutQuantityN() - info.getDemandPalletQuantity()*info.getProductBoxRelation()-info.getDemandBoxQuantity()*info.getCorrespondenceA())
+                ))
         );
         return info;
     }
