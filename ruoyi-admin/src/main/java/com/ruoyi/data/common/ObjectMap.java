@@ -16,9 +16,9 @@ public class ObjectMap {
     @Getter
     @Setter
     @JsonProperty("value")
-    private Integer value;
+    private Double value;
 
-    public ObjectMap(String key, Integer value) {
+    public ObjectMap(String key, Double value) {
         this.key = key;
         this.value = value;
     }

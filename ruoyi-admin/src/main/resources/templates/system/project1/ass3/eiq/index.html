@@ -1553,7 +1553,7 @@
             EN_PERCENTAGE_CHART_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieBarChart('en1', en_percentage_data, '订单行数', '订单行数出现次数占比');
+                return refreshBaidieBarChart('en1', en_percentage_data, 'key', 'value');
             }
         );
     }
@@ -1575,8 +1575,8 @@
                 return refreshBaidieBarChart(
                     'eq1',
                     eq_distribution_data,
-                    "该订单对应的出库总数量分布区间",
-                    "区间内订单出库总数量出现次数占比");
+                    "key",
+                    "value");
             }
         );
     }
@@ -1598,7 +1598,7 @@
             baidieScore,
             function () {
                 return refreshBaidieBarChart(
-                    'ei1', ei_percentage_data, '订单对应的物料品种数', '订单对应的物料品种数出现次数占比');
+                    'ei1', ei_percentage_data, 'key', 'value');
             }
         )
     }

@@ -215,7 +215,7 @@ public class EIQClassifier {
     }
 
     /***
-     * 将导入的数据转换为IK综合分析数据统计表(data6)
+     * 将导入的数据转换为EQ综合分析数据统计表(data6)
      * 1.将数据按照物料编码分组
      * 2.统计分组后物料编码出现的次数
      * @param eiqBasicInfos
@@ -294,10 +294,10 @@ public class EIQClassifier {
      * @param eiqBasicInfos EIQ基本数据
      * @return EI分析的区间和区间对应的值的数量
      */
-    public static List<ObjectMap> getIKHistogram(List<EIQBasicInfo> eiqBasicInfos) {
-        final List<IKAnalysisInfo> ikAnalysisInfoList =
-                getIKAnalysisInfoTest(eiqBasicInfos);
-        final double[] ikCount = getMaterialOccurrenceCount(ikAnalysisInfoList);
+    public static List<ObjectMap> getEQHistogram(List<EIQBasicInfo> eiqBasicInfos) {
+        final List<EQAnalysisInfo> eqAnalysisInfoList =
+                getEQAnalysisTable(eiqBasicInfos);
+        final double[] ikCount = getMaterialOccurrenceCount(eqAnalysisInfoList);
         return BaidieUtils.generateIntervalData(ikCount, 5);
     }
     /**
@@ -330,11 +330,10 @@ public class EIQClassifier {
      * @param ikAnalysisInfoList
      * @return
      */
-    private static double[] getMaterialOccurrenceCount(List<IKAnalysisInfo> ikAnalysisInfoList) {
+    private static double[] getMaterialOccurrenceCount(List<EQAnalysisInfo> eqAnalysisInfoList) {
         // 使用 Java Stream 将 OccurrenceCount 提取到一个数组中
-        double[] materialVarietiesCountArray = ikAnalysisInfoList.stream()
-                .mapToInt(IKAnalysisInfo::getOccurrenceCount)
-                .asDoubleStream()
+        double[] materialVarietiesCountArray = eqAnalysisInfoList.stream()
+                .mapToDouble(EQAnalysisInfo::getTotalDeliveredQuantity)
                 .toArray();
 
         return materialVarietiesCountArray;

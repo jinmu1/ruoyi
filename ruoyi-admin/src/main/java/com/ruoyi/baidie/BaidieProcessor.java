@@ -143,8 +143,9 @@ public class BaidieProcessor {
                         "data4", EIQClassifier::getEQAnalysisTable,
                         "data5", EIQClassifier::getEIQAnalysisTable,
                         "data6", EIQClassifier::getIKAnalysisInfoTest,
-                        "data7", EIQClassifier::getEIHistogram,
-                        "data8", EIQClassifier::getIKHistogram
+                        "en_percentage_data", EIQClassifier::getENHistogram,
+                        "eq_distribution_data", EIQClassifier::getEQHistogram,
+                        "ei_percentage_data", EIQClassifier::getEIHistogram
                 ));
     }
 }
