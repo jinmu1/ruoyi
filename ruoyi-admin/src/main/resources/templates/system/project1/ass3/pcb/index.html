@@ -181,7 +181,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="checkGroupOneSelection()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroupOneSelection(true)" type="button">提交</button>
                         </div>
                     </div>
                 </div>
@@ -288,7 +288,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="checkGroupTwoTableSelection()" type="button">提交
+                            <button class="btn btn-primary" onclick="checkGroupTwoTableSelection(true)" type="button">提交
                             </button>
                         </div>
                     </div>
@@ -413,7 +413,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupTHREETableSelection()" type="button">
+                                <button class="btn btn-primary" onclick="checkGroupTHREETableSelection(true)" type="button">
                                     提交
                                 </button>
                             </div>
@@ -555,34 +555,37 @@
         initBaidieTable("bootstrap-table", outboundBasicTable);
     }
 
-    function checkGroupOneSelection() {
+    function checkGroupOneSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_ONE_ANSWERS,
             baidieScore,
             function () {
                 return popUpWindow($.modal.icon("success"), "选择正确!");
-            }
-        )
+            },
+            recordOp
+        );
     }
 
-    function checkGroupTwoTableSelection() {
+    function checkGroupTwoTableSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_TWO_ANSWERS,
             baidieScore,
             function () {
                 return createBaidieTable("bootstrap-table14", valueBasedPCBTableColumns, data1);
-            }
-        )
+            },
+            recordOp
+        );
     }
 
-    function checkGroupTHREETableSelection() {
+    function checkGroupTHREETableSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             PCB_SELECT_GROUP_THREE_ANSWERS,
             baidieScore,
             function () {
                 return createBaidieTable("bootstrap-table1", valuePackagePCBTableColumns, data2);
-            }
-        )
+            },
+            recordOp
+        );
     }
 
     function refreshGroupOneOriginalTable(data) {

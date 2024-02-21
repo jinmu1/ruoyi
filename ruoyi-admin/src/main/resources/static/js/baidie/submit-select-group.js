@@ -30,12 +30,14 @@ class BaidieScore {
  * @param selectGroupAnswerMap 传进来的<select> element id: 对应的答案。
  * @param baidieScoreKeeper 计算分数的类。
  * @param refreshCallback  如果所有选择都符合对应的答案，调用这个函数。
+ * @param recordOpValue 如果为true,则让后台记录选项值的这个网络调用。
  *
  */
 function checkSelectionResultAndRefresh(
     selectGroupAnswerMap,
     baidieScoreKeeper,
-    refreshCallback) {
+    refreshCallback,
+    recordOpValue) {
     // 首先统计选择正确的菜单数目。
     var correctCount = 0;
     for (const elementId of selectGroupAnswerMap.keys()) {
@@ -55,9 +57,12 @@ function checkSelectionResultAndRefresh(
     if (correctCount === selectGroupAnswerMap.size) {
         refreshCallback();
         // 调用百蝶的端口记录用户行为
-        selectGroupAnswerMap.forEach((value, key) => {
-            updateBaidieOps(key, value);
-        })
+        if (recordOpValue) {
+            selectGroupAnswerMap.forEach((value, key) => {
+                updateBaidieOps(key, value);
+            });
+        }
+
     }
 
     // Update score.
