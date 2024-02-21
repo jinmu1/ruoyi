@@ -15,15 +15,15 @@ public class MaterialOutboundTypeInfo {
     private String materialCode;
     @Getter
     @Setter
-    @JsonProperty("出库数量对应托盘数量")
+    @JsonProperty("出库数量对应托盘数量（P）")
     private Double palletQuantity;
     @Getter
     @Setter
-    @JsonProperty("出库数量对应对应箱装数量")
+    @JsonProperty("出库数量对应对应箱装数量（C）")
     private Double boxQuantity;
     @Getter
     @Setter
-    @JsonProperty("出库数量对应对应单品数量")
+    @JsonProperty("出库数量对应对应单品数量（B）")
     private Double productQuantity;
     @Getter
     @Setter
