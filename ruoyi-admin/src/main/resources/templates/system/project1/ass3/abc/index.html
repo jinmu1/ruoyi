@@ -142,7 +142,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup1TableSelection()" type="button">提交
+                                <button class="btn btn-primary" onclick="checkGroup1TableSelection(true)" type="button">提交
                                 </button>
                             </div>
                         </div>
@@ -217,7 +217,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection()" type="button">
+                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection(true)" type="button">
                                     提交
                                 </button>
                             </div>
@@ -385,7 +385,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup2TableSelection()" type="button">提交
+                                <button class="btn btn-primary" onclick="checkGroup2TableSelection(true)" type="button">提交
                                 </button>
                             </div>
                         </div>
@@ -457,7 +457,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection()" type="button">
+                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection(true)" type="button">
                                     提交
                                 </button>
                             </div>
@@ -626,7 +626,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup3TableSelection()" type="button">提交
+                                <button class="btn btn-primary" onclick="checkGroup3TableSelection(true)" type="button">提交
                                 </button>
                             </div>
                         </div>
@@ -700,7 +700,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection()" type="button">
+                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection(true)" type="button">
                                     提交
                                 </button>
                             </div>
@@ -803,7 +803,7 @@
             for (var i = 0; i < result.total; i++) {
                 $("#" + d[i].opId).val(d[i].opValue);
             }
-            checkAll();
+            initializeSelectionFromDb();
         });
     });
 
@@ -917,67 +917,65 @@
         initBaidieTable("bootstrap-table4", groupThreeOriginalTable);
     }
 
-    function checkGroup1TableSelection() {
+    function checkGroup1TableSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_ONE_ANSWERS,
             baidieScore,
             function () {
                 return createBaidieTable("bootstrap-table5", valueBasedABCTableColumns, data2);
-            }
-        )
+            },
+            recordOp);
     }
 
-    function checkGroup2TableSelection() {
+    function checkGroup2TableSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_TWO_ANSWERS,
             baidieScore,
             function () {
                 return createBaidieTable("bootstrap-table7", outboundFrequencyTableColumns, data3);
-            }
-        )
+            },
+            recordOp);
     }
 
-    function checkGroup3TableSelection() {
+    function checkGroup3TableSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_SELECT_GROUP_THREE_ANSWERS,
             baidieScore,
             function () {
                 return createBaidieTable("bootstrap-table8", groupThreeDerivedTable, data4);
-            }
-        )
+            },
+            recordOp);
     }
 
-    function checkGroupOneChartSelection() {
+    function checkGroupOneChartSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_GROUP_ONE_CHART_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieChart(
-                    'abc1', data2, '物料累计品目数百分比', '平均资金占用额累计百分比');
-            }
-        )
+                return refreshBaidieChart('abc1', data2, '物料累计品目数百分比', '平均资金占用额累计百分比');
+            },
+            recordOp);
     }
 
-    function checkGroupTwoChartSelection() {
+    function checkGroupTwoChartSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_GROUP_TWO_CHART_ANSWERS,
             baidieScore,
             function () {
                 return refreshBaidieChart(
                     'abc2', data3, '物料累计品目数百分比', '累计出库频次百分比');
-            }
-        )
+            },
+            recordOp);
     }
 
-    function checkGroupThreeChartSelection() {
+    function checkGroupThreeChartSelection(recordOp = false) {
         checkSelectionResultAndRefresh(
             ABC_GROUP_THREE_CHART_ANSWERS,
             baidieScore,
             function () {
-                return refreshBaidieChart(
-                    'abc3', data4, '物料累计品目数百分比', '累计出库量百分比');
-            }
-        )
+                return refreshBaidieChart('abc3', data4, '物料累计品目数百分比', '累计出库量百分比');
+            },
+            recordOp);
     }
 
     function refreshGroupOneOriginalTable(data) {
@@ -992,7 +990,7 @@
         refreshBaidieTable("bootstrap-table4", data);
     }
 
-    function checkAll(){
+    function initializeSelectionFromDb() {
         checkGroup1TableSelection();
         checkGroup2TableSelection();
         checkGroup3TableSelection();
