@@ -401,10 +401,10 @@ public class BaidieOpController extends BaseController
             // 设置连接方式：get
             connection.setRequestProperty(HttpHeaders.AUTHORIZATION,"Bearer "+ token);
             connection.setRequestMethod("GET");
-            // 设置连接主机服务器的超时时间：15000毫秒
+            // 设置连接主机服务器的超时时间：15秒
             connection.setConnectTimeout(15000);
-            // 设置读取远程返回的数据时间：60000毫秒
-            connection.setReadTimeout(60000);
+            // 设置读取远程返回的数据时间：10秒
+            connection.setReadTimeout(10000);
             // 发送请求
             connection.connect();
             // 通过connection连接，获取输入流
@@ -422,23 +422,23 @@ public class BaidieOpController extends BaseController
                 result = sbf.toString();
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            logger.error("MalformedURLException caught: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException caught: " + e.getMessage());
         } finally {
             // 关闭资源
             if (nonNull(bufferedReader)) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("IOException caught while closing buffered reader: " + e.getMessage());
                 }
             }
             if (nonNull(inputStream)) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("IOException caught while closing input stream: " + e.getMessage());
                 }
             }
             if (nonNull(connection)) {
