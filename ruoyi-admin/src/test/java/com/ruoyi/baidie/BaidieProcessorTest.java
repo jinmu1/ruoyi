@@ -140,7 +140,7 @@ public class BaidieProcessorTest {
         //物料编号:"4703710"
         //订单编号:11930498
         //销售单价:135
-        assertEquals(11930498, data5Entries.get(100).getOrderNumber());
+        assertEquals("11930498", data5Entries.get(100).getOrderNumber());
         assertEquals(4.0, data5Entries.get(100).getShippedQuantity(), 0.1);
 
         // index 167.
