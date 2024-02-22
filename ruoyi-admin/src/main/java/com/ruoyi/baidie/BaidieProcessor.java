@@ -6,6 +6,8 @@ import com.ruoyi.data.abc.OrderMaterialInfo;
 import com.ruoyi.data.eiq.EIQBasicInfo;
 import com.ruoyi.data.pcb.OutboundBasicInfo;
 import com.ruoyi.web.controller.utils.BaidieUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,6 +21,8 @@ import static java.util.Map.entry;
 public class BaidieProcessor {
     // Error message for import file error.
     public static final String IMPORT_FAILURE_MSG = "导入文件失败，请检查格式或者模版是否正确";
+
+    protected static final Logger logger = LoggerFactory.getLogger(BaidieProcessor.class);
 
     /**
      * Import and parse data from an uploaded file, and transforms the input data into
@@ -123,6 +127,7 @@ public class BaidieProcessor {
                     .putAll(derivedDataMap)
                     .build();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new IOException(IMPORT_FAILURE_MSG);
         }
     }
