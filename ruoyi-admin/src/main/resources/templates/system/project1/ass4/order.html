@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('订单分析')" />
+    <th:block th:include="include :: header('订单分析')"/>
     <style>
-        *{
+        * {
             margin: 0;
-            margin: 0;font-size:20px;
+            margin: 0;
+            font-size: 20px;
         }
 
     </style>
@@ -39,7 +40,7 @@
                 <div class="ibox-title">
                     <h5>周期内每日下达客户订单数量分析用表制作</h5>
                 </div>
-                <div class="ibox-content" style="height:400px">
+                <div class="ibox-content" style="height:700px">
                     <div class="form-horizontal m-t">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">选择正确的选项：</label>
@@ -65,40 +66,40 @@
                                     <div class="col-sm-3">
                                         <select class="type form-control m-b" id="s1" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	客户订单表	</option>
-                                            <option value="2">	库存表	</option>
-                                            <option value="3">	入库表	</option>
-                                            <option value="4">	出库表	</option>
+                                            <option value="1"> 客户订单表</option>
+                                            <option value="2"> 库存表</option>
+                                            <option value="3"> 入库表</option>
+                                            <option value="4"> 出库表</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s2" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	客户订单编码	</option>
-                                            <option value="2">	物料编码	</option>
-                                            <option value="3">	车辆编码	</option>
-                                            <option value="4">	客户编码	</option>
+                                            <option value="1"> 客户订单编码</option>
+                                            <option value="2"> 物料编码</option>
+                                            <option value="3"> 车辆编码</option>
+                                            <option value="4"> 客户编码</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s3" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	订单出库日期	</option>
-                                            <option value="2">	订单创建日期	</option>
-                                            <option value="3">	入库日期	</option>
-                                            <option value="4">	盘点日期	</option>
+                                            <option value="1"> 订单出库日期</option>
+                                            <option value="2"> 订单创建日期</option>
+                                            <option value="3"> 入库日期</option>
+                                            <option value="4"> 盘点日期</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s4" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	计算同一入库日期下出现的物料编码次数	</option>
-                                            <option value="2">	计算同一出库日期下出现的订单编码次数	</option>
-                                            <option value="3">	删除同一订单出库日期下重复的客户订单编码	</option>
-                                            <option value="4">	删除同一订单创建日期下重复的客户订单编码	</option>
+                                            <option value="1"> 计算同一入库日期下出现的物料编码次数</option>
+                                            <option value="2"> 计算同一出库日期下出现的订单编码次数</option>
+                                            <option value="3"> 删除同一订单出库日期下重复的客户订单编码</option>
+                                            <option value="4"> 删除同一订单创建日期下重复的客户订单编码</option>
 
                                         </select>
                                     </div>
@@ -107,7 +108,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup1TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +122,7 @@
                 <div class="ibox-title">
                     <h5>周期内每日下达客户订单数量分析用表</h5>
                 </div>
-                <div class="ibox-content" style="height:400px">
+                <div class="ibox-content" style="height:700px">
                     <table id="bootstrap-table2"></table>
                 </div>
             </div>
@@ -153,40 +155,42 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="z" id="z" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	按照订单出库日期统计每天出现的客户订单编码数量	</option>
-                                <option value="2">	按照订单创建日期统计每天出现的客户订单编码数量	</option>
-                                <option value="3">	按照每日入库出现的客户订单编码种类数量进行ABC分类	</option>
-                                <option value="4">	按照每日入库出现的订单编码种类数量进行直方图分析	</option>
+                            <select name="z" id="z" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 按照订单出库日期统计每天出现的客户订单编码数量</option>
+                                <option value="2"> 按照订单创建日期统计每天出现的客户订单编码数量</option>
+                                <option value="3"> 按照每日入库出现的客户订单编码种类数量进行ABC分类</option>
+                                <option value="4"> 按照每日入库出现的订单编码种类数量进行直方图分析</option>
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="x" id="x" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	出库日期	</option>
-                                <option value="2">	物料编码	</option>
-                                <option value="3">	订单编码	</option>
-                                <option value="4">	订单创建日期	</option>
+                            <select name="x" id="x" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 出库日期</option>
+                                <option value="2"> 物料编码</option>
+                                <option value="3"> 订单编码</option>
+                                <option value="4"> 订单创建日期</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y" id="y" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内每日出库物料种类数量（个）	</option>
-                                <option value="2">	周期内每日下达订单数量（个）	</option>
-                                <option value="3">	周期内每日入库物料种类数量（个）	</option>
-                                <option value="4">	周期内每日入库订单种类数量在总数量中的占比	</option>
+                            <select name="y" id="y" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内每日出库物料种类数量（个）</option>
+                                <option value="2"> 周期内每日下达订单数量（个）</option>
+                                <option value="3"> 周期内每日入库物料种类数量（个）</option>
+                                <option value="4"> 周期内每日入库订单种类数量在总数量中的占比</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reload1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -237,7 +241,7 @@
                 <div class="ibox-title">
                     <h5>周期内每日出库客户订单数量分析——数据分析用表制作</h5>
                 </div>
-                <div class="ibox-content" style="height:400px">
+                <div class="ibox-content" style="height:700px">
                     <div class="form-horizontal m-t">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">选择正确的选项：</label>
@@ -259,14 +263,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">选择正确步骤</label>
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-3">
                                         <select class="type form-control m-b" id="s11" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	库存表	</option>
-                                            <option value="2">	客户订单表	</option>
-                                            <option value="3">	入库表	</option>
-                                            <option value="4">	出库表	</option>
+                                            <option value="1"> 库存表</option>
+                                            <option value="2"> 客户订单表</option>
+                                            <option value="3"> 入库表</option>
+                                            <option value="4"> 出库表</option>
 
 
                                         </select>
@@ -274,10 +278,10 @@
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s12" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	车辆编码	</option>
-                                            <option value="2">	物料编码	</option>
-                                            <option value="3">	客户订单编码	</option>
-                                            <option value="4">	客户编码	</option>
+                                            <option value="1"> 车辆编码</option>
+                                            <option value="2"> 物料编码</option>
+                                            <option value="3"> 客户订单编码</option>
+                                            <option value="4"> 客户编码</option>
 
 
                                         </select>
@@ -285,10 +289,10 @@
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s13" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	订单创建日期	</option>
-                                            <option value="2">	入库日期	</option>
-                                            <option value="3">	盘点日期	</option>
-                                            <option value="4">	订单出库日期	</option>
+                                            <option value="1"> 订单创建日期</option>
+                                            <option value="2"> 入库日期</option>
+                                            <option value="3"> 盘点日期</option>
+                                            <option value="4"> 订单出库日期</option>
 
 
                                         </select>
@@ -296,10 +300,10 @@
                                     <div class="col-sm-3">
                                         <select class="router form-control m-b" id="s14" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	计算同一出库日期下出现的订单编码次数	</option>
-                                            <option value="2">	计算同一入库日期下出现的物料编码次数	</option>
-                                            <option value="3">	删除同一订单出库日期下重复的客户订单编码	</option>
-                                            <option value="4">	删除同一订单创建日期下重复的客户订单编码	</option>
+                                            <option value="1"> 计算同一出库日期下出现的订单编码次数</option>
+                                            <option value="2"> 计算同一入库日期下出现的物料编码次数</option>
+                                            <option value="3"> 删除同一订单出库日期下重复的客户订单编码</option>
+                                            <option value="4"> 删除同一订单创建日期下重复的客户订单编码</option>
 
 
                                         </select>
@@ -310,7 +314,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup2TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -323,7 +328,7 @@
                 <div class="ibox-title">
                     <h5>周期内每日出库客户订单数量分析——数据分析用表</h5>
                 </div>
-                <div class="ibox-content" style="height:400px">
+                <div class="ibox-content" style="height:700px">
                     <table id="bootstrap-table4"></table>
                 </div>
             </div>
@@ -356,41 +361,43 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="z1" id="z1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	按照订单出库日期统计每天出现的客户订单编码数量	</option>
-                                <option value="2">	按照订单创建日期统计每天出现的客户订单编码数量	</option>
-                                <option value="3">	按照每日入库出现的客户订单编码种类数量进行ABC分类	</option>
-                                <option value="4">	按照每日入库出现的订单编码种类数量进行直方图分析	</option>
+                            <select name="z1" id="z1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 按照订单出库日期统计每天出现的客户订单编码数量</option>
+                                <option value="2"> 按照订单创建日期统计每天出现的客户订单编码数量</option>
+                                <option value="3"> 按照每日入库出现的客户订单编码种类数量进行ABC分类</option>
+                                <option value="4"> 按照每日入库出现的订单编码种类数量进行直方图分析</option>
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="x1" id="x1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	入库日期	</option>
-                                <option value="2">	订单出库日期	</option>
-                                <option value="3">	物料编码	</option>
-                                <option value="4">	订单编码	</option>
+                            <select name="x1" id="x1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 入库日期</option>
+                                <option value="2"> 订单出库日期</option>
+                                <option value="3"> 物料编码</option>
+                                <option value="4"> 订单编码</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y1" id="y1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内每日出库订单数量（个）	</option>
-                                <option value="2">	周期内每日下达订单数量（个）	</option>
-                                <option value="3">	周期内每日入库物料种类数量（个）	</option>
-                                <option value="4">	周期内每日入库订单种类数量在总数量中的占比	</option>
+                            <select name="y1" id="y1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内每日出库订单数量（个）</option>
+                                <option value="2"> 周期内每日下达订单数量（个）</option>
+                                <option value="3"> 周期内每日入库物料种类数量（个）</option>
+                                <option value="4"> 周期内每日入库订单种类数量在总数量中的占比</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reload2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -470,14 +477,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">选择正确步骤</label>
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="s21" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	库存表	</option>
-                                            <option value="2">	入库表	</option>
-                                            <option value="3">	客户订单表	</option>
-                                            <option value="4">	出库表	</option>
+                                            <option value="1"> 库存表</option>
+                                            <option value="2"> 入库表</option>
+                                            <option value="3"> 客户订单表</option>
+                                            <option value="4"> 出库表</option>
 
 
                                         </select>
@@ -485,11 +492,10 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s22" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	客户订单编码	</option>
-                                            <option value="2">	物料编码	</option>
-                                            <option value="3">	入库日期	</option>
-                                            <option value="4">	出库日期	</option>
-
+                                            <option value="1"> 客户订单编码</option>
+                                            <option value="2"> 物料编码</option>
+                                            <option value="3"> 入库日期</option>
+                                            <option value="4"> 出库日期</option>
 
 
                                         </select>
@@ -497,40 +503,40 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s23" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	车辆编码	</option>
-                                            <option value="2">	物料编码	</option>
-                                            <option value="3">	订单创建日期	</option>
-                                            <option value="4">	供应商编码	</option>
+                                            <option value="1"> 车辆编码</option>
+                                            <option value="2"> 物料编码</option>
+                                            <option value="3"> 订单创建日期</option>
+                                            <option value="4"> 供应商编码</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s24" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	订单出库日期	</option>
-                                            <option value="2">	车辆编码	</option>
-                                            <option value="3">	物料编码	</option>
-                                            <option value="4">	客户编码	</option>
+                                            <option value="1"> 订单出库日期</option>
+                                            <option value="2"> 车辆编码</option>
+                                            <option value="3"> 物料编码</option>
+                                            <option value="4"> 客户编码</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s25" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	找出同一个物料编码对应的订单创建日期和订单出库日期	</option>
-                                            <option value="2">	删除同一出库日期下重复的订单编码	</option>
-                                            <option value="3">	删除同一入库日期下重复的订单编码	</option>
-                                            <option value="4">	找出同一个客户订单编码对应的订单创建日期和订单出库日期	</option>
+                                            <option value="1"> 找出同一个物料编码对应的订单创建日期和订单出库日期</option>
+                                            <option value="2"> 删除同一出库日期下重复的订单编码</option>
+                                            <option value="3"> 删除同一入库日期下重复的订单编码</option>
+                                            <option value="4"> 找出同一个客户订单编码对应的订单创建日期和订单出库日期</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s26" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	计算同一个物料编码下入库日期与出库日期的间隔天数	</option>
-                                            <option value="2">	计算同一个订单编码下订单创建日期与订单出库日期的间隔天数	</option>
-                                            <option value="3">	计算同一个客户订单编码周期内的出现次数	</option>
-                                            <option value="4">	计算同一个物料编码周期内的出现次数	</option>
+                                            <option value="1"> 计算同一个物料编码下入库日期与出库日期的间隔天数</option>
+                                            <option value="2"> 计算同一个订单编码下订单创建日期与订单出库日期的间隔天数</option>
+                                            <option value="3"> 计算同一个客户订单编码周期内的出现次数</option>
+                                            <option value="4"> 计算同一个物料编码周期内的出现次数</option>
 
 
                                         </select>
@@ -540,7 +546,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup3TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -586,38 +593,40 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="z2" id="z2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='按照每个订单的响应天数进行ABC分类分析'  >按照每个订单的响应天数进行ABC分类分析</option>
-                                <option  value='按照每个物料的响应天数进行ABC分类分析'  >按照每个物料的响应天数进行ABC分类分析</option>
-                                <option  value='按照每个订单的响应天数进行直方图分析'  >按照每个订单的响应天数进行直方图分析</option>
-                                <option  value='按照每个物料的响应天数进行直方图分析'  >按照每个物料的响应天数进行直方图分析</option>
+                            <select name="z2" id="z2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='按照每个订单的响应天数进行ABC分类分析'>按照每个订单的响应天数进行ABC分类分析</option>
+                                <option value='按照每个物料的响应天数进行ABC分类分析'>按照每个物料的响应天数进行ABC分类分析</option>
+                                <option value='按照每个订单的响应天数进行直方图分析'>按照每个订单的响应天数进行直方图分析</option>
+                                <option value='按照每个物料的响应天数进行直方图分析'>按照每个物料的响应天数进行直方图分析</option>
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="x2" id="x2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料响应周期分布区间'  >物料响应周期分布区间</option>
-                                <option  value='订单响应周期分布区间'  >订单响应周期分布区间</option>
-                                <option  value='入库日期分布周期'  >入库日期分布周期</option>
-                                <option  value='出库日期分布周期'  >出库日期分布周期</option>
+                            <select name="x2" id="x2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料响应周期分布区间'>物料响应周期分布区间</option>
+                                <option value='订单响应周期分布区间'>订单响应周期分布区间</option>
+                                <option value='入库日期分布周期'>入库日期分布周期</option>
+                                <option value='出库日期分布周期'>出库日期分布周期</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y2" id="y2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='区间内物料分布的数量'  >区间内物料分布的数量</option>
-                                <option  value='区间内订单分布的数量'  >区间内订单分布的数量</option>
-                                <option  value='周期内订单数量在总数量中占比'  >周期内订单数量在总数量中占比</option>
-                                <option  value='周期内物料数量在总数量中占比'  >周期内物料数量在总数量中占比</option>
+                            <select name="y2" id="y2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='区间内物料分布的数量'>区间内物料分布的数量</option>
+                                <option value='区间内订单分布的数量'>区间内订单分布的数量</option>
+                                <option value='周期内订单数量在总数量中占比'>周期内订单数量在总数量中占比</option>
+                                <option value='周期内物料数量在总数量中占比'>周期内物料数量在总数量中占比</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reload3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -724,14 +733,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">选择正确步骤</label>
                             <div class="col-sm-10">
-                                <div  class="row">
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <select class="type form-control m-b" id="s31" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	客户订单表	</option>
-                                            <option value="2">	入库表	</option>
-                                            <option value="3">	库存表	</option>
-                                            <option value="4">	出库表	</option>
+                                            <option value="1"> 客户订单表</option>
+                                            <option value="2"> 入库表</option>
+                                            <option value="3"> 库存表</option>
+                                            <option value="4"> 出库表</option>
 
 
                                         </select>
@@ -739,10 +748,10 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s32" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	客户编码	</option>
-                                            <option value="2">	车辆编码	</option>
-                                            <option value="3">	客户订单编码	</option>
-                                            <option value="4">	供应商编码	</option>
+                                            <option value="1"> 客户编码</option>
+                                            <option value="2"> 车辆编码</option>
+                                            <option value="3"> 客户订单编码</option>
+                                            <option value="4"> 供应商编码</option>
 
 
                                         </select>
@@ -750,20 +759,20 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s33" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	订单出库日期	</option>
-                                            <option value="2">	订单创建日期	</option>
-                                            <option value="3">	客户编码	</option>
-                                            <option value="4">	供应商编码	</option>
+                                            <option value="1"> 订单出库日期</option>
+                                            <option value="2"> 订单创建日期</option>
+                                            <option value="3"> 客户编码</option>
+                                            <option value="4"> 供应商编码</option>
 
                                         </select>
                                     </div>
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s34" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	供应商编码	</option>
-                                            <option value="2">	车辆编码	</option>
-                                            <option value="3">	物料编码	</option>
-                                            <option value="4">	客户编码	</option>
+                                            <option value="1"> 供应商编码</option>
+                                            <option value="2"> 车辆编码</option>
+                                            <option value="3"> 物料编码</option>
+                                            <option value="4"> 客户编码</option>
 
 
                                         </select>
@@ -771,11 +780,10 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s35" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	出库过账数量	</option>
-                                            <option value="2">	订购数量	</option>
-                                            <option value="3">	入库过账数量	</option>
-                                            <option value="4">	库存盘点数量	</option>
-
+                                            <option value="1"> 出库过账数量</option>
+                                            <option value="2"> 订购数量</option>
+                                            <option value="3"> 入库过账数量</option>
+                                            <option value="4"> 库存盘点数量</option>
 
 
                                         </select>
@@ -783,10 +791,10 @@
                                     <div class="col-sm-2">
                                         <select class="router form-control m-b" id="s36" data-first-title="请选择">
                                             <option value="">请选择</option>
-                                            <option value="1">	销售组织	</option>
-                                            <option value="2">	工厂代码	</option>
-                                            <option value="3">	单位代码	</option>
-                                            <option value="4">	一级分类	</option>
+                                            <option value="1"> 销售组织</option>
+                                            <option value="2"> 工厂代码</option>
+                                            <option value="3"> 单位代码</option>
+                                            <option value="4"> 一级分类</option>
 
 
                                         </select>
@@ -796,7 +804,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup4TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -843,41 +852,43 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="z3" id="z3" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	统计周期内不同一级分类下物料每日对应的客户订单的订购总数量	</option>
-                                <option value="2">	统计同一个订单编码周期内的入库过账总数量	</option>
-                                <option value="3">	统计不同一级分类下同一个物料编码周期内的入库过账总数量	</option>
-                                <option value="4">	统计不同一级分类下同一个物料编码周期内的出库过账总数量	</option>
+                            <select name="z3" id="z3" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 统计周期内不同一级分类下物料每日对应的客户订单的订购总数量</option>
+                                <option value="2"> 统计同一个订单编码周期内的入库过账总数量</option>
+                                <option value="3"> 统计不同一级分类下同一个物料编码周期内的入库过账总数量</option>
+                                <option value="4"> 统计不同一级分类下同一个物料编码周期内的出库过账总数量</option>
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="x3" id="x3" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	客户订单编码	</option>
-                                <option value="2">	订单出库日期	</option>
-                                <option value="3">	客户订单编码累计品目数	</option>
-                                <option value="4">	物料编码累计品目数	</option>
+                            <select name="x3" id="x3" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 客户订单编码</option>
+                                <option value="2"> 订单出库日期</option>
+                                <option value="3"> 客户订单编码累计品目数</option>
+                                <option value="4"> 物料编码累计品目数</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y3" id="y3" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内订单对应出库过账总数量（SKU）	</option>
-                                <option value="2">	周期内订单对应入库过账总数量（SKU）	</option>
-                                <option value="3">	周期内物料对应出库过账总数量（箱）	</option>
-                                <option value="4">	各一级分类下物料对应客户订单的每日订购总数量	</option>
+                            <select name="y3" id="y3" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内订单对应出库过账总数量（SKU）</option>
+                                <option value="2"> 周期内订单对应入库过账总数量（SKU）</option>
+                                <option value="3"> 周期内物料对应出库过账总数量（箱）</option>
+                                <option value="4"> 各一级分类下物料对应客户订单的每日订购总数量</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reload4()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupFourChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -950,43 +961,45 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="z3" id="z4" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	统计每个客户订单编码周期内出库过账总数量并进行升序排序	</option>
-                                <option value="2">	统计每个物料编码周期内订购总数量并进行降序排序	</option>
-                                <option value="3">	统计不同一级分类下物料对应的客户订单编码周期内订购总数量并进行降序排序	</option>
-                                <option value="4">	统计不同一级分类下每个物料编码周期内订购总数量并进行降序排序	</option>
+                            <select name="z3" id="z4" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 统计每个客户订单编码周期内出库过账总数量并进行升序排序</option>
+                                <option value="2"> 统计每个物料编码周期内订购总数量并进行降序排序</option>
+                                <option value="3"> 统计不同一级分类下物料对应的客户订单编码周期内订购总数量并进行降序排序</option>
+                                <option value="4"> 统计不同一级分类下每个物料编码周期内订购总数量并进行降序排序</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="x3" id="x4" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	客户订单编码	</option>
-                                <option value="2">	客户订单编码累计品目数	</option>
-                                <option value="3">	物料编码	</option>
-                                <option value="4">	物料编码累计品目数	</option>
+                            <select name="x3" id="x4" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 客户订单编码</option>
+                                <option value="2"> 客户订单编码累计品目数</option>
+                                <option value="3"> 物料编码</option>
+                                <option value="4"> 物料编码累计品目数</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y3" id="y4" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内订单对应出库过账总数量	</option>
-                                <option value="2">	周期内订单对应入库过账总数量	</option>
-                                <option value="3">	周期内物料对应出库过账总数量	</option>
-                                <option value="4">	周期内不同分类下订单对应的物料订购总数量	</option>
+                            <select name="y3" id="y4" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内订单对应出库过账总数量</option>
+                                <option value="2"> 周期内订单对应入库过账总数量</option>
+                                <option value="3"> 周期内物料对应出库过账总数量</option>
+                                <option value="4"> 周期内不同分类下订单对应的物料订购总数量</option>
 
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reload5()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupFiveChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1141,10 +1154,10 @@
                         <div class="col-sm-2">
                             <select class="type form-control m-b" id="d31" data-first-title="请选择">
                                 <option value="">请选择</option>
-                                <option value="1">	库存表	</option>
-                                <option value="2">	入库表	</option>
-                                <option value="3">	客户订单表	</option>
-                                <option value="4">	出库表	</option>
+                                <option value="1"> 库存表</option>
+                                <option value="2"> 入库表</option>
+                                <option value="3"> 客户订单表</option>
+                                <option value="4"> 出库表</option>
 
 
                             </select>
@@ -1152,10 +1165,10 @@
                         <div class="col-sm-2">
                             <select class="router form-control m-b" id="d32" data-first-title="请选择">
                                 <option value="">请选择</option>
-                                <option value="1">	客户编码	</option>
-                                <option value="2">	客户订单编码	</option>
-                                <option value="3">	供应商编码	</option>
-                                <option value="4">	车辆编码	</option>
+                                <option value="1"> 客户编码</option>
+                                <option value="2"> 客户订单编码</option>
+                                <option value="3"> 供应商编码</option>
+                                <option value="4"> 车辆编码</option>
 
 
                             </select>
@@ -1163,10 +1176,10 @@
                         <div class="col-sm-2">
                             <select class="router form-control m-b" id="d33" data-first-title="请选择">
                                 <option value="">请选择</option>
-                                <option value="1">	入库日期	</option>
-                                <option value="2">	订单出库日期	</option>
-                                <option value="3">	订单创建日期	</option>
-                                <option value="4">	库存盘点日期	</option>
+                                <option value="1"> 入库日期</option>
+                                <option value="2"> 订单出库日期</option>
+                                <option value="3"> 订单创建日期</option>
+                                <option value="4"> 库存盘点日期</option>
 
 
                             </select>
@@ -1174,10 +1187,10 @@
                         <div class="col-sm-2">
                             <select class="router form-control m-b" id="d34" data-first-title="请选择">
                                 <option value="">请选择</option>
-                                <option value="1">	工厂编码	</option>
-                                <option value="2">	供应商编码	</option>
-                                <option value="3">	车辆编码	</option>
-                                <option value="4">	物料编码	</option>
+                                <option value="1"> 工厂编码</option>
+                                <option value="2"> 供应商编码</option>
+                                <option value="3"> 车辆编码</option>
+                                <option value="4"> 物料编码</option>
 
 
                             </select>
@@ -1187,7 +1200,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="submit4()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroup5TableSelection()" type="button">提交
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1232,41 +1246,43 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="eix" id="x6" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	对每个物料编码按照周期内对应的订单种类总数量进行降序排序	</option>
-                                <option value="2">	对每个订单编码按照周期内对应的物料种类总数量进行降序排序	</option>
-                                <option value="3">	对每个订单编码按照周期内对应的物料种类总数量进行升序排序	</option>
-                                <option value="4">	对每个物料编码按照周期内对应的订单种类总数量进行升序排序	</option>
+                            <select name="eix" id="x6" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 对每个物料编码按照周期内对应的订单种类总数量进行降序排序</option>
+                                <option value="2"> 对每个订单编码按照周期内对应的物料种类总数量进行降序排序</option>
+                                <option value="3"> 对每个订单编码按照周期内对应的物料种类总数量进行升序排序</option>
+                                <option value="4"> 对每个物料编码按照周期内对应的订单种类总数量进行升序排序</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="eix" id="y6" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	订单编码	</option>
-                                <option value="2">	物料编码	</option>
-                                <option value="3">	订单编码累计品目数	</option>
-                                <option value="4">	物料编码累计品目数	</option>
+                            <select name="eix" id="y6" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 订单编码</option>
+                                <option value="2"> 物料编码</option>
+                                <option value="3"> 订单编码累计品目数</option>
+                                <option value="4"> 物料编码累计品目数</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select name="eiy" id="z6" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内订单对应物料种类总数量（种）	</option>
-                                <option value="2">	周期内物料对应订单种类总数量（种）	</option>
-                                <option value="3">	周期内容出现订单种类总数量（种）	</option>
-                                <option value="4">	周期内容出现物料种类总数量（种）	</option>
+                            <select name="eiy" id="z6" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内订单对应物料种类总数量（种）</option>
+                                <option value="2"> 周期内物料对应订单种类总数量（种）</option>
+                                <option value="3"> 周期内容出现订单种类总数量（种）</option>
+                                <option value="4"> 周期内容出现物料种类总数量（种）</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reloadEI()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupSixChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1328,41 +1344,43 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>统计方法</p>
-                            <select  name="eix1" id="x7" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	将每个物料编码按照周期内对应订单种类总数量（种）进行直方图分析	</option>
-                                <option value="2">	将每个订单编码按照周期内出库过账总数量（箱）进行直方图分析	</option>
-                                <option value="3">	将每个订单编码按照周期内对应物料种类总数量（种）进行直方图分析	</option>
-                                <option value="4">	将每个订单编码按照周期内入库过账总数量（箱）进行直方图分析	</option>
+                            <select name="eix1" id="x7" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 将每个物料编码按照周期内对应订单种类总数量（种）进行直方图分析</option>
+                                <option value="2"> 将每个订单编码按照周期内出库过账总数量（箱）进行直方图分析</option>
+                                <option value="3"> 将每个订单编码按照周期内对应物料种类总数量（种）进行直方图分析</option>
+                                <option value="4"> 将每个订单编码按照周期内入库过账总数量（箱）进行直方图分析</option>
 
 
                             </select>
                         </div>
                         <div>
                             <p>X轴</p>
-                            <select  name="eix1" id="y7" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	周期内物料对应订单种类总数量（种）分布区间	</option>
-                                <option value="2">	周期内订单对应物料种类总数量（种）分布区间	</option>
-                                <option value="3">	订单对应出库过账总数量（箱）分布区间	</option>
-                                <option value="4">	物料对应出库过账总数量（箱）分布区间	</option>
+                            <select name="eix1" id="y7" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 周期内物料对应订单种类总数量（种）分布区间</option>
+                                <option value="2"> 周期内订单对应物料种类总数量（种）分布区间</option>
+                                <option value="3"> 订单对应出库过账总数量（箱）分布区间</option>
+                                <option value="4"> 物料对应出库过账总数量（箱）分布区间</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="eiy1" id="z7" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option value="1">	区间内物料分布的数量	</option>
-                                <option value="2">	周期内订单数量在总数量中占比	</option>
-                                <option value="3">	周期内物料数量在总数量中占比	</option>
-                                <option value="4">	区间内订单分布数量	</option>
+                            <select name="eiy1" id="z7" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value="1"> 区间内物料分布的数量</option>
+                                <option value="2"> 周期内订单数量在总数量中占比</option>
+                                <option value="3"> 周期内物料数量在总数量中占比</option>
+                                <option value="4"> 区间内订单分布数量</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="reloadEI1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupSevenChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1423,7 +1441,7 @@
                 <div class="ibox-content" style="height:300px">
                     <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
                         <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
-                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <p><span id="token" style="display: none" th:text="${token}"></span></p>
                         <button class="btn btn-primary" onclick="end()" type="button">提交</button>
                     </div>
                 </div>
@@ -1432,1806 +1450,457 @@
 
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: echarts-js" />
-<script  th:inline="javascript">
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
     var ctx = [[@{/}]];
-    var total =0;
-    var n=0;
-    function end(){
-        n=(n)/(total);
-        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
+    var baidieScore = new BaidieScore();
+
+    function end() {
+        const score = baidieScore.getScore();
+        window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
     }
-    var data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11,data12;
+
+    var data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13;
 
     $.getJSON("../../../file/order.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
-        data4=data.data4;
-        data5=data.data5;
-        data6=data.data6;
-        data7=data.data7;
-        data8=data.data8;
-        data9 = data.data1;
-        data10 = data.data9;
-        data11 = data.data10;
-        data12 = data.data11;
-        loadTable1();
-        // loadTable2();
-        // loadTable3();
-        // loadTable4();
-        // loadTable5();
-        // loadTable11();
-        // load1();
-        // load2();
-        // load3();
-        // load4();
-        // load5();
-        // load8();
-        // load9();
-        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+        data1 = data.data1;
+        data2 = data.data2;
+        data3 = data.data3;
+        data4 = data.data4;
+        data5 = data.data5;
+        data6 = data.data6;
+        data7 = data.data7;
+        data8 = data.data8;
+        data9 = data.data9;
+        data10 = data.data10;
+        data11 = data.data11;
+        data12 = data.data12;
+        data13 = data.data13;
+        initGroupOneTables();
+        $.post(ctx + "system/op/list1?&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text(), function (result) {
             var d = result.rows;
-            for(var i=0;i<result.total;i++){
-                $("#"+d[i].opId).val(d[i].opValue);
+            for (var i = 0; i < result.total; i++) {
+                $("#" + d[i].opId).val(d[i].opValue);
             }
-            submit();
-            submit1();
-            submit2();
-            submit3();
-            submit4();
-            reload1();
-            reload2();
-            reload3();
-            reload4();
-            reload5();
-            reloadEI();
-            reloadEI1();
         });
     });
-    function addResutl(opId,opValue) {
-        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
-        });
+
+
+    function initGroupOneTables() {
+        initBaidieTable("bootstrap-table", valueBasedOrderTableColumns);
+        refreshBaidieTable("bootstrap-table", data1);
     }
 
-    function loadTable1() {
-        var  datadd = data1;
-
-        for(var dd=0;dd<71892;dd++){
-            datadd.push(null);
-        }
-
-        var options = {
-            id:"bootstrap-table",
-            data:datadd,
-            method: 'get',
-
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            totalRows:17000,
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns:[
-                {"field":"订单创建日期","title":"订单创建日期"},
-                {"field":"客户代码","title":"客户代码"},
-                {"field":"客户指定送达方门店代码","title":"客户指定送达方门店代码"},
-                {"field":"客户订单编码","title":"客户订单编码"},
-                {"field":"物料编码","title":"物料编码"},
-                {"field":"物料描述","title":"物料描述"},
-                {"field":"销售单价","title":"销售单价"},
-                {"field":"订购数量","title":"订购数量"},
-                {"field":"单位名称","title":"单位名称"},
-                {"field":"单位代码","title":"单位代码"},
-                {"field":"工厂代码","title":"工厂代码"},
-                {"field":"订单出库日期","title":"订单出库日期"},
-                {"field":"销售组织","title":"销售组织"},
-                {"field":"一级分类","title":"一级分类"},
-                {"field":"二级分类","title":"二级分类"},
-                {"field":"三级级分类","title":"三级级分类"},
-                {"field":"四级分类","title":"四级分类"},
-
-            ]
-        };
-        $.table.init(options);
-    }
-    function submit(){
-        var s1 = $('#s1 option:selected').val();
-        var s2 = $('#s2 option:selected').val();
-        var s3 = $('#s3 option:selected').val();
-        var s4 = $('#s4 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=1){
-            $('#s1').css("background-color","red");
-            setTimeout(function() {
-                $('#s1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=1){
-            $('#s2').css("background-color","red");
-            setTimeout(function() {
-                $('#s2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=2){
-            $('#s3').css("background-color","red");
-            setTimeout(function() {
-                $('#s3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#s4').css("background-color","red");
-            setTimeout(function() {
-                $('#s4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){
-            addResutl("s1",s1);
-            addResutl("s2",s2);
-            addResutl("s3",s3);
-            addResutl("s4",s4);
-            n++;
-            loadTable2();
-        }
-
-    }
-    function loadTable2() {
-        var dada = [];
-        for(var dd=0;dada.length<9892;dd++){
-            dada.push(data1[dd]);
-        }
-        var options = {
-            id:"bootstrap-table2",
-            data:dada,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 2,
-            pageNumber:1,
-            pageList: [2,10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单创建日期',
-                    title: '订单创建日期'
-                },
-                {
-                    field: '客户订单编码',
-                    title: '客户订单编码'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reload1(){
-        var x=$("#x option:selected").val();
-        var y=$("#y option:selected").val();
-        var z=$("#z option:selected").val();
-        total++;
-        var m=0;
-        if(x!="4"){
-            $('#x').css("background-color","red");
-            setTimeout(function() {
-                $('#x').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="2"){
-            m++;
-            $('#y').css("background-color","red");
-            setTimeout(function() {
-                $('#y').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            return;
-        }
-        if(z!="2"){
-            m++;
-            $('#z').css("background-color","red");
-            setTimeout(function() {
-                $('#z').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-
-            addResutl("x",x);
-            addResutl("y",y);
-            addResutl("z",z);
-            n++;
-            load1();
-        }
-    }
-    function load1(){
-        var myChart = echarts.init(document.getElementById('order'), 'macarons');
-
-        var d = data2;
-        var arr1=[];
-        var arr2=[];
-        var arr3=[];
-        var arr4=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单创建日期);
-            arr2.push(d[i].周期内每日下达订单数量);
-            arr3.push(d[i].平均数);
-            arr4.push(d[i].中位数);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'每日出库订单数量',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-                },{
-                    name:'平均数',
-                    type:'line',
-                    data:arr3,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-
-                },{
-                    name:'中位数',
-                    type:'line',
-                    data:arr4,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table3",
-            data:data2,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单创建日期',
-                    title: '订单创建日期'
-                },
-                {
-                    field: '周期内每日下达订单数量',
-                    title: '周期内每日下达订单数量（个）'
-                },
-                {
-                    field: '平均数',
-                    title: '平均数'
-                },
-                {
-                    field: '中位数',
-                    title: '中位数'
-                }]
-        };
-        $.table.init(options);
-
+    function checkGroup1TableSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_SELECT_GROUP_ONE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table2", valueCustomerOrderTableColumns, data2);
+            }
+        )
     }
 
-    function submit1(){
-        var s1 = $('#s11 option:selected').val();
-        var s2 = $('#s12 option:selected').val();
-        var s3 = $('#s13 option:selected').val();
-        var s4 = $('#s14 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=2){
-            $('#s11').css("background-color","red");
-            setTimeout(function() {
-                $('#s11').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=3){
-            $('#s12').css("background-color","red");
-            setTimeout(function() {
-                $('#s12').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=4){
-            $('#s13').css("background-color","red");
-            setTimeout(function() {
-                $('#s13').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=3){
-            $('#s14').css("background-color","red");
-            setTimeout(function() {
-                $('#s14').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-
-        if(m==0){      addResutl("s11",s1);
-            addResutl("s12",s2);
-            addResutl("s13",s3);
-            addResutl("s14",s4);
-            n++;
-            loadTable3();
-        }
-
-    }
-    function loadTable3() {
-        var options = {
-            id:"bootstrap-table4",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 2,
-            pageNumber:1,
-            pageList: [2,10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单出库日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '客户订单编码',
-                    title: '订单编号'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reload2(){
-        var x=$("#x1 option:selected").val();
-        var y=$("#y1 option:selected").val();
-        var z=$("#z1 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="2"){
-            $('#x1').css("background-color","red");
-            setTimeout(function() {
-                $('#x1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="1"){
-            m++;
-            $('#y1').css("background-color","red");
-            setTimeout(function() {
-                $('#y1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            return;
-        }
-        if(z!="1"){
-            m++;
-            $('#z1').css("background-color","red");
-            setTimeout(function() {
-                $('#z1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("x1",x);
-            addResutl("y1",y);
-            addResutl("z1",z);
-            n++;
-            load2();
-        }
-    }
-    function load2(){
-        var myChart = echarts.init(document.getElementById('order1'), 'macarons');
-
-        var d = data3;
-        var arr1=[];
-        var arr2=[];
-        var arr3=[];
-        var arr4=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单完成日期);
-            arr2.push(d[i].周期内每日完成订单数量);
-            arr3.push(d[i].平均数);
-            arr4.push(d[i].中位数);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['每日入库订单种类数量','平均数','中位数']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: true
-
-                }
-            },
-            series: [
-                {
-                    name:'每日出库订单数量',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-                },{
-                    name:'平均数',
-                    type:'line',
-                    data:arr3,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-
-                },{
-                    name:'中位数',
-                    type:'line',
-                    data:arr4,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table5",
-            data:data3,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单完成日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '周期内每日完成订单数量',
-                    title: '周期内每日出库订单数量'
-                },
-                {
-                    field: '平均数',
-                    title: '平均数'
-                },
-                {
-                    field: '中位数',
-                    title: '中位数'
-                }]
-        };
-        $.table.init(options);
-
+    function checkGroup2TableSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_SELECT_GROUP_TWO_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table4", valueCompleOrderTableColumns, data4);
+            }
+        )
     }
 
-    function submit2(){
-        var s1 = $('#s21 option:selected').val();
-        var s2 = $('#s22 option:selected').val();
-        var s3 = $('#s23 option:selected').val();
-        var s4 = $('#s24 option:selected').val();
-        var s5 = $('#s25 option:selected').val();
-        var s6 = $('#s26 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=3){
-            $('#s21').css("background-color","red");
-            setTimeout(function() {
-                $('#s21').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=1){
-            $('#s22').css("background-color","red");
-            setTimeout(function() {
-                $('#s22').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#s23').css("background-color","red");
-            setTimeout(function() {
-                $('#s23').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=1){
-            $('#s24').css("background-color","red");
-            setTimeout(function() {
-                $('#s24').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=4){
-            $('#s25').css("background-color","red");
-            setTimeout(function() {
-                $('#s25').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=2){
-            $('#s26').css("background-color","red");
-            setTimeout(function() {
-                $('#s26').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){     addResutl("s21",s1);
-            addResutl("s22",s2);
-            addResutl("s23",s3);
-            addResutl("s24",s4);
-            addResutl("s25",s5);
-            addResutl("s26",s6);
-            n++;
-            loadTable4();
-        }
-
-    }
-    function loadTable4() {
-        var options = {
-            id:"bootstrap-table6",
-            data:data4,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '客户订单编码',
-                    title: '客户订单编码'
-                },
-                {
-                    field: '订单创建日期',
-                    title: '订单创建日期'
-                },
-                {
-                    field: '订单出库日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '订单响应周期（天）',
-                    title: '订单响应周期（天）'
-                }
-            ]
-        };
-        $.table.init(options);
-    }
-    function reload3(){
-        var x=$("#x2 option:selected").val();
-        var y=$("#y2 option:selected").val();
-        var z=$("#z2 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="订单响应周期分布区间"){
-            $('#x2').css("background-color","red");
-            setTimeout(function() {
-                $('#x2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="区间内订单分布的数量"){
-            m++;
-            $('#y2').css("background-color","red");
-            setTimeout(function() {
-                $('#y2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            return;
-        }
-        if(z!="按照每个订单的响应天数进行直方图分析"){
-            m++;
-            $('#z2').css("background-color","red");
-            setTimeout(function() {
-                $('#z2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){       addResutl("x2",x);
-            addResutl("y2",y);
-            addResutl("z2",z);
-            n++;
-            load3();
-        }
-    }
-    function load3(){
-        var myChart = echarts.init(document.getElementById('order2'), 'macarons');
-        var myChart1 = echarts.init(document.getElementById('order3'), 'macarons');
-
-        var arr1=["【0,1）","【1,2）","【2,3）","【3,4）","【4,5）","【5,6）","【6,7】"];
-        var arr2=[9829,18,15,8,2,5,2,2,2,3];
-        var arr3=[65,17.03,7.92,2.97,2.03,2.38,2.67];
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            toolbox: {
-                feature: {
-                    dataView: {show: true, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
-                }
-            },
-            legend: {
-                data:['订单数量','占比']
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: arr1
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    name: '数量',
-
-                    axisLabel: {
-                        formatter: '{value}'
-                    }
-                },
-                {
-                    type: 'value',
-                    name: '占比',
-                    axisLabel: {
-                        formatter: '{value} %'
-                    }
-                }
-            ],
-            series: [
-                {
-                    name:'订单数量',
-                    type:'bar',
-                    barCategoryGap:"0%",
-                    data:arr2
-                },
-                {
-                    name:'占比',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:arr3
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-        var option1 = {
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            color:['#8fc31f','#f35833','#00ccff','#ffcc00'],
-            legend: {
-                orient: 'vertical',
-                x: 'right',
-                data: arr1,
-            },
-            series : [
-                {
-                    name: '周期订单占比',
-                    type: 'pie',
-                    radius : '55%',
-                    center: ['40%', '50%'],
-                    data:arr2,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            label:{
-                                show: true,
-//	                            position:'inside',
-                                formatter: '{a} : ({d}%)'
-                            }
-                        },
-                        labelLine :{show:true}
-                    }
-                }
-            ]
-        };
-        myChart1.setOption(option1);
-        var params = {
-            total: 7,
-
-            rows:{
-                "订单响应周期分布区间":arr1[0],
-                "区间内对应订单分布的数量":arr2[0],
-                "对应订单数量分布在总数量中的占比":arr3[0]
-            },
-            code: 0, msg: null
-
-        }
-
-        var options = {
-            id:"bootstrap-table7",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单响应周期分布区间',
-                    title: '订单响应周期分布区间'
-                },
-                {
-                    field: '区间内对应订单分布的数量',
-                    title: '区间内对应订单分布的数量'
-                }]
-        };
-        $.table.init(options);
-
+    function checkGroup3TableSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_SELECT_GROUP_THREE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table6", valueOrderCycleTableColumns, data6);
+            }
+        )
     }
 
-    function submit3(){
-        var s1 = $('#s31 option:selected').val();
-        var s2 = $('#s32 option:selected').val();
-        var s3 = $('#s33 option:selected').val();
-        var s4 = $('#s34 option:selected').val();
-        var s5 = $('#s35 option:selected').val();
-        var s6 = $('#s36 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=1){
-            $('#s31').css("background-color","red");
-            setTimeout(function() {
-                $('#s31').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=3){
-            $('#s32').css("background-color","red");
-            setTimeout(function() {
-                $('#s32').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=1){
-            $('#s33').css("background-color","red");
-            setTimeout(function() {
-                $('#s33').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=3){
-            $('#s34').css("background-color","red");
-            setTimeout(function() {
-                $('#s34').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=2){
-            $('#s35').css("background-color","red");
-            setTimeout(function() {
-                $('#s35').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=4){
-            $('#s36').css("background-color","red");
-            setTimeout(function() {
-                $('#s36').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){     addResutl("s31",s1);
-            addResutl("s32",s2);
-            addResutl("s33",s3);
-            addResutl("s34",s4);
-            addResutl("s35",s5);
-            addResutl("s36",s6);
-            n++;
-            loadTable5();
-        }
-
-    }
-    function loadTable5() {
-        var options = {
-            id:"bootstrap-table8",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单出库日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '客户订单编码',
-                    title: '客户订单编码'
-                },
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '订购数量',
-                    title: '订购数量'
-                },
-                {
-                    field: '一级分类',
-                    title: '一级分类'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reload4(){
-        var x=$("#x3 option:selected").val();
-        var y=$("#y3 option:selected").val();
-        var z=$("#z3 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="2"){
-            $('#x3').css("background-color","red");
-            setTimeout(function() {
-                $('#x3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="4"){
-            m++;
-            $('#y3').css("background-color","red");
-            setTimeout(function() {
-                $('#y3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            return;
-        }
-        if(z!="1"){
-            m++;
-            $('#z3').css("background-color","red");
-            setTimeout(function() {
-                $('#z3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){       addResutl("x3",x);
-            addResutl("y3",y);
-            addResutl("z3",z);
-            n++;
-            load4();
-        }
-    }
-    function load4(){
-        var myChart = echarts.init(document.getElementById('order4'), 'macarons');
-
-        var d = data6;
-        var arr1=[];
-        var arr2=[];
-        var arr3=[];
-        var arr4=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单出库日期);
-            arr2.push(d[i].食品百货类物料周期内每日订单订购总数量);
-            arr3.push(d[i].用品百货类物料周期内每日订单订购总数量);
-            arr4.push(d[i].零售百货类物料周期内每日订单订购总数量);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['每日入库订单种类数量','平均数','中位数']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: true
-
-                }
-            },
-            series: [
-                {
-                    name:'食品百货类物料周期内每日订单订购总数量',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                },
-                {
-                    name:'用品百货类物料周期内每日订单订购总数量',
-                    type:'line',
-                    data:arr3,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                },
-                {
-                    name:'零售百货类物料周期内每日订单订购总数量',
-                    type:'line',
-                    data:arr4,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table9",
-            data:data6,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单出库日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '食品百货类物料周期内每日订单订购总数量',
-                    title: '食品百货类物料周期内每日订单订购总数量'
-                },
-                {
-                    field: '用品百货类物料周期内每日订单订购总数量',
-                    title: '用品百货类物料周期内每日订单订购总数量'
-                },
-                {
-                    field: '零售百货类物料周期内每日订单订购总数量',
-                    title: '零售百货类物料周期内每日订单订购总数量'
-                }]
-        };
-        $.table.init(options);
-
-    }
-    function reload5(){
-        var x=$("#x4 option:selected").val();
-        var y=$("#y4 option:selected").val();
-        var z=$("#z4 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="2"){
-            $('#x4').css("background-color","red");
-            setTimeout(function() {
-                $('#x4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="4"){
-            m++;
-            $('#y4').css("background-color","red");
-            setTimeout(function() {
-                $('#y4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            return;
-        }
-        if(z!="3"){
-            m++;
-            $('#z4').css("background-color","red");
-            setTimeout(function() {
-                $('#z4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){
-            addResutl("x4",x);
-            addResutl("y4",y);
-            addResutl("z4",z);
-            n++;
-            load5();
-        }
+    function checkGroup4TableSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_SELECT_GROUP_FOUR_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table8", valueOrderTypeTableColumns, data1);
+            }
+        )
     }
 
-    function load5(){
-        var myChart = echarts.init(document.getElementById('order5'), 'macarons');
-        var d = data10;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单累计品目数);
-            arr2.push(d[i].周期内客户订单订购总数量);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['','','']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: true
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    }
-
-                }
-
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table10",
-            data:data10,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '零食百货类物料对应客户订单编码',
-                    title: '零食百货类物料对应客户订单编码'
-                },
-                {
-                    field: '周期内客户订单订购总数量',
-                    title: '周期内客户订单订购总数量'
-                },
-                {
-                    field: '订单累计品目数',
-                    title: '订单累计品目数'
-                }]
-        };
-        $.table.init(options);
-
-        var myChart = echarts.init(document.getElementById('order6'), 'macarons');
-        var d = data11;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单累计品目数);
-            arr2.push(d[i].周期内客户订单订购总数量);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['','','']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: true
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    }
-
-                }
-
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table12",
-            data:data11,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '食品百货类物料对应客户订单编码',
-                    title: '食品百货类物料对应客户订单编码'
-                },
-                {
-                    field: '周期内客户订单订购总数量',
-                    title: '周期内客户订单订购总数量'
-                },
-                {
-                    field: '订单累计品目数',
-                    title: '订单累计品目数'
-                }]
-        };
-        $.table.init(options);
-
-        var myChart = echarts.init(document.getElementById('order7'), 'macarons');
-        var d = data12;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].订单累计品目数);
-            arr2.push(d[i].周期内客户订单订购总数量);
-        }
-
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['','','']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: true
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    }
-
-                }
-
-            ]
-        };
-        myChart.setOption(option);
-
-        var options = {
-            id:"bootstrap-table13",
-            data:data12,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '用品百货类物料对应客户订单编码',
-                    title: '用品百货类物料对应客户订单编码'
-                },
-                {
-                    field: '周期内客户订单订购总数量',
-                    title: '周期内客户订单订购总数量'
-                },
-                {
-                    field: '订单累计品目数',
-                    title: '订单累计品目数'
-                }]
-        };
-        $.table.init(options);
-
+    function checkGroup5TableSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_SELECT_GROUP_FIVE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table11", valueDailyOrderTableColumns, data1);
+            }
+        )
     }
-    function submit4(){
-        var s1 = $('#d31 option:selected').val();
-        var s2 = $('#d32 option:selected').val();
-        var s3 = $('#d33 option:selected').val();
-        var s4 = $('#d34 option:selected').val();
-        total++;
 
-        var m = 0;
-        if(s1!=3){
-            $('#d31').css("background-color","red");
-            setTimeout(function() {
-                $('#d31').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#d32').css("background-color","red");
-            setTimeout(function() {
-                $('#d32').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=2){
-            $('#d33').css("background-color","red");
-            setTimeout(function() {
-                $('#d33').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#d34').css("background-color","red");
-            setTimeout(function() {
-                $('#d34').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){     addResutl("d31",s1);
-            addResutl("d32",s2);
-            addResutl("d33",s3);
-            addResutl("d34",s4);
-            n++;
-            loadTable11();
-        }
-
+    function checkGroupOneChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_ONE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                createBaidieTable("bootstrap-table3", valueIssueOrderTableColumns, data3)
+                return refreshBaidieChartWithMid(
+                    'order', data3, '订单创建日期', '周期内每日下达订单数量', '中位数', '平均数');
+            }
+        )
     }
-    function reloadEI(){
-        var x=$("#x6 option:selected").val();
-        var y=$("#y6 option:selected").val();
-        var z=$("#z6 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="2"){
-            $('#x6').css("background-color","red");
-            setTimeout(function() {
-                $('#x6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="3"){
-            m++;
-            $('#y6').css("background-color","red");
-            setTimeout(function() {
-                $('#y6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if(z!="1"){
-            m++;
-            $('#z6').css("background-color","red");
-            setTimeout(function() {
-                $('#z6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){       addResutl("x6",x);
-            addResutl("y6",y);
-            addResutl("z6",z);
-            n++;
-            load8();
-        }
+
+    function checkGroupTwoChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_TWO_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                createBaidieTable("bootstrap-table5", valueCompletionOrderTableColumns, data5)
+                return refreshBaidieChartWithMid(
+                    'order1', data5, '订单出库日期', '周期内每日出库订单数量', '中位数', '平均数');
+            }
+        )
     }
-    function loadTable11() {
-        var options = {
-            id:"bootstrap-table11",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '订单出库日期',
-                    title: '订单出库日期'
-                },
-                {
-                    field: '客户订单编码',
-                    title: '客户订单编码'
-                },
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                }]
-        };
-        $.table.init(options);
+
+    function checkGroupThreeChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_THREE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                createBaidieTable("bootstrap-table7", valueRangeTableColumns, data7);
+                refreshBaidieBarChart('order2', data7, '订单响应周期分布区间', '区间内对应订单分布的数量');
+                return refreshBaidiePieChart(
+                    'order3', data7, '订单响应周期分布区间', '区间内对应订单分布的数量');
+            }
+        )
     }
-    function load8(){
-        var myChart = echarts.init(document.getElementById('ei'), 'macarons');
-        var d =data7;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].客户订单编码累计品目数);
-            arr2.push(d[i].周期内客户订单对应物料种类总数量);
-        }
 
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                splitLine:{
-                    show: false
-
-                }
-            },
-            series: [
-                {
-                    name:'',
-                    type:'line',
-                    data:arr2,
-
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
+    function checkGroupFourChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_FOUR_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                createBaidieTable("bootstrap-table9", valueTypeTableColumns, data8);
+                return refreshBaidieChartWithMid(
+                    'order4', data8, '订单出库日期', '食品百货类物料周期内每日订单订购总数量', '用品百货类物料周期内每日订单订购总数量', '零售百货类物料周期内每日订单订购总数量');
+            }
+        )
     }
-    function reloadEI1(){
-        var x=$("#x7 option:selected").val();
-        var y=$("#y7 option:selected").val();
-        var z=$("#z7 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="3"){
-            $('#x7').css("background-color","red");
-            setTimeout(function() {
-                $('#x7').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="2"){
-            m++;
-            $('#y7').css("background-color","red");
-            setTimeout(function() {
-                $('#y7').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if(z!="4"){
-            m++;
-            $('#z7').css("background-color","red");
-            setTimeout(function() {
-                $('#z7').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        if (m==0){       addResutl("x7",x);
-            addResutl("y7",y);
-            addResutl("z7",z);
-            n++;
-            load9();
-        }
+
+    function checkGroupFiveChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_FIVE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                createBaidieTable("bootstrap-table10", valueGoodsType1Columns, data9);
+                createBaidieTable("bootstrap-table12", valueGoodsType2Columns, data10);
+                createBaidieTable("bootstrap-table13", valueGoodsType3Columns, data11);
+                refreshChartWithMaxMin('order6', data10, '订单累计品目数', '周期内客户订单订购总数量');
+                refreshChartWithMaxMin('order7', data11, '订单累计品目数', '周期内客户订单订购总数量')
+                return refreshChartWithMaxMin(
+                    'order5', data9, '订单累计品目数', '周期内客户订单订购总数量');
+            }
+        )
     }
-    function load9(){
-        var myChart = echarts.init(document.getElementById('ei1'), 'macarons');
-        var d = data8;
-        var arr1=[];
-        var arr2=[];
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].周期内客户订单对应物料种类总数量分布区间);
-            arr2.push(d[i].区间内客户订单分布数量);
-        }
-        var   option = {
-            backgroundColor:'rgba(255, 255, 255, 0)',
-            tooltip: {
-                trigger: 'axis'
 
-            },
-            legend: [
-                {
-                    left:'left',
-                    data:['订单编号']
-                }
-            ],
-            dataZoom : {
-                show : true,
-                realtime : true
-            },
-            xAxis: {
-                type: "category",
-                data: arr1
-            },
-            yAxis: {
-                type: "value",
-                axisLabel: {
-                    formatter: '{value}'
-                },
-            },
-            series: [
-                {
-                    type: "bar",
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-                    barCategoryGap:"0%"
-
-                },    {
-                    type: "line",
-                    data:arr2,
-                    itemStyle : {
-                        normal : {
-                            color:'#39c7aa'
-                        }
-                    },
-
-                }
-            ]
-        };
-        myChart.setOption(option);
-
+    function checkGroupSixChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_SIX_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshChartWithMaxMin(
+                    'ei', data12, '客户订单编码累计品目数', '周期内客户订单对应物料种类总数量');
+            }
+        )
     }
+
+    function checkGroupSevenChartSelection() {
+        checkSelectionResultAndRefresh(
+            ORDER_GROUP_SEVEN_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieBarChart(
+                    'ei1', data13, '周期内客户订单对应物料种类总数量分布区间', '区间内客户订单分布数量');
+            }
+        )
+    }
+
+    /************************************************************/
+    /**************ORDER PAGE SELECTION ANSWERS *******************/
+    /************************************************************/
+    const ORDER_SELECT_GROUP_ONE_ANSWERS = new Map([
+        ["s1", "1"],
+        ["s2", "1"],
+        ["s3", "2"],
+        ["s4", "4"]
+    ]);
+    const ORDER_GROUP_ONE_CHART_ANSWERS = new Map([
+        ["x", "4"],
+        ["y", "2"],
+        ["z", "2"]
+    ]);
+    const ORDER_SELECT_GROUP_TWO_ANSWERS = new Map([
+        ["s11", "2"],
+        ["s12", "3"],
+        ["s13", "4"],
+        ["s14", "3"]
+    ]);
+    const ORDER_GROUP_TWO_CHART_ANSWERS = new Map([
+        ["x1", "2"],
+        ["y1", "1"],
+        ["z1", "1"]
+    ]);
+    const ORDER_SELECT_GROUP_THREE_ANSWERS = new Map([
+        ["s21", "3"],
+        ["s22", "1"],
+        ["s23", "3"],
+        ["s24", "1"],
+        ["s25", "4"],
+        ["s26", "2"]
+    ]);
+    const ORDER_GROUP_THREE_CHART_ANSWERS = new Map([
+        ["x2", "订单响应周期分布区间"],
+        ["y2", "区间内订单分布的数量"],
+        ["z2", "按照每个订单的响应天数进行直方图分析"]
+    ]);
+    const ORDER_SELECT_GROUP_FOUR_ANSWERS = new Map([
+        ["s31", "1"],
+        ["s32", "3"],
+        ["s33", "1"],
+        ["s34", "3"],
+        ["s35", "2"],
+        ["s36", "4"]
+    ]);
+    const ORDER_GROUP_FOUR_CHART_ANSWERS = new Map([
+        ["x3", "2"],
+        ["y3", "4"],
+        ["z3", "1"]
+    ]);
+    const ORDER_GROUP_FIVE_CHART_ANSWERS = new Map([
+        ["x4", "2"],
+        ["y4", "4"],
+        ["z4", "3"]
+    ]);
+    const ORDER_SELECT_GROUP_FIVE_ANSWERS = new Map([
+        ["d31", "3"],
+        ["d32", "2"],
+        ["d33", "2"],
+        ["d34", "4"]
+    ]);
+    const ORDER_GROUP_SIX_CHART_ANSWERS = new Map([
+        ["x6", "2"],
+        ["y6", "3"],
+        ["z6", "1"]
+    ]);
+    const ORDER_GROUP_SEVEN_CHART_ANSWERS = new Map([
+        ["x7", "3"],
+        ["y7", "2"],
+        ["z7", "4"]
+    ]);
+    /************************************************************/
+    /**************ORDER PAGE OPTION *******************/
+    /************************************************************/
+    const valueBasedOrderTableColumns = [
+        {"field": "订单创建日期", "title": "订单创建日期"},
+        {"field": "客户代码", "title": "客户代码"},
+        {"field": "客户指定送达方门店代码", "title": "客户指定送达方门店代码"},
+        {"field": "客户订单编码", "title": "客户订单编码"},
+        {"field": "物料编码", "title": "物料编码"},
+        {"field": "物料描述", "title": "物料描述"},
+        {"field": "销售单价", "title": "销售单价"},
+        {"field": "订购数量", "title": "订购数量"},
+        {"field": "单位名称", "title": "单位名称"},
+        {"field": "单位代码", "title": "单位代码"},
+        {"field": "工厂代码", "title": "工厂代码"},
+        {"field": "订单出库日期", "title": "订单出库日期"},
+        {"field": "销售组织", "title": "销售组织"},
+        {"field": "一级分类", "title": "一级分类"},
+        {"field": "二级分类", "title": "二级分类"},
+        {"field": "三级分类", "title": "三级分类"},
+        {"field": "四级分类", "title": "四级分类"}
+    ]
+    const valueCustomerOrderTableColumns = [
+        {
+            field: '订单创建日期',
+            title: '订单创建日期'
+        },
+        {
+            field: '客户订单编码',
+            title: '客户订单编码'
+        }]
+    const valueCompleOrderTableColumns = [
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '客户订单编码',
+            title: '客户订单编码'
+        }]
+    const valueIssueOrderTableColumns = [
+        {
+            field: '订单创建日期',
+            title: '订单创建日期'
+        },
+        {
+            field: '周期内每日下达订单数量',
+            title: '周期内每日下达订单数量（个）'
+        },
+        {
+            field: '平均数',
+            title: '平均数'
+        },
+        {
+            field: '中位数',
+            title: '中位数'
+        }
+    ]
+    const valueCompletionOrderTableColumns = [
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '周期内每日出库订单数量',
+            title: '周期内每日出库订单数量（个）'
+        },
+        {
+            field: '平均数',
+            title: '平均数'
+        },
+        {
+            field: '中位数',
+            title: '中位数'
+        }
+    ]
+    const valueOrderCycleTableColumns = [
+        {
+            field: '客户订单编码',
+            title: '客户订单编码'
+        },
+        {
+            field: '订单创建日期',
+            title: '订单创建日期'
+        },
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '订单响应周期（天）',
+            title: '订单响应周期（天）'
+        }
+    ]
+    const valueOrderTypeTableColumns = [
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '客户订单编码',
+            title: '客户订单编码'
+        },
+        {
+            field: '物料编码',
+            title: '物料编码'
+        },
+        {
+            field: '订购数量',
+            title: '订购数量'
+        },
+        {
+            field: '一级分类',
+            title: '一级分类'
+        }
+    ]
+    const valueDailyOrderTableColumns = [
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '客户订单编码',
+            title: '客户订单编码'
+        },
+        {
+            field: '物料编码',
+            title: '物料编码'
+        }
+    ]
+    const valueRangeTableColumns = [
+        {
+            field: '订单响应周期分布区间',
+            title: '订单响应周期分布区间'
+        },
+        {
+            field: '区间内对应订单分布的数量',
+            title: '区间内对应订单分布的数量'
+        }
+    ]
+    const valueTypeTableColumns = [
+        {
+            field: '订单出库日期',
+            title: '订单出库日期'
+        },
+        {
+            field: '食品百货类物料周期内每日订单订购总数量',
+            title: '食品百货类物料周期内每日订单订购总数量'
+        },
+        {
+            field: '用品百货类物料周期内每日订单订购总数量',
+            title: '用品百货类物料周期内每日订单订购总数量'
+        },
+        {
+            field: '零售百货类物料周期内每日订单订购总数量',
+            title: '零售百货类物料周期内每日订单订购总数量'
+        }
+    ]
+    const valueGoodsType1Columns = [
+        {
+            field: '零食百货类物料对应客户订单编码',
+            title: '零食百货类物料对应客户订单编码'
+        },
+        {
+            field: '周期内客户订单订购总数量',
+            title: '周期内客户订单订购总数量'
+        },
+        {
+            field: '订单累计品目数',
+            title: '订单累计品目数'
+        }
+    ]
+    const valueGoodsType2Columns = [
+        {
+            field: '零食百货类物料对应客户订单编码',
+            title: '食品百货类物料对应客户订单编码'
+        },
+        {
+            field: '周期内客户订单订购总数量',
+            title: '周期内客户订单订购总数量'
+        },
+        {
+            field: '订单累计品目数',
+            title: '订单累计品目数'
+        }
+    ]
+    const valueGoodsType3Columns = [
+        {
+            field: '零食百货类物料对应客户订单编码',
+            title: '用品百货类物料对应客户订单编码'
+        },
+        {
+            field: '周期内客户订单订购总数量',
+            title: '周期内客户订单订购总数量'
+        },
+        {
+            field: '订单累计品目数',
+            title: '订单累计品目数'
+        }
+    ]
 </script>
-
 </body>
 </html>
