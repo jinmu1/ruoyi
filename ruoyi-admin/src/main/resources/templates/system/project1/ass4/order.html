@@ -108,7 +108,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup1TableSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup1TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -187,7 +188,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -311,7 +314,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup2TableSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup2TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -391,7 +395,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -540,7 +546,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup3TableSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup3TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -617,7 +624,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -795,7 +804,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroup4TableSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup4TableSelection()" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -876,7 +886,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupFourChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupFourChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -985,7 +997,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupFiveChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupFiveChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1186,7 +1200,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                            <button class="btn btn-primary" onclick="checkGroup5TableSelection()" type="button">提交</button>
+                            <button class="btn btn-primary" onclick="checkGroup5TableSelection()" type="button">提交
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1265,7 +1280,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupSixChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupSixChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1361,7 +1378,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="checkGroupSevenChartSelection()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupSevenChartSelection()" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1442,7 +1461,7 @@
         window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
     }
 
-    var  data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12,data13;
+    var data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13;
 
     $.getJSON("../../../file/order.json", function (data) {
         data1 = data.data1;
@@ -1464,6 +1483,18 @@
             for (var i = 0; i < result.total; i++) {
                 $("#" + d[i].opId).val(d[i].opValue);
             }
+            checkGroup1TableSelection();
+            checkGroup2TableSelection();
+            checkGroup3TableSelection();
+            checkGroup4TableSelection();
+            checkGroup5TableSelection();
+            checkGroupOneChartSelection();
+            checkGroupTwoChartSelection();
+            checkGroupThreeChartSelection();
+            checkGroupFourChartSelection();
+            checkGroupFiveChartSelection();
+            checkGroupSixChartSelection();
+            checkGroupSevenChartSelection();
         });
     });
 
@@ -1609,6 +1640,7 @@
             }
         )
     }
+
     /************************************************************/
     /**************ORDER PAGE SELECTION ANSWERS *******************/
     /************************************************************/
