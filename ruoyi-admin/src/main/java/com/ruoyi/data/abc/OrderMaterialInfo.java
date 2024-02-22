@@ -17,7 +17,7 @@ public class OrderMaterialInfo {
     private Date deliveryDate;
     @JsonProperty("订单编号")
     @Excel(name = "订单编号")
-    private long orderNumber;
+    private String orderNumber;
     @JsonProperty("物料编号")
     @Excel(name = "物料编号")
     private String materialNumber;

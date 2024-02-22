@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('ABC分析')" />
+    <th:block th:include="include :: header('ABC分析')"/>
     <style>
-        *{
+        * {
             margin: 0;
             margin: 0;
             font-size: 18px;
@@ -21,7 +21,9 @@
             <div class="ibox-content">
                 <div style="font-size:26px;text-align: center">ABC分类</div>
                 <div style="height: 17px;"></div>
-                <div style="line-height: 33px;">ABC分类法又称帕累托分类法，即所谓“关键的少数和一般的多数”的哲理，也就是我们平时所提到的80-20法则。ABC分类法的核心思想是在决定一个事物的众多因素中分清主次，识别出少数的但对事物起决定作用的关键因素和种类繁多的但对事物影响极小的次要因素。ABC分类法基本原理，是运用数理统计的方法，对种类繁多的各种事物属性或所占权重不同要求，进行统计、排列和分类，划分为A、B、C部分，分别给予重点、一般、次要等不同程度的相应管理。</div>
+                <div style="line-height: 33px;">
+                    ABC分类法又称帕累托分类法，即所谓“关键的少数和一般的多数”的哲理，也就是我们平时所提到的80-20法则。ABC分类法的核心思想是在决定一个事物的众多因素中分清主次，识别出少数的但对事物起决定作用的关键因素和种类繁多的但对事物影响极小的次要因素。ABC分类法基本原理，是运用数理统计的方法，对种类繁多的各种事物属性或所占权重不同要求，进行统计、排列和分类，划分为A、B、C部分，分别给予重点、一般、次要等不同程度的相应管理。
+                </div>
                 <!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ABC分类法的作用</div>-->
                 <!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、优化库存结构。</div>-->
                 <!--                <div style="line-height: 33px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、压缩库存总量，减少库存资金，加快物资流通和资金周转速度。</div>-->
@@ -35,9 +37,14 @@
     <div class="row">
 
         <div class="col-sm-12 select-table table-striped">
-            <div class="btn-group-sm" id="toolbar" role="group">
+            <div class="btn-group-sm" role="group">
             </div>
-            <table id="bootstrap-table"></table>
+            <div class="btn-group-sm" role="group">
+                <a class="btn btn-info" onclick="importData('system/abc/importData', firstGroupPostImport)">
+                    <i class="fa fa-upload"></i> 导入
+                </a>
+            </div>
+            <table id="bootstrap-table" data-show-export="true"></table>
         </div>
     </div>
     <div class="row">
@@ -135,7 +142,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup1TableSelection(true)" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -182,34 +190,36 @@
 
                         <div>
                             <p>X轴</p>
-                            <select  name="x" id="x" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编码'  >物料编码</option>
-                                <option  value='销售单价（元/件）'  >销售单价（元/件）</option>
-                                <option  value='平均库存（件/月）'  >平均库存（件/月）</option>
-                                <option  value='平均资金占用额（元）'  >平均资金占用额（元）</option>
-                                <option  value='平均资金占用额累计（元）'  >平均资金占用额累计（元）</option>
-                                <option  value='平均资金占用额累计百分比'  >平均资金占用额累计百分比</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="x" id="x" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编码'>物料编码</option>
+                                <option value='销售单价（元/件）'>销售单价（元/件）</option>
+                                <option value='平均库存（件/月）'>平均库存（件/月）</option>
+                                <option value='平均资金占用额（元）'>平均资金占用额（元）</option>
+                                <option value='平均资金占用额累计（元）'>平均资金占用额累计（元）</option>
+                                <option value='平均资金占用额累计百分比'>平均资金占用额累计百分比</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
 
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y" id="y" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编码'  >物料编码</option>
-                                <option  value='销售单价（元/件）'  >销售单价（元/件）</option>
-                                <option  value='平均库存（件/月）'  >平均库存（件/月）</option>
-                                <option  value='平均资金占用额（元）'  >平均资金占用额（元）</option>
-                                <option  value='平均资金占用额累计（元）'  >平均资金占用额累计（元）</option>
-                                <option  value='平均资金占用额累计百分比'  >平均资金占用额累计百分比</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="y" id="y" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编码'>物料编码</option>
+                                <option value='销售单价（元/件）'>销售单价（元/件）</option>
+                                <option value='平均库存（件/月）'>平均库存（件/月）</option>
+                                <option value='平均资金占用额（元）'>平均资金占用额（元）</option>
+                                <option value='平均资金占用额累计（元）'>平均资金占用额累计（元）</option>
+                                <option value='平均资金占用额累计百分比'>平均资金占用额累计百分比</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupOneChartSelection(true)" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
 
@@ -270,9 +280,11 @@
                 </div>
 
                 <div class="ibox-content" style="height:700px">
-
+                    <a class="btn btn-info" onclick="importData('system/abc/importData1', secondGroupPostImport)">
+                        <i class="fa fa-upload"></i> 导入
+                    </a>
                     <table class="col-sm-12 select-table table-striped"
-                           id="bootstrap-table3" >
+                           id="bootstrap-table3">
                     </table>
                 </div>
             </div>
@@ -373,7 +385,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit1()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup2TableSelection(true)" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -420,31 +433,33 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="x1" id="x1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='出库频次'  >出库频次</option>
-                                <option  value='累计出库频次'  >累计出库频次</option>
-                                <option  value='累计出库频次百分比' >累计出库频次百分比</option>
-                                <option  value='物料累计品目数'  >物料累计品目数</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="x1" id="x1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='出库频次'>出库频次</option>
+                                <option value='累计出库频次'>累计出库频次</option>
+                                <option value='累计出库频次百分比'>累计出库频次百分比</option>
+                                <option value='物料累计品目数'>物料累计品目数</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y1" id="y1" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编号'  >物料编号</option>
-                                <option  value='出库频次'  >出库频次</option>
-                                <option  value='累计出库频次'  >累计出库频次</option>
-                                <option  value='累计出库频次百分比' >累计出库频次百分比</option>
-                                <option  value='物料累计品目数'  >物料累计品目数</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="y1" id="y1" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编号'>物料编号</option>
+                                <option value='出库频次'>出库频次</option>
+                                <option value='累计出库频次'>累计出库频次</option>
+                                <option value='累计出库频次百分比'>累计出库频次百分比</option>
+                                <option value='物料累计品目数'>物料累计品目数</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX3()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupTwoChartSelection(true)" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -503,9 +518,13 @@
                     </div>
                 </div>
                 <div class="ibox-content" style="height:700px">
-
+                    <div class="btn-group-sm" role="group">
+                        <a class="btn btn-info" onclick="importData('system/abc/importData2', thirdGroupPostImport)">
+                            <i class="fa fa-upload"></i> 导入
+                        </a>
+                    </div>
                     <table class="col-sm-12 select-table table-striped"
-                           id="bootstrap-table4" >
+                           id="bootstrap-table4">
 
                     </table>
                 </div>
@@ -607,7 +626,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px">
-                                <button class="btn btn-primary" onclick="submit2()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroup3TableSelection(true)" type="button">提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -654,33 +674,35 @@
                     <div class="panel panel-bordered">
                         <div>
                             <p>X轴</p>
-                            <select  name="x2" id="x2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编码'  >物料编码</option>
-                                <option  value='物料描述'  >物料描述</option>
-                                <option  value='出库量' >出库量</option>
-                                <option  value='累计出库量'  >累计出库量</option>
-                                <option  value='累计出库量百分比'  >累计出库量百分比</option>
-                                <option  value='物料累计品目数'  >物料累计品目数</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="x2" id="x2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编码'>物料编码</option>
+                                <option value='物料描述'>物料描述</option>
+                                <option value='出库量'>出库量</option>
+                                <option value='累计出库量'>累计出库量</option>
+                                <option value='累计出库量百分比'>累计出库量百分比</option>
+                                <option value='物料累计品目数'>物料累计品目数</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
                             </select>
                         </div>
                         <div>
                             <p>Y轴</p>
-                            <select  name="y2" id="y2" type="text"  class="form-control"    >
-                                <option  value='请选择'  >请选择</option>
-                                <option  value='物料编码'  >物料编码</option>
-                                <option  value='物料描述'  >物料描述</option>
-                                <option  value='出库量' >出库量</option>
-                                <option  value='累计出库量'  >累计出库量</option>
-                                <option  value='累计出库量百分比'  >累计出库量百分比</option>
-                                <option  value='物料累计品目数'  >物料累计品目数</option>
-                                <option  value='物料累计品目数百分比'  >物料累计品目数百分比</option>
+                            <select name="y2" id="y2" type="text" class="form-control">
+                                <option value='请选择'>请选择</option>
+                                <option value='物料编码'>物料编码</option>
+                                <option value='物料描述'>物料描述</option>
+                                <option value='出库量'>出库量</option>
+                                <option value='累计出库量'>累计出库量</option>
+                                <option value='累计出库量百分比'>累计出库量百分比</option>
+                                <option value='物料累计品目数'>物料累计品目数</option>
+                                <option value='物料累计品目数百分比'>物料累计品目数百分比</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
-                                <button class="btn btn-primary" onclick="reloadX4()" type="button">提交</button>
+                                <button class="btn btn-primary" onclick="checkGroupThreeChartSelection(true)" type="button">
+                                    提交
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -741,7 +763,7 @@
                 <div class="ibox-content" style="height:300px">
                     <div class="col-sm-12 col-sm-offset-6" th:height="40px" style="margin-top: 20px">
                         <p><span id="trainingId" style="display: none" th:text="${trainingId}"></span></p>
-                        <p> <span id="token" style="display: none" th:text="${token}"></span></p>
+                        <p><span id="token" style="display: none" th:text="${token}"></span></p>
                         <button class="btn btn-primary" onclick="end()" type="button">提交</button>
                     </div>
                 </div>
@@ -750,1097 +772,414 @@
 
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: jquery-cxselect-js" />
-<th:block th:include="include :: echarts-js" />
-<script  th:inline="javascript">
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jquery-cxselect-js"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
     var ctx = [[@{/}]];
-    var data,data1,data2,data3,data4;
-    var total =0;
-    var n=0;
-    function end(){
-        n=(n)/(total);
-        window.location.href=ctx+"end?score="+n+"&trainingId="+$('#trainingId').text()+"&token="+$('#token').text();
-    }
-    $.getJSON("../../../obj/file/abc.json", function (data) {
-        data1=data.data1;
-        data2=data.data2;
-        data3=data.data3;
-        data4=data.data4;
-        data5=data.data5;
-        loadTable7();
-        load5();
-        load7();
+    var data, data1, data2, data3, data4, data5;
+    var baidieScore = new BaidieScore();
 
-        $.post(ctx + "system/op/list1?&trainingId="+$('#trainingId').text()+"&token="+$('#token').text(), function(result) {
+    function end() {
+        const score = baidieScore.getScore();
+        window.location.href = ctx + "end?score=" + score + "&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text();
+    }
+
+    $.getJSON("../../../obj/file/abc.json", function (data) {
+        data1 = data.data1;
+        data2 = data.data2;
+        data3 = data.data3;
+        data4 = data.data4;
+        data5 = data.data5;
+        // 初始化所有的表
+        initAllTables();
+        // 首先显示每一组的主表。
+        refreshGroupOneOriginalTable(data1);
+        refreshGroupTwoOriginalTable(data5);
+        refreshGroupThreeOriginalTable(data5);
+
+        $.post(ctx + "system/op/list1?&trainingId=" + $('#trainingId').text() + "&token=" + $('#token').text(), function (result) {
             var d = result.rows;
-            for(var i=0;i<result.total;i++){
-                $("#"+d[i].opId).val(d[i].opValue);
+            for (var i = 0; i < result.total; i++) {
+                $("#" + d[i].opId).val(d[i].opValue);
             }
-            submit();
-            submit1();
-            submit2();
-            reloadX();
-            reloadX3();
-            reloadX4();
+            initializeSelectionFromDb();
         });
-        // load3();
-        // load6();
-        // load8();
-        // loadTable6();
-        // loadTable7();
-        // loadTable6();
-        // loadTable8();
-        // loadTable9();
     });
 
-
-    function submit(){
-        var s1 = $('#s1 option:selected').val();
-        var s2 = $('#s2 option:selected').val();
-        var s3 = $('#s3 option:selected').val();
-        var s4 = $('#s4 option:selected').val();
-        var s5 = $('#s5 option:selected').val();
-        var s6 = $('#s6 option:selected').val();
-        var m = 0;
-        total++;
-        if(s1!=1){
-            $('#s1').css("background-color","red");
-            setTimeout(function() {
-                $('#s1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#s2').css("background-color","red");
-            setTimeout(function() {
-                $('#s2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(s3!=4){
-            $('#s3').css("background-color","red");
-            setTimeout(function() {
-                $('#s3').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=4){
-            $('#s4').css("background-color","red");
-            setTimeout(function() {
-                $('#s4').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=2){
-            $('#s5').css("background-color","red");
-            setTimeout(function() {
-                $('#s5').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(s6!=1){
-            $('#s6').css("background-color","red");
-            setTimeout(function() {
-                $('#s6').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(m==0){
-            addResutl("s1",s1);
-            addResutl("s2",s2);
-            addResutl("s3",s3);
-            addResutl("s4",s4);
-            addResutl("s5",s5);
-            addResutl("s6",s6);
-            n++;
-            loadTable6();
-        }
-
+    function initAllTables() {
+        initGroupOneTables();
+        initGroupTwoTables();
+        initGroupThreeTables();
     }
-    function addResutl(opId,opValue) {
-        $.post(ctx + "system/op/add?trainingId="+$('#trainingId').text()+"&token="+$('#token').text() + "&opId=" + opId + "&opValue=" + opValue, function (result) {
-        });
-    }
-    function submit1(){
-        var s1 = $('#s11 option:selected').val();
-        var s2 = $('#s12 option:selected').val();
-        var s3 = $('#s13 option:selected').val();
-        var s4 = $('#s14 option:selected').val();
-        var s5 = $('#s15 option:selected').val();
-        var s6 = $('#s16 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=4){
-            $('#s11').css("background-color","red");
-            setTimeout(function() {
-                $('#s11').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=3){
-            $('#s12').css("background-color","red");
-            setTimeout(function() {
-                $('#s12').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=3){
-            $('#s13').css("background-color","red");
-            setTimeout(function() {
-                $('#s13').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s14').css("background-color","red");
-            setTimeout(function() {
-                $('#s14').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=4){
-            $('#s15').css("background-color","red");
-            setTimeout(function() {
-                $('#s15').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=3){
-            $('#s16').css("background-color","red");
-            setTimeout(function() {
-                $('#s16').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(m==0){
-            addResutl("s11",s1);
-            addResutl("s12",s2);
-            addResutl("s13",s3);
-            addResutl("s14",s4);
-            addResutl("s15",s5);
-            addResutl("s16",s6);
-            n++;
-            loadTable8();
-        }
 
-    }
-    function submit2(){
-        var s1 = $('#s21 option:selected').val();
-        var s2 = $('#s22 option:selected').val();
-        var s3 = $('#s23 option:selected').val();
-        var s4 = $('#s24 option:selected').val();
-        var s5 = $('#s25 option:selected').val();
-        var s6 = $('#s26 option:selected').val();
-        total++;
-        var m = 0;
-        if(s1!=3){
-            $('#s21').css("background-color","red");
-            setTimeout(function() {
-                $('#s21').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s2!=2){
-            $('#s22').css("background-color","red");
-            setTimeout(function() {
-                $('#s22').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s3!=1){
-            $('#s23').css("background-color","red");
-            setTimeout(function() {
-                $('#s23').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s4!=2){
-            $('#s24').css("background-color","red");
-            setTimeout(function() {
-                $('#s24').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s5!=3){
-            $('#s25').css("background-color","red");
-            setTimeout(function() {
-                $('#s25').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        if(s6!=3){
-            $('#s26').css("background-color","red");
-            setTimeout(function() {
-                $('#s26').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-        }
-        n=n+m;
-        if(m==0){
-            addResutl("s21",s1);
-            addResutl("s22",s2);
-            addResutl("s23",s3);
-            addResutl("s24",s4);
-            addResutl("s25",s5);
-            addResutl("s26",s6);
-            n++;
-            loadTable9();
-        }
-
-    }
-    function reloadX() {
-        var x=$("#x option:selected").val();
-        var y=$("#y option:selected").val();
-        total++;
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x').css("background-color","red");
-            setTimeout(function() {
-                $('#x').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-            return;
-        }
-        if(y!="平均资金占用额累计百分比"){
-            m++;
-            $('#y').css("background-color","red");
-            setTimeout(function() {
-                $('#y').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-
-        if (m==0){
-            addResutl("x",x);
-            addResutl("y",y);
-            n++;
-            load3();
-        }
-    }
-    function load3() {
-        var myChart1 = echarts.init(document.getElementById('abc1'), 'macarons');
-
-        var d = data2;
-        var arr1=[];
-        var arr2=[];
-
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].物料累计品目数百分比);
-            var m= d[i].平均资金占用额累计百分比.replace("%","");
-            arr2.push(m);
-        }
-        var option = {
-            title: {
-                text: 'ei分析'
-                , show: false
+    function initGroupOneTables() {
+        const inventoryTableColumns = [
+            {
+                field: '物料编码',
+                title: '物料编码'
             },
-            tooltip: {
-                trigger: 'axis'
-
+            {
+                field: '平均库存',
+                title: '平均库存（件/月）'
             },
-            dataZoom :{
-                type: 'slider', // 设置为滑动条型式
-                show: false, // 显示dataZoom组件
-                start: 0, // 默认显示的起始位置为0
-                end: 100, // 默认显示的结束位置为100
-                handleSize: 8, // 滑动条的手柄大小
-                handleStyle: {
-                    color: '#DCE2E8' // 滑动条的手柄颜色
-                },
-                xAxisIndex: [0], // 表示控制第一个x轴
-                filterMode: 'filter' // 设置为filter模式，即数据超过范围时会被过滤掉
+            {
+                field: '当月出库总量',
+                title: '当月出库总量（件）'
             },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
+            {
+                field: '库存周转次数',
+                title: '库存周转次数'
             },
-            grid: {
-                top: 20,
-                left: 20,
-                right: 20,
-                bottom: 20,
-                containLabel: true
+            {
+                field: '库存周转天数',
+                title: '库存周转天数'
             },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1,
-
-                axisLabel: {
-                    interval: 0,
-                    fontSize: 12,
-                    formatter: function (value) {
-                        debugger
-                        var ret = "";//拼接加\n返回的类目项
-                        var maxLength = 4;//每项显示文字个数
-                        value = parseInt(value.substring(0, 3));
-                        var valLength = value.length;//X轴类目项的文字个数
-                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
-                        if (rowN > 1)//如果类目项的文字大于3,
-                        {
-                            for (var i = 0; i < rowN; i++) {
-                                var temp = "";//每次截取的字符串
-                                var start = i * maxLength;//开始截取的位置
-                                var end = start + maxLength;//结束截取的位置
-                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
-                                temp = value.substring(start, end) + "\n";
-                                ret += temp; //凭借最终的字符串
-                            }
-                            return ret+"%";
-                        }
-                        else {
-                            return value+"%";
-                        }
-                    }
-                },
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-
-                axisTick: {
-                    show: true
-                },
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-                axisTick: {
-                    show: true
-                },
-                axisLabel: {
-                    formatter: function(value){
-                        var var1=value;
-                        return var1+"%";
-                    },
-                    textStyle:{
-                        color:"#595959"
-                    }
-                },
-                splitLine:{
-                    show:true
-                },
-                splitArea: {
-                    show:true,
-                    areaStyle: {
-                        color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
-                    }
-                },
-            },
-            series: [{
-                name: '',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: arr2,
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    },
-                    normal: {
-                        lineStyle:{
-                            width:1
-                        },
-                        color:'#51D0E5',
-                    }
-                }
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
             }
-            ]
-        };
-
-        myChart1.setOption(option);
-    }
-    function load5() {
-        var options = {
-            id:"bootstrap-table3",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编号',
-                    title: '物料编号'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出货数量',
-                    title: '出货数量'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                },
-                {
-                    field: '托盘装件数',
-                    title: '托盘装件数'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reloadX3() {
-        var x=$("#x1 option:selected").val();
-        var y=$("#y1 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x1').css("background-color","red");
-            setTimeout(function() {
-                $('#x1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(y!="累计出库频次百分比"){
-            m++;
-            $('#y1').css("background-color","red");
-            setTimeout(function() {
-                $('#y1').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        n=n+m;
-        if (m==0){
-            addResutl("x1",x);
-            addResutl("y1",y);
-            load6();
-        }
-
-    }
-    function load6() {
-        var myChart1 = echarts.init(document.getElementById('abc2'), 'macarons');
-
-        var d = data3;
-        var arr1=[];
-        var arr2=[];
-
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].物料累计品目数百分比);
-            var m= d[i].累计出库频次百分比.replace("%","");
-            arr2.push(m);
-        }
-        var option = {
-            title: {
-                text: 'ei分析'
-                , show: false
-            },
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            dataZoom : {
-                show : false,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            grid: {
-                top: 20,
-                left: 20,
-                right: 20,
-                bottom: 20,
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1,
-                axisLabel: {
-                    interval: 0,
-                    fontSize: 12,
-                    formatter: function (value) {
-                        debugger
-                        var ret = "";//拼接加\n返回的类目项
-                        var maxLength = 2;//每项显示文字个数
-                        value = parseInt(value.substring(0, 3));
-                        var valLength = value.length;//X轴类目项的文字个数
-                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
-                        if (rowN > 1)//如果类目项的文字大于3,
-                        {
-                            for (var i = 0; i < rowN; i++) {
-                                var temp = "";//每次截取的字符串
-                                var start = i * maxLength;//开始截取的位置
-                                var end = start + maxLength;//结束截取的位置
-                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
-                                temp = value.substring(start, end) + "\n";
-                                ret += temp; //凭借最终的字符串
-                            }
-                            return ret+"%";
-                        }
-                        else {
-                            return value+"%";
-                        }
-                    }
-                },
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-                axisTick: {
-                    show: true
-                },
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-                axisTick: {
-                    show: true
-                },
-                axisLabel: {
-                    formatter: function(value){
-                        var var1=value;
-                        return var1+"%";
-                    },
-                    textStyle:{
-                        color:"#595959"
-                    }
-                },
-                splitLine:{
-                    show:true
-                },
-                splitArea: {
-                    show:true,
-                    areaStyle: {
-                        color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
-                    }
-                },
-            },
-            series: [{
-                name: '',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: arr2,
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    },
-                    normal: {
-                        lineStyle:{
-                            width:1
-                        },
-                        color:'#51D0E5',
-                    }
-                }
-            }
-            ]
-        };
-        myChart1.setOption(option);
-
-    }
-    function load7() {
-        var options = {
-            id:"bootstrap-table4",
-            data:data5,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '出库日期',
-                    title: '出库日期'
-                },
-                {
-                    field: '订单编号',
-                    title: '订单编号'
-                },
-                {
-                    field: '物料编号',
-                    title: '物料编号'
-                },
-                {
-                    field: '物料名称',
-                    title: '物料名称'
-                },
-                {
-                    field: '出货数量',
-                    title: '出货数量'
-                },
-                {
-                    field: '出货单位',
-                    title: '出货单位'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                },
-                {
-                    field: '托盘装件数',
-                    title: '托盘装件数'
-                }]
-        };
-        $.table.init(options);
-    }
-    function reloadX4() {
-        var x=$("#x2 option:selected").val();
-        var y=$("#y2 option:selected").val();
-        total++;
-        var m=0;
-        if(x!="物料累计品目数百分比"){
-            $('#x2').css("background-color","red");
-            setTimeout(function() {
-                $('#x2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-            m++;
-
-        }
-        if(y!="累计出库量百分比"){
-            m++;
-            $('#y2').css("background-color","red");
-            setTimeout(function() {
-                $('#y2').css("background-color","white");
-            },3000); //一秒内不能重复点击
-        }
-        n=n+m;
-        if (m==0){
-            addResutl("x2",x);
-            addResutl("y2",y);
-            n++;
-            load8();
-        }
-    }
-    function load8() {
-        var myChart1 = echarts.init(document.getElementById('abc3'), 'macarons');
-        var d = data4;
-        var arr1=[];
-        var arr2=[];
-
-        for(var i=0;i<d.length;i++){
-            arr1.push(d[i].物料累计品目数百分比);
-            var m = d[i].累计出库量百分比.replace("%","");
-            arr2.push(m);
-        }
-        var option = {
-            title: {
-                text: 'ei分析'
-                , show: false
-            },
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            dataZoom : {
-                show : false,
-                realtime : true
-            },
-            toolbox: {
-                show: true,
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
-                }
-            },
-            grid: {
-                top: 20,
-                left: 20,
-                right: 20,
-                bottom: 20,
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: arr1,
-                axisLabel: {
-                    interval: 0,
-                    fontSize:12,
-                    formatter: function (value) {
-                        debugger
-                        var ret = "";//拼接加\n返回的类目项
-                        var maxLength = 2;//每项显示文字个数
-                        value = parseInt(value.substring(0, 3));
-                        var valLength = value.length;//X轴类目项的文字个数
-                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
-                        if (rowN > 1)//如果类目项的文字大于3,
-                        {
-                            for (var i = 0; i < rowN; i++) {
-                                var temp = "";//每次截取的字符串
-                                var start = i * maxLength;//开始截取的位置
-                                var end = start + maxLength;//结束截取的位置
-                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
-                                temp = value.substring(start, end) + "\n";
-                                ret += temp; //凭借最终的字符串
-                            }
-                            return ret+"%";
-                        }
-                        else {
-                            return value+"%";
-                        }
-                    }
-                },
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-                axisTick: {
-                    show: true
-                },
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: true,
-                    lineStyle:{
-                        color:'#BDB9B9'
-                    }
-                },
-                axisTick: {
-                    show: true
-                },
-                axisLabel: {
-                    formatter: function(value){
-                        var var1=value*1;
-                        return var1+"%";
-                    },
-                    textStyle:{
-                        color:"#595959"
-                    }
-                },
-                splitLine:{
-                    show:true
-                },
-                splitArea: {
-                    show:true,
-                    areaStyle: {
-                        color: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)']
-                    }
-                },
-            },
-            series: [{
-                name: '',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: arr2,
-                axisLabel: {
-                    formatter: function(value){
-                        var var1=value*1;
-                        return var1+"%";
-                    },
-                    textStyle:{
-                        color:"#595959"
-                    }
-                },
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    },
-                    normal: {
-                        lineStyle:{
-                            width:1
-                        },
-                        color:'#51D0E5',
-                    }
-                }
-            }
-            ]
-        };
-        myChart1.setOption(option);
-
-    }
-    function loadTable6(){
-        var options = {
-            id:"bootstrap-table5",
-            data:data2,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价'
-                },
-                {
-                    field: '平均库存',
-                    title: '平均库存'
-                },
-                {
-                    field: '平均资金占用额',
-                    title: '平均资金占用额'
-                },
-                {
-                    field: '平均资金占用额累计',
-                    title: '平均资金占用额累计'
-                },
-                {
-                    field: '平均资金占用额累计百分比',
-                    title: '平均资金占用额累计百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        };
-        $.table.init(options);
-
-
-    }
-    function loadTable8(){
-        var options = {
-            id:"bootstrap-table7",
-            data:data3,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '出库频次',
-                    title: '出库频次'
-                },
-                {
-                    field: '累计出库频次',
-                    title: '累计出库频次'
-                },
-                {
-                    field: '累计出库频次百分比',
-                    title: '累计出库频次百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        };
-        $.table.init(options);
-
-
-    }
-    function loadTable9(){
-        var options = {
-            id:"bootstrap-table8",
-            data:data4,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '物料描述',
-                    title: '物料描述'
-                },
-                {
-                    field: '出库量',
-                    title: '出库量'
-                },
-                {
-                    field: '累计出库量',
-                    title: '累计出库量'
-                },
-                {
-                    field: '累计出库量百分比',
-                    title: '累计出库量百分比'
-                },
-                {
-                    field: '物料累计品目数',
-                    title: '物料累计品目数'
-                },
-                {
-                    field: '物料累计品目数百分比',
-                    title: '物料累计品目数百分比'
-                }]
-        };
-        $.table.init(options);
-
-
-    }
-    function  loadTable7(){
-        var options = {
-            id:"bootstrap-table",
-            data:data1,
-            method: 'get',
-            cache: false,
-            striped: true,
-            pagination: true,
-            pageSize: 10,
-            pageNumber:1,
-            pageList: [10, 20, 50, 100, 200, 500],
-            sidePagination:'client',
-            search: true,
-            showColumns: true,
-            showRefresh: false,
-            showExport: true,
-            exportTypes: ['excel','txt','xml'],
-            columns: [
-                {
-                    field: '物料编码',
-                    title: '物料编码'
-                },
-                {
-                    field: '平均库存',
-                    title: '平均库存（件/月）'
-                },
-                {
-                    field: '当月出库总量',
-                    title: '当月出库总量（件）'
-                },
-                {
-                    field: '库存周转次数',
-                    title: '库存周转次数'
-                },
-                {
-                    field: '库存周转天数',
-                    title: '库存周转天数'
-                },
-                {
-                    field: '销售单价',
-                    title: '销售单价（元/件）'
-                }
-            ]
-        };
-        $.table.init(options);
+        ];
+        initBaidieTable("bootstrap-table", inventoryTableColumns);
     }
 
+    function initGroupTwoTables() {
+        const outboundTableColumns = [
+            {
+                field: '出库日期',
+                title: '出库日期'
+            },
+            {
+                field: '订单编号',
+                title: '订单编号'
+            },
+            {
+                field: '物料编号',
+                title: '物料编号'
+            },
+            {
+                field: '物料名称',
+                title: '物料名称'
+            },
+            {
+                field: '出货数量',
+                title: '出货数量'
+            },
+            {
+                field: '出货单位',
+                title: '出货单位'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
+            },
+            {
+                field: '托盘装件数',
+                title: '托盘装件数'
+            }];
+        initBaidieTable("bootstrap-table3", outboundTableColumns);
+    }
 
+    function initGroupThreeTables() {
+        const groupThreeOriginalTable = [
+            {
+                field: '出库日期',
+                title: '出库日期'
+            },
+            {
+                field: '订单编号',
+                title: '订单编号'
+            },
+            {
+                field: '物料编号',
+                title: '物料编号'
+            },
+            {
+                field: '物料名称',
+                title: '物料名称'
+            },
+            {
+                field: '出货数量',
+                title: '出货数量'
+            },
+            {
+                field: '出货单位',
+                title: '出货单位'
+            },
+            {
+                field: '销售单价',
+                title: '销售单价（元/件）'
+            },
+            {
+                field: '托盘装件数',
+                title: '托盘装件数'
+            }];
+        initBaidieTable("bootstrap-table4", groupThreeOriginalTable);
+    }
+
+    function checkGroup1TableSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_SELECT_GROUP_ONE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table5", valueBasedABCTableColumns, data2);
+            },
+            recordOp);
+    }
+
+    function checkGroup2TableSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_SELECT_GROUP_TWO_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table7", outboundFrequencyTableColumns, data3);
+            },
+            recordOp);
+    }
+
+    function checkGroup3TableSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_SELECT_GROUP_THREE_ANSWERS,
+            baidieScore,
+            function () {
+                return createBaidieTable("bootstrap-table8", groupThreeDerivedTable, data4);
+            },
+            recordOp);
+    }
+
+    function checkGroupOneChartSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_ONE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieChart('abc1', data2, '物料累计品目数百分比', '平均资金占用额累计百分比');
+            },
+            recordOp);
+    }
+
+    function checkGroupTwoChartSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_TWO_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieChart(
+                    'abc2', data3, '物料累计品目数百分比', '累计出库频次百分比');
+            },
+            recordOp);
+    }
+
+    function checkGroupThreeChartSelection(recordOp = false) {
+        checkSelectionResultAndRefresh(
+            ABC_GROUP_THREE_CHART_ANSWERS,
+            baidieScore,
+            function () {
+                return refreshBaidieChart('abc3', data4, '物料累计品目数百分比', '累计出库量百分比');
+            },
+            recordOp);
+    }
+
+    function refreshGroupOneOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table", data);
+    }
+
+    function refreshGroupTwoOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table3", data);
+    }
+
+    function refreshGroupThreeOriginalTable(data) {
+        refreshBaidieTable("bootstrap-table4", data);
+    }
+
+    function initializeSelectionFromDb() {
+        checkGroup1TableSelection();
+        checkGroup2TableSelection();
+        checkGroup3TableSelection();
+        checkGroupOneChartSelection();
+        checkGroupTwoChartSelection();
+        checkGroupThreeChartSelection();
+    }
+
+    /***
+     * 第一个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function firstGroupPostImport(result) {
+        data1 = JSON.parse(result.data.data1); //对返回的result中json字符串中的值data1赋值data1
+        data2 = JSON.parse(result.data.data2); //对返回的result中json字符串中的值data2赋值data2
+        refreshGroupOneOriginalTable(data1); //刷新第一个表bootstrap-table
+        checkGroup1TableSelection(); //重新提交第一个表对应的表
+        checkGroupOneChartSelection(); //重新提交第一个表对应的图
+    }
+
+    /***
+     * 第二个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function secondGroupPostImport(result) {
+        data3 = JSON.parse(result.data.data3); //对返回的result中json字符串中的值data3赋值data3
+        data5 = JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
+
+        // 刷新原始表的显示。
+        refreshGroupTwoOriginalTable(data5);
+        //data3重新赋值后，加载与data3相关的调用方法
+        checkGroup2TableSelection(); //重新提交第二个表对应的表
+        checkGroupTwoChartSelection(); //重新提交第二个表对应的图
+    }
+
+    /***
+     * 第三个表单的导入后返回的数据处理方法
+     * 返回后端传回来的数据，将对应的变化调用
+     * @param url
+     * @param result
+     */
+    function thirdGroupPostImport(result) {
+        data5 = JSON.parse(result.data.data5); //对返回的result中json字符串中的值data5赋值data5
+        data4 = JSON.parse(result.data.data4); //对返回的result中json字符串中的值data4赋值data4
+        //data5重新赋值后，只重新加载第三组原始表单
+        refreshGroupThreeOriginalTable(data5);
+        //data3重新赋值后，加载与data3相关的调用方法
+        checkGroup3TableSelection(); //重新提交第三个表对应的表
+        checkGroupThreeChartSelection(); //重新提交第三个表对应的表
+    }
+
+    /************************************************************/
+    /**************ABC PAGE SELECTION ANSWERS *******************/
+    /************************************************************/
+    const ABC_SELECT_GROUP_ONE_ANSWERS = new Map([
+        ["s1", "1"],
+        ["s2", "2"],
+        ["s3", "4"],
+        ["s4", "4"],
+        ["s5", "2"],
+        ["s6", "1"]
+    ]);
+
+    const ABC_SELECT_GROUP_TWO_ANSWERS = new Map([
+        ["s11", "4"],
+        ["s12", "3"],
+        ["s13", "3"],
+        ["s14", "2"],
+        ["s15", "4"],
+        ["s16", "3"]
+    ]);
+
+    const ABC_SELECT_GROUP_THREE_ANSWERS = new Map([
+        ["s21", "3"],
+        ["s22", "2"],
+        ["s23", "1"],
+        ["s24", "2"],
+        ["s25", "3"],
+        ["s26", "3"]
+    ]);
+
+    const ABC_GROUP_ONE_CHART_ANSWERS = new Map([
+        ["x", "物料累计品目数百分比"],
+        ["y", "平均资金占用额累计百分比"]
+    ]);
+
+    const ABC_GROUP_TWO_CHART_ANSWERS = new Map([
+        ["x1", "物料累计品目数百分比"],
+        ["y1", "累计出库频次百分比"]
+    ]);
+
+    const ABC_GROUP_THREE_CHART_ANSWERS = new Map([
+        ["x2", "物料累计品目数百分比"],
+        ["y2", "累计出库量百分比"]
+    ]);
+
+    const valueBasedABCTableColumns = [
+        {
+            field: '物料编码',
+            title: '物料编码'
+        },
+        {
+            field: '销售单价',
+            title: '销售单价'
+        },
+        {
+            field: '平均库存',
+            title: '平均库存'
+        },
+        {
+            field: '平均资金占用额',
+            title: '平均资金占用额'
+        },
+        {
+            field: '平均资金占用额累计',
+            title: '平均资金占用额累计'
+        },
+        {
+            field: '平均资金占用额累计百分比',
+            title: '平均资金占用额累计百分比'
+        },
+        {
+            field: '物料累计品目数',
+            title: '物料累计品目数'
+        },
+        {
+            field: '物料累计品目数百分比',
+            title: '物料累计品目数百分比'
+        }];
+
+    const outboundFrequencyTableColumns = [
+        {
+            field: '物料编码',
+            title: '物料编码'
+        },
+        {
+            field: '出库频次',
+            title: '出库频次'
+        },
+        {
+            field: '累计出库频次',
+            title: '累计出库频次'
+        },
+        {
+            field: '累计出库频次百分比',
+            title: '累计出库频次百分比'
+        },
+        {
+            field: '物料累计品目数',
+            title: '物料累计品目数'
+        },
+        {
+            field: '物料累计品目数百分比',
+            title: '物料累计品目数百分比'
+        }];
+
+    const groupThreeDerivedTable = [
+        {
+            field: '物料编码',
+            title: '物料编码'
+        },
+        {
+            field: '物料描述',
+            title: '物料描述'
+        },
+        {
+            field: '出库量',
+            title: '出库量'
+        },
+        {
+            field: '累计出库量',
+            title: '累计出库量'
+        },
+        {
+            field: '累计出库量百分比',
+            title: '累计出库量百分比'
+        },
+        {
+            field: '物料累计品目数',
+            title: '物料累计品目数'
+        },
+        {
+            field: '物料累计品目数百分比',
+            title: '物料累计品目数百分比'
+        }];
 </script>
-<script id="importTpl" type="text/template">
-    <form enctype="multipart/form-data" class="mt20 mb10">
-        <div class="col-xs-offset-1">
-            <input type="file" id="file" name="file"/>
-            <div class="mt10 pt5">
-                <input type="checkbox" id="updateSupport" name="updateSupport" title="是否更新已经存在的入库数据。"> 是否更新已经存在的出库数据
-                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-            </div>
-            <font color="red" class="pull-left mt10">
-                提示：仅允许导入“xls”或“xlsx”格式文件！
-            </font>
-        </div>
-    </form>
-</script>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?0db08d5fd7bd34e99daaee5a7e9c65de";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
 </body>
 </html>
