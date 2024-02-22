@@ -58,8 +58,8 @@ public class OutboundOrder {
     @Excel(name = "二级分类")
     @JsonProperty("二级分类")
     private String secondaryCategory;
-    @Excel(name = "三级级分类")
-    @JsonProperty("三级级分类")
+    @Excel(name = "三级分类")
+    @JsonProperty("三级分类")
     private String tertiaryCategory;
     @Excel(name = "四级分类")
     @JsonProperty("四级分类")
